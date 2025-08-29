@@ -9,7 +9,7 @@
 
 - FreeDevTool.App is a stand-alone web app offering developer/productivity utilities.
 - No network calls after load; treat it as an offline SPA. Do not add telemetry or remote calls.
-- Built with Vite. There is no backend aside from SEO helpers provided by Vite.
+- Built with Vite. There is no backend aside from rendering the initially rendering the page by Vite.
 - See `README.md` for details.
 
 ## How to build, test, and verify locally
@@ -63,7 +63,7 @@
 - Code adheres to `STYLE.md` and the tenets section in `README.md`.
 - `make ci` passes locally.
 - No hard-coded paths, secrets, or environment assumptions.
-- Only `Makefile` commands are used in docs/scripts; no raw bash in workflows.
+- Only `Makefile` commands are used in docs/scripts; no raw bash in the .github/workflows directory.
 - Changes are minimal, reversible, and documented in code comments where non-obvious.
 
 ## First steps for a new task
