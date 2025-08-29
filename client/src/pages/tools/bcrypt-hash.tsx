@@ -333,8 +333,6 @@ export default function BcryptHash() {
             data-testid="hash-output"
             className="min-h-[100px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
             rows={5}
-            showLineNumbers={true}
-            showStats={true}
           />
         </CardContent>
       </Card>

@@ -339,8 +339,6 @@ export default function QRGenerator() {
                   onChange={e => setInputText(e.target.value)}
                   rows={4}
                   data-testid="qr-input"
-                  showLineNumbers={true}
-                  showStats={true}
                 />
               </div>
 

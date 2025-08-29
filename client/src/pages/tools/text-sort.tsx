@@ -174,8 +174,6 @@ export default function TextSorter() {
               data-testid="text-input"
               className="min-h-[400px] font-mono text-sm"
               rows={20}
-              showLineNumbers={true}
-              showStats={true}
             />
           </CardContent>
         </Card>
@@ -192,8 +190,6 @@ export default function TextSorter() {
               data-testid="text-output"
               className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               rows={20}
-              showLineNumbers={true}
-              showStats={true}
             />
           </CardContent>
         </Card>

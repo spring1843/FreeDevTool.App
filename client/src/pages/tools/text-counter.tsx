@@ -98,8 +98,6 @@ export default function TextCounter() {
               className="min-h-[400px] font-mono text-sm"
               data-testid="text-input"
               rows={20}
-              showLineNumbers={true}
-              showStats={true}
             />
             <div className="mt-4 flex justify-end">
               <Button

@@ -134,8 +134,6 @@ export default function Base64Encoder() {
               data-testid="base64-plain-text"
               className="min-h-[400px] font-mono text-sm"
               rows={20}
-              showLineNumbers={true}
-              showStats={true}
             />
           </CardContent>
         </Card>
@@ -152,8 +150,6 @@ export default function Base64Encoder() {
               data-testid="base64-encoded-text"
               className="min-h-[400px] font-mono text-sm"
               rows={20}
-              showLineNumbers={true}
-              showStats={true}
             />
           </CardContent>
         </Card>

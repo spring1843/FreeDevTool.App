@@ -190,8 +190,6 @@ export default function TLSDecoder() {
             data-testid="certificate-input"
             className="min-h-[200px] font-mono text-sm"
             rows={10}
-            showLineNumbers={true}
-            showStats={true}
           />
         </CardContent>
       </Card>
