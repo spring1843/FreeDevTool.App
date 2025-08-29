@@ -23,7 +23,7 @@
 
 - `Makefile` contains all commands for install, build, lint, tests, and CI checks. Do not add raw shell in workflows; add/update Makefile targets instead.
 - The app is packaged via `make build`. Production readiness checks run via `make ci`.
-- Review docs first: `README.md`, `CONTRIBUTING.md`, `STYLE.md`, `Makefile`, and other docs.
+- Review docs first: `README.md`,  `STYLE.md`, `Makefile`, and other docs.
 
 ## Coding guidelines
 
@@ -60,7 +60,7 @@
 
 ## PR readiness checklist (pre-submit)
 
-- Code adheres to `STYLE.md`.
+- Code adheres to `STYLE.md` and the tenets section in `README.md`.
 - `make ci` passes locally.
 - No hard-coded paths, secrets, or environment assumptions.
 - Only `Makefile` commands are used in docs/scripts; no raw bash in workflows.
@@ -68,7 +68,7 @@
 
 ## First steps for a new task
 
-- Inventory the codebase and read: `README.md`, `CONTRIBUTING.md`, `STYLE.md`, `Makefile`, and any related docs in the feature area.
+- Inventory the codebase and read: `README.md`, `STYLE.md`, and any related docs in the feature area.
 - Identify existing components/utilities to reuse.
 - Plan the minimal change set needed to meet goals while keeping CI green.
 - Implement, test locally via `make ci`, and prepare a concise PR.
