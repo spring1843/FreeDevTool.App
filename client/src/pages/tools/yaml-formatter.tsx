@@ -108,6 +108,7 @@ export default function YAMLFormatter() {
               placeholder="Formatted YAML will appear here..."
               data-testid="yaml-output"
               className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
+              minHeight="400px"
               rows={20}
             />
           </CardContent>

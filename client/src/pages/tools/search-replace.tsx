@@ -222,6 +222,7 @@ export default function SearchReplace() {
               placeholder="Search and replace results will appear here..."
               data-testid="text-output"
               className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
+              minHeight="400px"
               rows={20}
             />
           </CardContent>

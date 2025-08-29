@@ -189,6 +189,7 @@ export default function TextSorter() {
               placeholder="Sorted text will appear here..."
               data-testid="text-output"
               className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
+              minHeight="400px"
               rows={20}
             />
           </CardContent>

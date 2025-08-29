@@ -153,6 +153,7 @@ export default function JsonFormatter() {
               placeholder="Formatted JSON will appear here..."
               data-testid="json-output"
               rows={20}
+              lang="javascript"
             />
           </CardContent>
         </Card>

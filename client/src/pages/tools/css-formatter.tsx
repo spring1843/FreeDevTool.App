@@ -211,6 +211,7 @@ export default function CSSFormatter() {
               placeholder="Formatted CSS/LESS/SCSS will appear here..."
               data-testid="css-output"
               className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
+              minHeight="400px"
               rows={20}
             />
           </CardContent>

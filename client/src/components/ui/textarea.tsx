@@ -10,16 +10,17 @@ import { html } from "@codemirror/lang-html";
 export interface TextAreaProps {
   className?: string;
   value?: string;
-  lang?: string; // This is the prop we need to use
+  lang?: string;
   readOnly?: boolean;
   rows?: number;
   placeholder?: string;
   id?: string;
+  minHeight?: string;
   onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
 }
 
 const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
-  ({ className, value, lang, onChange, ..._props }) => {
+  ({ className, value, onChange, ...props }) => {
     const baseClassName = cn(
       "w-full rounded-md border border-input bg-background text-sm",
       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
@@ -51,7 +52,7 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         target: { value: val } as unknown as EventTarget & HTMLTextAreaElement,
       }) as unknown as React.ChangeEvent<HTMLTextAreaElement>;
 
-    const extensions = [getLanguageExtension(lang)];
+    const extensions = [getLanguageExtension(props.lang)];
 
     return (
       <CodeMirror
@@ -66,6 +67,11 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         onChange={val => {
           if (onChange) onChange(createSyntheticChangeEvent(val));
         }}
+        minHeight={props.minHeight}
+        lang={props.lang}
+        placeholder={props.placeholder}
+        readOnly={props.readOnly}
+        id={props.id}
       />
     );
   }
