@@ -19,7 +19,7 @@ export interface TextAreaProps {
 }
 
 const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
-  ({ className, value, lang, onChange, ...props }, ref) => {
+  ({ className, value, lang, onChange, ..._props }) => {
     const baseClassName = cn(
       "w-full rounded-md border border-input bg-background text-sm",
       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
@@ -54,20 +54,19 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
     const extensions = [getLanguageExtension(lang)];
 
     return (
-      <div className={baseClassName} ref={ref} {...props}>
-        <CodeMirror
-          value={value}
-          theme={dracula}
-          extensions={extensions}
-          basicSetup={{
-            lineNumbers: true,
-            foldGutter: true,
-          }}
-          onChange={val => {
-            if (onChange) onChange(createSyntheticChangeEvent(val));
-          }}
-        />
-      </div>
+      <CodeMirror
+        className={baseClassName}
+        value={value}
+        theme={dracula}
+        extensions={extensions}
+        basicSetup={{
+          lineNumbers: true,
+          foldGutter: true,
+        }}
+        onChange={val => {
+          if (onChange) onChange(createSyntheticChangeEvent(val));
+        }}
+      />
     );
   }
 );

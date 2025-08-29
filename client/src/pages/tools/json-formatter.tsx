@@ -152,7 +152,6 @@ export default function JsonFormatter() {
               readOnly={true}
               placeholder="Formatted JSON will appear here..."
               data-testid="json-output"
-              className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               rows={20}
             />
           </CardContent>
