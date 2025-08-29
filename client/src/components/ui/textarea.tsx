@@ -74,4 +74,4 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
 
 TextArea.displayName = "TextArea";
 
-export { TextArea as Textarea };
+export { TextArea };
