@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
 import { formatMarkdown } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { FileText, RotateCcw } from "lucide-react";
@@ -87,7 +87,7 @@ export default function MarkdownFormatter() {
             <CardTitle>Input</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={input}
               onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your Markdown here..."
@@ -103,7 +103,7 @@ export default function MarkdownFormatter() {
             <CardTitle>Formatted Output</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={output}
               readOnly={true}
               placeholder="Formatted Markdown will appear here..."

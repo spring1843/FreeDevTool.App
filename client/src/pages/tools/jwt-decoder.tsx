@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Key, CheckCircle, XCircle } from "lucide-react";
 import { SecurityBanner } from "@/components/ui/security-banner";
@@ -139,7 +139,7 @@ export default function JWTDecoder() {
               tooltip="Reset to default token"
             />
           </div>
-          <Textarea
+          <TextArea
             value={token}
             onChange={e => handleTokenChange(e.target.value)}
             placeholder="Paste your JWT token here..."
@@ -158,7 +158,7 @@ export default function JWTDecoder() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={header}
               readOnly={true}
               placeholder="Decoded header will appear here..."
@@ -176,7 +176,7 @@ export default function JWTDecoder() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={payload}
               readOnly={true}
               placeholder="Decoded payload will appear here..."
@@ -194,7 +194,7 @@ export default function JWTDecoder() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={signature}
               readOnly={true}
               placeholder="Signature will appear here..."

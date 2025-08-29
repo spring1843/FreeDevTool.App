@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
@@ -326,7 +326,7 @@ export default function BcryptHash() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <Textarea
+          <TextArea
             value={hash}
             readOnly={true}
             placeholder="Generated bcrypt hash will appear here..."

@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
 import { formatJSONC } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, RotateCcw } from "lucide-react";
@@ -78,13 +78,12 @@ export default function JSONCFormatter() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Textarea
+            <TextArea
               data-testid="jsonc-input"
               value={input}
               onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your JSONC code here..."
               className="font-mono text-sm min-h-[400px] resize-y"
-              spellCheck={false}
             />
             <div className="flex gap-2 flex-wrap">
               <Button onClick={formatCode} className="flex-1 sm:flex-none">
@@ -110,7 +109,7 @@ export default function JSONCFormatter() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               data-testid="jsonc-output"
               value={output}
               readOnly

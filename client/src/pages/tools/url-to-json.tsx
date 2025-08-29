@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { CopyButton } from "@/components/ui/copy-button";
 import { Link, Globe, Hash, Share } from "lucide-react";
@@ -222,7 +222,7 @@ export default function URLToJSON() {
             <CardContent className="space-y-4">
               <div>
                 <Label htmlFor="url-input">Enter URL</Label>
-                <Textarea
+                <TextArea
                   id="url-input"
                   value={inputUrl}
                   onChange={e => setInputUrl(e.target.value)}
@@ -302,7 +302,7 @@ export default function URLToJSON() {
             <CardContent>
               {jsonOutput ? (
                 <div className="space-y-4">
-                  <Textarea
+                  <TextArea
                     value={jsonOutput}
                     readOnly={true}
                     className="font-mono text-sm min-h-[300px] resize-none"

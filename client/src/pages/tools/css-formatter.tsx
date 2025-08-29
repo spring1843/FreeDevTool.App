@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
 import { formatCSS, formatLESS, formatSCSS } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
@@ -189,7 +189,7 @@ export default function CSSFormatter() {
             <CardTitle>Input CSS/LESS/SCSS</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={input}
               onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your CSS, LESS, or SCSS code here..."
@@ -205,7 +205,7 @@ export default function CSSFormatter() {
             <CardTitle>Formatted Output</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={output}
               readOnly={true}
               placeholder="Formatted CSS/LESS/SCSS will appear here..."

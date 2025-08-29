@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -329,7 +329,7 @@ Jane Smith      jane@example.com        25      Marketing`,
               </div>
             </div>
 
-            <Textarea
+            <TextArea
               value={csvInput}
               onChange={e => setCsvInput(e.target.value)}
               placeholder="name,email,age
@@ -435,7 +435,7 @@ Jane Smith,jane@example.com,25"
               </Button>
             </div>
 
-            <Textarea
+            <TextArea
               value={jsonOutput}
               readOnly
               placeholder="JSON output will appear here..."

@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Shield, RotateCcw, CheckCircle, XCircle } from "lucide-react";
@@ -183,7 +183,7 @@ export default function TLSDecoder() {
               Reset
             </Button>
           </div>
-          <Textarea
+          <TextArea
             value={certificate}
             onChange={e => handleCertificateChange(e.target.value)}
             placeholder="Paste your X.509 certificate here (PEM format)..."

@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
 import { Link, Unlink, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
@@ -100,7 +100,7 @@ export default function URLEncoder() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={plainText}
               onChange={e => handlePlainTextChange(e.target.value)}
               placeholder="Enter text to URL encode..."
@@ -118,7 +118,7 @@ export default function URLEncoder() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={encodedText}
               onChange={e => handleEncodedTextChange(e.target.value)}
               placeholder="URL encoded text will appear here..."

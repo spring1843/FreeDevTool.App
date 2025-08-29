@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -332,7 +332,7 @@ export default function QRGenerator() {
 
               <div>
                 <Label htmlFor="input-text">{currentPreset.name} Content</Label>
-                <Textarea
+                <TextArea
                   id="input-text"
                   placeholder={currentPreset.placeholder}
                   value={inputText}

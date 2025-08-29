@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { FileText, Copy, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
@@ -327,7 +327,7 @@ export default function LoremGenerator() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={generated}
               readOnly={true}
               placeholder="Generated lorem ipsum will appear here..."

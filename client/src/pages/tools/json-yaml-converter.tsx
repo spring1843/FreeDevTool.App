@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
 import { convertJSONToYAML, convertYAMLToJSON } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ArrowRight, ArrowLeft, RotateCcw } from "lucide-react";
@@ -109,7 +109,7 @@ export default function JSONYAMLConverter() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Textarea
+              <TextArea
                 value={jsonInput}
                 onChange={e => handleJsonInputChange(e.target.value)}
                 placeholder="Paste your JSON here..."
@@ -127,7 +127,7 @@ export default function JSONYAMLConverter() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Textarea
+              <TextArea
                 value={yamlOutput}
                 readOnly={true}
                 placeholder="YAML output will appear here..."
@@ -147,7 +147,7 @@ export default function JSONYAMLConverter() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Textarea
+              <TextArea
                 value={yamlInput}
                 onChange={e => handleYamlInputChange(e.target.value)}
                 placeholder="Paste your YAML here..."
@@ -165,7 +165,7 @@ export default function JSONYAMLConverter() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Textarea
+              <TextArea
                 value={jsonOutput}
                 readOnly={true}
                 placeholder="JSON output will appear here..."

@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { RefreshCw, Copy, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
@@ -255,7 +255,7 @@ export default function UUIDGenerator() {
                 <Label className="text-sm font-medium">
                   All UUIDs (for copying):
                 </Label>
-                <Textarea
+                <TextArea
                   value={uuids.join("\n")}
                   readOnly={true}
                   className="mt-2 min-h-[100px] font-mono text-sm bg-slate-50 dark:bg-slate-900"

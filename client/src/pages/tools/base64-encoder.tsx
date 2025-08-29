@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
 import { encodeBase64, decodeBase64 } from "@/lib/encoders";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Lock, Unlock, ArrowRightLeft } from "lucide-react";
@@ -127,7 +127,7 @@ export default function Base64Encoder() {
             <CardTitle>Plain Text</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={plainText}
               onChange={e => handlePlainTextChange(e.target.value)}
               placeholder="Enter text to encode..."
@@ -143,7 +143,7 @@ export default function Base64Encoder() {
             <CardTitle>Base64 Encoded</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={encodedText}
               onChange={e => handleEncodedTextChange(e.target.value)}
               placeholder="Enter Base64 encoded text to decode..."

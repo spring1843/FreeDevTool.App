@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -167,7 +167,7 @@ export default function TextSorter() {
             <CardTitle>Input Text</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={input}
               onChange={e => setInput(e.target.value)}
               placeholder="Enter lines of text to sort..."
@@ -183,7 +183,7 @@ export default function TextSorter() {
             <CardTitle>Sorted Output</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={sortedOutput}
               readOnly={true}
               placeholder="Sorted text will appear here..."

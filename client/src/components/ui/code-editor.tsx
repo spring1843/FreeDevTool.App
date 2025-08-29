@@ -1,4 +1,4 @@
-import { Textarea } from "./textarea";
+import { TextArea } from "./textarea";
 import { CopyButton } from "./copy-button";
 import { cn } from "@/lib/utils";
 
@@ -22,7 +22,7 @@ export function CodeEditor({
 }: CodeEditorProps) {
   return (
     <div className="relative">
-      <Textarea
+      <TextArea
         value={value}
         onChange={e => onChange?.(e.target.value)}
         placeholder={placeholder}

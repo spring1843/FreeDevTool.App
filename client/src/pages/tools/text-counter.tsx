@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { countTextStats } from "@/lib/text-tools";
@@ -91,7 +91,7 @@ export default function TextCounter() {
             <CardTitle>Enter Text</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={fields.text}
               onChange={e => updateField("text", e.target.value)}
               placeholder="Enter or paste your text here..."

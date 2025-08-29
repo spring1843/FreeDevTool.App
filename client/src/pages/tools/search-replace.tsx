@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Search, RotateCcw } from "lucide-react";
@@ -200,7 +200,7 @@ export default function SearchReplace() {
             <CardTitle>Original Text</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={text}
               onChange={e => setText(e.target.value)}
               placeholder="Enter text to search and replace..."
@@ -216,7 +216,7 @@ export default function SearchReplace() {
             <CardTitle>Result</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={result}
               readOnly={true}
               placeholder="Search and replace results will appear here..."

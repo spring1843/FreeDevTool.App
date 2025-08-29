@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { GitCompare, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
@@ -216,7 +216,7 @@ export default function TextDiff() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={text1}
               onChange={e => setText1(e.target.value)}
               placeholder="Enter original text here..."
@@ -234,7 +234,7 @@ export default function TextDiff() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={text2}
               onChange={e => setText2(e.target.value)}
               placeholder="Enter modified text here..."
