@@ -12,6 +12,7 @@ export interface TextAreaProps {
   value?: string;
   lang?: string;
   readOnly?: boolean;
+  autoFocus?: boolean;
   rows?: number;
   placeholder?: string;
   id?: string;
@@ -72,6 +73,7 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         placeholder={props.placeholder}
         readOnly={props.readOnly}
         id={props.id}
+        autoFocus={props.autoFocus}
       />
     );
   }
