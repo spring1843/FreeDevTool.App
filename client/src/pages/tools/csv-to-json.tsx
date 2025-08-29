@@ -338,6 +338,8 @@ Jane Smith,jane@example.com,25"
               className="min-h-[200px] font-mono text-sm"
               data-testid="csv-input"
               rows={10}
+              autoFocus={true}
+              minHeight="200px"
             />
 
             {error ? (
@@ -443,6 +445,7 @@ Jane Smith,jane@example.com,25"
               data-testid="json-output"
               rows={10}
               lang="javascript"
+              minHeight="200px"
             />
 
             {headers.length > 0 && (

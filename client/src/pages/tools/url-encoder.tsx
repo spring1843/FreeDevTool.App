@@ -107,6 +107,8 @@ export default function URLEncoder() {
               data-testid="plain-text-input"
               className="min-h-[400px] font-mono text-sm"
               rows={20}
+              autoFocus={true}
+              minHeight="400px"
             />
           </CardContent>
         </Card>
@@ -125,6 +127,7 @@ export default function URLEncoder() {
               data-testid="encoded-text-output"
               className="min-h-[400px] font-mono text-sm"
               rows={20}
+              minHeight="400px"
             />
           </CardContent>
         </Card>

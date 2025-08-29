@@ -229,6 +229,7 @@ export default function URLToJSON() {
                   placeholder="https://example.com/path?param1=value1&param2=value2#section"
                   className="font-mono min-h-[100px] resize-none"
                   data-testid="url-input"
+                  autoFocus={true}
                 />
               </div>
 

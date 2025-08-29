@@ -94,6 +94,7 @@ export default function MarkdownFormatter() {
               data-testid="markdown-input"
               className="min-h-[500px] font-mono text-sm"
               rows={25}
+              autoFocus={true}
             />
           </CardContent>
         </Card>

@@ -84,6 +84,9 @@ export default function JSONCFormatter() {
               onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your JSONC code here..."
               className="font-mono text-sm min-h-[400px] resize-y"
+              lang="javascript"
+              autoFocus={true}
+              minHeight="400px"
             />
             <div className="flex gap-2 flex-wrap">
               <Button onClick={formatCode} className="flex-1 sm:flex-none">
@@ -115,6 +118,7 @@ export default function JSONCFormatter() {
               readOnly
               placeholder="Formatted JSONC will appear here..."
               className="font-mono text-sm min-h-[400px] resize-y bg-slate-50 dark:bg-slate-900"
+              minHeight="400px"
             />
             <div className="mt-4 text-sm text-slate-500 dark:text-slate-400">
               <p>

@@ -197,6 +197,8 @@ export default function CSSFormatter() {
               className="min-h-[400px] font-mono text-sm"
               rows={20}
               lang="css"
+              autoFocus={true}
+              minHeight="400px"
             />
           </CardContent>
         </Card>

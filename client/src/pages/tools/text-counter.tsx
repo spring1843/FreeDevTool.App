@@ -92,12 +92,14 @@ export default function TextCounter() {
           </CardHeader>
           <CardContent>
             <TextArea
+              autoFocus={true}
               value={fields.text}
               onChange={e => updateField("text", e.target.value)}
               placeholder="Enter or paste your text here..."
               className="min-h-[400px] font-mono text-sm"
               data-testid="text-input"
               rows={20}
+              minHeight="400px"
             />
             <div className="mt-4 flex justify-end">
               <Button

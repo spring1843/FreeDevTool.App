@@ -1,7 +1,6 @@
 import * as React from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
-import { dracula } from "@uiw/codemirror-theme-dracula";
 import { cn } from "@/lib/utils";
 import { css } from "@codemirror/lang-css";
 import { html } from "@codemirror/lang-html";
@@ -59,7 +58,6 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
       <CodeMirror
         className={baseClassName}
         value={value}
-        theme={dracula}
         extensions={extensions}
         basicSetup={{
           lineNumbers: true,

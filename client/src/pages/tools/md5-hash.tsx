@@ -284,6 +284,7 @@ export default function MD5Hash() {
             data-testid="hash-output"
             className="min-h-[100px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
             rows={5}
+            autoFocus={true}
           />
         </CardContent>
       </Card>

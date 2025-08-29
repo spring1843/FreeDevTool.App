@@ -261,6 +261,7 @@ export default function UUIDGenerator() {
                   className="mt-2 min-h-[100px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
                   data-testid="all-uuids-output"
                   rows={5}
+                  autoFocus={true}
                 />
               </div>
             )}

@@ -138,6 +138,7 @@ export default function JsonFormatter() {
               data-testid="json-input"
               className="min-h-[400px] font-mono text-sm"
               rows={20}
+              autoFocus={true}
             />
           </CardContent>
         </Card>

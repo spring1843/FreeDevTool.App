@@ -223,6 +223,7 @@ export default function TextDiff() {
               data-testid="text1-input"
               className="min-h-[300px] font-mono text-sm"
               rows={15}
+              autoFocus={true}
             />
           </CardContent>
         </Card>

@@ -43,7 +43,6 @@ export function DualEditor({
             placeholder={leftPlaceholder}
             language={leftLanguage}
             className="min-h-[400px]"
-            minHeight="400px"
           />
         </CardContent>
       </Card>

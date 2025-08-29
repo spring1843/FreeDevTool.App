@@ -116,6 +116,7 @@ export default function JSONYAMLConverter() {
                 data-testid="json-input"
                 className="min-h-[300px] font-mono text-sm"
                 rows={15}
+                autoFocus={true}
               />
             </CardContent>
           </Card>

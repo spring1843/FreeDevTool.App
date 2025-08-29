@@ -146,6 +146,7 @@ export default function JWTDecoder() {
             data-testid="jwt-token-input"
             className="min-h-[100px] font-mono text-sm"
             rows={5}
+            autoFocus={true}
           />
         </CardContent>
       </Card>

@@ -109,6 +109,8 @@ export default function TypeScriptFormatter() {
               data-testid="typescript-input"
               className="min-h-[400px] font-mono text-sm"
               rows={20}
+              autoFocus={true}
+              minHeight="400px"
             />
           </CardContent>
         </Card>
