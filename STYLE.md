@@ -39,9 +39,13 @@ We strive to:
 
 ### Linters
 
-*   Run all linters with `make lint`.
-*   We use ESLint for TypeScript.
+* Run all linters with `make lint`.
+* We use ESLint for TypeScript.
 
 ### Formatters
 
-*   Format all applicable files with `make format`.
+* Format all applicable files with `make format`.
+
+# Github Workflows
+
+* Only `Makefile` commands should be used in .github/workflows, no shell or bash commands as much as possible
