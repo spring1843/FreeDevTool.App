@@ -117,6 +117,8 @@ export default function JSONYAMLConverter() {
                 className="min-h-[300px] font-mono text-sm"
                 rows={15}
                 autoFocus={true}
+                minHeight="300px"
+                lang="javascript"
               />
             </CardContent>
           </Card>
@@ -135,6 +137,8 @@ export default function JSONYAMLConverter() {
                 data-testid="yaml-output"
                 className="min-h-[300px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
                 rows={15}
+                minHeight="300px"
+                lang="yaml"
               />
             </CardContent>
           </Card>
@@ -155,6 +159,8 @@ export default function JSONYAMLConverter() {
                 data-testid="yaml-input"
                 className="min-h-[300px] font-mono text-sm"
                 rows={15}
+                minHeight="300px"
+                lang="yaml"
               />
             </CardContent>
           </Card>
@@ -173,6 +179,8 @@ export default function JSONYAMLConverter() {
                 data-testid="json-output"
                 className="min-h-[300px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
                 rows={15}
+                minHeight="300px"
+                lang="javascript"
               />
             </CardContent>
           </Card>

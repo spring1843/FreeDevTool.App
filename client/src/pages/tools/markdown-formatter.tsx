@@ -95,6 +95,7 @@ export default function MarkdownFormatter() {
               className="min-h-[500px] font-mono text-sm"
               rows={25}
               autoFocus={true}
+              lang="markdown"
             />
           </CardContent>
         </Card>
@@ -111,6 +112,7 @@ export default function MarkdownFormatter() {
               data-testid="markdown-output"
               className="min-h-[500px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               rows={25}
+              lang="markdown"
             />
           </CardContent>
         </Card>

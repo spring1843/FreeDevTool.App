@@ -231,6 +231,7 @@ export default function RegexTester() {
               className="min-h-[300px] font-mono text-sm resize-none"
               rows={15}
               autoFocus={true}
+              minHeight="300px"
             />
           </CardContent>
         </Card>

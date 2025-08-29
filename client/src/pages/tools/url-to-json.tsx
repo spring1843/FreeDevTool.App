@@ -27,6 +27,7 @@ interface URLComponents {
 }
 
 import { DEFAULT_URL_TO_JSON } from "@/data/defaults";
+import { Input } from "@/components/ui/input";
 
 export default function URLToJSON() {
   const [inputUrl, setInputUrl] = useState(DEFAULT_URL_TO_JSON);
@@ -222,12 +223,12 @@ export default function URLToJSON() {
             <CardContent className="space-y-4">
               <div>
                 <Label htmlFor="url-input">Enter URL</Label>
-                <TextArea
+                <Input
                   id="url-input"
                   value={inputUrl}
                   onChange={e => setInputUrl(e.target.value)}
                   placeholder="https://example.com/path?param1=value1&param2=value2#section"
-                  className="font-mono min-h-[100px] resize-none"
+                  className="font-mono resize-none"
                   data-testid="url-input"
                   autoFocus={true}
                 />
@@ -307,6 +308,7 @@ export default function URLToJSON() {
                     value={jsonOutput}
                     readOnly={true}
                     className="font-mono text-sm min-h-[300px] resize-none"
+                    minHeight="300px"
                     placeholder="JSON output will appear here..."
                   />
 
