@@ -146,8 +146,6 @@ export default function JWTDecoder() {
             data-testid="jwt-token-input"
             className="min-h-[100px] font-mono text-sm"
             rows={5}
-            showLineNumbers={true}
-            showStats={true}
           />
         </CardContent>
       </Card>
@@ -167,8 +165,6 @@ export default function JWTDecoder() {
               data-testid="jwt-header-output"
               className="min-h-[300px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               rows={15}
-              showLineNumbers={true}
-              showStats={true}
             />
           </CardContent>
         </Card>
@@ -187,8 +183,6 @@ export default function JWTDecoder() {
               data-testid="jwt-payload-output"
               className="min-h-[300px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               rows={15}
-              showLineNumbers={true}
-              showStats={true}
             />
           </CardContent>
         </Card>
@@ -207,8 +201,6 @@ export default function JWTDecoder() {
               data-testid="jwt-signature-output"
               className="min-h-[300px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               rows={15}
-              showLineNumbers={true}
-              showStats={true}
             />
           </CardContent>
         </Card>
