@@ -442,6 +442,7 @@ Jane Smith,jane@example.com,25"
               className="min-h-[200px] font-mono text-sm"
               data-testid="json-output"
               rows={10}
+              lang="javascript"
             />
 
             {headers.length > 0 && (

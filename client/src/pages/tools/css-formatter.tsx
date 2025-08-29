@@ -213,6 +213,7 @@ export default function CSSFormatter() {
               className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               minHeight="400px"
               rows={20}
+              lang="css"
             />
           </CardContent>
         </Card>
