@@ -115,6 +115,7 @@ export default function TypeScriptFormatter() {
               minHeight="400px"
               fileExtension="ts"
               theme={theme}
+              lang="typescript"
             />
           </CardContent>
         </Card>
@@ -129,9 +130,12 @@ export default function TypeScriptFormatter() {
               readOnly={true}
               placeholder="Formatted JavaScript/TypeScript will appear here..."
               data-testid="typescript-output"
-              className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
+              className="min-h-[400px] font-mono text-sm"
               minHeight="400px"
               rows={20}
+              theme={theme}
+              lang="typescript"
+              fileExtension="ts"
             />
           </CardContent>
         </Card>

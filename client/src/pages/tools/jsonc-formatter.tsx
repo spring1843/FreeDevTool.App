@@ -121,8 +121,11 @@ export default function JSONCFormatter() {
               value={output}
               readOnly
               placeholder="Formatted JSONC will appear here..."
-              className="font-mono text-sm min-h-[400px] resize-y bg-slate-50 dark:bg-slate-900"
+              className="font-mono text-sm min-h-[400px] resize-y"
               minHeight="400px"
+              theme={theme}
+              lang="javascript"
+              fileExtension="jsonc"
             />
             <div className="mt-4 text-sm text-slate-500 dark:text-slate-400">
               <p>

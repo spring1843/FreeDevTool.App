@@ -99,6 +99,7 @@ export default function YAMLFormatter() {
               minHeight="400px"
               fileExtension="yaml"
               theme={theme}
+              lang="yaml"
             />
           </CardContent>
         </Card>
@@ -117,6 +118,8 @@ export default function YAMLFormatter() {
               minHeight="400px"
               rows={20}
               lang="yaml"
+              fileExtension="yaml"
+              theme={theme}
             />
           </CardContent>
         </Card>

@@ -159,6 +159,7 @@ export default function HTMLFormatter() {
               minHeight="400px"
               fileExtension="html"
               theme={theme}
+              lang="html"
             />
           </CardContent>
         </Card>
@@ -185,6 +186,8 @@ export default function HTMLFormatter() {
               minHeight="400px"
               rows={20}
               lang="html"
+              fileExtension="html"
+              theme={theme}
             />
           </CardContent>
         </Card>

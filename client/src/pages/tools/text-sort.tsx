@@ -180,6 +180,7 @@ export default function TextSort() {
               minHeight="400px"
               fileExtension="txt"
               theme={theme}
+              lang="text"
             />
           </CardContent>
         </Card>
@@ -197,6 +198,9 @@ export default function TextSort() {
               className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               minHeight="400px"
               rows={20}
+              theme={theme}
+              lang="text"
+              fileExtension="txt"
             />
           </CardContent>
         </Card>

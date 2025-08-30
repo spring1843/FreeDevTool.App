@@ -143,6 +143,7 @@ export default function JsonFormatter() {
               autoFocus={true}
               fileExtension="json"
               theme={theme}
+              lang="json"
             />
           </CardContent>
         </Card>
@@ -158,7 +159,7 @@ export default function JsonFormatter() {
               placeholder="Formatted JSON will appear here..."
               data-testid="json-output"
               rows={20}
-              lang="javascript"
+              lang="json"
               fileExtension="json"
               theme={theme}
             />

@@ -194,15 +194,15 @@ export default function CSSFormatter() {
             <TextArea
               value={input}
               onChange={e => handleInputChange(e.target.value)}
-              placeholder="Paste your CSS, LESS, or SCSS code here..."
+              placeholder="Paste your CSS here..."
               data-testid="css-input"
               className="min-h-[400px] font-mono text-sm"
               rows={20}
-              lang="css"
               autoFocus={true}
               minHeight="400px"
               fileExtension="css"
               theme={theme}
+              lang="css"
             />
           </CardContent>
         </Card>
@@ -215,12 +215,14 @@ export default function CSSFormatter() {
             <TextArea
               value={output}
               readOnly={true}
-              placeholder="Formatted CSS/LESS/SCSS will appear here..."
+              placeholder="Formatted CSS will appear here..."
               data-testid="css-output"
               className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               minHeight="400px"
               rows={20}
               lang="css"
+              fileExtension="css"
+              theme={theme}
             />
           </CardContent>
         </Card>
