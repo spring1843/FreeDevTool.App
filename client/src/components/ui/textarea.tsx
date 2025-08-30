@@ -23,7 +23,7 @@ export interface TextAreaProps {
   id?: string;
   minHeight?: string;
   onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
-  theme?: "light" | "dark" | "system"; // Add theme prop
+  theme?: "light" | "dark";
 }
 
 const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
