@@ -91,6 +91,7 @@ export default function JSONCFormatter() {
               minHeight="400px"
               fileExtension="jsonc"
               theme={theme}
+              data-default-input="true"
             />
             <div className="flex gap-2 flex-wrap">
               <Button onClick={formatCode} className="flex-1 sm:flex-none">
@@ -118,8 +119,6 @@ export default function JSONCFormatter() {
           <CardContent>
             <TextArea
               data-testid="jsonc-output"
-              data-default-input="true"
-              autoFocus={true}
               value={output}
               readOnly
               placeholder="Formatted JSONC will appear here..."

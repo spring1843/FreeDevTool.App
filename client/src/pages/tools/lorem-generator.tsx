@@ -281,6 +281,8 @@ export default function LoremGenerator() {
                   )
                 }
                 data-testid="count-input"
+                data-default-input="true"
+                autoFocus={true}
               />
             </div>
 
@@ -291,8 +293,6 @@ export default function LoremGenerator() {
                 checked={startWithLorem}
                 onChange={e => setStartWithLorem(e.target.checked)}
                 className="rounded"
-                data-default-input="true"
-                autoFocus={true}
               />
               <Label htmlFor="start-with-lorem">Start with "Lorem ipsum"</Label>
             </div>
@@ -338,7 +338,6 @@ export default function LoremGenerator() {
               data-testid="lorem-output"
               className="min-h-[300px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               rows={15}
-              autoFocus={true}
               minHeight="300px"
               fileExtension="txt"
               theme={theme}
