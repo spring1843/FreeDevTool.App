@@ -196,13 +196,20 @@ export default function BrowserInfo() {
       currentTime: new Date().toISOString(),
 
       // System preferences
-      systemTheme: window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches
-        ? "light"
-        : "no-preference",
-      reducedMotion: window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-      highContrast: window.matchMedia && window.matchMedia("(prefers-contrast: high)").matches,
+      systemTheme:
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : window.matchMedia &&
+              window.matchMedia("(prefers-color-scheme: light)").matches
+            ? "light"
+            : "no-preference",
+      reducedMotion:
+        window.matchMedia &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+      highContrast:
+        window.matchMedia &&
+        window.matchMedia("(prefers-contrast: high)").matches,
 
       // Browser features
       localStorage: testFeature(window.localStorage),
@@ -599,25 +606,41 @@ export default function BrowserInfo() {
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">System Theme:</span>
-                <span className={`font-medium ${
-                  browserInfo.systemTheme === "dark" ? "text-purple-600" :
-                  browserInfo.systemTheme === "light" ? "text-yellow-600" :
-                  "text-gray-600"
-                }`}>
-                  {browserInfo.systemTheme === "dark" ? "Dark" :
-                   browserInfo.systemTheme === "light" ? "Light" :
-                   "No Preference"}
+                <span
+                  className={`font-medium ${
+                    browserInfo.systemTheme === "dark"
+                      ? "text-purple-600"
+                      : browserInfo.systemTheme === "light"
+                        ? "text-yellow-600"
+                        : "text-gray-600"
+                  }`}
+                >
+                  {browserInfo.systemTheme === "dark"
+                    ? "Dark"
+                    : browserInfo.systemTheme === "light"
+                      ? "Light"
+                      : "No Preference"}
                 </span>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">Reduced Motion:</span>
-                <span className={browserInfo.reducedMotion ? "text-blue-600" : "text-gray-600"}>
+                <span
+                  className={
+                    browserInfo.reducedMotion
+                      ? "text-blue-600"
+                      : "text-gray-600"
+                  }
+                >
                   {browserInfo.reducedMotion ? "Enabled" : "Disabled"}
                 </span>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">High Contrast:</span>
-                <span className={browserInfo.highContrast ? "text-blue-600" : "text-gray-600"}>
+                <span
+                  className={
+                    browserInfo.highContrast ? "text-blue-600" : "text-gray-600"
+                  }
+                >
                   {browserInfo.highContrast ? "Enabled" : "Disabled"}
                 </span>
               </div>
