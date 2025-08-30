@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import CodeMirror from "@uiw/react-codemirror";
+import type { ViewUpdate } from "@codemirror/view";
 import { javascript } from "@codemirror/lang-javascript";
 import { cn } from "@/lib/utils";
 import { css } from "@codemirror/lang-css";
@@ -65,6 +66,38 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
       navigator.clipboard.writeText(value || "");
     };
 
+    // State for cursor position and content size
+    const [cursor, setCursor] = React.useState({ line: 1, ch: 1 });
+    const [contentSize, setContentSize] = React.useState(0);
+
+    // Format bytes to human readable string
+    const formatBytes = (bytes: number): string => {
+      if (bytes < 1024) return `${bytes} B`;
+      const units = ["kB", "MB", "GB", "TB"];
+      let i = -1;
+      let size = bytes;
+      do {
+        size /= 1024;
+        i++;
+      } while (size >= 1024 && i < units.length - 1);
+      return `${size.toFixed(2)} ${units[i]}`;
+    };
+
+    // Update content size when value changes
+    React.useEffect(() => {
+      setContentSize(new Blob([value || ""]).size);
+    }, [value]);
+
+    // Handler for CodeMirror view updates
+    const handleEditorUpdate = React.useCallback((view: ViewUpdate) => {
+      const pos = view.state.selection.main.head;
+      const line = view.state.doc.lineAt(pos);
+      setCursor({
+        line: line.number,
+        ch: pos - line.from + 1,
+      });
+    }, []);
+
     return (
       <div className="relative">
         <div className="absolute top-1 right-1 z-10">
@@ -96,7 +129,20 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
           readOnly={props.readOnly}
           id={props.id}
           autoFocus={props.autoFocus}
+          // Add onUpdate handler for cursor tracking
+          onUpdate={handleEditorUpdate}
         />
+        {/* Status bar below editor */}
+        <div
+          className="w-full flex justify-between items-center px-2 py-1 text-xs text-muted-foreground bg-muted rounded-b-md border-t"
+          style={{ fontFamily: "monospace" }}
+          data-testid="textarea-status-bar"
+        >
+          <span>
+            Line {cursor.line}, Char {cursor.ch}
+          </span>
+          <span>Size: {formatBytes(contentSize)}</span>
+        </div>
       </div>
     );
   }
