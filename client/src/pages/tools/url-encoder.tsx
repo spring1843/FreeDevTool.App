@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { Link, Unlink, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
@@ -10,6 +11,7 @@ import { DEFAULT_URL_ENCODER } from "@/data/defaults";
 export default function URLEncoder() {
   const [plainText, setPlainText] = useState(DEFAULT_URL_ENCODER);
   const [encodedText, setEncodedText] = useState("");
+  const { theme } = useTheme();
 
   const encodeURL = useCallback(() => {
     try {
@@ -110,6 +112,7 @@ export default function URLEncoder() {
               autoFocus={true}
               minHeight="400px"
               fileExtension="txt"
+              theme={theme}
             />
           </CardContent>
         </Card>
@@ -129,6 +132,7 @@ export default function URLEncoder() {
               className="min-h-[400px] font-mono text-sm"
               rows={20}
               minHeight="400px"
+              theme={theme}
             />
           </CardContent>
         </Card>

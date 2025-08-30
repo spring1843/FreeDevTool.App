@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { Label } from "@/components/ui/label";
 import { CopyButton } from "@/components/ui/copy-button";
 import { Link, Globe, Hash, Share } from "lucide-react";
@@ -35,6 +36,7 @@ export default function URLToJSON() {
   const [jsonOutput, setJsonOutput] = useState("");
   const [error, setError] = useState("");
   const { toast } = useToast();
+  const { theme } = useTheme();
 
   useEffect(() => {
     // Load parameters from URL with validation
@@ -311,6 +313,7 @@ export default function URLToJSON() {
                     minHeight="300px"
                     placeholder="JSON output will appear here..."
                     fileExtension="json"
+                    theme={theme}
                   />
 
                   {/* URL Components Summary */}

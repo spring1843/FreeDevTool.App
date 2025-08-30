@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { Badge } from "@/components/ui/badge";
 import { GitCompare, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
@@ -28,6 +29,7 @@ export default function TextDiff() {
     charactersRemoved: number;
     charactersModified: number;
   } | null>(null);
+  const { theme } = useTheme();
 
   const calculateDiff = useCallback(() => {
     const lines1 = text1.split("\n");
@@ -226,6 +228,7 @@ export default function TextDiff() {
               autoFocus={true}
               minHeight="300px"
               fileExtension="txt"
+              theme={theme}
             />
           </CardContent>
         </Card>
@@ -246,6 +249,7 @@ export default function TextDiff() {
               rows={15}
               minHeight="300px"
               fileExtension="txt"
+              theme={theme}
             />
           </CardContent>
         </Card>

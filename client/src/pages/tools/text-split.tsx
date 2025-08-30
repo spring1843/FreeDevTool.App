@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Split, RotateCcw } from "lucide-react";
@@ -17,6 +18,7 @@ export default function TextSplit() {
   const [removeEmpty, setRemoveEmpty] = useState(true);
   const [trimWhitespace, setTrimWhitespace] = useState(true);
   const [splitResult, setSplitResult] = useState<string[]>([]);
+  const { theme } = useTheme();
 
   const splitText = useCallback(() => {
     try {
@@ -165,6 +167,7 @@ export default function TextSplit() {
               autoFocus={true}
               minHeight="300px"
               fileExtension="txt"
+              theme={theme}
             />
           </CardContent>
         </Card>

@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import {
   Select,
   SelectContent,
@@ -142,6 +143,7 @@ export default function QRGenerator() {
   const [error, setError] = useState("");
 
   const { toast } = useToast();
+  const { theme } = useTheme();
 
   const currentPreset = qrPresets.find(p => p.type === qrType) || qrPresets[0];
 
@@ -341,6 +343,7 @@ export default function QRGenerator() {
                   data-testid="qr-input"
                   autoFocus={true}
                   fileExtension="txt"
+                  theme={theme}
                 />
               </div>
 

@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { formatJSONC } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, RotateCcw } from "lucide-react";
@@ -14,6 +15,7 @@ export default function JSONCFormatter() {
   const [input, setInput] = useState(DEFAULT_JSONC);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const { theme } = useTheme();
 
   const formatCode = useCallback(async () => {
     try {
@@ -88,6 +90,7 @@ export default function JSONCFormatter() {
               autoFocus={true}
               minHeight="400px"
               fileExtension="jsonc"
+              theme={theme}
             />
             <div className="flex gap-2 flex-wrap">
               <Button onClick={formatCode} className="flex-1 sm:flex-none">

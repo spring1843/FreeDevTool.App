@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { formatJSON } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, Lightbulb } from "lucide-react";
@@ -14,6 +15,7 @@ export default function JsonFormatter() {
   const [input, setInput] = useState(DEFAULT_JSON);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const { theme } = useTheme();
 
   const formatCode = useCallback(async () => {
     try {
@@ -140,6 +142,7 @@ export default function JsonFormatter() {
               rows={20}
               autoFocus={true}
               fileExtension="json"
+              theme={theme}
             />
           </CardContent>
         </Card>
@@ -157,6 +160,7 @@ export default function JsonFormatter() {
               rows={20}
               lang="javascript"
               fileExtension="json"
+              theme={theme}
             />
           </CardContent>
         </Card>

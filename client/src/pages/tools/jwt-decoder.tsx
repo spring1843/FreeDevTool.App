@@ -6,6 +6,7 @@ import { SecurityBanner } from "@/components/ui/security-banner";
 import { useState, useEffect, useCallback } from "react";
 import { ToolButton, ResetButton } from "@/components/ui/tool-button";
 import { DEFAULT_JWT } from "@/data/defaults";
+import { useTheme } from "@/providers/theme-provider";
 
 export default function JWTDecoder() {
   const [token, setToken] = useState(DEFAULT_JWT);
@@ -14,6 +15,7 @@ export default function JWTDecoder() {
   const [signature, setSignature] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { theme } = useTheme();
 
   const decodeToken = useCallback(() => {
     try {
@@ -148,6 +150,7 @@ export default function JWTDecoder() {
             rows={5}
             autoFocus={true}
             fileExtension="json"
+            theme={theme}
           />
         </CardContent>
       </Card>
@@ -168,6 +171,7 @@ export default function JWTDecoder() {
               className="min-h-[300px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               rows={15}
               minHeight="300px"
+              theme={theme}
             />
           </CardContent>
         </Card>
@@ -187,6 +191,7 @@ export default function JWTDecoder() {
               className="min-h-[300px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               rows={15}
               minHeight="300px"
+              theme={theme}
             />
           </CardContent>
         </Card>
@@ -206,6 +211,7 @@ export default function JWTDecoder() {
               className="min-h-[300px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               rows={15}
               minHeight="300px"
+              theme={theme}
             />
           </CardContent>
         </Card>

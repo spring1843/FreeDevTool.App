@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Shield, RotateCcw, CheckCircle, XCircle } from "lucide-react";
@@ -29,6 +30,7 @@ export default function TLSDecoder() {
   const [certificateInfo, setCertificateInfo] =
     useState<CertificateInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const { theme } = useTheme();
 
   const decodeCertificate = useCallback(() => {
     try {
@@ -193,6 +195,7 @@ export default function TLSDecoder() {
             autoFocus={true}
             minHeight="200px"
             fileExtension="txt"
+            theme={theme}
           />
         </CardContent>
       </Card>

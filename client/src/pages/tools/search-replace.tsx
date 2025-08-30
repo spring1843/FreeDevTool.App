@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Search, RotateCcw } from "lucide-react";
@@ -27,6 +28,7 @@ export default function SearchReplace() {
   const [result, setResult] = useState("");
   const [matchCount, setMatchCount] = useState(0);
   const [error, setError] = useState("");
+  const { theme } = useTheme();
 
   const performSearchReplace = useCallback(() => {
     try {
@@ -210,6 +212,7 @@ export default function SearchReplace() {
               autoFocus={true}
               minHeight="400px"
               fileExtension="txt"
+              theme={theme}
             />
           </CardContent>
         </Card>
@@ -227,6 +230,7 @@ export default function SearchReplace() {
               className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               minHeight="400px"
               rows={20}
+              theme={theme}
             />
           </CardContent>
         </Card>

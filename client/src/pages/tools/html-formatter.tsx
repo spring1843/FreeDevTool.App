@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { formatHTML } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, Minimize2, RotateCcw, AlertTriangle } from "lucide-react";
@@ -21,6 +22,7 @@ export default function HTMLFormatter() {
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [warnings, setWarnings] = useState<ValidationIssue[]>([]);
+  const { theme } = useTheme();
 
   const formatCode = useCallback(
     async (minify = false) => {
@@ -156,6 +158,7 @@ export default function HTMLFormatter() {
               autoFocus={true}
               minHeight="400px"
               fileExtension="html"
+              theme={theme}
             />
           </CardContent>
         </Card>

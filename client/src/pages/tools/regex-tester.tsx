@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Search, RotateCcw, CheckCircle, XCircle } from "lucide-react";
@@ -27,6 +28,7 @@ export default function RegexTester() {
   const [matches, setMatches] = useState<RegexMatch[]>([]);
   const [isValidRegex, setIsValidRegex] = useState(true);
   const [error, setError] = useState("");
+  const { theme } = useTheme();
 
   const updateFlags = useCallback(() => {
     let newFlags = "";
@@ -233,6 +235,7 @@ export default function RegexTester() {
               autoFocus={true}
               minHeight="300px"
               fileExtension="txt"
+              theme={theme}
             />
           </CardContent>
         </Card>

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import {
   Hash,
   Copy,
@@ -57,6 +58,7 @@ export default function MD5Hash() {
   const [isLoading, setIsLoading] = useState(false);
   const [isMatch, setIsMatch] = useState<boolean | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const { theme } = useTheme();
 
   const generateHash = useCallback(async () => {
     if (!inputText.trim()) {
@@ -286,6 +288,7 @@ export default function MD5Hash() {
             rows={5}
             autoFocus={true}
             fileExtension="txt"
+            theme={theme}
           />
         </CardContent>
       </Card>

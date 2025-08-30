@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { formatTypeScript } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, Minimize2, RotateCcw } from "lucide-react";
@@ -13,6 +14,7 @@ export default function TypeScriptFormatter() {
   const [input, setInput] = useState(DEFAULT_TYPESCRIPT);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const { theme } = useTheme();
 
   const formatCode = useCallback(
     async (minify = false) => {
@@ -112,6 +114,7 @@ export default function TypeScriptFormatter() {
               autoFocus={true}
               minHeight="400px"
               fileExtension="ts"
+              theme={theme}
             />
           </CardContent>
         </Card>

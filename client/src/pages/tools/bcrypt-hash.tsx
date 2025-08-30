@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
@@ -39,6 +40,7 @@ export default function BcryptHash() {
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showVerifyPassword, setShowVerifyPassword] = useState(false);
+  const { theme } = useTheme();
 
   // Simple bcrypt-like hash function for demonstration
   // In a real implementation, you would use a proper bcrypt library
@@ -335,6 +337,7 @@ export default function BcryptHash() {
             rows={5}
             autoFocus={true}
             fileExtension="txt"
+            theme={theme}
           />
         </CardContent>
       </Card>

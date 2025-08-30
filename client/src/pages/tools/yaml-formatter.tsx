@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { formatYAML } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, RotateCcw } from "lucide-react";
@@ -12,6 +13,7 @@ export default function YAMLFormatter() {
   const [input, setInput] = useState(DEFAULT_YAML);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const { theme } = useTheme();
 
   const formatCode = useCallback(async () => {
     try {
@@ -96,6 +98,7 @@ export default function YAMLFormatter() {
               autoFocus={true}
               minHeight="400px"
               fileExtension="yaml"
+              theme={theme}
             />
           </CardContent>
         </Card>

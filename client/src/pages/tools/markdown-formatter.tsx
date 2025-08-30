@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { formatMarkdown } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { FileText, RotateCcw } from "lucide-react";
@@ -13,6 +14,7 @@ export default function MarkdownFormatter() {
   const [input, setInput] = useState(DEFAULT_MARKDOWN);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const { theme } = useTheme();
 
   const formatCode = useCallback(async () => {
     try {
@@ -97,6 +99,7 @@ export default function MarkdownFormatter() {
               autoFocus={true}
               lang="markdown"
               fileExtension="md"
+              theme={theme}
             />
           </CardContent>
         </Card>
@@ -114,6 +117,7 @@ export default function MarkdownFormatter() {
               className="min-h-[500px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               rows={25}
               lang="markdown"
+              theme={theme}
             />
           </CardContent>
         </Card>

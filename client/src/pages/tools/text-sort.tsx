@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import {
   Select,
   SelectContent,
@@ -19,12 +20,13 @@ import { DEFAULT_TEXT_SORT } from "@/data/defaults";
 type SortType = "alphabetical" | "numerical" | "length" | "reverse";
 type SortOrder = "asc" | "desc";
 
-export default function TextSorter() {
+export default function TextSort() {
   const [input, setInput] = useState(DEFAULT_TEXT_SORT);
   const [sortType, setSortType] = useState<SortType>("alphabetical");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
   const [caseSensitive, setCaseSensitive] = useState(false);
   const [sortedOutput, setSortedOutput] = useState("");
+  const { theme } = useTheme();
 
   const sortText = useCallback(() => {
     const lines = input.split("\n").filter(line => line.trim() !== "");
@@ -177,6 +179,7 @@ export default function TextSorter() {
               autoFocus={true}
               minHeight="400px"
               fileExtension="txt"
+              theme={theme}
             />
           </CardContent>
         </Card>

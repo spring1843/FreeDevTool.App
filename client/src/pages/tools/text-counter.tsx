@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { countTextStats } from "@/lib/text-tools";
@@ -26,6 +27,7 @@ export default function TextCounter() {
   );
 
   const stats = countTextStats(fields.text);
+  const { theme } = useTheme();
 
   const statItems = [
     {
@@ -101,6 +103,7 @@ export default function TextCounter() {
               rows={20}
               minHeight="400px"
               fileExtension="txt"
+              theme={theme}
             />
             <div className="mt-4 flex justify-end">
               <Button

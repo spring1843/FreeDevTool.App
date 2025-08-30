@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { convertJSONToYAML, convertYAMLToJSON } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ArrowRight, ArrowLeft, RotateCcw } from "lucide-react";
@@ -15,6 +16,7 @@ export default function JSONYAMLConverter() {
   const [yamlInput, setYamlInput] = useState(DEFAULT_YAML);
   const [jsonOutput, setJsonOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const { theme } = useTheme();
 
   const convertToYAML = useCallback(() => {
     const { converted, error: convertError } = convertJSONToYAML(jsonInput);
@@ -120,6 +122,7 @@ export default function JSONYAMLConverter() {
                 minHeight="300px"
                 lang="javascript"
                 fileExtension="json"
+                theme={theme}
               />
             </CardContent>
           </Card>
@@ -141,6 +144,7 @@ export default function JSONYAMLConverter() {
                 minHeight="300px"
                 lang="yaml"
                 fileExtension="yaml"
+                theme={theme}
               />
             </CardContent>
           </Card>
@@ -164,6 +168,7 @@ export default function JSONYAMLConverter() {
                 minHeight="300px"
                 lang="yaml"
                 fileExtension="yaml"
+                theme={theme}
               />
             </CardContent>
           </Card>
@@ -185,6 +190,7 @@ export default function JSONYAMLConverter() {
                 minHeight="300px"
                 lang="javascript"
                 fileExtension="json"
+                theme={theme}
               />
             </CardContent>
           </Card>

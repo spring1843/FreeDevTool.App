@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { Badge } from "@/components/ui/badge";
 import { FileText, Copy, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
@@ -104,6 +105,7 @@ export default function LoremGenerator() {
   const [count, setCount] = useState(3);
   const [startWithLorem, setStartWithLorem] = useState(true);
   const [generated, setGenerated] = useState("");
+  const { theme } = useTheme();
 
   const generateRandom = () => {
     const randomIndex = Math.floor(Math.random() * loremWords.length);
@@ -337,6 +339,7 @@ export default function LoremGenerator() {
               autoFocus={true}
               minHeight="300px"
               fileExtension="txt"
+              theme={theme}
             />
 
             <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">

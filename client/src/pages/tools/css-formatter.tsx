@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { formatCSS, formatLESS, formatSCSS } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
@@ -21,6 +22,7 @@ type FormatType = "css" | "scss" | "less";
 
 export default function CSSFormatter() {
   const [location] = useLocation();
+  const { theme } = useTheme();
 
   // Determine initial format based on route - only on mount
   const getInitialFormat = (): FormatType => {
@@ -200,6 +202,7 @@ export default function CSSFormatter() {
               autoFocus={true}
               minHeight="400px"
               fileExtension="css"
+              theme={theme}
             />
           </CardContent>
         </Card>

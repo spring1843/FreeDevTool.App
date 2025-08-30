@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { formatGraphQL } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, RotateCcw } from "lucide-react";
@@ -13,6 +14,7 @@ export default function GraphQLFormatter() {
   const [input, setInput] = useState(DEFAULT_GRAPHQL);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const { theme } = useTheme();
 
   const formatCode = useCallback(async () => {
     try {
@@ -99,6 +101,7 @@ export default function GraphQLFormatter() {
               autoFocus={true}
               minHeight="400px"
               fileExtension="graphql"
+              theme={theme}
             />
           </CardContent>
         </Card>
@@ -116,6 +119,7 @@ export default function GraphQLFormatter() {
               className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               minHeight="400px"
               rows={20}
+              theme={theme}
             />
           </CardContent>
         </Card>

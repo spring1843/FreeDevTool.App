@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { encodeBase64, decodeBase64 } from "@/lib/encoders";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Lock, Unlock, ArrowRightLeft } from "lucide-react";
@@ -12,6 +13,7 @@ export default function Base64Encoder() {
   const [plainText, setPlainText] = useState(DEFAULT_BASE64);
   const [encodedText, setEncodedText] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const { theme } = useTheme();
 
   const encode = useCallback(() => {
     try {
@@ -137,6 +139,7 @@ export default function Base64Encoder() {
               autoFocus={true}
               minHeight="400px"
               fileExtension="txt"
+              theme={theme}
             />
           </CardContent>
         </Card>
@@ -155,6 +158,7 @@ export default function Base64Encoder() {
               rows={20}
               minHeight="400px"
               fileExtension="txt"
+              theme={theme}
             />
           </CardContent>
         </Card>

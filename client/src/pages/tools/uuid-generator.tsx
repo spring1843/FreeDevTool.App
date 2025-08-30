@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { Badge } from "@/components/ui/badge";
 import { RefreshCw, Copy, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
@@ -23,6 +24,7 @@ export default function UUIDGenerator() {
   const [format, setFormat] = useState<
     "standard" | "uppercase" | "lowercase" | "nodashes" | "brackets"
   >("standard");
+  const { theme } = useTheme();
 
   const generateUUID = useCallback(() => {
     const newUuids: string[] = [];
@@ -263,6 +265,7 @@ export default function UUIDGenerator() {
                   rows={5}
                   autoFocus={true}
                   fileExtension="txt"
+                  theme={theme}
                 />
               </div>
             )}
