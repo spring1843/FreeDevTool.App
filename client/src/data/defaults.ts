@@ -6,7 +6,8 @@ export const DEFAULT_JSON = `{"name":"John Doe","age":30,
 "city":"New York","hobbies":
 ["reading","swimming","coding"],
 "address":{"street":"123 Main St",
-"zipCode":"10001"}}`;
+"zipCode":"10001"}}
+`;
 
 export const DEFAULT_JSONC = `{
   // Application configuration
