@@ -8,13 +8,14 @@ import { css } from "@codemirror/lang-css";
 import { html } from "@codemirror/lang-html";
 import { yaml } from "@codemirror/lang-yaml";
 import { markdown } from "@codemirror/lang-markdown";
-import { Copy } from "lucide-react";
+import { Copy, Download } from "lucide-react";
 
 // Define props for the CodeMirror component
 export interface TextAreaProps {
   className?: string;
   value?: string;
   lang?: string;
+  fileExtension?: string;
   readOnly?: boolean;
   autoFocus?: boolean;
   rows?: number;
@@ -66,6 +67,23 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
       navigator.clipboard.writeText(value || "");
     };
 
+    // Download handler
+    const handleDownload = () => {
+      const extension = props.fileExtension
+        ? props.fileExtension.replace(/^\./, "")
+        : "txt";
+      const randomName = `file_${Math.random().toString(36).slice(2, 10)}.${extension}`;
+      const blob = new Blob([value || ""], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = randomName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    };
+
     // State for cursor position and content size
     const [cursor, setCursor] = React.useState({ line: 1, ch: 1 });
     const [contentSize, setContentSize] = React.useState(0);
@@ -100,7 +118,7 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
 
     return (
       <div className="relative">
-        <div className="absolute top-1 right-1 z-10">
+        <div className="absolute top-1 right-1 z-10 flex gap-1">
           <Button
             onClick={handleCopy}
             size="sm"
@@ -109,6 +127,15 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
             data-testid="copy-all-button"
           >
             <Copy className="w-4 h-4" />
+          </Button>
+          <Button
+            onClick={handleDownload}
+            size="sm"
+            variant="ghost"
+            title="Download file"
+            data-testid="download-button"
+          >
+            <Download className="w-4 h-4" />
           </Button>
         </div>
 
