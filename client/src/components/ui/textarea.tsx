@@ -143,8 +143,47 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
     // Use theme prop for CodeMirror theme
     const codeMirrorTheme = theme === "dark" ? "dark" : "light";
 
+    // Drag-and-drop state for visual feedback
+    const [isDragOver, setIsDragOver] = React.useState(false);
+
+    // Drag-and-drop handlers
+    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+      if (props.readOnly) return;
+      e.preventDefault();
+      setIsDragOver(true);
+    };
+
+    const handleDragLeave = (_e: React.DragEvent<HTMLDivElement>) => {
+      if (props.readOnly) return;
+      setIsDragOver(false);
+    };
+
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+      if (props.readOnly) return;
+      e.preventDefault();
+      setIsDragOver(false);
+      const file = e.dataTransfer.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (onChange) {
+          onChange(createSyntheticChangeEvent(reader.result as string));
+        }
+      };
+      reader.readAsText(file);
+    };
+
     return (
-      <div className="relative">
+      <div
+        className={cn(
+          "relative",
+          isDragOver && !props.readOnly ? "border-blue-500 border-2" : ""
+        )}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        data-testid="textarea-drop-area"
+      >
         <div className="absolute top-1 right-1 z-10 flex gap-1">
           <Button
             onClick={handleCopy}
