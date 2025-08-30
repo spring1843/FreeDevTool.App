@@ -100,6 +100,7 @@ export default function YAMLFormatter() {
               fileExtension="yaml"
               theme={theme}
               lang="yaml"
+              data-default-input="true"
             />
           </CardContent>
         </Card>

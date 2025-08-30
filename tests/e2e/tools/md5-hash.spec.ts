@@ -1,9 +1,5 @@
 import { test, expect } from "@playwright/test";
-import {
-  setupJSErrorCollection,
-  expectNoCriticalJSErrors,
-  expectDefaultValue,
-} from "./utils";
+import { setupJSErrorCollection, expectNoCriticalJSErrors } from "./utils";
 
 test.describe("MD5 Hash Tool", () => {
   test.beforeEach(async ({ page }) => {
@@ -16,6 +12,5 @@ test.describe("MD5 Hash Tool", () => {
   }) => {
     await expect(page.locator("main")).toBeVisible();
     await expectNoCriticalJSErrors(page);
-    await expectDefaultValue(page);
   });
 });

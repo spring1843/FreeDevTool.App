@@ -338,6 +338,7 @@ export default function BcryptHash() {
             autoFocus={true}
             fileExtension="txt"
             theme={theme}
+            data-default-input="true"
           />
         </CardContent>
       </Card>

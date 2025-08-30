@@ -205,6 +205,8 @@ export default function JWTDecoder() {
           <CardContent>
             <TextArea
               value={signature}
+              data-default-input="true"
+              autoFocus={true}
               readOnly={true}
               placeholder="Signature will appear here..."
               data-testid="jwt-signature-output"

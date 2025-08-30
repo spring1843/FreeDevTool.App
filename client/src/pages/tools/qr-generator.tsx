@@ -344,6 +344,7 @@ export default function QRGenerator() {
                   autoFocus={true}
                   fileExtension="txt"
                   theme={theme}
+                  data-default-input="true"
                 />
               </div>
 

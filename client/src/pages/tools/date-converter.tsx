@@ -321,6 +321,8 @@ export default function DateConverter() {
               placeholder="Enter Unix timestamp, ISO date, or any standard date format..."
               data-testid="date-input"
               className="font-mono"
+              autoFocus={true}
+              data-default-input="true"
             />
             <p className="text-sm text-gray-500 mt-1">
               Supports: Unix timestamps (seconds/milliseconds), ISO 8601, RFC

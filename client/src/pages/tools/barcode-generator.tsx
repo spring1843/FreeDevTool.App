@@ -211,6 +211,8 @@ export default function BarcodeGenerator() {
                 placeholder="Enter text or numbers..."
                 data-testid="barcode-text"
                 className={inputError ? "border-red-500" : ""}
+                data-default-input="true"
+                autoFocus={true}
               />
               {inputError ? (
                 <div className="text-sm text-red-600 mt-1">{inputError}</div>

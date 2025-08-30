@@ -312,6 +312,8 @@ export default function ColorPaletteGenerator() {
                   onChange={e => handleBaseColorChange(e.target.value)}
                   className="w-16 h-10 p-1 border"
                   data-testid="color-picker"
+                  data-default-input="true"
+                  autoFocus={true}
                 />
                 <Input
                   type="text"

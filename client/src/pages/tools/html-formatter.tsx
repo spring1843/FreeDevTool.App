@@ -160,6 +160,7 @@ export default function HTMLFormatter() {
               fileExtension="html"
               theme={theme}
               lang="html"
+              data-default-input="true"
             />
           </CardContent>
         </Card>

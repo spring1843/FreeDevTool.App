@@ -300,6 +300,8 @@ export default function TimeFormatter() {
                 value={inputDate}
                 onChange={e => setInputDate(e.target.value)}
                 data-testid="input-date"
+                autoFocus={true}
+                data-default-input="true"
               />
             </div>
             <div>

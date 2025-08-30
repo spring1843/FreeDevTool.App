@@ -30,6 +30,7 @@ export async function expectNoCriticalJSErrors(page: Page) {
 }
 
 export async function expectDefaultValue(page: Page) {
-  // const defaultInput = page.locator('[data-default-input="true"]');
+  const defaultInput = page.locator('[data-default-input="true"]');
+  await expect(defaultInput).toBeVisible();
   // await expect(defaultInput).not.toHaveValue("");
 }

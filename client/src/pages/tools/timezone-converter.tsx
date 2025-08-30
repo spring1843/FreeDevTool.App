@@ -319,6 +319,8 @@ export default function TimezoneConverter() {
                 value={sourceDate}
                 onChange={e => setSourceDate(e.target.value)}
                 data-testid="source-date-input"
+                data-default-input="true"
+                autoFocus={true}
               />
             </div>
             <div>

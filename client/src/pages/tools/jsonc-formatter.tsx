@@ -118,6 +118,8 @@ export default function JSONCFormatter() {
           <CardContent>
             <TextArea
               data-testid="jsonc-output"
+              data-default-input="true"
+              autoFocus={true}
               value={output}
               readOnly
               placeholder="Formatted JSONC will appear here..."

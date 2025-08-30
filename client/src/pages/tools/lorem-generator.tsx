@@ -291,6 +291,8 @@ export default function LoremGenerator() {
                 checked={startWithLorem}
                 onChange={e => setStartWithLorem(e.target.checked)}
                 className="rounded"
+                data-default-input="true"
+                autoFocus={true}
               />
               <Label htmlFor="start-with-lorem">Start with "Lorem ipsum"</Label>
             </div>
@@ -340,6 +342,7 @@ export default function LoremGenerator() {
               minHeight="300px"
               fileExtension="txt"
               theme={theme}
+              lang="plaintext"
             />
 
             <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">

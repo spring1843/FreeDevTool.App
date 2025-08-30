@@ -165,6 +165,8 @@ export default function UUIDGenerator() {
                   )
                 }
                 data-testid="count-input"
+                autoFocus={true}
+                data-default-input="true"
               />
             </div>
 
@@ -263,7 +265,6 @@ export default function UUIDGenerator() {
                   className="mt-2 min-h-[100px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
                   data-testid="all-uuids-output"
                   rows={5}
-                  autoFocus={true}
                   fileExtension="txt"
                   theme={theme}
                 />

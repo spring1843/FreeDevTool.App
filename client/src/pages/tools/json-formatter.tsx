@@ -144,6 +144,7 @@ export default function JsonFormatter() {
               fileExtension="json"
               theme={theme}
               lang="json"
+              data-default-input="true"
             />
           </CardContent>
         </Card>

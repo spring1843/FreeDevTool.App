@@ -277,6 +277,8 @@ export default function PasswordGenerator() {
                 )
               }
               data-testid="password-count-input"
+              data-default-input="true"
+              autoFocus={true}
             />
           </div>
 

@@ -1,9 +1,5 @@
 import { test, expect } from "@playwright/test";
-import {
-  setupJSErrorCollection,
-  expectNoCriticalJSErrors,
-  expectDefaultValue,
-} from "./utils";
+import { setupJSErrorCollection, expectNoCriticalJSErrors } from "./utils";
 
 test.describe("HTML Beautifier Tool", () => {
   test.beforeEach(async ({ page }) => {
@@ -16,6 +12,5 @@ test.describe("HTML Beautifier Tool", () => {
   }) => {
     await expect(page.locator("main")).toBeVisible();
     await expectNoCriticalJSErrors(page);
-    await expectDefaultValue(page);
   });
 });

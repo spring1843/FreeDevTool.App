@@ -219,6 +219,8 @@ export default function MD5Hash() {
                 onChange={e => setCompareHash(e.target.value)}
                 placeholder="Enter hash for comparison..."
                 data-testid="compare-hash"
+                data-default-input="true"
+                autoFocus={true}
               />
             </div>
 

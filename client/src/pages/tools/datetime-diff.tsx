@@ -379,6 +379,8 @@ export default function DateTimeDiff() {
                     value={fields.startTime}
                     onChange={e => updateField("startTime", e.target.value)}
                     data-testid="start-time-input"
+                    data-default-input="true"
+                    autoFocus={true}
                   />
                 </div>
               </div>

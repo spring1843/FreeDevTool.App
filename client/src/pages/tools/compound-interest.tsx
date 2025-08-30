@@ -243,6 +243,8 @@ export default function CompoundInterestCalculator() {
                 value={principal}
                 onChange={e => setPrincipal(Number(e.target.value))}
                 placeholder="Initial amount"
+                data-default-input="true"
+                autoFocus={true}
               />
             </div>
 
