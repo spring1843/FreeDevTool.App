@@ -23,10 +23,11 @@ export interface TextAreaProps {
   id?: string;
   minHeight?: string;
   onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
+  theme?: "light" | "dark" | "system"; // Add theme prop
 }
 
 const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
-  ({ className, value, onChange, ...props }) => {
+  ({ className, value, onChange, theme = "light", ...props }) => {
     const baseClassName = cn(
       "w-full rounded-md border border-input bg-background text-sm",
       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
@@ -116,6 +117,9 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
       });
     }, []);
 
+    // Use theme prop for CodeMirror theme
+    const codeMirrorTheme = theme === "dark" ? "dark" : "light";
+
     return (
       <div className="relative">
         <div className="absolute top-1 right-1 z-10 flex gap-1">
@@ -147,6 +151,7 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
             lineNumbers: true,
             foldGutter: true,
           }}
+          theme={codeMirrorTheme}
           onChange={val => {
             if (onChange) onChange(createSyntheticChangeEvent(val));
           }}

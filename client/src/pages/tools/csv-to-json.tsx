@@ -25,6 +25,7 @@ import {
   getValidatedParam,
 } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
+import { useTheme } from "@/providers/theme-provider";
 
 interface CSVRow {
   [key: string]: string;
@@ -51,6 +52,7 @@ export default function CSVToJSON() {
   const [rowCount, setRowCount] = useState(0);
 
   const { toast } = useToast();
+  const { theme: resolvedTheme } = useTheme();
 
   // Load URL parameters on mount
   useEffect(() => {
@@ -341,6 +343,7 @@ Jane Smith,jane@example.com,25"
               autoFocus={true}
               minHeight="200px"
               fileExtension="csv"
+              theme={resolvedTheme}
             />
 
             {error ? (
@@ -447,6 +450,7 @@ Jane Smith,jane@example.com,25"
               rows={10}
               lang="javascript"
               minHeight="200px"
+              theme={resolvedTheme}
             />
 
             {headers.length > 0 && (
