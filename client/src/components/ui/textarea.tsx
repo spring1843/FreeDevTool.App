@@ -100,9 +100,7 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
       const reader = new FileReader();
       reader.onload = () => {
         if (onChange) {
-          onChange(
-            createSyntheticChangeEvent(reader.result as string)
-          );
+          onChange(createSyntheticChangeEvent(reader.result as string));
         }
       };
       reader.readAsText(file);
@@ -182,7 +180,11 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
               <input
                 ref={fileInputRef}
                 type="file"
-                accept={props.fileExtension ? `.${props.fileExtension.replace(/^\./, "")}` : undefined}
+                accept={
+                  props.fileExtension
+                    ? `.${props.fileExtension.replace(/^\./, "")}`
+                    : undefined
+                }
                 style={{ display: "none" }}
                 onChange={handleFileChange}
                 data-testid="upload-input"
