@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import {
   setupJSErrorCollection,
-  expectNoCriticalJSErrors,
+  expectNoErrors,
   expectDefaultValue,
 } from "./utils";
 
@@ -15,7 +15,7 @@ test.describe("Countdown Tool", () => {
     page,
   }) => {
     await expect(page.locator("main")).toBeVisible();
-    await expectNoCriticalJSErrors(page);
+    await expectNoErrors(page);
     await expectDefaultValue(page);
   });
 });

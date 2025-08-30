@@ -16,21 +16,29 @@ export async function setupJSErrorCollection(page: Page) {
   });
 }
 
-export async function expectNoCriticalJSErrors(page: Page) {
+export async function expectNoErrors(page: Page) {
   const errors = await page.evaluate(
     () => (window as typeof window & { jsErrors?: string[] }).jsErrors || []
   );
-  const criticalErrors = errors.filter(
-    (error: string) =>
-      !error.includes("unhandledrejection") ||
-      error.includes("TypeError") ||
-      error.includes("ReferenceError")
+
+  const consoleMessages = await page.evaluate(
+    () =>
+      (window as typeof window & { consoleMessages?: string[] })
+        .consoleMessages || []
   );
-  expect(criticalErrors.length).toBe(0);
+
+  const allErrors = [...errors, ...consoleMessages];
+
+  expect(
+    allErrors,
+    `Expected no critical JS errors or warnings, but found: ${allErrors.join(
+      ", "
+    )}`
+  ).toHaveLength(0);
 }
 
 export async function expectDefaultValue(page: Page) {
   const defaultInput = page.locator('[data-default-input="true"]');
   await expect(defaultInput).toBeVisible();
-  // await expect(defaultInput).not.toHaveValue("");
+  await expect(defaultInput).not.toHaveValue("");
 }

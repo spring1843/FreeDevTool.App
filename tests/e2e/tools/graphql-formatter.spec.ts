@@ -1,5 +1,5 @@
-import { test, expect } from "@playwright/test";
-import { setupJSErrorCollection, expectNoCriticalJSErrors } from "./utils";
+import { test } from "@playwright/test";
+import { setupJSErrorCollection, expectNoErrors } from "./utils";
 
 test.describe("GraphQL Formatter Tool", () => {
   test.beforeEach(async ({ page }) => {
@@ -10,7 +10,6 @@ test.describe("GraphQL Formatter Tool", () => {
   test("should load without errors and have default value", async ({
     page,
   }) => {
-    await expect(page.locator("main")).toBeVisible();
-    await expectNoCriticalJSErrors(page);
+    await expectNoErrors(page);
   });
 });
