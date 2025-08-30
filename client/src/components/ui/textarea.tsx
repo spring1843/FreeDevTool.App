@@ -8,7 +8,7 @@ import { css } from "@codemirror/lang-css";
 import { html } from "@codemirror/lang-html";
 import { yaml } from "@codemirror/lang-yaml";
 import { markdown } from "@codemirror/lang-markdown";
-import { Copy, Download } from "lucide-react";
+import { Copy, Download, Upload } from "lucide-react";
 
 // Define props for the CodeMirror component
 export interface TextAreaProps {
@@ -85,6 +85,31 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
       URL.revokeObjectURL(url);
     };
 
+    // Ref for hidden file input
+    const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+    // Handler for upload button click
+    const handleUploadClick = () => {
+      fileInputRef.current?.click();
+    };
+
+    // Handler for file input change
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (onChange) {
+          onChange(
+            createSyntheticChangeEvent(reader.result as string)
+          );
+        }
+      };
+      reader.readAsText(file);
+      // Reset input value so same file can be uploaded again
+      e.target.value = "";
+    };
+
     // State for cursor position and content size
     const [cursor, setCursor] = React.useState({ line: 1, ch: 1 });
     const [contentSize, setContentSize] = React.useState(0);
@@ -141,6 +166,29 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
           >
             <Download className="w-4 h-4" />
           </Button>
+          {/* Only show upload if not readOnly */}
+          {!props.readOnly && (
+            <>
+              <Button
+                onClick={handleUploadClick}
+                size="sm"
+                variant="ghost"
+                title="Upload file"
+                data-testid="upload-button"
+              >
+                <Upload className="w-4 h-4" />
+              </Button>
+              {/* Hidden file input for upload */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept={props.fileExtension ? `.${props.fileExtension.replace(/^\./, "")}` : undefined}
+                style={{ display: "none" }}
+                onChange={handleFileChange}
+                data-testid="upload-input"
+              />
+            </>
+          )}
         </div>
 
         <CodeMirror
