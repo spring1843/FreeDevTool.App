@@ -209,6 +209,7 @@ export default function SearchReplace() {
               rows={20}
               autoFocus={true}
               minHeight="400px"
+              fileExtension="txt"
             />
           </CardContent>
         </Card>

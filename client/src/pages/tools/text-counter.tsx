@@ -100,6 +100,7 @@ export default function TextCounter() {
               data-testid="text-input"
               rows={20}
               minHeight="400px"
+              fileExtension="txt"
             />
             <div className="mt-4 flex justify-end">
               <Button

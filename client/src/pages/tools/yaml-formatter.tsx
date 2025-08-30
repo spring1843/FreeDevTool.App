@@ -95,6 +95,7 @@ export default function YAMLFormatter() {
               rows={20}
               autoFocus={true}
               minHeight="400px"
+              fileExtension="yaml"
             />
           </CardContent>
         </Card>

@@ -155,6 +155,7 @@ export default function HTMLFormatter() {
               rows={20}
               autoFocus={true}
               minHeight="400px"
+              fileExtension="html"
             />
           </CardContent>
         </Card>

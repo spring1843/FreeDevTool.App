@@ -340,6 +340,7 @@ Jane Smith,jane@example.com,25"
               rows={10}
               autoFocus={true}
               minHeight="200px"
+              fileExtension="csv"
             />
 
             {error ? (

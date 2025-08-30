@@ -139,6 +139,7 @@ export default function JsonFormatter() {
               className="min-h-[400px] font-mono text-sm"
               rows={20}
               autoFocus={true}
+              fileExtension="json"
             />
           </CardContent>
         </Card>
@@ -155,6 +156,7 @@ export default function JsonFormatter() {
               data-testid="json-output"
               rows={20}
               lang="javascript"
+              fileExtension="json"
             />
           </CardContent>
         </Card>

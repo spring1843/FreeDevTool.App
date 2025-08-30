@@ -147,6 +147,7 @@ export default function JWTDecoder() {
             className="min-h-[100px] font-mono text-sm"
             rows={5}
             autoFocus={true}
+            fileExtension="json"
           />
         </CardContent>
       </Card>

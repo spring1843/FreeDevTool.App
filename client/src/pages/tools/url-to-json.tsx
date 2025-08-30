@@ -310,6 +310,7 @@ export default function URLToJSON() {
                     className="font-mono text-sm min-h-[300px] resize-none"
                     minHeight="300px"
                     placeholder="JSON output will appear here..."
+                    fileExtension="json"
                   />
 
                   {/* URL Components Summary */}

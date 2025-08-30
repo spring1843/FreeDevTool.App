@@ -199,6 +199,7 @@ export default function CSSFormatter() {
               lang="css"
               autoFocus={true}
               minHeight="400px"
+              fileExtension="css"
             />
           </CardContent>
         </Card>

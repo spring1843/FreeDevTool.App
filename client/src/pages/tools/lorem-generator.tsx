@@ -336,6 +336,7 @@ export default function LoremGenerator() {
               rows={15}
               autoFocus={true}
               minHeight="300px"
+              fileExtension="txt"
             />
 
             <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">

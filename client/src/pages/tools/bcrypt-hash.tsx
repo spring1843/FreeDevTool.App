@@ -334,6 +334,7 @@ export default function BcryptHash() {
             className="min-h-[100px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
             rows={5}
             autoFocus={true}
+            fileExtension="txt"
           />
         </CardContent>
       </Card>

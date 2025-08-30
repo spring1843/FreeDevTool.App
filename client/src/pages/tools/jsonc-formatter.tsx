@@ -87,6 +87,7 @@ export default function JSONCFormatter() {
               lang="javascript"
               autoFocus={true}
               minHeight="400px"
+              fileExtension="jsonc"
             />
             <div className="flex gap-2 flex-wrap">
               <Button onClick={formatCode} className="flex-1 sm:flex-none">

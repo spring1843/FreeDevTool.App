@@ -96,6 +96,7 @@ export default function MarkdownFormatter() {
               rows={25}
               autoFocus={true}
               lang="markdown"
+              fileExtension="md"
             />
           </CardContent>
         </Card>

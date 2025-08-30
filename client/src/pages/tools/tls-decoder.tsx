@@ -192,6 +192,7 @@ export default function TLSDecoder() {
             rows={10}
             autoFocus={true}
             minHeight="200px"
+            fileExtension="txt"
           />
         </CardContent>
       </Card>

@@ -176,6 +176,7 @@ export default function TextSorter() {
               rows={20}
               autoFocus={true}
               minHeight="400px"
+              fileExtension="txt"
             />
           </CardContent>
         </Card>

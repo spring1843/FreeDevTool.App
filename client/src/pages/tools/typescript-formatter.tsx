@@ -111,6 +111,7 @@ export default function TypeScriptFormatter() {
               rows={20}
               autoFocus={true}
               minHeight="400px"
+              fileExtension="ts"
             />
           </CardContent>
         </Card>

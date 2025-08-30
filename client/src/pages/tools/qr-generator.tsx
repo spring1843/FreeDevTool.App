@@ -340,6 +340,7 @@ export default function QRGenerator() {
                   rows={4}
                   data-testid="qr-input"
                   autoFocus={true}
+                  fileExtension="txt"
                 />
               </div>
 

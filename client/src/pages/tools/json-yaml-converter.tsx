@@ -119,6 +119,7 @@ export default function JSONYAMLConverter() {
                 autoFocus={true}
                 minHeight="300px"
                 lang="javascript"
+                fileExtension="json"
               />
             </CardContent>
           </Card>
@@ -139,6 +140,7 @@ export default function JSONYAMLConverter() {
                 rows={15}
                 minHeight="300px"
                 lang="yaml"
+                fileExtension="yaml"
               />
             </CardContent>
           </Card>
@@ -161,6 +163,7 @@ export default function JSONYAMLConverter() {
                 rows={15}
                 minHeight="300px"
                 lang="yaml"
+                fileExtension="yaml"
               />
             </CardContent>
           </Card>
@@ -181,6 +184,7 @@ export default function JSONYAMLConverter() {
                 rows={15}
                 minHeight="300px"
                 lang="javascript"
+                fileExtension="json"
               />
             </CardContent>
           </Card>

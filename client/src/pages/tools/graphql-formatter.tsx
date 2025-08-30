@@ -98,6 +98,7 @@ export default function GraphQLFormatter() {
               rows={20}
               autoFocus={true}
               minHeight="400px"
+              fileExtension="graphql"
             />
           </CardContent>
         </Card>

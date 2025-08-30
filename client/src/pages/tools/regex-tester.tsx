@@ -232,6 +232,7 @@ export default function RegexTester() {
               rows={15}
               autoFocus={true}
               minHeight="300px"
+              fileExtension="txt"
             />
           </CardContent>
         </Card>

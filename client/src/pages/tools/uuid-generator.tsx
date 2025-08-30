@@ -262,6 +262,7 @@ export default function UUIDGenerator() {
                   data-testid="all-uuids-output"
                   rows={5}
                   autoFocus={true}
+                  fileExtension="txt"
                 />
               </div>
             )}
