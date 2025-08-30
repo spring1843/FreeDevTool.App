@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { encodeBase64, decodeBase64 } from "@/lib/encoders";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Lock, Unlock, ArrowRightLeft } from "lucide-react";
@@ -12,6 +13,7 @@ export default function Base64Encoder() {
   const [plainText, setPlainText] = useState(DEFAULT_BASE64);
   const [encodedText, setEncodedText] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const { theme } = useTheme();
 
   const encode = useCallback(() => {
     try {
@@ -127,15 +129,17 @@ export default function Base64Encoder() {
             <CardTitle>Plain Text</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={plainText}
               onChange={e => handlePlainTextChange(e.target.value)}
               placeholder="Enter text to encode..."
               data-testid="base64-plain-text"
               className="min-h-[400px] font-mono text-sm"
               rows={20}
-              showLineNumbers={true}
-              showStats={true}
+              autoFocus={true}
+              minHeight="400px"
+              fileExtension="txt"
+              theme={theme}
             />
           </CardContent>
         </Card>
@@ -145,15 +149,16 @@ export default function Base64Encoder() {
             <CardTitle>Base64 Encoded</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={encodedText}
               onChange={e => handleEncodedTextChange(e.target.value)}
               placeholder="Enter Base64 encoded text to decode..."
               data-testid="base64-encoded-text"
               className="min-h-[400px] font-mono text-sm"
               rows={20}
-              showLineNumbers={true}
-              showStats={true}
+              minHeight="400px"
+              fileExtension="txt"
+              theme={theme}
             />
           </CardContent>
         </Card>

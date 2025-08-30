@@ -1,11 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Key, CheckCircle, XCircle } from "lucide-react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useState, useEffect, useCallback } from "react";
 import { ToolButton, ResetButton } from "@/components/ui/tool-button";
 import { DEFAULT_JWT } from "@/data/defaults";
+import { useTheme } from "@/providers/theme-provider";
 
 export default function JWTDecoder() {
   const [token, setToken] = useState(DEFAULT_JWT);
@@ -14,6 +15,7 @@ export default function JWTDecoder() {
   const [signature, setSignature] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { theme } = useTheme();
 
   const decodeToken = useCallback(() => {
     try {
@@ -139,15 +141,16 @@ export default function JWTDecoder() {
               tooltip="Reset to default token"
             />
           </div>
-          <Textarea
+          <TextArea
             value={token}
             onChange={e => handleTokenChange(e.target.value)}
             placeholder="Paste your JWT token here..."
             data-testid="jwt-token-input"
             className="min-h-[100px] font-mono text-sm"
             rows={5}
-            showLineNumbers={true}
-            showStats={true}
+            autoFocus={true}
+            fileExtension="json"
+            theme={theme}
           />
         </CardContent>
       </Card>
@@ -160,15 +163,15 @@ export default function JWTDecoder() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={header}
               readOnly={true}
               placeholder="Decoded header will appear here..."
               data-testid="jwt-header-output"
               className="min-h-[300px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               rows={15}
-              showLineNumbers={true}
-              showStats={true}
+              minHeight="300px"
+              theme={theme}
             />
           </CardContent>
         </Card>
@@ -180,15 +183,15 @@ export default function JWTDecoder() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={payload}
               readOnly={true}
               placeholder="Decoded payload will appear here..."
               data-testid="jwt-payload-output"
               className="min-h-[300px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               rows={15}
-              showLineNumbers={true}
-              showStats={true}
+              minHeight="300px"
+              theme={theme}
             />
           </CardContent>
         </Card>
@@ -200,15 +203,15 @@ export default function JWTDecoder() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={signature}
               readOnly={true}
               placeholder="Signature will appear here..."
               data-testid="jwt-signature-output"
               className="min-h-[300px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               rows={15}
-              showLineNumbers={true}
-              showStats={true}
+              minHeight="300px"
+              theme={theme}
             />
           </CardContent>
         </Card>

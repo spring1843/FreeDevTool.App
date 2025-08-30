@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { formatCSS, formatLESS, formatSCSS } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
@@ -21,6 +22,7 @@ type FormatType = "css" | "scss" | "less";
 
 export default function CSSFormatter() {
   const [location] = useLocation();
+  const { theme } = useTheme();
 
   // Determine initial format based on route - only on mount
   const getInitialFormat = (): FormatType => {
@@ -189,15 +191,18 @@ export default function CSSFormatter() {
             <CardTitle>Input CSS/LESS/SCSS</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={input}
               onChange={e => handleInputChange(e.target.value)}
-              placeholder="Paste your CSS, LESS, or SCSS code here..."
+              placeholder="Paste your CSS here..."
               data-testid="css-input"
               className="min-h-[400px] font-mono text-sm"
               rows={20}
-              showLineNumbers={true}
-              showStats={true}
+              autoFocus={true}
+              minHeight="400px"
+              fileExtension="css"
+              theme={theme}
+              lang="css"
             />
           </CardContent>
         </Card>
@@ -207,15 +212,17 @@ export default function CSSFormatter() {
             <CardTitle>Formatted Output</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={output}
               readOnly={true}
-              placeholder="Formatted CSS/LESS/SCSS will appear here..."
+              placeholder="Formatted CSS will appear here..."
               data-testid="css-output"
               className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
+              minHeight="400px"
               rows={20}
-              showLineNumbers={true}
-              showStats={true}
+              lang="css"
+              fileExtension="css"
+              theme={theme}
             />
           </CardContent>
         </Card>

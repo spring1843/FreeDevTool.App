@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { formatTypeScript } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, Minimize2, RotateCcw } from "lucide-react";
@@ -13,6 +14,7 @@ export default function TypeScriptFormatter() {
   const [input, setInput] = useState(DEFAULT_TYPESCRIPT);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const { theme } = useTheme();
 
   const formatCode = useCallback(
     async (minify = false) => {
@@ -102,15 +104,18 @@ export default function TypeScriptFormatter() {
             <CardTitle>Input JavaScript/TypeScript</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={input}
               onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your JavaScript or TypeScript code here..."
               data-testid="typescript-input"
               className="min-h-[400px] font-mono text-sm"
               rows={20}
-              showLineNumbers={true}
-              showStats={true}
+              autoFocus={true}
+              minHeight="400px"
+              fileExtension="ts"
+              theme={theme}
+              lang="typescript"
             />
           </CardContent>
         </Card>
@@ -120,15 +125,17 @@ export default function TypeScriptFormatter() {
             <CardTitle>Formatted Output</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={output}
               readOnly={true}
               placeholder="Formatted JavaScript/TypeScript will appear here..."
               data-testid="typescript-output"
-              className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
+              className="min-h-[400px] font-mono text-sm"
+              minHeight="400px"
               rows={20}
-              showLineNumbers={true}
-              showStats={true}
+              theme={theme}
+              lang="typescript"
+              fileExtension="ts"
             />
           </CardContent>
         </Card>

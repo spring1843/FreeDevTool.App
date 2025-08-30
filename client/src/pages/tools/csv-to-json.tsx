@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -25,6 +25,7 @@ import {
   getValidatedParam,
 } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
+import { useTheme } from "@/providers/theme-provider";
 
 interface CSVRow {
   [key: string]: string;
@@ -51,6 +52,7 @@ export default function CSVToJSON() {
   const [rowCount, setRowCount] = useState(0);
 
   const { toast } = useToast();
+  const { theme: resolvedTheme } = useTheme();
 
   // Load URL parameters on mount
   useEffect(() => {
@@ -329,7 +331,7 @@ Jane Smith      jane@example.com        25      Marketing`,
               </div>
             </div>
 
-            <Textarea
+            <TextArea
               value={csvInput}
               onChange={e => setCsvInput(e.target.value)}
               placeholder="name,email,age
@@ -338,6 +340,10 @@ Jane Smith,jane@example.com,25"
               className="min-h-[200px] font-mono text-sm"
               data-testid="csv-input"
               rows={10}
+              autoFocus={true}
+              minHeight="200px"
+              fileExtension="csv"
+              theme={resolvedTheme}
             />
 
             {error ? (
@@ -435,13 +441,16 @@ Jane Smith,jane@example.com,25"
               </Button>
             </div>
 
-            <Textarea
+            <TextArea
               value={jsonOutput}
               readOnly
               placeholder="JSON output will appear here..."
               className="min-h-[200px] font-mono text-sm"
               data-testid="json-output"
               rows={10}
+              lang="javascript"
+              minHeight="200px"
+              theme={resolvedTheme}
             />
 
             {headers.length > 0 && (

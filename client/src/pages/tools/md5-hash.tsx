@@ -2,7 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import {
   Hash,
   Copy,
@@ -57,6 +58,7 @@ export default function MD5Hash() {
   const [isLoading, setIsLoading] = useState(false);
   const [isMatch, setIsMatch] = useState<boolean | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const { theme } = useTheme();
 
   const generateHash = useCallback(async () => {
     if (!inputText.trim()) {
@@ -278,14 +280,15 @@ export default function MD5Hash() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <Textarea
+          <TextArea
             value={hashResult || "Hash will appear here after generation..."}
             readOnly={true}
             data-testid="hash-output"
             className="min-h-[100px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
             rows={5}
-            showLineNumbers={true}
-            showStats={true}
+            autoFocus={true}
+            fileExtension="txt"
+            theme={theme}
           />
         </CardContent>
       </Card>

@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { Label } from "@/components/ui/label";
 import { CopyButton } from "@/components/ui/copy-button";
 import { Link, Globe, Hash, Share } from "lucide-react";
@@ -27,6 +28,7 @@ interface URLComponents {
 }
 
 import { DEFAULT_URL_TO_JSON } from "@/data/defaults";
+import { Input } from "@/components/ui/input";
 
 export default function URLToJSON() {
   const [inputUrl, setInputUrl] = useState(DEFAULT_URL_TO_JSON);
@@ -34,6 +36,7 @@ export default function URLToJSON() {
   const [jsonOutput, setJsonOutput] = useState("");
   const [error, setError] = useState("");
   const { toast } = useToast();
+  const { theme } = useTheme();
 
   useEffect(() => {
     // Load parameters from URL with validation
@@ -222,13 +225,14 @@ export default function URLToJSON() {
             <CardContent className="space-y-4">
               <div>
                 <Label htmlFor="url-input">Enter URL</Label>
-                <Textarea
+                <Input
                   id="url-input"
                   value={inputUrl}
                   onChange={e => setInputUrl(e.target.value)}
                   placeholder="https://example.com/path?param1=value1&param2=value2#section"
-                  className="font-mono min-h-[100px] resize-none"
+                  className="font-mono resize-none"
                   data-testid="url-input"
+                  autoFocus={true}
                 />
               </div>
 
@@ -302,11 +306,14 @@ export default function URLToJSON() {
             <CardContent>
               {jsonOutput ? (
                 <div className="space-y-4">
-                  <Textarea
+                  <TextArea
                     value={jsonOutput}
                     readOnly={true}
                     className="font-mono text-sm min-h-[300px] resize-none"
+                    minHeight="300px"
                     placeholder="JSON output will appear here..."
+                    fileExtension="json"
+                    theme={theme}
                   />
 
                   {/* URL Components Summary */}

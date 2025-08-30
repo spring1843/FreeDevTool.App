@@ -2,7 +2,12 @@
 // Each constant is independent for easy tracking and refactoring
 
 // Formatters
-export const DEFAULT_JSON = `{"name":"John Doe","age":30,"city":"New York","hobbies":["reading","swimming","coding"],"address":{"street":"123 Main St","zipCode":"10001"}}`;
+export const DEFAULT_JSON = `{"name":"John Doe","age":30,
+"city":"New York","hobbies":
+["reading","swimming","coding"],
+"address":{"street":"123 Main St",
+"zipCode":"10001"}}
+`;
 
 export const DEFAULT_JSONC = `{
   // Application configuration
@@ -45,7 +50,12 @@ export const DEFAULT_JSONC = `{
   }
 }`;
 
-export const DEFAULT_HTML = `<!DOCTYPE html><html><head><title>Sample Page</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body><header><h1>Welcome to My Website</h1><nav><ul><li><a href="#home">Home</a></li><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li></ul></nav></header><main><section id="hero"><h2>Hero Section</h2><p>This is a sample HTML document for formatting.</p><button type="button">Call to Action</button></section><article><h3>Article Title</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. <strong>Bold text</strong> and <em>italic text</em> for emphasis.</p><blockquote>This is a quote that spans multiple lines and contains important information.</blockquote></article></main><footer><p>&copy; 2024 My Website. All rights reserved.</p></footer></body></html>`;
+export const DEFAULT_HTML = `<!DOCTYPE html>
+<html>
+<head><title>Sample Page</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<body><header><h1>Welcome to My Website</h1><nav><ul><li><a href="#home">Home</a></li><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li></ul></nav></header><main><section id="hero"><h2>Hero Section</h2><p>This is a sample HTML document for formatting.</p><button type="button">Call to Action</button></section><article><h3>Article Title</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. <strong>Bold text</strong> and <em>italic text</em> for emphasis.</p><blockquote>This is a quote that spans multiple lines and contains important information.</blockquote></article></main><footer><p>&copy; 2024 My Website. All rights reserved.</p></footer>
+</body>
+</html>`;
 
 export const DEFAULT_YAML = `# Application Configuration
 app:
@@ -510,7 +520,11 @@ const response = createResponse<User[]>([], 'Users loaded successfully');
 
 export { User, UserService, ApiResponse, UserRole };`;
 
-export const DEFAULT_GRAPHQL = `type User{id:ID!name:String!email:String!age:Int posts:[Post!]!profile:UserProfile}type Post{id:ID!title:String!content:String!author:User!tags:[String!]!createdAt:String!updatedAt:String comments:[Comment!]!}type Comment{id:ID!content:String!author:User!post:Post!createdAt:String!}type UserProfile{bio:String avatar:String website:String location:String}input CreateUserInput{name:String!email:String!age:Int}input UpdateUserInput{name:String email:String age:Int}type Query{users:[User!]!user(id:ID!):User posts:[Post!]!post(id:ID!):Post searchPosts(query:String!):[Post!]!}type Mutation{createUser(input:CreateUserInput!):User!updateUser(id:ID!,input:UpdateUserInput!):User!deleteUser(id:ID!):Boolean!createPost(title:String!,content:String!,authorId:ID!):Post!}type Subscription{postAdded:Post!commentAdded(postId:ID!):Comment!}schema{query:Query mutation:Mutation subscription:Subscription}`;
+export const DEFAULT_GRAPHQL = `type User
+{id:ID!name:String!email:String!age:Int posts:[Post!]!profile:UserProfile}type Post{id:ID!title:String!content:String!author:User!tags:[String!]
+!createdAt:String!updatedAt:String comments:[Comment!]!}
+type Comment{id:ID!content:String!author:User!post:Post!createdAt:String!}type UserProfile{bio:String avatar:String website:String location:String}input CreateUserInput{name:String!email:String!age:Int}input UpdateUserInput{name:String email:String age:Int}type Query{users:[User!]!user(id:ID!):User posts:[Post!]!post(id:ID!):Post searchPosts(query:String!):[Post!]!}type Mutation{createUser(input:CreateUserInput!):User!updateUser(id:ID!,input:UpdateUserInput!):User!deleteUser(id:ID!):Boolean!createPost(title:String!,content:String!,authorId:ID!):Post!}type Subscription{postAdded:Post!commentAdded(postId:ID!):Comment!}schema{query:Query mutation:Mutation subscription:Subscription}
+`;
 
 // Converters
 export const DEFAULT_JSON_YAML = `{

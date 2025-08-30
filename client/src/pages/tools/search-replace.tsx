@@ -2,7 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Search, RotateCcw } from "lucide-react";
@@ -27,6 +28,7 @@ export default function SearchReplace() {
   const [result, setResult] = useState("");
   const [matchCount, setMatchCount] = useState(0);
   const [error, setError] = useState("");
+  const { theme } = useTheme();
 
   const performSearchReplace = useCallback(() => {
     try {
@@ -200,15 +202,17 @@ export default function SearchReplace() {
             <CardTitle>Original Text</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={text}
               onChange={e => setText(e.target.value)}
               placeholder="Enter text to search and replace..."
               data-testid="text-input"
               className="min-h-[400px] font-mono text-sm"
               rows={20}
-              showLineNumbers={true}
-              showStats={true}
+              autoFocus={true}
+              minHeight="400px"
+              fileExtension="txt"
+              theme={theme}
             />
           </CardContent>
         </Card>
@@ -218,15 +222,15 @@ export default function SearchReplace() {
             <CardTitle>Result</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={result}
               readOnly={true}
               placeholder="Search and replace results will appear here..."
               data-testid="text-output"
               className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
+              minHeight="400px"
               rows={20}
-              showLineNumbers={true}
-              showStats={true}
+              theme={theme}
             />
           </CardContent>
         </Card>

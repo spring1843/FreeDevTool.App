@@ -9,7 +9,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { Badge } from "@/components/ui/badge";
 import { RefreshCw, Copy, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
@@ -23,6 +24,7 @@ export default function UUIDGenerator() {
   const [format, setFormat] = useState<
     "standard" | "uppercase" | "lowercase" | "nodashes" | "brackets"
   >("standard");
+  const { theme } = useTheme();
 
   const generateUUID = useCallback(() => {
     const newUuids: string[] = [];
@@ -255,14 +257,15 @@ export default function UUIDGenerator() {
                 <Label className="text-sm font-medium">
                   All UUIDs (for copying):
                 </Label>
-                <Textarea
+                <TextArea
                   value={uuids.join("\n")}
                   readOnly={true}
                   className="mt-2 min-h-[100px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
                   data-testid="all-uuids-output"
                   rows={5}
-                  showLineNumbers={true}
-                  showStats={true}
+                  autoFocus={true}
+                  fileExtension="txt"
+                  theme={theme}
                 />
               </div>
             )}

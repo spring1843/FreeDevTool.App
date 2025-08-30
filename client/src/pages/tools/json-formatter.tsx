@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { formatJSON } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, Lightbulb } from "lucide-react";
@@ -14,6 +15,7 @@ export default function JsonFormatter() {
   const [input, setInput] = useState(DEFAULT_JSON);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const { theme } = useTheme();
 
   const formatCode = useCallback(async () => {
     try {
@@ -131,15 +133,17 @@ export default function JsonFormatter() {
             <CardTitle>Input</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={input}
               onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your JSON here..."
               data-testid="json-input"
               className="min-h-[400px] font-mono text-sm"
               rows={20}
-              showLineNumbers={true}
-              showStats={true}
+              autoFocus={true}
+              fileExtension="json"
+              theme={theme}
+              lang="json"
             />
           </CardContent>
         </Card>
@@ -149,15 +153,15 @@ export default function JsonFormatter() {
             <CardTitle>Formatted Output</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={output}
               readOnly={true}
               placeholder="Formatted JSON will appear here..."
               data-testid="json-output"
-              className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               rows={20}
-              showLineNumbers={true}
-              showStats={true}
+              lang="json"
+              fileExtension="json"
+              theme={theme}
             />
           </CardContent>
         </Card>

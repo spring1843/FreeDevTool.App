@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import {
   Select,
   SelectContent,
@@ -19,12 +20,13 @@ import { DEFAULT_TEXT_SORT } from "@/data/defaults";
 type SortType = "alphabetical" | "numerical" | "length" | "reverse";
 type SortOrder = "asc" | "desc";
 
-export default function TextSorter() {
+export default function TextSort() {
   const [input, setInput] = useState(DEFAULT_TEXT_SORT);
   const [sortType, setSortType] = useState<SortType>("alphabetical");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
   const [caseSensitive, setCaseSensitive] = useState(false);
   const [sortedOutput, setSortedOutput] = useState("");
+  const { theme } = useTheme();
 
   const sortText = useCallback(() => {
     const lines = input.split("\n").filter(line => line.trim() !== "");
@@ -167,15 +169,18 @@ export default function TextSorter() {
             <CardTitle>Input Text</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={input}
               onChange={e => setInput(e.target.value)}
               placeholder="Enter lines of text to sort..."
               data-testid="text-input"
               className="min-h-[400px] font-mono text-sm"
               rows={20}
-              showLineNumbers={true}
-              showStats={true}
+              autoFocus={true}
+              minHeight="400px"
+              fileExtension="txt"
+              theme={theme}
+              lang="text"
             />
           </CardContent>
         </Card>
@@ -185,15 +190,17 @@ export default function TextSorter() {
             <CardTitle>Sorted Output</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={sortedOutput}
               readOnly={true}
               placeholder="Sorted text will appear here..."
               data-testid="text-output"
               className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
+              minHeight="400px"
               rows={20}
-              showLineNumbers={true}
-              showStats={true}
+              theme={theme}
+              lang="text"
+              fileExtension="txt"
             />
           </CardContent>
         </Card>

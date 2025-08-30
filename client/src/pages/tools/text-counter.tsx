@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { countTextStats } from "@/lib/text-tools";
@@ -26,6 +27,7 @@ export default function TextCounter() {
   );
 
   const stats = countTextStats(fields.text);
+  const { theme } = useTheme();
 
   const statItems = [
     {
@@ -91,15 +93,17 @@ export default function TextCounter() {
             <CardTitle>Enter Text</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
+              autoFocus={true}
               value={fields.text}
               onChange={e => updateField("text", e.target.value)}
               placeholder="Enter or paste your text here..."
               className="min-h-[400px] font-mono text-sm"
               data-testid="text-input"
               rows={20}
-              showLineNumbers={true}
-              showStats={true}
+              minHeight="400px"
+              fileExtension="txt"
+              theme={theme}
             />
             <div className="mt-4 flex justify-end">
               <Button

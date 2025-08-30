@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { formatHTML } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, Minimize2, RotateCcw, AlertTriangle } from "lucide-react";
@@ -21,6 +22,7 @@ export default function HTMLFormatter() {
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [warnings, setWarnings] = useState<ValidationIssue[]>([]);
+  const { theme } = useTheme();
 
   const formatCode = useCallback(
     async (minify = false) => {
@@ -146,15 +148,18 @@ export default function HTMLFormatter() {
             <CardTitle>Input HTML</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={input}
               onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your HTML here..."
               data-testid="html-input"
               className="min-h-[400px] font-mono text-sm"
               rows={20}
-              showLineNumbers={true}
-              showStats={true}
+              autoFocus={true}
+              minHeight="400px"
+              fileExtension="html"
+              theme={theme}
+              lang="html"
             />
           </CardContent>
         </Card>
@@ -172,15 +177,17 @@ export default function HTMLFormatter() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={output}
               readOnly={true}
               placeholder="Formatted HTML will appear here..."
               data-testid="html-output"
               className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
+              minHeight="400px"
               rows={20}
-              showLineNumbers={true}
-              showStats={true}
+              lang="html"
+              fileExtension="html"
+              theme={theme}
             />
           </CardContent>
         </Card>

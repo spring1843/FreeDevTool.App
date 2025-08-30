@@ -2,7 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import {
   Select,
   SelectContent,
@@ -142,6 +143,7 @@ export default function QRGenerator() {
   const [error, setError] = useState("");
 
   const { toast } = useToast();
+  const { theme } = useTheme();
 
   const currentPreset = qrPresets.find(p => p.type === qrType) || qrPresets[0];
 
@@ -332,15 +334,16 @@ export default function QRGenerator() {
 
               <div>
                 <Label htmlFor="input-text">{currentPreset.name} Content</Label>
-                <Textarea
+                <TextArea
                   id="input-text"
                   placeholder={currentPreset.placeholder}
                   value={inputText}
                   onChange={e => setInputText(e.target.value)}
                   rows={4}
                   data-testid="qr-input"
-                  showLineNumbers={true}
-                  showStats={true}
+                  autoFocus={true}
+                  fileExtension="txt"
+                  theme={theme}
                 />
               </div>
 

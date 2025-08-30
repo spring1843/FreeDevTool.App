@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { Badge } from "@/components/ui/badge";
 import { GitCompare, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
@@ -28,6 +29,7 @@ export default function TextDiff() {
     charactersRemoved: number;
     charactersModified: number;
   } | null>(null);
+  const { theme } = useTheme();
 
   const calculateDiff = useCallback(() => {
     const lines1 = text1.split("\n");
@@ -216,15 +218,17 @@ export default function TextDiff() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={text1}
               onChange={e => setText1(e.target.value)}
               placeholder="Enter original text here..."
               data-testid="text1-input"
               className="min-h-[300px] font-mono text-sm"
               rows={15}
-              showLineNumbers={true}
-              showStats={true}
+              autoFocus={true}
+              minHeight="300px"
+              fileExtension="txt"
+              theme={theme}
             />
           </CardContent>
         </Card>
@@ -236,15 +240,16 @@ export default function TextDiff() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={text2}
               onChange={e => setText2(e.target.value)}
               placeholder="Enter modified text here..."
               data-testid="text2-input"
               className="min-h-[300px] font-mono text-sm"
               rows={15}
-              showLineNumbers={true}
-              showStats={true}
+              minHeight="300px"
+              fileExtension="txt"
+              theme={theme}
             />
           </CardContent>
         </Card>

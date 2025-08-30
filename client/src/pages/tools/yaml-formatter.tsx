@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { formatYAML } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, RotateCcw } from "lucide-react";
@@ -12,6 +13,7 @@ export default function YAMLFormatter() {
   const [input, setInput] = useState(DEFAULT_YAML);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const { theme } = useTheme();
 
   const formatCode = useCallback(async () => {
     try {
@@ -86,15 +88,18 @@ export default function YAMLFormatter() {
             <CardTitle>Input</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={input}
               onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your YAML here..."
               data-testid="yaml-input"
               className="min-h-[400px] font-mono text-sm"
               rows={20}
-              showLineNumbers={true}
-              showStats={true}
+              autoFocus={true}
+              minHeight="400px"
+              fileExtension="yaml"
+              theme={theme}
+              lang="yaml"
             />
           </CardContent>
         </Card>
@@ -104,15 +109,17 @@ export default function YAMLFormatter() {
             <CardTitle>Formatted Output</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={output}
               readOnly={true}
               placeholder="Formatted YAML will appear here..."
               data-testid="yaml-output"
               className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
+              minHeight="400px"
               rows={20}
-              showLineNumbers={true}
-              showStats={true}
+              lang="yaml"
+              fileExtension="yaml"
+              theme={theme}
             />
           </CardContent>
         </Card>

@@ -1,195 +1,274 @@
 import * as React from "react";
-import { cn } from "@/lib/utils";
-import { Copy, WrapText } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import CodeMirror from "@uiw/react-codemirror";
+import type { ViewUpdate } from "@codemirror/view";
+import { javascript } from "@codemirror/lang-javascript";
+import { cn } from "@/lib/utils";
+import { css } from "@codemirror/lang-css";
+import { html } from "@codemirror/lang-html";
+import { yaml } from "@codemirror/lang-yaml";
+import { markdown } from "@codemirror/lang-markdown";
+import { Copy, Download, Upload } from "lucide-react";
 
-interface TextareaProps extends React.ComponentProps<"textarea"> {
-  showLineNumbers?: boolean;
-  showStats?: boolean;
-  enableWordWrap?: boolean;
-  showControls?: boolean;
-  onCopy?: () => void;
-  resizable?: boolean;
+// Define props for the CodeMirror component
+export interface TextAreaProps {
+  className?: string;
+  value?: string;
+  lang?: string;
+  fileExtension?: string;
+  readOnly?: boolean;
+  autoFocus?: boolean;
+  rows?: number;
+  placeholder?: string;
+  id?: string;
+  minHeight?: string;
+  onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
+  theme?: "light" | "dark" | "system"; // Add theme prop
 }
 
-const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  (
-    {
-      className,
-      showLineNumbers = false,
-      showStats = false,
-      enableWordWrap = true,
-      showControls = true,
-      onCopy,
-      resizable = true,
-      value = "",
-      onChange,
-      readOnly: initialReadOnly = false,
-      ...restProps
-    },
-    ref
-  ) => {
-    // Remove readOnly from restProps to prevent conflicts
-    const cleanRestProps = restProps;
-    const [, setCursorPosition] = React.useState(0);
-    const [currentLine, setCurrentLine] = React.useState(1);
-    const [currentColumn, setCurrentColumn] = React.useState(1);
-    const [wordWrap, setWordWrap] = React.useState(enableWordWrap);
-    const textareaRef = React.useRef<HTMLTextAreaElement>(null);
-
-    // Use forwarded ref or our own ref
-    const actualRef = ref || textareaRef;
-
-    // Calculate line numbers and cursor position
-    React.useEffect(() => {
-      const textarea =
-        typeof actualRef === "function"
-          ? textareaRef.current
-          : actualRef?.current;
-      if (!textarea) return;
-
-      const handleSelectionChange = () => {
-        const position = textarea.selectionStart;
-        setCursorPosition(position);
-
-        const textBeforeCursor = value.toString().slice(0, position);
-        const lines = textBeforeCursor.split("\n");
-        setCurrentLine(lines.length);
-        setCurrentColumn(lines[lines.length - 1].length + 1);
-      };
-
-      textarea.addEventListener("selectionchange", handleSelectionChange);
-      textarea.addEventListener("click", handleSelectionChange);
-      textarea.addEventListener("keyup", handleSelectionChange);
-
-      // Initial calculation
-      handleSelectionChange();
-
-      return () => {
-        textarea.removeEventListener("selectionchange", handleSelectionChange);
-        textarea.removeEventListener("click", handleSelectionChange);
-        textarea.removeEventListener("keyup", handleSelectionChange);
-      };
-    }, [value, actualRef]);
-
-    const textValue = value.toString();
-    const lineCount = textValue.split("\n").length;
-    const characterCount = textValue.length;
-    const lineNumbers = Array.from(
-      { length: Math.max(lineCount, 10) },
-      (_, i) => i + 1
-    );
-
-    const handleCopyToClipboard = async () => {
-      try {
-        await navigator.clipboard.writeText(value.toString());
-        if (onCopy) onCopy();
-      } catch (err) {
-        console.error("Failed to copy to clipboard:", err);
-      }
-    };
-
-    const toggleWordWrap = () => {
-      setWordWrap(!wordWrap);
-    };
-
+const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
+  ({ className, value, onChange, theme = "light", ...props }) => {
     const baseClassName = cn(
-      "flex min-h-[80px] w-full border border-input bg-background text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-      wordWrap ? "whitespace-pre-wrap" : "whitespace-nowrap overflow-auto",
-      resizable ? "resize-y" : "resize-none",
-      showLineNumbers && !wordWrap ? "pl-14" : "px-3",
-      showControls ? "rounded-t-md" : "rounded-md",
-      "py-2",
+      "w-full rounded-md border border-input bg-background text-sm",
+      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
       className
     );
 
+    // Map language prop to the correct CodeMirror extension
+    const getLanguageExtension = (language: string | undefined) => {
+      switch (language) {
+        case "javascript":
+          return javascript({ jsx: true });
+        case "typescript":
+          return javascript({ jsx: true, typescript: true });
+        case "css":
+          return css();
+        case "html":
+          return html();
+        case "yaml":
+          return yaml();
+        case "markdown":
+          return markdown();
+        default:
+          return javascript({ jsx: true }); // Default to JavaScript if lang is not provided or recognized
+      }
+    };
+
+    // Create a minimal synthetic ChangeEvent compatible with e.target.value usage.
+    const createSyntheticChangeEvent = (
+      val: string
+    ): React.ChangeEvent<HTMLTextAreaElement> =>
+      ({
+        // Consumers expect e.target.value; other fields are not used.
+        target: { value: val } as unknown as EventTarget & HTMLTextAreaElement,
+      }) as unknown as React.ChangeEvent<HTMLTextAreaElement>;
+    const extensions = [getLanguageExtension(props.lang)];
+
+    const handleCopy = () => {
+      navigator.clipboard.writeText(value || "");
+    };
+
+    // Download handler
+    const handleDownload = () => {
+      const extension = props.fileExtension
+        ? props.fileExtension.replace(/^\./, "")
+        : "txt";
+      const randomName = `file_${Math.random().toString(36).slice(2, 10)}.${extension}`;
+      const blob = new Blob([value || ""], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = randomName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    };
+
+    // Ref for hidden file input
+    const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+    // Handler for upload button click
+    const handleUploadClick = () => {
+      fileInputRef.current?.click();
+    };
+
+    // Handler for file input change
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (onChange) {
+          onChange(createSyntheticChangeEvent(reader.result as string));
+        }
+      };
+      reader.readAsText(file);
+      // Reset input value so same file can be uploaded again
+      e.target.value = "";
+    };
+
+    // State for cursor position and content size
+    const [cursor, setCursor] = React.useState({ line: 1, ch: 1 });
+    const [contentSize, setContentSize] = React.useState(0);
+
+    // Format bytes to human readable string
+    const formatBytes = (bytes: number): string => {
+      if (bytes < 1024) return `${bytes} B`;
+      const units = ["kB", "MB", "GB", "TB"];
+      let i = -1;
+      let size = bytes;
+      do {
+        size /= 1024;
+        i++;
+      } while (size >= 1024 && i < units.length - 1);
+      return `${size.toFixed(2)} ${units[i]}`;
+    };
+
+    // Update content size when value changes
+    React.useEffect(() => {
+      setContentSize(new Blob([value || ""]).size);
+    }, [value]);
+
+    // Handler for CodeMirror view updates
+    const handleEditorUpdate = React.useCallback((view: ViewUpdate) => {
+      const pos = view.state.selection.main.head;
+      const line = view.state.doc.lineAt(pos);
+      setCursor({
+        line: line.number,
+        ch: pos - line.from + 1,
+      });
+    }, []);
+
+    // Use theme prop for CodeMirror theme
+    const codeMirrorTheme = theme === "dark" ? "dark" : "light";
+
+    // Drag-and-drop state for visual feedback
+    const [isDragOver, setIsDragOver] = React.useState(false);
+
+    // Drag-and-drop handlers
+    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+      if (props.readOnly) return;
+      e.preventDefault();
+      setIsDragOver(true);
+    };
+
+    const handleDragLeave = (_e: React.DragEvent<HTMLDivElement>) => {
+      if (props.readOnly) return;
+      setIsDragOver(false);
+    };
+
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+      if (props.readOnly) return;
+      e.preventDefault();
+      setIsDragOver(false);
+      const file = e.dataTransfer.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (onChange) {
+          onChange(createSyntheticChangeEvent(reader.result as string));
+        }
+      };
+      reader.readAsText(file);
+    };
+
     return (
-      <div className="relative">
-        {/* Controls Bar */}
-        {showControls ? (
-          <div className="flex items-center justify-between px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-b-0 border-input rounded-t-md">
-            <div className="flex items-center gap-2">
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={toggleWordWrap}
-                className="h-7 px-2 text-xs"
-                title={wordWrap ? "Disable word wrap" : "Enable word wrap"}
-              >
-                <WrapText className="w-3 h-3 mr-1" />
-                {wordWrap ? "No Wrap" : "Wrap"}
-              </Button>
-            </div>
-
-            <div className="flex items-center gap-2">
-              {value ? (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleCopyToClipboard}
-                  className="h-7 px-2 text-xs"
-                  title="Copy to clipboard"
-                >
-                  <Copy className="w-3 h-3 mr-1" />
-                  Copy
-                </Button>
-              ) : null}
-            </div>
-          </div>
-        ) : null}
-
-        {/* Line Numbers */}
-        {showLineNumbers && !wordWrap ? (
-          <div
-            className="absolute left-0 top-0 bottom-0 w-12 bg-slate-50 dark:bg-slate-800 border-r border-input flex flex-col text-sm text-slate-500 dark:text-slate-400 font-mono select-none z-10"
-            style={{ marginTop: showControls ? "41px" : "0" }}
+      <div
+        className={cn(
+          "relative",
+          isDragOver && !props.readOnly ? "border-blue-500 border-2" : ""
+        )}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        data-testid="textarea-drop-area"
+      >
+        <div className="absolute top-1 right-1 z-10 flex gap-1">
+          <Button
+            onClick={handleCopy}
+            size="sm"
+            variant="ghost"
+            title="Copy To clipboard"
+            data-testid="copy-all-button"
           >
-            <div className="py-2 px-2 flex-1 leading-6">
-              {lineNumbers.map(num => (
-                <div key={num} className="text-right leading-6 h-6">
-                  {num <= lineCount ? num : ""}
-                </div>
-              ))}
-            </div>
-          </div>
-        ) : null}
+            <Copy className="w-4 h-4" />
+          </Button>
+          <Button
+            onClick={handleDownload}
+            size="sm"
+            variant="ghost"
+            title="Download file"
+            data-testid="download-button"
+          >
+            <Download className="w-4 h-4" />
+          </Button>
+          {/* Only show upload if not readOnly */}
+          {!props.readOnly && (
+            <>
+              <Button
+                onClick={handleUploadClick}
+                size="sm"
+                variant="ghost"
+                title="Upload file"
+                data-testid="upload-button"
+              >
+                <Upload className="w-4 h-4" />
+              </Button>
+              {/* Hidden file input for upload */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept={
+                  props.fileExtension
+                    ? `.${props.fileExtension.replace(/^\./, "")}`
+                    : undefined
+                }
+                style={{ display: "none" }}
+                onChange={handleFileChange}
+                data-testid="upload-input"
+              />
+            </>
+          )}
+        </div>
 
-        {/* Textarea */}
-        <textarea
-          {...cleanRestProps}
-          ref={actualRef}
+        <CodeMirror
           className={baseClassName}
           value={value}
-          onChange={onChange}
-          readOnly={initialReadOnly}
-          style={{
-            lineHeight: "1.5rem", // 24px line height to match line numbers
-            fontFamily:
-              'ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace',
-            whiteSpace: wordWrap ? "pre-wrap" : "nowrap",
-            overflowWrap: wordWrap ? "break-word" : "normal",
+          extensions={extensions}
+          basicSetup={{
+            lineNumbers: true,
+            foldGutter: true,
           }}
+          theme={codeMirrorTheme}
+          onChange={val => {
+            if (onChange) onChange(createSyntheticChangeEvent(val));
+          }}
+          minHeight={props.minHeight}
+          lang={props.lang}
+          placeholder={props.placeholder}
+          readOnly={props.readOnly}
+          id={props.id}
+          autoFocus={props.autoFocus}
+          // Add onUpdate handler for cursor tracking
+          onUpdate={handleEditorUpdate}
         />
-
-        {/* Stats Bar */}
-        {showStats ? (
-          <div className="flex justify-between items-center px-3 py-1 bg-slate-50 dark:bg-slate-800 border border-t-0 border-input rounded-b-md text-xs text-slate-600 dark:text-slate-400">
-            <div className="flex gap-4">
-              <span>Lines: {lineCount}</span>
-              <span>Characters: {characterCount}</span>
-            </div>
-            <div>
-              Line {currentLine}, Column {currentColumn}
-            </div>
-          </div>
-        ) : null}
+        {/* Status bar below editor */}
+        <div
+          className="w-full flex justify-between items-center px-2 py-1 text-xs text-muted-foreground bg-muted rounded-b-md border-t"
+          style={{ fontFamily: "monospace" }}
+          data-testid="textarea-status-bar"
+        >
+          <span>
+            Line {cursor.line}, Char {cursor.ch}
+          </span>
+          <span>Size: {formatBytes(contentSize)}</span>
+        </div>
       </div>
     );
   }
 );
 
-Textarea.displayName = "Textarea";
+TextArea.displayName = "TextArea";
 
-export { Textarea, type TextareaProps };
+export { TextArea };

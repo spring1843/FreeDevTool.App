@@ -2,7 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Search, RotateCcw, CheckCircle, XCircle } from "lucide-react";
@@ -27,6 +28,7 @@ export default function RegexTester() {
   const [matches, setMatches] = useState<RegexMatch[]>([]);
   const [isValidRegex, setIsValidRegex] = useState(true);
   const [error, setError] = useState("");
+  const { theme } = useTheme();
 
   const updateFlags = useCallback(() => {
     let newFlags = "";
@@ -223,13 +225,17 @@ export default function RegexTester() {
             <CardTitle>Test Text</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <TextArea
               value={text}
               onChange={e => setText(e.target.value)}
               placeholder="Enter text to test against..."
               data-testid="test-text"
               className="min-h-[300px] font-mono text-sm resize-none"
               rows={15}
+              autoFocus={true}
+              minHeight="300px"
+              fileExtension="txt"
+              theme={theme}
             />
           </CardContent>
         </Card>

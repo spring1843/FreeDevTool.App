@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
 import { convertJSONToYAML, convertYAMLToJSON } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ArrowRight, ArrowLeft, RotateCcw } from "lucide-react";
@@ -15,6 +16,7 @@ export default function JSONYAMLConverter() {
   const [yamlInput, setYamlInput] = useState(DEFAULT_YAML);
   const [jsonOutput, setJsonOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const { theme } = useTheme();
 
   const convertToYAML = useCallback(() => {
     const { converted, error: convertError } = convertJSONToYAML(jsonInput);
@@ -109,15 +111,18 @@ export default function JSONYAMLConverter() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Textarea
+              <TextArea
                 value={jsonInput}
                 onChange={e => handleJsonInputChange(e.target.value)}
                 placeholder="Paste your JSON here..."
                 data-testid="json-input"
                 className="min-h-[300px] font-mono text-sm"
                 rows={15}
-                showLineNumbers={true}
-                showStats={true}
+                autoFocus={true}
+                minHeight="300px"
+                lang="javascript"
+                fileExtension="json"
+                theme={theme}
               />
             </CardContent>
           </Card>
@@ -129,15 +134,17 @@ export default function JSONYAMLConverter() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Textarea
+              <TextArea
                 value={yamlOutput}
                 readOnly={true}
                 placeholder="YAML output will appear here..."
                 data-testid="yaml-output"
                 className="min-h-[300px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
                 rows={15}
-                showLineNumbers={true}
-                showStats={true}
+                minHeight="300px"
+                lang="yaml"
+                fileExtension="yaml"
+                theme={theme}
               />
             </CardContent>
           </Card>
@@ -151,15 +158,17 @@ export default function JSONYAMLConverter() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Textarea
+              <TextArea
                 value={yamlInput}
                 onChange={e => handleYamlInputChange(e.target.value)}
                 placeholder="Paste your YAML here..."
                 data-testid="yaml-input"
                 className="min-h-[300px] font-mono text-sm"
                 rows={15}
-                showLineNumbers={true}
-                showStats={true}
+                minHeight="300px"
+                lang="yaml"
+                fileExtension="yaml"
+                theme={theme}
               />
             </CardContent>
           </Card>
@@ -171,15 +180,17 @@ export default function JSONYAMLConverter() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Textarea
+              <TextArea
                 value={jsonOutput}
                 readOnly={true}
                 placeholder="JSON output will appear here..."
                 data-testid="json-output"
                 className="min-h-[300px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
                 rows={15}
-                showLineNumbers={true}
-                showStats={true}
+                minHeight="300px"
+                lang="javascript"
+                fileExtension="json"
+                theme={theme}
               />
             </CardContent>
           </Card>
