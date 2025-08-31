@@ -269,13 +269,13 @@ export function Header({ onMenuClick }: HeaderProps) {
                     className="h-10 w-10 p-0 rounded-md bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors touch-manipulation"
                     onClick={onMenuClick}
                     data-testid="menu-button"
-                    aria-label="Open navigation menu"
+                    aria-label="Toggle navigation menu"
                   >
                     <Menu className="h-5 w-5 text-slate-700 dark:text-slate-300" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Open Menu (Ctrl+M)</p>
+                  <p>Toggle Menu (Ctrl+M)</p>
                 </TooltipContent>
               </Tooltip>
             </div>
