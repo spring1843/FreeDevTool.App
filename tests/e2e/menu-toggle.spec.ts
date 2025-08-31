@@ -12,13 +12,13 @@ test.describe("Menu Toggle Functionality", () => {
   }) => {
     // Set desktop viewport
     await page.setViewportSize({ width: 1280, height: 720 });
-    
+
     // Verify menu button is visible
     const menuButton = page.locator('[data-testid="menu-button"]');
     await expect(menuButton).toBeVisible();
 
     // Verify sidebar is initially visible on desktop homepage
-    const sidebar = page.locator('aside.lg\\:block');
+    const sidebar = page.locator("aside.lg\\:block");
     await expect(sidebar).toBeVisible();
 
     // Click menu button to hide sidebar
@@ -45,7 +45,7 @@ test.describe("Menu Toggle Functionality", () => {
   }) => {
     // Set mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
-    
+
     // Verify menu button is visible
     const menuButton = page.locator('[data-testid="menu-button"]');
     await expect(menuButton).toBeVisible();
@@ -82,7 +82,7 @@ test.describe("Menu Toggle Functionality", () => {
 
     // Set desktop viewport (but should still show mobile menu on tool pages)
     await page.setViewportSize({ width: 1280, height: 720 });
-    
+
     // Verify menu button is visible
     const menuButton = page.locator('[data-testid="menu-button"]');
     await expect(menuButton).toBeVisible();
@@ -113,9 +113,9 @@ test.describe("Menu Toggle Functionality", () => {
   test("should work with keyboard shortcut Ctrl+M", async ({ page }) => {
     // Set desktop viewport
     await page.setViewportSize({ width: 1280, height: 720 });
-    
+
     // Verify sidebar is initially visible on desktop homepage
-    const sidebar = page.locator('aside.lg\\:block');
+    const sidebar = page.locator("aside.lg\\:block");
     await expect(sidebar).toBeVisible();
 
     // Use keyboard shortcut to toggle sidebar
@@ -142,7 +142,7 @@ test.describe("Menu Toggle Functionality", () => {
   }) => {
     // Set desktop viewport
     await page.setViewportSize({ width: 1280, height: 720 });
-    
+
     const menuButton = page.locator('[data-testid="menu-button"]');
 
     // Listen for JavaScript errors
@@ -170,9 +170,11 @@ test.describe("Menu Toggle Functionality", () => {
 
     // Verify no JavaScript errors occurred
     expect(jsErrors).toHaveLength(0);
-    expect(consoleErrors.filter(error => 
-      error.includes("error") && !error.includes("vite")
-    )).toHaveLength(0);
+    expect(
+      consoleErrors.filter(
+        error => error.includes("error") && !error.includes("vite")
+      )
+    ).toHaveLength(0);
 
     // Verify the application is still responsive
     await expect(menuButton).toBeVisible();
@@ -181,28 +183,33 @@ test.describe("Menu Toggle Functionality", () => {
 
   test("should have correct aria-label and tooltip text", async ({ page }) => {
     const menuButton = page.locator('[data-testid="menu-button"]');
-    
+
     // Verify aria-label is correct
-    await expect(menuButton).toHaveAttribute("aria-label", "Toggle navigation menu");
+    await expect(menuButton).toHaveAttribute(
+      "aria-label",
+      "Toggle navigation menu"
+    );
 
     // Hover to show tooltip
     await menuButton.hover();
-    
+
     // Wait for tooltip to appear
     await page.waitForTimeout(200);
-    
+
     // Verify tooltip text
-    const tooltip = page.locator('[role="tooltip"]').filter({ hasText: "Toggle Menu (Ctrl+M)" });
+    const tooltip = page
+      .locator('[role="tooltip"]')
+      .filter({ hasText: "Toggle Menu (Ctrl+M)" });
     await expect(tooltip).toBeVisible();
   });
 
   test("should work correctly when resizing viewport", async ({ page }) => {
     // Start with desktop viewport
     await page.setViewportSize({ width: 1280, height: 720 });
-    
+
     const menuButton = page.locator('[data-testid="menu-button"]');
-    const sidebar = page.locator('aside.lg\\:block');
-    
+    const sidebar = page.locator("aside.lg\\:block");
+
     // Verify sidebar is visible on desktop
     await expect(sidebar).toBeVisible();
 
