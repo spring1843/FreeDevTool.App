@@ -13,6 +13,7 @@ export interface DemoContextType {
   pauseDemo: () => void;
   resumeDemo: () => void;
   skipToNext: () => void;
+  skipToPrevious: () => void;
   setDemoSpeed: (speed: DemoSpeed) => void;
   totalTools: number;
 }

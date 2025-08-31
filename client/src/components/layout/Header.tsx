@@ -7,7 +7,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useTheme } from "@/providers/theme-provider";
+// import { useTheme } from "@/providers/theme-provider";
 import { Link } from "wouter";
 import { useSearch } from "@/hooks/use-search";
 import { SearchResults } from "@/components/ui/search-results";
@@ -19,7 +19,7 @@ interface HeaderProps {
 }
 
 export function Header({ onMenuClick }: HeaderProps) {
-  const { theme, setTheme } = useTheme();
+  // const { theme, setTheme } = useTheme();
   const {
     searchQuery,
     setSearchQuery,
@@ -34,11 +34,12 @@ export function Header({ onMenuClick }: HeaderProps) {
   const searchRef = useRef<HTMLDivElement>(null);
 
   const toggleTheme = () => {
-    if (theme === "dark") {
-      setTheme("light");
-    } else {
-      setTheme("dark");
-    }
+    // Temporarily disabled
+    // if (theme === "dark") {
+    //   setTheme("light");
+    // } else {
+    //   setTheme("dark");
+    // }
   };
 
   const handleSearchChange = (value: string) => {
@@ -246,17 +247,13 @@ export function Header({ onMenuClick }: HeaderProps) {
                     onClick={toggleTheme}
                     className="h-10 w-10 p-0 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors touch-manipulation"
                     data-testid="theme-toggle"
-                    aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+                    aria-label="Toggle theme"
                   >
-                    {theme === "dark" ? (
-                      <Sun className="h-5 w-5" />
-                    ) : (
-                      <Moon className="h-5 w-5" />
-                    )}
+                    <Moon className="h-5 w-5" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Switch to {theme === "dark" ? "Light" : "Dark"} Mode</p>
+                  <p>Toggle Theme</p>
                 </TooltipContent>
               </Tooltip>
 

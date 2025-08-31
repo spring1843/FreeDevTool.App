@@ -6,6 +6,7 @@ import {
   Play,
   Square,
   SkipForward,
+  SkipBack,
   Pause,
   ChevronDown,
   ChevronRight,
@@ -30,6 +31,7 @@ export default function Home() {
     pauseDemo,
     resumeDemo,
     skipToNext,
+    skipToPrevious,
     totalTools,
   } = useDemo();
 
@@ -78,8 +80,18 @@ export default function Home() {
                   <Button
                     size="sm"
                     variant="outline"
+                    onClick={skipToPrevious}
+                    className="h-7 px-2"
+                    data-testid="demo-previous"
+                  >
+                    <SkipBack className="w-3 h-3" />
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
                     onClick={isDemoPaused ? resumeDemo : pauseDemo}
                     className="h-7 px-2"
+                    data-testid="demo-pause-resume"
                   >
                     {isDemoPaused ? (
                       <Play className="w-3 h-3" />
@@ -92,6 +104,7 @@ export default function Home() {
                     variant="outline"
                     onClick={skipToNext}
                     className="h-7 px-2"
+                    data-testid="demo-next"
                   >
                     <SkipForward className="w-3 h-3" />
                   </Button>
@@ -100,6 +113,7 @@ export default function Home() {
                     variant="destructive"
                     onClick={stopDemo}
                     className="h-7 px-2"
+                    data-testid="demo-stop"
                   >
                     <Square className="w-3 h-3" />
                   </Button>

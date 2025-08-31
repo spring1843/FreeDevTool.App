@@ -145,8 +145,31 @@ export function DemoProvider({ children }: DemoProviderProps) {
     if (demoTimeoutRef.current) {
       clearTimeout(demoTimeoutRef.current);
     }
-    setIsDemoPaused(false);
+    
+    // When manually navigating, don't auto-continue - stay paused if already paused
+    if (!isDemoPaused) {
+      setIsDemoPaused(true);
+    }
+    
     cycleThroughTools(currentIndexRef.current + 1);
+  };
+
+  const skipToPrevious = () => {
+    if (!isDemoRunning) return;
+    
+    // Can't go before the first tool
+    if (currentIndexRef.current <= 0) return;
+
+    if (demoTimeoutRef.current) {
+      clearTimeout(demoTimeoutRef.current);
+    }
+    
+    // When manually navigating, don't auto-continue - stay paused if already paused
+    if (!isDemoPaused) {
+      setIsDemoPaused(true);
+    }
+    
+    cycleThroughTools(currentIndexRef.current - 1);
   };
 
   // Cleanup on unmount
@@ -170,6 +193,7 @@ export function DemoProvider({ children }: DemoProviderProps) {
     pauseDemo,
     resumeDemo,
     skipToNext,
+    skipToPrevious,
     setDemoSpeed,
     totalTools: allTools.length,
   };
