@@ -10,7 +10,9 @@ RUN apt-get update && apt-get install -y -q --no-install-recommends \
         libssl-dev \
         wget
 
+ADD .git .
 ADD package.json .
+ADD package-lock.json .
 ADD Makefile .
 
 RUN make setup

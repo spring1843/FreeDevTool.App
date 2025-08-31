@@ -13,6 +13,13 @@ YELLOW=\033[1;33m
 BLUE=\033[0;34m
 NC=\033[0m # No Color
 
+GIT_TAG:=$(shell git describe --tags --abbrev=7 --always HEAD)
+GIT_SHA:=$(shell git rev-parse HEAD)
+GIT_SHA_SHORT:=$(shell git rev-parse --short HEAD)
+
+# Image tags
+E2E_IMAGE_TAG:=ghcr.io/spring1843/freedevtool.app/e2e:${GIT_SHA_SHORT}
+
 ## Setup Commands
 
 setup: ## Complete project setup - install dependencies, browsers, and prepare for development
@@ -63,8 +70,8 @@ dev: ## Start development server with verbose logging
 build: ## Build the application for production
 	npm run build
 
-build-e2e-docker: ## Build the Docker image for end-to-end testing
-	docker build -t docker.pkg.github.com/spring1843/freedevtool.app/e2e -f infra/images/Dockerfile.e2e .
+build-and-push-e2e-image: ## Build the Docker image for end-to-end testing
+	docker build --platform linux/amd64 --network host -t ${E2E_IMAGE_TAG} -f infra/images/Dockerfile.e2e . --push
 
 ## Code Quality Commands
 
