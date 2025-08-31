@@ -19,7 +19,7 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: "assets/*.png",
+          src: "assets/favicon-32x32.png",
           dest: "assets",
         },
         {
