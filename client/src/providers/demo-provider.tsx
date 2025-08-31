@@ -61,7 +61,11 @@ export function DemoProvider({ children }: DemoProviderProps) {
   // Get all tools in a flat array for demo using centralized function
   const allTools = getDemoTools();
 
-  const cycleThroughTools = (index: number, customDelay?: number, shouldPause: boolean = false) => {
+  const cycleThroughTools = (
+    index: number,
+    customDelay?: number,
+    shouldPause: boolean = false
+  ) => {
     if (index >= allTools.length) {
       // Demo complete
       stopDemo();
@@ -156,26 +160,26 @@ export function DemoProvider({ children }: DemoProviderProps) {
     if (demoTimeoutRef.current) {
       clearTimeout(demoTimeoutRef.current);
     }
-    
+
     // When manually navigating, pause the demo
     setIsDemoPaused(true);
-    
+
     cycleThroughTools(currentIndexRef.current + 1, undefined, true);
   };
 
   const skipToPrevious = () => {
     if (!isDemoRunning) return;
-    
+
     // Can't go before the first tool
     if (currentIndexRef.current <= 0) return;
 
     if (demoTimeoutRef.current) {
       clearTimeout(demoTimeoutRef.current);
     }
-    
+
     // When manually navigating, pause the demo
     setIsDemoPaused(true);
-    
+
     cycleThroughTools(currentIndexRef.current - 1, undefined, true);
   };
 
