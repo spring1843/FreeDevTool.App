@@ -28,6 +28,7 @@ import {
   ChevronUp,
   Square,
   SkipForward,
+  SkipBack,
   Timer,
   Play,
   Pause,
@@ -56,6 +57,7 @@ export function Layout({ children }: LayoutProps) {
     demoSpeed,
     stopDemo,
     skipToNext,
+    skipToPrevious,
     setDemoSpeed,
     pauseDemo,
     resumeDemo,
@@ -188,8 +190,26 @@ export function Layout({ children }: LayoutProps) {
                     <Button
                       size="sm"
                       variant="outline"
+                      onClick={skipToPrevious}
+                      className="flex items-center space-x-1 h-7"
+                      data-testid="demo-previous-layout"
+                    >
+                      <SkipBack className="w-3 h-3" />
+                      <span className="text-xs">Previous</span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Previous Tool in Demo</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size="sm"
+                      variant="outline"
                       onClick={isDemoPaused ? resumeDemo : pauseDemo}
                       className="flex items-center space-x-1 h-7"
+                      data-testid="demo-pause-resume-layout"
                     >
                       {isDemoPaused ? (
                         <>
@@ -217,13 +237,14 @@ export function Layout({ children }: LayoutProps) {
                       variant="outline"
                       onClick={skipToNext}
                       className="flex items-center space-x-1 h-7"
+                      data-testid="demo-next-layout"
                     >
                       <SkipForward className="w-3 h-3" />
-                      <span className="text-xs">Skip</span>
+                      <span className="text-xs">Next</span>
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Skip to Next Tool in Demo</p>
+                    <p>Next Tool in Demo</p>
                   </TooltipContent>
                 </Tooltip>
                 <Tooltip>

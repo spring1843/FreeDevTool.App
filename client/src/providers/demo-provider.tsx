@@ -61,7 +61,11 @@ export function DemoProvider({ children }: DemoProviderProps) {
   // Get all tools in a flat array for demo using centralized function
   const allTools = getDemoTools();
 
-  const cycleThroughTools = (index: number, customDelay?: number) => {
+  const cycleThroughTools = (
+    index: number,
+    customDelay?: number,
+    shouldPause = false
+  ) => {
     if (index >= allTools.length) {
       // Demo complete
       stopDemo();
@@ -76,17 +80,28 @@ export function DemoProvider({ children }: DemoProviderProps) {
     // Navigate to the tool
     setLocation(tool.path);
 
-    // Set up next tool after configured delay - use ref to get current speed
-    const delay =
-      customDelay !== undefined
-        ? customDelay
-        : speedConfig[demoSpeedRef.current];
-    remainingTimeRef.current = delay;
-    pauseStartTimeRef.current = Date.now();
+    // Only set up automatic navigation if not pausing
+    if (!shouldPause) {
+      // Set up next tool after configured delay - use ref to get current speed
+      const delay =
+        customDelay !== undefined
+          ? customDelay
+          : speedConfig[demoSpeedRef.current];
+      remainingTimeRef.current = delay;
+      pauseStartTimeRef.current = Date.now();
 
-    demoTimeoutRef.current = setTimeout(() => {
-      cycleThroughTools(index + 1);
-    }, delay);
+      demoTimeoutRef.current = setTimeout(() => {
+        cycleThroughTools(index + 1);
+      }, delay);
+    } else {
+      // If pausing, just update the remaining time for future resume
+      const delay =
+        customDelay !== undefined
+          ? customDelay
+          : speedConfig[demoSpeedRef.current];
+      remainingTimeRef.current = delay;
+      pauseStartTimeRef.current = Date.now();
+    }
   };
 
   const startDemo = () => {
@@ -145,8 +160,27 @@ export function DemoProvider({ children }: DemoProviderProps) {
     if (demoTimeoutRef.current) {
       clearTimeout(demoTimeoutRef.current);
     }
-    setIsDemoPaused(false);
-    cycleThroughTools(currentIndexRef.current + 1);
+
+    // When manually navigating, pause the demo
+    setIsDemoPaused(true);
+
+    cycleThroughTools(currentIndexRef.current + 1, undefined, true);
+  };
+
+  const skipToPrevious = () => {
+    if (!isDemoRunning) return;
+
+    // Can't go before the first tool
+    if (currentIndexRef.current <= 0) return;
+
+    if (demoTimeoutRef.current) {
+      clearTimeout(demoTimeoutRef.current);
+    }
+
+    // When manually navigating, pause the demo
+    setIsDemoPaused(true);
+
+    cycleThroughTools(currentIndexRef.current - 1, undefined, true);
   };
 
   // Cleanup on unmount
@@ -170,6 +204,7 @@ export function DemoProvider({ children }: DemoProviderProps) {
     pauseDemo,
     resumeDemo,
     skipToNext,
+    skipToPrevious,
     setDemoSpeed,
     totalTools: allTools.length,
   };
