@@ -64,9 +64,6 @@ dev: ## Start development server with verbose logging
 
 build: ## Build the application for production
 	npm run build
-	cp client/assets/favicon.ico dist/public/favicon.ico
-	cp client/assets/robots.txt dist/public/robots.txt
-	cp client/assets/sitemap.xml dist/public/sitemap.xml
 
 ## Code Quality Commands
 
