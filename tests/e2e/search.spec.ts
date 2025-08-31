@@ -183,4 +183,32 @@ test.describe("Search Functionality", () => {
       page.locator('[data-testid="search-result-uuid-generator"]')
     ).toBeVisible();
   });
+
+  test("should focus search input and allow typing when Ctrl+S is pressed", async ({
+    page,
+  }) => {
+    const searchInput = page.locator('[data-testid="search-input"]');
+    
+    // Ensure search input is not initially focused
+    await page.click("body");
+    await expect(searchInput).not.toBeFocused();
+
+    // Press Ctrl+S to focus search input
+    await page.keyboard.press("Control+s");
+    
+    // Verify search input is focused
+    await expect(searchInput).toBeFocused();
+    
+    // Type text to verify user can type after focus
+    await page.keyboard.type("json");
+    
+    // Verify text was typed into the search input
+    await expect(searchInput).toHaveValue("json");
+    
+    // Verify search results appear
+    await expect(page.locator('[data-testid="search-results"]')).toBeVisible();
+    await expect(
+      page.locator('[data-testid="search-result-json-formatter"]')
+    ).toBeVisible();
+  });
 });
