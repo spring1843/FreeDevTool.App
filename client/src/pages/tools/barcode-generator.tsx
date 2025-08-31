@@ -291,11 +291,29 @@ export default function BarcodeGenerator() {
                 onClick={generateBarcode}
                 disabled={!text.trim() || !!inputError}
                 className="bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
+                title="Generate the barcode with the current settings"
+                id="generate"
               >
                 <BarChart3 className="w-4 h-4 mr-2" />
                 Generate Barcode
               </Button>
-              <Button onClick={handleReset} variant="outline">
+              <Button
+                onClick={downloadBarcode}
+                variant="outline"
+                disabled={!!error || !!inputError}
+                title="Download barcode as a PNG file."
+                id="download"
+              >
+                <Download className="w-4 h-4  mr-2" />
+                Download
+              </Button>
+              <Button
+                onClick={handleReset}
+                variant="outline"
+                disabled={text === DEFAULT_BARCODE_GENERATOR}
+                id="reset"
+                title="Reset to default value"
+              >
                 <RotateCcw className="w-4 h-4 mr-2" />
                 Reset
               </Button>
@@ -316,17 +334,6 @@ export default function BarcodeGenerator() {
                 ref={canvasRef}
                 className="max-w-full h-auto border border-gray-200 dark:border-gray-700 rounded-lg bg-white mx-auto"
               />
-
-              <div className="mt-4">
-                <Button
-                  onClick={downloadBarcode}
-                  disabled={!!error || !!inputError}
-                  className="bg-green-600 hover:bg-green-700 text-white disabled:opacity-50"
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  Download PNG
-                </Button>
-              </div>
             </div>
           </CardContent>
         </Card>

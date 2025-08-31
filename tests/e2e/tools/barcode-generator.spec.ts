@@ -21,14 +21,14 @@ test.describe("Barcode Generator Tool", () => {
 
   test("should generate barcode and allow download", async ({ page }) => {
     // Enter text to generate barcode
-    const inputField = page.locator('[data-testid="barcode-input"]');
+    const inputField = page.locator('[data-testid="barcode-text"]');
     await inputField.fill("123456789012");
 
     // Wait for barcode to be generated
     await expect(page.locator("canvas")).toBeVisible();
 
     // Verify download button is visible
-    const downloadButton = page.locator('[data-testid="download-barcode"]');
+    const downloadButton = page.locator('[id="download"]');
     await expect(downloadButton).toBeVisible();
 
     // Set up download promise before clicking
@@ -57,14 +57,14 @@ test.describe("Barcode Generator Tool", () => {
     page,
   }) => {
     // Test with default format first
-    const inputField = page.locator('[data-testid="barcode-input"]');
+    const inputField = page.locator('[id="barcode-text"]');
     await inputField.fill("1234567890");
 
     // Wait for barcode to be generated
     await expect(page.locator("canvas")).toBeVisible();
 
     // Change barcode format
-    const formatSelect = page.locator('[data-testid="barcode-format-select"]');
+    const formatSelect = page.locator('[id="download"]');
     await formatSelect.click();
     await page.locator("text=Code 39").click();
 
@@ -76,7 +76,7 @@ test.describe("Barcode Generator Tool", () => {
     await expect(page.locator("canvas")).toBeVisible();
 
     // Verify download is still available
-    const downloadButton = page.locator('[data-testid="download-barcode"]');
+    const downloadButton = page.locator('[id="download"]');
     await expect(downloadButton).toBeVisible();
 
     // Test download with different format
