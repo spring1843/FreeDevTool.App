@@ -159,7 +159,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                 >
                   <span className="text-white text-sm font-bold transition-transform duration-300">
                     <img
-                      src="/assets/android-chrome-32x32.png"
+                      src="/assets/favicon-32x32.png"
                       alt="FD"
                       title="Click to toggle menu"
                       className="h-5 w-5"
