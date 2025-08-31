@@ -91,38 +91,13 @@ export function Layout({ children }: LayoutProps) {
             if (isLargeScreen) {
               setDesktopSidebarVisible(!desktopSidebarVisible);
             } else {
-              const wasOpen = mobileMenuOpen;
-              setMobileMenuOpen(!mobileMenuOpen);
-
-              // If opening the menu, focus the sidebar after a brief delay
-              if (!wasOpen) {
-                setTimeout(() => {
-                  const sidebar = document.querySelector(
-                    '[role="navigation"]'
-                  ) as HTMLElement;
-                  if (sidebar) {
-                    sidebar.focus();
-                  }
-                }, 100);
-              }
+              toggleStateOfMobileMenu(mobileMenuOpen, setMobileMenuOpen);
             }
-          } else {
-            // On tool pages, always toggle mobile menu
-            const wasOpen = mobileMenuOpen;
-            setMobileMenuOpen(!mobileMenuOpen);
-
-            // If opening the menu, focus the sidebar after a brief delay
-            if (!wasOpen) {
-              setTimeout(() => {
-                const sidebar = document.querySelector(
-                  '[role="navigation"]'
-                ) as HTMLElement;
-                if (sidebar) {
-                  sidebar.focus();
-                }
-              }, 100);
-            }
+            return;
           }
+
+          // On tool pages, always toggle mobile menu
+          toggleStateOfMobileMenu(mobileMenuOpen, setMobileMenuOpen);
           return;
         }
 
@@ -459,4 +434,24 @@ export function Layout({ children }: LayoutProps) {
       </div>
     </TooltipProvider>
   );
+}
+
+function toggleStateOfMobileMenu(
+  mobileMenuOpen: boolean,
+  setMobileMenuOpen: React.Dispatch<React.SetStateAction<boolean>>
+) {
+  const wasOpen = mobileMenuOpen;
+  setMobileMenuOpen(!mobileMenuOpen);
+
+  // If opening the menu, focus the sidebar after a brief delay
+  if (!wasOpen) {
+    setTimeout(() => {
+      const sidebar = document.querySelector(
+        '[role="navigation"]'
+      ) as HTMLElement;
+      if (sidebar) {
+        sidebar.focus();
+      }
+    }, 100);
+  }
 }
