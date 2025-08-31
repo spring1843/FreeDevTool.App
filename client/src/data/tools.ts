@@ -25,7 +25,7 @@ export const toolsData: ToolData = {
       {
         name: "Date Converter",
         path: "/tools/date-converter",
-        shortcut: "Ctrl+Shift+Date",
+        shortcut: "Ctrl+Shift+DateConv",
         description: "Convert between timestamps, dates, and formats",
       },
       {
