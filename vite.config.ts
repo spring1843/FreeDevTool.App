@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
+import { viteStaticCopy } from "vite-plugin-static-copy";
 
 export default defineConfig({
   plugins: [
@@ -15,6 +16,26 @@ export default defineConfig({
           ),
         ]
       : []),
+    viteStaticCopy({
+      targets: [
+        {
+          src: "assets/favicon-32x32.png",
+          dest: "assets",
+        },
+        {
+          src: "assets/robots.txt",
+          dest: "",
+        },
+        {
+          src: "assets/sitemap.xml",
+          dest: "",
+        },
+        {
+          src: "assets/favicon.ico",
+          dest: "",
+        },
+      ],
+    }),
   ],
   resolve: {
     alias: {
