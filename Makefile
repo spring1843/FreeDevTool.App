@@ -67,7 +67,7 @@ build: ## Build the application for production
 	cp client/assets/favicon.ico dist/public/favicon.ico
 	cp client/assets/robots.txt dist/public/robots.txt
 	cp client/assets/sitemap.xml dist/public/sitemap.xml
-	cp client/assets/android-chrome-32x32.png dist/public/android-chrome-32x32.png
+	cp client/assets/favicon-32x32.png dist/public/favicon-32x32.png
 
 ## Code Quality Commands
 
