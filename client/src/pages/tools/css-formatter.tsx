@@ -203,6 +203,7 @@ export default function CSSFormatter() {
               fileExtension="css"
               theme={theme}
               lang="css"
+              data-default-input="true"
             />
           </CardContent>
         </Card>

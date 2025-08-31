@@ -102,6 +102,7 @@ export default function GraphQLFormatter() {
               minHeight="400px"
               fileExtension="graphql"
               theme={theme}
+              data-default-input="true"
             />
           </CardContent>
         </Card>

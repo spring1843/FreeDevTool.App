@@ -162,6 +162,8 @@ export default function RegexTester() {
               placeholder="Enter regex pattern..."
               data-testid="regex-pattern"
               className={`font-mono ${!isValidRegex ? "border-red-500" : ""}`}
+              autoFocus={true}
+              data-default-input="true"
             />
             {error ? (
               <div className="text-sm text-red-600 mt-1">{error}</div>

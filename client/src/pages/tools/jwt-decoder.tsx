@@ -148,6 +148,7 @@ export default function JWTDecoder() {
             data-testid="jwt-token-input"
             className="min-h-[100px] font-mono text-sm"
             rows={5}
+            data-default-input="true"
             autoFocus={true}
             fileExtension="json"
             theme={theme}
@@ -205,6 +206,7 @@ export default function JWTDecoder() {
           <CardContent>
             <TextArea
               value={signature}
+              data-default-input="true"
               readOnly={true}
               placeholder="Signature will appear here..."
               data-testid="jwt-signature-output"

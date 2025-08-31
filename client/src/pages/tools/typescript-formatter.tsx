@@ -116,6 +116,7 @@ export default function TypeScriptFormatter() {
               fileExtension="ts"
               theme={theme}
               lang="typescript"
+              data-default-input="true"
             />
           </CardContent>
         </Card>

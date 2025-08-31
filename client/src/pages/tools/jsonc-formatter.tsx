@@ -91,6 +91,7 @@ export default function JSONCFormatter() {
               minHeight="400px"
               fileExtension="jsonc"
               theme={theme}
+              data-default-input="true"
             />
             <div className="flex gap-2 flex-wrap">
               <Button onClick={formatCode} className="flex-1 sm:flex-none">

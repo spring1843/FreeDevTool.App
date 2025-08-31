@@ -280,6 +280,8 @@ export default function Countdown() {
                 value={targetDate}
                 onChange={e => setTargetDate(e.target.value)}
                 data-testid="target-date"
+                data-default-input="true"
+                autoFocus={true}
               />
             </div>
             <div>

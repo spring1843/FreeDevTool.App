@@ -206,6 +206,7 @@ export default function SearchReplace() {
               value={text}
               onChange={e => setText(e.target.value)}
               placeholder="Enter text to search and replace..."
+              data-default-input="true"
               data-testid="text-input"
               className="min-h-[400px] font-mono text-sm"
               rows={20}

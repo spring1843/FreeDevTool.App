@@ -196,6 +196,7 @@ export default function TLSDecoder() {
             minHeight="200px"
             fileExtension="txt"
             theme={theme}
+            data-default-input="true"
           />
         </CardContent>
       </Card>

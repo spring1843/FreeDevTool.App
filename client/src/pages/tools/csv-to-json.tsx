@@ -344,6 +344,7 @@ Jane Smith,jane@example.com,25"
               minHeight="200px"
               fileExtension="csv"
               theme={resolvedTheme}
+              data-default-input="true"
             />
 
             {error ? (

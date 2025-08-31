@@ -168,6 +168,7 @@ export default function TextSplit() {
               minHeight="300px"
               fileExtension="txt"
               theme={theme}
+              data-default-input="true"
             />
           </CardContent>
         </Card>

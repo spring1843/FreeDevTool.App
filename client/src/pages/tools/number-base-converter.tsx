@@ -347,6 +347,8 @@ export default function NumberBaseConverter() {
                   placeholder="Enter number..."
                   className="font-mono"
                   data-testid="number-input"
+                  data-default-input="true"
+                  autoFocus={true}
                 />
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                   Valid characters for base {inputBase}:{" "}

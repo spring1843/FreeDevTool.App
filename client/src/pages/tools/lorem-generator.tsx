@@ -281,6 +281,8 @@ export default function LoremGenerator() {
                   )
                 }
                 data-testid="count-input"
+                data-default-input="true"
+                autoFocus={true}
               />
             </div>
 
@@ -336,10 +338,10 @@ export default function LoremGenerator() {
               data-testid="lorem-output"
               className="min-h-[300px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               rows={15}
-              autoFocus={true}
               minHeight="300px"
               fileExtension="txt"
               theme={theme}
+              lang="plaintext"
             />
 
             <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">

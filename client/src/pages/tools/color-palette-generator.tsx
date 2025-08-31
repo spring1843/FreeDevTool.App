@@ -320,6 +320,8 @@ export default function ColorPaletteGenerator() {
                   placeholder="#3B82F6"
                   className="flex-1 font-mono"
                   data-testid="color-input"
+                  data-default-input="true"
+                  autoFocus={true}
                 />
                 <Button
                   variant="outline"

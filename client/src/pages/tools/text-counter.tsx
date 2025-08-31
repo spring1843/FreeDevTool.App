@@ -100,6 +100,7 @@ export default function TextCounter() {
               placeholder="Enter or paste your text here..."
               className="min-h-[400px] font-mono text-sm"
               data-testid="text-input"
+              data-default-input="true"
               rows={20}
               minHeight="400px"
               fileExtension="txt"

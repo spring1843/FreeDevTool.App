@@ -151,6 +151,8 @@ export default function DebtRepaymentCalculator() {
                 value={principal}
                 onChange={e => setPrincipal(Number(e.target.value))}
                 placeholder="Total debt amount"
+                data-default-input="true"
+                autoFocus={true}
               />
             </div>
 

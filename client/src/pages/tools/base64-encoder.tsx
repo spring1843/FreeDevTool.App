@@ -140,6 +140,7 @@ export default function Base64Encoder() {
               minHeight="400px"
               fileExtension="txt"
               theme={theme}
+              data-default-input="true"
             />
           </CardContent>
         </Card>

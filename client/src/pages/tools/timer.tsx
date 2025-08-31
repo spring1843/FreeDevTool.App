@@ -450,6 +450,8 @@ export default function Timer() {
                   value={newTimerName}
                   onChange={e => setNewTimerName(e.target.value)}
                   data-testid="timer-name-input"
+                  data-default-input="true"
+                  autoFocus={true}
                 />
               </div>
 

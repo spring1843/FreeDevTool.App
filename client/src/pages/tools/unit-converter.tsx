@@ -392,6 +392,8 @@ export default function UnitConverter() {
                 onChange={e => setInputValue(e.target.value)}
                 placeholder="Enter value"
                 data-testid="input-value"
+                autoFocus={true}
+                data-default-input="true"
               />
             </div>
             <div>

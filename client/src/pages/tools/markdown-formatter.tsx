@@ -100,6 +100,7 @@ export default function MarkdownFormatter() {
               lang="markdown"
               fileExtension="md"
               theme={theme}
+              data-default-input="true"
             />
           </CardContent>
         </Card>

@@ -233,6 +233,7 @@ export default function URLToJSON() {
                   className="font-mono resize-none"
                   data-testid="url-input"
                   autoFocus={true}
+                  data-default-input="true"
                 />
               </div>
 

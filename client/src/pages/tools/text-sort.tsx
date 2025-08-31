@@ -181,6 +181,7 @@ export default function TextSort() {
               fileExtension="txt"
               theme={theme}
               lang="text"
+              data-default-input="true"
             />
           </CardContent>
         </Card>

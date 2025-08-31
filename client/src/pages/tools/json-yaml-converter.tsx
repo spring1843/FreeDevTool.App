@@ -117,6 +117,7 @@ export default function JSONYAMLConverter() {
                 placeholder="Paste your JSON here..."
                 data-testid="json-input"
                 className="min-h-[300px] font-mono text-sm"
+                data-default-input="true"
                 rows={15}
                 autoFocus={true}
                 minHeight="300px"
