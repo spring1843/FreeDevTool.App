@@ -64,7 +64,7 @@ export function DemoProvider({ children }: DemoProviderProps) {
   const cycleThroughTools = (
     index: number,
     customDelay?: number,
-    shouldPause: boolean = false
+    shouldPause = false
   ) => {
     if (index >= allTools.length) {
       // Demo complete
