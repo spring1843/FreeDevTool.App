@@ -433,7 +433,7 @@ export function Layout({ children }: LayoutProps) {
               <span>Menu</span>
               <span className="w-1 h-1 bg-slate-300 rounded-full" />
               <kbd className="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs">
-                Ctrl+K
+                Ctrl+S
               </kbd>
               <span>Search</span>
               <span className="w-1 h-1 bg-slate-300 rounded-full" />
