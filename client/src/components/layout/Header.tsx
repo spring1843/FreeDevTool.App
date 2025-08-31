@@ -246,7 +246,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                     onClick={toggleTheme}
                     className="h-10 w-10 p-0 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors touch-manipulation"
                     data-testid="theme-toggle"
-                    aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+                    aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode (CTRL+D)`}
                   >
                     {theme === "dark" ? (
                       <Sun className="h-5 w-5" />

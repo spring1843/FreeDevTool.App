@@ -25,7 +25,7 @@ export const toolsData: ToolData = {
       {
         name: "Date Converter",
         path: "/tools/date-converter",
-        shortcut: "Ctrl+D",
+        shortcut: "Ctrl+Shift+1",
         description: "Convert between timestamps, dates, and formats",
       },
       {
@@ -37,7 +37,7 @@ export const toolsData: ToolData = {
       {
         name: "Timezone Converter",
         path: "/tools/timezone-converter",
-        shortcut: "Ctrl+T",
+        shortcut: "Ctrl+Shift+2",
         description: "Convert time across multiple timezones with precision",
       },
       {
@@ -50,20 +50,20 @@ export const toolsData: ToolData = {
       {
         name: "URL to JSON",
         path: "/tools/url-to-json",
-        shortcut: "Ctrl+Shift+URL",
+        shortcut: "Ctrl+Shift+3",
         description:
           "Convert URLs to JSON with parameter parsing and TLD lookup",
       },
       {
         name: "CSV to JSON",
         path: "/tools/csv-to-json",
-        shortcut: "Ctrl+Shift+CSV",
+        shortcut: "Ctrl+Shift+4",
         description: "Convert CSV data to JSON format with delimiter selection",
       },
       {
         name: "Number Base Converter",
         path: "/tools/number-base-converter",
-        shortcut: "Ctrl+Shift+Base",
+        shortcut: "Ctrl+Shift+5",
         description: "Convert numbers between different bases (2-64)",
       },
     ],
@@ -75,7 +75,7 @@ export const toolsData: ToolData = {
       {
         name: "JSON Formatter",
         path: "/tools/json-formatter",
-        shortcut: "Ctrl+J",
+        shortcut: "Ctrl+Shift+J",
         description: "Format and beautify JSON with validation",
       },
       {
@@ -87,39 +87,39 @@ export const toolsData: ToolData = {
       {
         name: "HTML Beautifier",
         path: "/tools/html-formatter",
-        shortcut: "Ctrl+H",
+        shortcut: "Ctrl+Shift+H",
         description:
           "Beautify HTML with proper indentation and validate for errors",
       },
       {
         name: "YAML Formatter",
         path: "/tools/yaml-formatter",
-        shortcut: "Ctrl+Y",
+        shortcut: "Ctrl+Shift+6",
         description: "Format and beautify YAML configuration files",
       },
       {
         name: "Markdown Formatter",
         path: "/tools/markdown-formatter",
-        shortcut: "Ctrl+M",
+        shortcut: "Ctrl+Shift+K",
         description: "Format Markdown with live preview",
       },
       {
         name: "CSS/LESS/SCSS Formatter",
         path: "/tools/css-formatter",
-        shortcut: "Ctrl+Shift+C",
+        shortcut: "Ctrl+Shift+7",
         description: "Format CSS, LESS, and SCSS stylesheets with Prettier",
       },
       {
         name: "JavaScript/TypeScript Formatter",
         path: "/tools/typescript-formatter",
-        shortcut: "Ctrl+Shift+TS",
+        shortcut: "Ctrl+Shift+8",
         description: "Format JavaScript and TypeScript code with Prettier",
       },
 
       {
         name: "GraphQL Formatter",
         path: "/tools/graphql-formatter",
-        shortcut: "Ctrl+G",
+        shortcut: "Ctrl+Shift+9",
         description: "Format GraphQL schemas and queries",
       },
       {
@@ -137,37 +137,37 @@ export const toolsData: ToolData = {
       {
         name: "Base64 Encoder",
         path: "/tools/base64",
-        shortcut: "Ctrl+B",
+        shortcut: "Ctrl+Shift+B",
         description: "Encode and decode Base64 data",
       },
       {
         name: "URL Encoder",
         path: "/tools/url-encoder",
-        shortcut: "Ctrl+U",
+        shortcut: "Ctrl+Shift+~",
         description: "URL encode and decode strings",
       },
       {
         name: "JWT Decoder",
         path: "/tools/jwt-decoder",
-        shortcut: "Ctrl+Shift+J",
+        shortcut: "Ctrl+Shift+A",
         description: "Decode and inspect JWT tokens",
       },
       {
         name: "TLS Certificate Decoder",
         path: "/tools/tls-decoder",
-        shortcut: "Ctrl+Shift+S",
+        shortcut: "Ctrl+Shift+G",
         description: "Decode TLS certificates",
       },
       {
         name: "MD5 Hash",
         path: "/tools/md5-hash",
-        shortcut: "Ctrl+Shift+M",
+        shortcut: "Ctrl+Shift+R",
         description: "Generate MD5 hashes",
       },
       {
         name: "BCrypt Hash",
         path: "/tools/bcrypt-hash",
-        shortcut: "Ctrl+Shift+B",
+        shortcut: "Ctrl+Shift+F",
         description: "Generate and verify BCrypt hashes",
       },
     ],
@@ -179,13 +179,13 @@ export const toolsData: ToolData = {
       {
         name: "Text Diff",
         path: "/tools/text-diff",
-        shortcut: "Ctrl+Shift+D",
+        shortcut: "Ctrl+Shift+!",
         description: "Compare text differences side by side",
       },
       {
         name: "Regex Tester",
         path: "/tools/regex-tester",
-        shortcut: "Ctrl+E",
+        shortcut: "Ctrl+Shift+E",
         description: "Test regular expressions with live matches",
       },
       {
@@ -197,19 +197,19 @@ export const toolsData: ToolData = {
       {
         name: "Word Counter",
         path: "/tools/text-counter",
-        shortcut: "Ctrl+W",
+        shortcut: "Ctrl+Shift+W",
         description: "Count words, characters, and lines in text",
       },
       {
         name: "QR Generator",
         path: "/tools/qr-generator",
-        shortcut: "Ctrl+Q",
+        shortcut: "Ctrl+Shift+Q",
         description: "Generate QR codes for text and URLs",
       },
       {
         name: "Barcode Generator",
         path: "/tools/barcode-generator",
-        shortcut: "Ctrl+Shift+G",
+        shortcut: "Ctrl+Shift+I",
         description: "Generate various barcode formats",
       },
       {
@@ -227,25 +227,25 @@ export const toolsData: ToolData = {
       {
         name: "Password Generator",
         path: "/tools/password-generator",
-        shortcut: "Ctrl+P",
+        shortcut: "Ctrl+Shift+P",
         description: "Generate secure passwords with custom criteria",
       },
       {
         name: "UUID Generator",
         path: "/tools/uuid-generator",
-        shortcut: "Ctrl+Shift+I",
+        shortcut: "Ctrl+Shift+@",
         description: "Generate UUIDs (v1, v4) for unique identifiers",
       },
       {
         name: "Search & Replace",
         path: "/tools/search-replace",
-        shortcut: "Ctrl+F",
+        shortcut: "Ctrl+Shift+Z",
         description: "Find and replace text with regex support",
       },
       {
         name: "Text Split",
         path: "/tools/text-split",
-        shortcut: "Ctrl+Shift+Split",
+        shortcut: "Ctrl+Shift+X",
         description: "Split text by delimiters or patterns",
       },
     ],
@@ -257,37 +257,37 @@ export const toolsData: ToolData = {
       {
         name: "World Clock",
         path: "/tools/world-clock",
-        shortcut: "Ctrl+Shift+W",
+        shortcut: "Ctrl+Shift+0",
         description: "View time across multiple cities and timezones",
       },
       {
         name: "Timer",
         path: "/tools/timer",
-        shortcut: "Ctrl+Shift+Timer",
+        shortcut: "Ctrl+Shift+V",
         description: "Countdown timer with audio alerts",
       },
       {
         name: "Stopwatch",
         path: "/tools/stopwatch",
-        shortcut: "Ctrl+Shift+Stop",
+        shortcut: "Ctrl+Shift+=",
         description: "Precision stopwatch with lap times",
       },
       {
         name: "Countdown",
         path: "/tools/countdown",
-        shortcut: "Ctrl+Shift+Count",
+        shortcut: "Ctrl+Shift+-",
         description: "Count down to a specific date and time",
       },
       {
         name: "Date/Time Difference",
         path: "/tools/datetime-diff",
-        shortcut: "Ctrl+Shift+Diff",
+        shortcut: "Ctrl+Shift+[",
         description: "Calculate differences between dates and times",
       },
       {
         name: "Metronome",
         path: "/tools/metronome",
-        shortcut: "Ctrl+Shift+Metro",
+        shortcut: "Ctrl+Shift+]",
         description: "Multi-tone metronome with custom timing intervals",
       },
     ],
@@ -299,13 +299,13 @@ export const toolsData: ToolData = {
       {
         name: "Compound Interest",
         path: "/tools/compound-interest",
-        shortcut: "Ctrl+Shift+Interest",
+        shortcut: "Ctrl+Shift+;",
         description: "Calculate compound interest and investment growth",
       },
       {
         name: "Debt Repayment",
         path: "/tools/debt-repayment",
-        shortcut: "Ctrl+Shift+Debt",
+        shortcut: "Ctrl+Shift+'",
         description: "Plan debt payoff strategies and calculate payments",
       },
     ],
@@ -317,7 +317,7 @@ export const toolsData: ToolData = {
       {
         name: "Color Palette Generator",
         path: "/tools/color-palette-generator",
-        shortcut: "Ctrl+Shift+Color",
+        shortcut: "Ctrl+Shift+,",
         description: "Generate beautiful color palettes and schemes",
       },
     ],
@@ -329,21 +329,21 @@ export const toolsData: ToolData = {
       {
         name: "Camera Test",
         path: "/tools/webcam-test",
-        shortcut: "Ctrl+Shift+V",
+        shortcut: "Ctrl+Shift+.",
         description: "Test your camera and record video clips",
         experimental: true,
       },
       {
         name: "Microphone Test",
         path: "/tools/microphone-test",
-        shortcut: "Ctrl+Shift+M",
+        shortcut: "Ctrl+Shift+/",
         description:
           "Test microphone with audio level monitoring and recording",
       },
       {
         name: "Keyboard Test",
         path: "/tools/keyboard-test",
-        shortcut: "Ctrl+Shift+K",
+        shortcut: "Ctrl+Shift+`",
         description: "Test keyboard keys and see which buttons are pressed",
       },
     ],
@@ -355,7 +355,7 @@ export const toolsData: ToolData = {
       {
         name: "Browser Info",
         path: "/tools/browser-info",
-        shortcut: "Ctrl+Shift+Browser",
+        shortcut: "Ctrl+Shift+\\",
         description: "Display comprehensive browser and system information",
       },
     ],

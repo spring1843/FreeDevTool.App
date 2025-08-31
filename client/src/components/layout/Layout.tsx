@@ -35,6 +35,7 @@ import {
 } from "lucide-react";
 import { toolsData } from "@/data/tools";
 import { useDemo } from "@/hooks/use-demo-hook";
+import { useTheme } from "@/providers/theme-provider";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -64,6 +65,8 @@ export function Layout({ children }: LayoutProps) {
     resumeDemo,
   } = useDemo();
 
+  const { theme, setTheme } = useTheme();
+
   // Global keyboard shortcut handler
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -79,6 +82,14 @@ export function Layout({ children }: LayoutProps) {
       }
 
       if (event.ctrlKey) {
+        // Handle theme toggle with Ctrl+D (case-sensitive check)
+        if (event.key === "d" || event.key === "D") {
+          event.preventDefault();
+          event.stopPropagation();
+          setTheme(theme === "dark" ? "light" : "dark");
+          return;
+        }
+
         // Handle menu toggle with Ctrl+M (case-sensitive check)
         if (event.key === "m" || event.key === "M") {
           event.preventDefault();
@@ -131,6 +142,8 @@ export function Layout({ children }: LayoutProps) {
     mobileMenuOpen,
     shouldShowSidebarByDefault,
     desktopSidebarVisible,
+    theme,
+    setTheme,
   ]);
 
   return (
@@ -420,7 +433,7 @@ export function Layout({ children }: LayoutProps) {
               <span>Menu</span>
               <span className="w-1 h-1 bg-slate-300 rounded-full" />
               <kbd className="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-xs">
-                Ctrl+K
+                Ctrl+S
               </kbd>
               <span>Search</span>
               <span className="w-1 h-1 bg-slate-300 rounded-full" />

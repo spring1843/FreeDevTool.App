@@ -69,9 +69,9 @@ test.describe("Theme Toggle Functionality", () => {
       // Verify aria-label updates correctly
       const ariaLabel = await themeToggle.getAttribute("aria-label");
       if (expectedTheme === "dark") {
-        expect(ariaLabel).toBe("Switch to light mode");
+        expect(ariaLabel).toContain("Switch to light mode");
       } else {
-        expect(ariaLabel).toBe("Switch to dark mode");
+        expect(ariaLabel).toContain("Switch to dark mode");
       }
     }
   });
@@ -229,5 +229,104 @@ test.describe("Theme Toggle Functionality", () => {
     // Verify button remains accessible and functional
     await expect(themeToggle).toBeVisible();
     await expect(themeToggle).toBeEnabled();
+  });
+
+  test("should toggle theme with Ctrl+D keyboard shortcut", async ({
+    page,
+  }) => {
+    // Get initial theme state from document element class
+    const initialThemeClass = await page.evaluate(
+      () => document.documentElement.className
+    );
+
+    // Determine initial theme (default should be light)
+    const initialTheme = initialThemeClass.includes("dark") ? "dark" : "light";
+
+    // Use keyboard shortcut to toggle theme
+    await page.keyboard.press("Control+d");
+
+    // Wait for theme to change using proper wait condition
+    await page.waitForFunction(
+      initialTheme => {
+        const { className } = document.documentElement;
+        const currentTheme = className.includes("dark") ? "dark" : "light";
+        return currentTheme !== initialTheme;
+      },
+      initialTheme,
+      { timeout: 2000 }
+    );
+
+    // Verify theme has changed
+    const newThemeClass = await page.evaluate(
+      () => document.documentElement.className
+    );
+    const newTheme = newThemeClass.includes("dark") ? "dark" : "light";
+    expect(newTheme).not.toBe(initialTheme);
+
+    // Toggle back with keyboard shortcut
+    await page.keyboard.press("Control+D");
+
+    // Wait for theme to change back
+    await page.waitForFunction(
+      newTheme => {
+        const { className } = document.documentElement;
+        const currentTheme = className.includes("dark") ? "dark" : "light";
+        return currentTheme !== newTheme;
+      },
+      newTheme,
+      { timeout: 2000 }
+    );
+
+    // Verify theme is back to original
+    const finalThemeClass = await page.evaluate(
+      () => document.documentElement.className
+    );
+    const finalTheme = finalThemeClass.includes("dark") ? "dark" : "light";
+    expect(finalTheme).toBe(initialTheme);
+  });
+
+  test("should work with both uppercase and lowercase Ctrl+D", async ({
+    page,
+  }) => {
+    // Get initial theme
+    const initialThemeClass = await page.evaluate(
+      () => document.documentElement.className
+    );
+    const initialTheme = initialThemeClass.includes("dark") ? "dark" : "light";
+
+    // Test lowercase 'd'
+    await page.keyboard.press("Control+d");
+
+    // Wait for theme change
+    await page.waitForFunction(
+      initialTheme => {
+        const { className } = document.documentElement;
+        const currentTheme = className.includes("dark") ? "dark" : "light";
+        return currentTheme !== initialTheme;
+      },
+      initialTheme,
+      { timeout: 2000 }
+    );
+
+    // Test uppercase 'D'
+    await page.keyboard.press("Control+D");
+
+    // Wait for theme to change back
+    await page.waitForFunction(
+      initialTheme => {
+        const { className } = document.documentElement;
+        const currentTheme = className.includes("dark") ? "dark" : "light";
+        return currentTheme === initialTheme;
+      },
+      initialTheme,
+      { timeout: 2000 }
+    );
+
+    // Verify we're back to original theme
+    const finalThemeClass = await page.evaluate(
+      () => document.documentElement.className
+    );
+    const finalTheme = finalThemeClass.includes("dark") ? "dark" : "light";
+    expect(finalTheme).toBe(initialTheme);
   });
 });
