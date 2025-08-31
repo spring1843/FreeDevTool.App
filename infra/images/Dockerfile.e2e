@@ -1,0 +1,16 @@
+FROM node:24
+
+RUN apt-get update && apt-get install -y -q --no-install-recommends \
+        apt-transport-https \
+        build-essential \
+        ca-certificates \
+        curl \
+        git \
+        make \
+        libssl-dev \
+        wget
+
+ADD package.json .
+ADD Makefile .
+
+RUN make setup

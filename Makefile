@@ -18,8 +18,6 @@ NC=\033[0m # No Color
 setup: ## Complete project setup - install dependencies, browsers, and prepare for development
 	make deps
 	make e2e-install
-	make type-check
-	make lint
 
 ## Combined Commands
 
@@ -64,6 +62,9 @@ dev: ## Start development server with verbose logging
 
 build: ## Build the application for production
 	npm run build
+
+build-e2e-docker: ## Build the Docker image for end-to-end testing
+	docker build -t docker.pkg.github.com/spring1843/freedevtool.app/e2e -f infra/images/Dockerfile.e2e .
 
 ## Code Quality Commands
 
