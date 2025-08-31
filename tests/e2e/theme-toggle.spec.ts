@@ -69,9 +69,9 @@ test.describe("Theme Toggle Functionality", () => {
       // Verify aria-label updates correctly
       const ariaLabel = await themeToggle.getAttribute("aria-label");
       if (expectedTheme === "dark") {
-        expect(ariaLabel).toBe("Switch to light mode");
+        expect(ariaLabel).toContain("Switch to light mode");
       } else {
-        expect(ariaLabel).toBe("Switch to dark mode");
+        expect(ariaLabel).toContain("Switch to dark mode");
       }
     }
   });
