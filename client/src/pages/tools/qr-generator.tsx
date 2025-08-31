@@ -29,7 +29,10 @@ import QRCodeLib from "qrcode-generator";
 import { DEFAULT_QR_GENERATOR } from "@/data/defaults";
 
 // Standalone QR Code generation using qrcode-generator library
-const generateQRCode = (text: string, size = 200): { url: string; svgData: string } => {
+const generateQRCode = (
+  text: string,
+  size = 200
+): { url: string; svgData: string } => {
   try {
     const qr = QRCodeLib(0, "M"); // Type 0 (auto), Error correction level M
     qr.addData(text);
@@ -192,7 +195,7 @@ export default function QRGenerator() {
 
     try {
       // Create SVG blob directly from the SVG string
-      const blob = new Blob([svgData], { type: 'image/svg+xml' });
+      const blob = new Blob([svgData], { type: "image/svg+xml" });
       const url = URL.createObjectURL(blob);
 
       const a = document.createElement("a");
