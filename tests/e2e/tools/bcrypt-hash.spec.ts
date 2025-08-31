@@ -1,5 +1,9 @@
 import { test, expect } from "@playwright/test";
-import { setupJSErrorCollection, expectNoErrors } from "./utils";
+import {
+  setupJSErrorCollection,
+  expectNoErrors,
+  expectDefaultValue,
+} from "./utils";
 
 test.describe("BCrypt Hash Tool", () => {
   test.beforeEach(async ({ page }) => {
@@ -12,5 +16,6 @@ test.describe("BCrypt Hash Tool", () => {
   }) => {
     await expect(page.locator("main")).toBeVisible();
     await expectNoErrors(page);
+    await expectDefaultValue(page);
   });
 });

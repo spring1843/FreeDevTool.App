@@ -156,6 +156,8 @@ export default function MD5Hash() {
                   placeholder="Enter text to hash..."
                   data-testid="input-text"
                   className="pr-10"
+                  data-default-input="true"
+                  autoFocus={true}
                 />
                 <Button
                   type="button"
@@ -219,8 +221,6 @@ export default function MD5Hash() {
                 onChange={e => setCompareHash(e.target.value)}
                 placeholder="Enter hash for comparison..."
                 data-testid="compare-hash"
-                data-default-input="true"
-                autoFocus={true}
               />
             </div>
 
@@ -288,7 +288,6 @@ export default function MD5Hash() {
             data-testid="hash-output"
             className="min-h-[100px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
             rows={5}
-            autoFocus={true}
             fileExtension="txt"
             theme={theme}
           />
