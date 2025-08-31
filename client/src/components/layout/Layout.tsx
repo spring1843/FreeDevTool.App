@@ -44,6 +44,7 @@ export function Layout({ children }: LayoutProps) {
   const [location, setLocation] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [headerCollapsed, setHeaderCollapsed] = useState(false);
+  const [desktopSidebarVisible, setDesktopSidebarVisible] = useState(true);
 
   // Determine if sidebar should be shown by default (only on homepage and desktop)
   const isHomepage = location === "/";
@@ -82,19 +83,45 @@ export function Layout({ children }: LayoutProps) {
         if (event.key === "m" || event.key === "M") {
           event.preventDefault();
           event.stopPropagation();
-          const wasOpen = mobileMenuOpen;
-          setMobileMenuOpen(!mobileMenuOpen);
-
-          // If opening the menu, focus the sidebar after a brief delay
-          if (!wasOpen) {
-            setTimeout(() => {
-              const sidebar = document.querySelector(
-                '[role="navigation"]'
-              ) as HTMLElement;
-              if (sidebar) {
-                sidebar.focus();
+          
+          // Toggle appropriate menu based on current context
+          if (shouldShowSidebarByDefault) {
+            // On homepage, toggle desktop sidebar on large screens, mobile menu on small screens
+            const isLargeScreen = window.innerWidth >= 1024; // lg breakpoint
+            if (isLargeScreen) {
+              setDesktopSidebarVisible(!desktopSidebarVisible);
+            } else {
+              const wasOpen = mobileMenuOpen;
+              setMobileMenuOpen(!mobileMenuOpen);
+              
+              // If opening the menu, focus the sidebar after a brief delay
+              if (!wasOpen) {
+                setTimeout(() => {
+                  const sidebar = document.querySelector(
+                    '[role="navigation"]'
+                  ) as HTMLElement;
+                  if (sidebar) {
+                    sidebar.focus();
+                  }
+                }, 100);
               }
-            }, 100);
+            }
+          } else {
+            // On tool pages, always toggle mobile menu
+            const wasOpen = mobileMenuOpen;
+            setMobileMenuOpen(!mobileMenuOpen);
+
+            // If opening the menu, focus the sidebar after a brief delay
+            if (!wasOpen) {
+              setTimeout(() => {
+                const sidebar = document.querySelector(
+                  '[role="navigation"]'
+                ) as HTMLElement;
+                if (sidebar) {
+                  sidebar.focus();
+                }
+              }, 100);
+            }
           }
           return;
         }
@@ -124,7 +151,7 @@ export function Layout({ children }: LayoutProps) {
 
     document.addEventListener("keydown", handleKeyDown, true);
     return () => document.removeEventListener("keydown", handleKeyDown, true);
-  }, [setLocation, mobileMenuOpen]);
+  }, [setLocation, mobileMenuOpen, shouldShowSidebarByDefault, desktopSidebarVisible]);
 
   return (
     <TooltipProvider>
@@ -133,7 +160,21 @@ export function Layout({ children }: LayoutProps) {
         <div
           className={`transition-all duration-300 ${headerCollapsed ? "h-0" : "h-auto"} ${headerCollapsed ? "overflow-hidden" : "overflow-visible"} relative z-50`}
         >
-          <Header onMenuClick={() => setMobileMenuOpen(true)} />
+          <Header onMenuClick={() => {
+            // Toggle appropriate menu based on current context
+            if (shouldShowSidebarByDefault) {
+              // On homepage, toggle desktop sidebar on large screens, mobile menu on small screens
+              const isLargeScreen = window.innerWidth >= 1024; // lg breakpoint
+              if (isLargeScreen) {
+                setDesktopSidebarVisible(!desktopSidebarVisible);
+              } else {
+                setMobileMenuOpen(!mobileMenuOpen);
+              }
+            } else {
+              // On tool pages, always toggle mobile menu
+              setMobileMenuOpen(!mobileMenuOpen);
+            }
+          }} />
         </div>
 
         {/* Demo Status Bar */}
@@ -298,11 +339,13 @@ export function Layout({ children }: LayoutProps) {
           {shouldShowSidebarByDefault ? (
             <>
               {/* Default sidebar on homepage - hidden on mobile (lg:block) */}
-              <aside className="hidden lg:block w-80 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 overflow-y-auto custom-scrollbar flex flex-col h-full">
-                <div className="flex-1 min-h-0">
-                  <Sidebar collapsed={false} />
-                </div>
-              </aside>
+              {desktopSidebarVisible && (
+                <aside className="hidden lg:block w-80 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 overflow-y-auto custom-scrollbar flex flex-col h-full">
+                  <div className="flex-1 min-h-0">
+                    <Sidebar collapsed={false} />
+                  </div>
+                </aside>
+              )}
 
               {/* Hamburger menu for mobile on homepage */}
               <Sheet
