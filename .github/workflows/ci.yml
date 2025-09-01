@@ -23,6 +23,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - run: git config --global --add safe.directory $(pwd)
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
