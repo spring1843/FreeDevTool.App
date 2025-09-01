@@ -20,7 +20,7 @@ GIT_SHA_SHORT:=$(shell git rev-parse --short HEAD)
 # Image tags
 E2E_IMAGE:=ghcr.io/spring1843/freedevtool.app/e2e
 E2E_IMAGE_TAG:=${E2E_IMAGE}:${GIT_SHA_SHORT}
-E2E_IMAGE_USE:=${E2E_IMAGE}:813b031
+E2E_IMAGE_USE:=${E2E_IMAGE}:616a628
 PWD:=$(shell pwd)
 
 ## Setup Commands
@@ -77,7 +77,7 @@ build: ## Build the application for production
 	npm run build
 
 build-and-push-e2e-image: ## Build the Docker image for end-to-end testing
-	docker build --platform linux/amd64 --network host -t ${E2E_IMAGE_TAG} -f infra/images/Dockerfile.e2e . --push
+	docker build --platform linux/amd64 -t ${E2E_IMAGE_TAG} -f infra/images/Dockerfile.e2e . --push
 
 ## Code Quality Commands
 

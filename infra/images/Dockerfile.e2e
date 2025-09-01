@@ -12,9 +12,11 @@ RUN apt-get update && apt-get install -y -q --no-install-recommends \
 
 WORKDIR /app
 
-ADD .git .
-ADD package.json .
-ADD package-lock.json .
-ADD Makefile .
+RUN git config --global --add safe.directory /app
+
+COPY .git .
+COPY package.json .
+COPY package-lock.json .
+COPY Makefile .
 
 RUN make setup
