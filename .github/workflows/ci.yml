@@ -16,6 +16,7 @@ jobs:
     name: Continuous Integration
     permissions:
       contents: read
+      packages: read 
     runs-on: ubuntu-latest
     
     steps:
