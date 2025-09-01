@@ -74,7 +74,7 @@ dev: ## Start development server with verbose logging
 	NODE_ENV=development DEBUG=* npm run dev
 
 build: ## Build the application for production
-	npm run build
+	npm run build && node scripts/prerender.js
 
 build-and-push-e2e-image: ## Build the Docker image for end-to-end testing
 	docker build --platform linux/amd64 -t ${E2E_IMAGE_TAG} -f infra/images/Dockerfile.e2e . --push

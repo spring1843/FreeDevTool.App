@@ -81,6 +81,7 @@ The application operates without authentication requirements as all tools functi
 - Optimized JavaScript bundle (1.3MB, 352KB gzipped) with tree shaking and unused dependency removal.
 - Browser caching (`Cache-Control: public, max-age=86400, must-revalidate`) for HTML routes.
 - Removed 16+ unused UI libraries including CodeMirror, carousel, input-otp, drawer components for smaller bundle size.
+- **Static Site Generation**: Converted from SPA to static multi-page site for S3/CDN deployment, with each tool having its own subdirectory and index.html file while preserving all URLs for SEO benefits.
 
 **Testing Strategy:**
 
