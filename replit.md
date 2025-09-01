@@ -1,9 +1,11 @@
 # replit.md
 
 ## Overview
- is a web-based collection of 49+ open-source, free, and completely offline developer tools. It offers a wide range of utilities including converters, formatters, encoders, text tools, timing utilities, financial calculators, hardware tests, and generators. Designed with privacy in mind, all processing occurs locally without network dependencies, making it suitable for sensitive business environments and air-gapped systems.
+
+is a web-based collection of 49+ open-source, free, and completely offline developer tools. It offers a wide range of utilities including converters, formatters, encoders, text tools, timing utilities, financial calculators, hardware tests, and generators. Designed with privacy in mind, all processing occurs locally without network dependencies, making it suitable for sensitive business environments and air-gapped systems.
 
 ## User Preferences
+
 Preferred communication style: Simple, everyday language.
 Theme preferences: Smooth theme transitions with local storage persistence, respecting browser/OS theme selection by default, falling back to light mode when system preference unavailable.
 Timezone behavior: All time-related tools should default to the user's local timezone instead of UTC for better user experience.
@@ -16,9 +18,11 @@ Formatting standards: Industry-standard code formatting using Prettier for all m
 ## System Architecture
 
 ### Frontend Architecture
+
 The client-side application is built with React and TypeScript, leveraging a modern component-based architecture. It uses shadcn/ui components (based on Radix UI) for consistent design and Tailwind CSS for styling. It supports both light and dark themes with system preference detection.
 
 **Key Frontend Decisions:**
+
 - **Routing**: `wouter` for lightweight client-side routing.
 - **State Management**: React's built-in hooks (`useState`, `useEffect`).
 - **UI Components**: Radix UI primitives with shadcn/ui.
@@ -27,32 +31,39 @@ The client-side application is built with React and TypeScript, leveraging a mod
 - **Navigation**: Contextual sidebar behavior - visible by default on homepage desktop view, hidden on mobile devices and tool pages. Hamburger menu available on all screen sizes via Ctrl+M shortcut. Blue FD logo toggles sidebar, text logo links to homepage.
 
 ### Backend Architecture
+
 The server-side is a minimal Node.js Express application with TypeScript, providing a basic REST API foundation for future development. It is intentionally lightweight as the application primarily focuses on client-side processing.
 
 **Key Backend Decisions:**
+
 - **Framework**: Express.js for simplicity.
 - **Development**: Vite integration for HMR.
 - **Error Handling**: Basic middleware for logging and structured responses.
 
 ### Data Storage Solutions
+
 The application operates entirely client-side without persistent data storage, focusing on real-time tool computations and browser-based processing.
 
 **Storage Architecture:**
+
 - **Client-Side Only**: All data processing occurs in the browser with no server persistence.
 - **Privacy-First**: No data transmitted to servers, ensuring complete privacy and security.
 - **Offline Capability**: Full functionality without network dependencies.
 
 ### Authentication and Authorization
+
 The application operates without authentication requirements as all tools function offline and require no user accounts or data persistence.
 
 ### Key Technical Implementations
 
 **Offline-First Design:**
+
 - All external dependencies replaced with local JavaScript libraries.
 - Content Security Policy prevents external resource loading.
 - System fonts used exclusively.
 
 **Tool Architecture:**
+
 - Unified tool layout with consistent error handling and validation.
 - URL sharing for state persistence.
 - Demo system with automated tours, pause/resume, and 5 speed options (Slow, Normal, Fast, Very Fast, Crazy Fast) available in both homepage controls and layout dropdown during demo playback.
@@ -64,6 +75,7 @@ The application operates without authentication requirements as all tools functi
 - Centralized defaults system: All tool default values consolidated into `client/src/data/defaults.ts` package, providing consistent defaults across 22+ tools including formatters, converters, encoders, and text tools for better maintainability and easier modification.
 
 **Performance Optimizations:**
+
 - Debounced input handling.
 - Lazy loading of tool components.
 - Optimized JavaScript bundle (1.3MB, 352KB gzipped) with tree shaking and unused dependency removal.
@@ -71,6 +83,7 @@ The application operates without authentication requirements as all tools functi
 - Removed 16+ unused UI libraries including CodeMirror, carousel, input-otp, drawer components for smaller bundle size.
 
 **Testing Strategy:**
+
 - Individual end-to-end test files for each of the 45+ tools in the application (`tests/e2e/tools/`).
 - Each tool has dedicated test coverage verifying page loads without JavaScript/CSS errors.
 - Isolated test failures allow precise identification of broken tools during development.
@@ -82,6 +95,7 @@ The application operates without authentication requirements as all tools functi
 - CI/CD pipeline includes comprehensive testing with 146 unit tests and full e2e validation.
 
 **Security Features:**
+
 - Content Security Policy enforcing local-only resources.
 - Input validation and sanitization.
 - No telemetry or tracking.
@@ -89,6 +103,7 @@ The application operates without authentication requirements as all tools functi
 ## Issue Management and Community
 
 **GitHub Issue Templates:**
+
 - **Bug Report**: Comprehensive bug reporting with tool-specific categorization, browser/device info, and reproduction steps
 - **Feature Request**: Structured feature requests with user stories, priority assessment, and technical considerations
 - **New Tool Request**: Specialized template for requesting additional developer tools with detailed requirements
@@ -96,6 +111,7 @@ The application operates without authentication requirements as all tools functi
 - **Documentation Issue**: Template for documentation improvements and corrections
 
 **Issue Classification:**
+
 - Tool-specific categorization covering all 45+ tools in the application
 - Clear priority levels and impact assessment
 - User type targeting (developers, designers, students, etc.)
@@ -104,12 +120,14 @@ The application operates without authentication requirements as all tools functi
 ## CI/CD and Release Management
 
 **GitHub Actions Workflows:**
+
 - **CI Pipeline**: Automated testing, type checking, and build validation on every PR and main branch push.
 - **Release Workflow**: Automated building, packaging, and GitHub release creation with changelog generation from merged PRs.
 - **CI Dependency**: Release workflow requires CI to pass before allowing releases, ensuring quality control.
 - **GitHub Pages Deployment**: Each release deploys the same gzip package to GitHub Pages as a standalone web application.
 
 **Release Process:**
+
 - **Automatic**: Push git tags (e.g., `v1.0.0`) trigger releases after CI validation
 - **Manual**: GitHub Actions workflow dispatch with CI status verification
 - **Emergency Bypass**: Manual releases can bypass CI requirement if needed (creates prerelease with warning)
@@ -122,6 +140,7 @@ The application operates without authentication requirements as all tools functi
 ## External Dependencies
 
 ### Core Framework Dependencies
+
 - **Node.js 24.4.0**: Runtime environment with latest features and performance improvements.
 - **React 19.1.1**: UI component library with latest features and performance improvements.
 - **TypeScript**: Type safety.
@@ -130,20 +149,21 @@ The application operates without authentication requirements as all tools functi
 - **Tailwind CSS**: Styling framework.
 
 ### UI Component Libraries
+
 - **Radix UI**: Accessible primitive components.
 - **shadcn/ui**: Component library based on Radix UI.
 - **Lucide React**: Icon library.
 - **cmdk**: Command palette functionality.
 
 ### Development and Build Tools
+
 - **ESLint**: Code linting.
 - **PostCSS**: CSS processing.
 - **tsx**: TypeScript execution.
 - **esbuild**: JavaScript bundler.
 
-
-
 ### Utility Libraries
+
 - **wouter**: Lightweight client-side routing.
 - **js-yaml**: YAML parsing/serialization.
 - **clsx + tailwind-merge**: Conditional CSS class composition.

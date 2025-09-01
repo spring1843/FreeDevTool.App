@@ -1,9 +1,11 @@
 # Pull Request
 
 ## 📋 Description
+
 <!-- Provide a brief description of your changes -->
 
 ## 🔧 Type of Change
+
 <!-- Mark the relevant option with an [x] -->
 
 - [ ] 🐛 Bug fix (non-breaking change which fixes an issue)
@@ -16,9 +18,11 @@
 - [ ] 🔧 Build/CI configuration change
 
 ## 📱 Screenshots/Videos
+
 <!-- If applicable, add screenshots or videos to help explain your changes -->
 
 ## 📝 Checklist
+
 <!-- Mark completed items with [x] -->
 
 - [ ] My code follows the project's style guidelines
@@ -31,7 +35,9 @@
 - [ ] Any dependent changes have been merged and published
 
 ## 🔗 Related Issues
+
 <!-- Link to related issues, e.g., "Fixes #123" or "Closes #456" -->
 
 ## 📋 Additional Notes
+
 <!-- Add any additional notes, concerns, or context about the PR -->

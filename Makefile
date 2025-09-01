@@ -13,19 +13,30 @@ YELLOW=\033[1;33m
 BLUE=\033[0;34m
 NC=\033[0m # No Color
 
+GIT_TAG:=$(shell git describe --tags --abbrev=7 --always HEAD)
+GIT_SHA:=$(shell git rev-parse HEAD)
+GIT_SHA_SHORT:=$(shell git rev-parse --short HEAD)
+
+# Image tags
+E2E_IMAGE:=ghcr.io/spring1843/freedevtool.app/e2e
+E2E_IMAGE_TAG:=${E2E_IMAGE}:${GIT_SHA_SHORT}
+E2E_IMAGE_USE:=${E2E_IMAGE}:616a628
+PWD:=$(shell pwd)
+
 ## Setup Commands
 
 setup: ## Complete project setup - install dependencies, browsers, and prepare for development
 	make deps
 	make e2e-install
-	make type-check
-	make lint
 
 ## Combined Commands
 
 all: clean setup lint type-check test build ## Run full development setup with all dependencies including tests
 
 pre-commit: format type-check lint-fix ## Pre-commit hook (fix, format, check)
+
+ci-containerized:  ## Run CI checks inside a container that has dependencies installed
+	docker run --rm -v "${PWD}:/app" ${E2E_IMAGE_USE} make setup && make ci
 
 ci-without-e2e: pre-commit build test ## CI commands without end-to-end tests, for environments that can't run e2e tests
 
@@ -64,6 +75,9 @@ dev: ## Start development server with verbose logging
 
 build: ## Build the application for production
 	npm run build
+
+build-and-push-e2e-image: ## Build the Docker image for end-to-end testing
+	docker build --platform linux/amd64 -t ${E2E_IMAGE_TAG} -f infra/images/Dockerfile.e2e . --push
 
 ## Code Quality Commands
 

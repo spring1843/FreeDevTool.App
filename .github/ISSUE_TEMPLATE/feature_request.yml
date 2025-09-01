@@ -64,7 +64,7 @@ body:
       description: Describe how users would interact with this feature
       placeholder: |
         As a [type of user], I want [functionality] so that [benefit].
-        
+
         Example:
         - As a web developer, I want to minify CSS code so that I can reduce file sizes
         - As a designer, I want to convert colors between formats so that I can match brand guidelines
@@ -129,7 +129,7 @@ body:
       description: How complex do you think this feature would be to implement?
       options:
         - "Simple - Small UI change or minor feature"
-        - "Medium - New tool or significant enhancement"  
+        - "Medium - New tool or significant enhancement"
         - "Complex - Major feature requiring architecture changes"
         - "Not sure"
 

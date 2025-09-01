@@ -1,0 +1,22 @@
+FROM node:24
+
+RUN apt-get update && apt-get install -y -q --no-install-recommends \
+        apt-transport-https \
+        build-essential \
+        ca-certificates \
+        curl \
+        git \
+        make \
+        libssl-dev \
+        wget
+
+WORKDIR /app
+
+RUN git config --global --add safe.directory /app
+
+COPY .git .
+COPY package.json .
+COPY package-lock.json .
+COPY Makefile .
+
+RUN make setup

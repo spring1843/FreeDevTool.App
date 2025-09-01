@@ -78,7 +78,7 @@ body:
             background-color: blue;
         }
         ```
-        
+
         Expected Output:
         ```css
         body{color:red;background-color:blue}
@@ -92,7 +92,7 @@ body:
       multiple: true
       options:
         - "Web Development"
-        - "Backend Development" 
+        - "Backend Development"
         - "Mobile Development"
         - "Data Analysis"
         - "DevOps/Infrastructure"

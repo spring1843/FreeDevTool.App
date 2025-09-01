@@ -3,19 +3,21 @@ name: Build and Release
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version tag (e.g., v1.0.0)'
+        description: "Version tag (e.g., v1.0.0)"
         required: true
         type: string
 
 jobs:
   build-and-release:
+    container: ghcr.io/spring1843/freedevtool.app/e2e:616a628
     permissions:
       contents: write
       pages: write
+      packages: read
       id-token: write
 
     name: Build and Release
@@ -25,24 +27,24 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Fetch full history for changelog generation
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
-          cache: 'npm'
-      
+          node-version: "24"
+          cache: "npm"
+
       - name: Install dependencies
         run: make deps
-      
+
       - name: Build application
         run: make build
-      
+
       - name: Create dist archive
         run: |
           # Create a clean build directory for release
           mkdir -p release-build
-          
+
           # Copy deployable public files
           if [ -d "dist" ]; then
             cp -r dist/public/* release-build/
@@ -52,7 +54,7 @@ jobs:
           cd dist
           tar -czf ../freedevtool-app.tar.gz .
           cd ..
-          
+
           # Create zip for Windows users
           cd release-build
           zip -r ../freedevtool-app.zip .
@@ -66,17 +68,17 @@ jobs:
           else
             echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
           fi
-      
+
       - name: Generate changelog
         id: changelog
         run: |
           CURRENT_TAG="${{ steps.version.outputs.version }}"
-          
+
           echo "Generating changelog for ${CURRENT_TAG}"
-          
+
           # Create changelog content
           CHANGELOG_FILE="CHANGELOG.md"
-          
+
           # Header
           echo "# Release Notes for ${CURRENT_TAG}" > ${CHANGELOG_FILE}
           echo "" >> ${CHANGELOG_FILE}
@@ -98,15 +100,15 @@ jobs:
           echo "- [GitHub Repository](https://github.com/spring1843/freedevtool.app)" >> ${CHANGELOG_FILE}
           echo "- [Documentation](https://github.com/spring1843/freedevtool.app#readme)" >> ${CHANGELOG_FILE}
           echo "- [Report Issues](https://github.com/spring1843/freedevtool.app/issues)" >> ${CHANGELOG_FILE}
-          
+
           # Set output for release notes
           echo "changelog_file=${CHANGELOG_FILE}" >> $GITHUB_OUTPUT
-      
+
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.version.outputs.version }}
-          name: 'FreeDev Tool App ${{ steps.version.outputs.version }}'
+          name: "FreeDev Tool App ${{ steps.version.outputs.version }}"
           body_path: ${{ steps.changelog.outputs.changelog_file }}
           files: |
             freedevtool-app.tar.gz
@@ -120,13 +122,13 @@ jobs:
 
       - name: Setup GitHub Pages
         run: |
-            # Create a clean build directory for release
-            mkdir -p gh-pages-deploy
-          
-            # Copy deployable public files
-            if [ -d "dist" ]; then
-              cp -r dist/public/* gh-pages-deploy/
-            fi
+          # Create a clean build directory for release
+          mkdir -p gh-pages-deploy
+
+          # Copy deployable public files
+          if [ -d "dist" ]; then
+            cp -r dist/public/* gh-pages-deploy/
+          fi
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
