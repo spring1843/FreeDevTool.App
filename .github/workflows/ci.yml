@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   ci:
-    container: ghcr.io/spring1843/freedevtool.app/e2e:768b0f3
+    container: ghcr.io/spring1843/freedevtool.app/e2e:616a628
     name: Continuous Integration
     permissions:
       contents: read
