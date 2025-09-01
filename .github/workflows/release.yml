@@ -13,9 +13,11 @@ on:
 
 jobs:
   build-and-release:
+    container: ghcr.io/spring1843/freedevtool.app/e2e:813b031
     permissions:
       contents: write
       pages: write
+      packages: read
       id-token: write
 
     name: Build and Release

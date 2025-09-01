@@ -30,7 +30,6 @@ jobs:
           cache: 'npm'
 
       - run: make install
-
       - run: make type-check
       - run: make test
       - run: make format-check
