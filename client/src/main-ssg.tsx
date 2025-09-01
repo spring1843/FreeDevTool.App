@@ -1,7 +1,4 @@
 import { ViteReactSSG } from "vite-react-ssg";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import App from "./App";
-import { getAllToolPaths } from "./data/tools";
 import "./index.css";
 
 // Import all tool components
@@ -322,6 +319,6 @@ export const createRoot = ViteReactSSG(
   { routes },
   ({ router, routes, isClient, initialState }) => {
     // Custom setup for the application
-    console.log(`SSG Mode: ${isClient ? 'Client' : 'Server'}`);
+    console.log(`SSG Mode: ${isClient ? "Client" : "Server"}`);
   }
 );
