@@ -23,7 +23,7 @@
 
 - `Makefile` contains all commands for install, build, lint, tests, and CI checks. Do not add raw shell in workflows; add/update Makefile targets instead.
 - The app is packaged via `make build`. Production readiness checks run via `make ci`.
-- Review docs first: `README.md`,  `STYLE.md`, `Makefile`, and other docs.
+- Review docs first: `README.md`, `STYLE.md`, `Makefile`, and other docs.
 
 ## Coding guidelines
 

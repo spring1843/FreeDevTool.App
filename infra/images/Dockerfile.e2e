@@ -10,6 +10,8 @@ RUN apt-get update && apt-get install -y -q --no-install-recommends \
         libssl-dev \
         wget
 
+WORKDIR /app
+
 ADD .git .
 ADD package.json .
 ADD package-lock.json .

@@ -18,7 +18,10 @@ GIT_SHA:=$(shell git rev-parse HEAD)
 GIT_SHA_SHORT:=$(shell git rev-parse --short HEAD)
 
 # Image tags
-E2E_IMAGE_TAG:=ghcr.io/spring1843/freedevtool.app/e2e:${GIT_SHA_SHORT}
+E2E_IMAGE:=ghcr.io/spring1843/freedevtool.app/e2e
+E2E_IMAGE_TAG:=${E2E_IMAGE}:${GIT_SHA_SHORT}
+E2E_IMAGE_USE:=${E2E_IMAGE}:813b031
+PWD:=$(shell pwd)
 
 ## Setup Commands
 
@@ -31,6 +34,9 @@ setup: ## Complete project setup - install dependencies, browsers, and prepare f
 all: clean setup lint type-check test build ## Run full development setup with all dependencies including tests
 
 pre-commit: format type-check lint-fix ## Pre-commit hook (fix, format, check)
+
+ci-containerized:  ## Run CI checks inside a container that has dependencies installed
+	docker run --rm -v "${PWD}:/app" ${E2E_IMAGE_USE} make setup && make ci
 
 ci-without-e2e: pre-commit build test ## CI commands without end-to-end tests, for environments that can't run e2e tests
 

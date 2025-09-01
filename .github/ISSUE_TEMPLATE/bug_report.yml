@@ -18,7 +18,7 @@ body:
       options:
         - "Homepage/Navigation"
         - "ASCII Art Generator"
-        - "Barcode Generator"  
+        - "Barcode Generator"
         - "Base64 Encoder/Decoder"
         - "Color Converter"
         - "Color Palette Generator"
@@ -37,7 +37,7 @@ body:
         - "JSON to CSV"
         - "JWT Decoder"
         - "Lorem Ipsum Generator"
-        - "Markdown Formatter"  
+        - "Markdown Formatter"
         - "Memory Test"
         - "Metronome"
         - "Monitor Test"
