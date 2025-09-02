@@ -6,7 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { DemoProvider } from "@/providers/demo-provider";
 import { Layout } from "@/components/layout/Layout";
-import { Suspense, lazy } from "react";
+import { memo, Suspense, lazy } from "react";
 
 // Static imports (always needed)
 import Home from "@/pages/home";
@@ -78,14 +78,15 @@ const NumberBaseConverter = lazy(
 );
 
 // Loading component for lazy-loaded tools
-const ToolLoader = () => (
+const ToolLoader = memo(() => (
   <div className="flex items-center justify-center min-h-[400px]">
     <div className="text-center">
       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4" />
       <p className="text-muted-foreground">Loading tool...</p>
     </div>
   </div>
-);
+));
+ToolLoader.displayName = "ToolLoader";
 
 function Router() {
   return (
