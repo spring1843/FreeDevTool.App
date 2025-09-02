@@ -8,7 +8,7 @@ export interface ThemeProviderState {
 }
 
 const initialState: ThemeProviderState = {
-  theme: getSystemTheme(),
+  theme: "light", // Safe fallback instead of calling getSystemTheme() during initialization
   setTheme: () => null,
 };
 

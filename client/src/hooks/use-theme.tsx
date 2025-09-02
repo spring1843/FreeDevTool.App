@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import {
   getSystemTheme,
   type Theme,
@@ -12,7 +12,7 @@ interface ThemeProviderProps {
 
 export function ThemeProvider({
   children,
-  defaultTheme = getSystemTheme(),
+  defaultTheme = "light",
   ...props
 }: ThemeProviderProps) {
   const [theme, setThemeState] = useState<Theme>(() => {
@@ -22,6 +22,8 @@ export function ThemeProvider({
       if (stored && ["light", "dark"].includes(stored)) {
         return stored;
       }
+      // Use system theme as fallback
+      return getSystemTheme();
     }
     return defaultTheme;
   });
@@ -32,14 +34,14 @@ export function ThemeProvider({
     root.classList.add(theme);
   }, [theme]);
 
-  const value = {
+  const value = useMemo(() => ({
     theme,
     setTheme: (theme: Theme) => {
       // Save to localStorage before updating state
       localStorage.setItem("theme", theme);
       setThemeState(theme);
     },
-  };
+  }), [theme]);
 
   return (
     <ThemeProviderContext.Provider {...props} value={value}>

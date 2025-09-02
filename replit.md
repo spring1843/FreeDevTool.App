@@ -40,6 +40,19 @@ The server-side is a minimal Node.js Express application with TypeScript, provid
 - **Development**: Vite integration for HMR.
 - **Error Handling**: Basic middleware for logging and structured responses.
 
+### Static Site Generation Architecture
+
+The application supports static site generation for optimal deployment to CDNs like S3/CloudFront, preserving all current URLs for SEO benefits while dramatically improving performance.
+
+**Static Generation Features:**
+
+- **Multi-page Structure**: Each of the 45+ tools gets its own subdirectory with index.html file.
+- **SEO Optimization**: Tool-specific titles, meta descriptions, and automated sitemap.xml generation.
+- **Performance**: Code splitting with vendor chunks reduces initial load from 2MB to manageable chunks.
+- **URL Preservation**: All existing tool URLs maintained for SEO continuity.
+- **Build Integration**: Integrated into `make build` command using custom production Vite configuration.
+- **Privacy Maintained**: Offline-first design preserved with no external dependencies in generated static files.
+
 ### Data Storage Solutions
 
 The application operates entirely client-side without persistent data storage, focusing on real-time tool computations and browser-based processing.
@@ -77,10 +90,13 @@ The application operates without authentication requirements as all tools functi
 **Performance Optimizations:**
 
 - Debounced input handling.
-- Lazy loading of tool components.
-- Optimized JavaScript bundle (1.3MB, 352KB gzipped) with tree shaking and unused dependency removal.
+- Code splitting with React.lazy achieving 80% bundle size reduction (from 2MB to 438KB main bundle).
+- Static site generation creating individual tool pages with shared vendor chunks for optimal caching.
+- Vendor chunk strategy: React core (12KB), routing (33KB), UI components (110KB), utilities (59KB), code editors (240KB), charts (403KB).
+- Each tool loads only required code (3-75KB chunks) instead of entire application bundle.
 - Browser caching (`Cache-Control: public, max-age=86400, must-revalidate`) for HTML routes.
 - Removed 16+ unused UI libraries including CodeMirror, carousel, input-otp, drawer components for smaller bundle size.
+- Automated sitemap.xml generation for all 45+ tools with SEO-optimized URLs.
 
 **Testing Strategy:**
 
