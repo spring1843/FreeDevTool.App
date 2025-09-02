@@ -14,16 +14,24 @@ import NotFound from "@/pages/not-found";
 
 // Dynamic imports for tool pages
 const DateConverter = lazy(() => import("@/pages/tools/date-converter"));
-const JsonYamlConverter = lazy(() => import("@/pages/tools/json-yaml-converter"));
-const TimezoneConverter = lazy(() => import("@/pages/tools/timezone-converter"));
+const JsonYamlConverter = lazy(
+  () => import("@/pages/tools/json-yaml-converter")
+);
+const TimezoneConverter = lazy(
+  () => import("@/pages/tools/timezone-converter")
+);
 const UnitConverter = lazy(() => import("@/pages/tools/unit-converter"));
 const JsonFormatter = lazy(() => import("@/pages/tools/json-formatter"));
 const JSONCFormatter = lazy(() => import("@/pages/tools/jsonc-formatter"));
 const HtmlFormatter = lazy(() => import("@/pages/tools/html-formatter"));
 const YamlFormatter = lazy(() => import("@/pages/tools/yaml-formatter"));
-const MarkdownFormatter = lazy(() => import("@/pages/tools/markdown-formatter"));
+const MarkdownFormatter = lazy(
+  () => import("@/pages/tools/markdown-formatter")
+);
 const CssFormatter = lazy(() => import("@/pages/tools/css-formatter"));
-const TypeScriptFormatter = lazy(() => import("@/pages/tools/typescript-formatter"));
+const TypeScriptFormatter = lazy(
+  () => import("@/pages/tools/typescript-formatter")
+);
 const GraphQLFormatter = lazy(() => import("@/pages/tools/graphql-formatter"));
 const TimeFormatter = lazy(() => import("@/pages/tools/time-formatter"));
 const Base64Encoder = lazy(() => import("@/pages/tools/base64-encoder"));
@@ -42,24 +50,32 @@ const Stopwatch = lazy(() => import("@/pages/tools/stopwatch"));
 const Countdown = lazy(() => import("@/pages/tools/countdown"));
 const CompoundInterest = lazy(() => import("@/pages/tools/compound-interest"));
 const DebtRepayment = lazy(() => import("@/pages/tools/debt-repayment"));
-const ColorPaletteGenerator = lazy(() => import("@/pages/tools/color-palette-generator"));
+const ColorPaletteGenerator = lazy(
+  () => import("@/pages/tools/color-palette-generator")
+);
 const CameraTest = lazy(() => import("@/pages/tools/webcam-test"));
 const MicrophoneTest = lazy(() => import("@/pages/tools/microphone-test"));
 const KeyboardTest = lazy(() => import("@/pages/tools/keyboard-test"));
 const QRGenerator = lazy(() => import("@/pages/tools/qr-generator"));
 const BarcodeGenerator = lazy(() => import("@/pages/tools/barcode-generator"));
 const LoremGenerator = lazy(() => import("@/pages/tools/lorem-generator"));
-const UnicodeCharacters = lazy(() => import("@/pages/tools/unicode-characters"));
+const UnicodeCharacters = lazy(
+  () => import("@/pages/tools/unicode-characters")
+);
 const MD5Hash = lazy(() => import("@/pages/tools/md5-hash"));
 const BCryptHash = lazy(() => import("@/pages/tools/bcrypt-hash"));
-const PasswordGenerator = lazy(() => import("@/pages/tools/password-generator"));
+const PasswordGenerator = lazy(
+  () => import("@/pages/tools/password-generator")
+);
 const UUIDGenerator = lazy(() => import("@/pages/tools/uuid-generator"));
 const DateTimeDiff = lazy(() => import("@/pages/tools/datetime-diff"));
 const Metronome = lazy(() => import("@/pages/tools/metronome"));
 const BrowserInfo = lazy(() => import("@/pages/tools/browser-info"));
 const URLToJSON = lazy(() => import("@/pages/tools/url-to-json"));
 const CSVToJSON = lazy(() => import("@/pages/tools/csv-to-json"));
-const NumberBaseConverter = lazy(() => import("@/pages/tools/number-base-converter"));
+const NumberBaseConverter = lazy(
+  () => import("@/pages/tools/number-base-converter")
+);
 
 // Loading component for lazy-loaded tools
 const ToolLoader = () => (
@@ -85,7 +101,10 @@ function Router() {
             path="/tools/json-yaml-converter"
             component={JsonYamlConverter}
           />
-          <Route path="/tools/timezone-converter" component={TimezoneConverter} />
+          <Route
+            path="/tools/timezone-converter"
+            component={TimezoneConverter}
+          />
           <Route path="/tools/unit-converter" component={UnitConverter} />
           <Route path="/tools/url-to-json" component={URLToJSON} />
           <Route path="/tools/csv-to-json" component={CSVToJSON} />
@@ -99,7 +118,10 @@ function Router() {
           <Route path="/tools/jsonc-formatter" component={JSONCFormatter} />
           <Route path="/tools/html-formatter" component={HtmlFormatter} />
           <Route path="/tools/yaml-formatter" component={YamlFormatter} />
-          <Route path="/tools/markdown-formatter" component={MarkdownFormatter} />
+          <Route
+            path="/tools/markdown-formatter"
+            component={MarkdownFormatter}
+          />
           <Route path="/tools/css-formatter" component={CssFormatter} />
           <Route path="/tools/less-formatter" component={CssFormatter} />
           <Route path="/tools/scss-formatter" component={CssFormatter} />
@@ -129,8 +151,14 @@ function Router() {
           <Route path="/tools/qr-generator" component={QRGenerator} />
           <Route path="/tools/barcode-generator" component={BarcodeGenerator} />
           <Route path="/tools/lorem-generator" component={LoremGenerator} />
-          <Route path="/tools/unicode-characters" component={UnicodeCharacters} />
-          <Route path="/tools/password-generator" component={PasswordGenerator} />
+          <Route
+            path="/tools/unicode-characters"
+            component={UnicodeCharacters}
+          />
+          <Route
+            path="/tools/password-generator"
+            component={PasswordGenerator}
+          />
           <Route path="/tools/uuid-generator" component={UUIDGenerator} />
 
           {/* Time Tools */}
