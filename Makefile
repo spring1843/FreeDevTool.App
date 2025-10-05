@@ -80,13 +80,13 @@ build: ## Build the application for production
 	npm run build
 
 build-image: ## Build the Docker image for the app
-	docker build --platform linux/amd64 -t ${IMAGE_TAG} -f infra/images/Dockerfile .
+	docker build --platform linux/amd64,linux/arm64 -t ${IMAGE_TAG} -f infra/images/Dockerfile .
 
 build-and-push-image: build-image # Build and push the Docker image for the app
 	docker push ${IMAGE_TAG}
 
 build-e2e-image: ## Build the Docker image for end-to-end testing
-	docker build --platform linux/amd64 -t ${E2E_IMAGE_TAG} -f infra/images/Dockerfile.e2e .
+	docker build --platform linux/amd64,linux/arm64 -t ${E2E_IMAGE_TAG} -f infra/images/Dockerfile.e2e .
 
 build-and-push-e2e-image: build-e2e-image ## Build the Docker image for end-to-end testing
 	docker push ${E2E_IMAGE_TAG}
