@@ -120,6 +120,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Log in to the Docker registry
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u ${{ github.repository }} --password-stdin
+
       - name: Build and Push Images
         run: |
           make build-and-push-image IMAGE_TAG="ghcr.io/spring1843/freedevtool.app/app:${{ steps.version.outputs.version }}"
