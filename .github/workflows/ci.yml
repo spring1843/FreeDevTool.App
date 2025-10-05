@@ -44,6 +44,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - run: echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u ${{ github.repository }} --password-stdin
+
       - if: github.event_name == 'pull_request'
         run: make push-all-images
 
