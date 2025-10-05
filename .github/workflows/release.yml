@@ -13,7 +13,7 @@ on:
 
 jobs:
   build-and-release:
-    container: ghcr.io/spring1843/freedevtool.app/e2e:616a628
+    container: ghcr.io/spring1843/freedevtool.app/e2e:240d332
     permissions:
       contents: write
       pages: write
@@ -119,6 +119,9 @@ jobs:
           generate_release_notes: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Images
+        run: make build-and-push-image IMAGE_TAG="ghcr.io/spring1843/freedevtool.app/app:${{ steps.version.outputs.version }}"
 
       - name: Setup GitHub Pages
         run: |

@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y -q --no-install-recommends \
         git \
         make \
         libssl-dev \
+        docker.io \
         wget
 
 WORKDIR /app
