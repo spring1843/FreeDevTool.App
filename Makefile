@@ -23,7 +23,7 @@ IMAGE=${IMAGE_REPO}/app
 IMAGE_TAG:=${IMAGE}:${GIT_SHA_SHORT}
 E2E_IMAGE:=${IMAGE_REPO}/e2e
 E2E_IMAGE_TAG:=${E2E_IMAGE}:${GIT_SHA_SHORT}
-E2E_IMAGE_USE:=${E2E_IMAGE}:616a628
+E2E_IMAGE_USE:=${E2E_IMAGE}:240d332
 PWD:=$(shell pwd)
 
 ## Setup Commands
@@ -82,7 +82,7 @@ build: ## Build the application for production
 build-image: ## Build the Docker image for the app
 	docker build --platform linux/amd64 -t ${IMAGE_TAG} -f infra/images/Dockerfile .
 
-build-and-push-image: build-and-push-image # Build and push the Docker image for the ap
+build-and-push-image: build-image # Build and push the Docker image for the app
 	docker push ${IMAGE_TAG}
 
 build-and-push-e2e-image: ## Build the Docker image for end-to-end testing
