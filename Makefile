@@ -91,6 +91,10 @@ build-e2e-image: ## Build the Docker image for end-to-end testing
 build-and-push-e2e-image: build-e2e-image ## Build the Docker image for end-to-end testing
 	docker push ${E2E_IMAGE_TAG}
 
+build--all-images: build-image build-e2e-image ## Build all Docker images
+
+push-all-images: build-and-push-image build-and-push-e2e-image ## Build and push all Docker images
+
 ## Code Quality Commands
 
 lint: ## Run ESLint to check for code issues
