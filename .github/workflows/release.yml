@@ -121,7 +121,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and Push Images
-        run: make build-and-push-image IMAGE_TAG="ghcr.io/spring1843/freedevtool.app/app:${{ steps.version.outputs.version }}"
+        run: |
+          make build-and-push-image IMAGE_TAG="ghcr.io/spring1843/freedevtool.app/app:${{ steps.version.outputs.version }}"
+          make build-and-push-e2e-image E2E_IMAGE_TAG="ghcr.io/spring1843/freedevtool.app/e2e:${{ steps.version.outputs.version }}"
 
       - name: Setup GitHub Pages
         run: |

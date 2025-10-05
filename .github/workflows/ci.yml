@@ -62,4 +62,8 @@ jobs:
             playwright-report/
           retention-days: 7
 
-      - run: make build-image
+      - if: github.event_name == 'pull_request'
+        run: make build-image
+
+      - if: github.ref == 'refs/heads/main' && github.event_name == 'pull_request'
+        run: make build-and-push-image
