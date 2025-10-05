@@ -120,6 +120,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Build and Push Images
+        run: make build-and-push-image IMAGE_TAG="ghcr.io/spring1843/freedevtool.app/app:${{ steps.version.outputs.version }}"
+
       - name: Setup GitHub Pages
         run: |
           # Create a clean build directory for release

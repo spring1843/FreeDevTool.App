@@ -18,7 +18,10 @@ GIT_SHA:=$(shell git rev-parse HEAD)
 GIT_SHA_SHORT:=$(shell git rev-parse --short HEAD)
 
 # Image tags
-E2E_IMAGE:=ghcr.io/spring1843/freedevtool.app/e2e
+IMAGE_REPO:=ghcr.io/spring1843/freedevtool.app
+IMAGE=${IMAGE_REPO}/app
+IMAGE_TAG:=${IMAGE}:${GIT_SHA_SHORT}
+E2E_IMAGE:=${IMAGE_REPO}/e2e
 E2E_IMAGE_TAG:=${E2E_IMAGE}:${GIT_SHA_SHORT}
 E2E_IMAGE_USE:=${E2E_IMAGE}:616a628
 PWD:=$(shell pwd)
@@ -75,6 +78,12 @@ dev: ## Start development server with verbose logging
 
 build: ## Build the application for production
 	npm run build
+
+build-image: ## Build the Docker image for the app
+	docker build --platform linux/amd64 -t ${IMAGE_TAG} -f infra/images/Dockerfile .
+
+build-and-push-image: build-and-push-image # Build and push the Docker image for the ap
+	docker push ${IMAGE_TAG}
 
 build-and-push-e2e-image: ## Build the Docker image for end-to-end testing
 	docker build --platform linux/amd64 -t ${E2E_IMAGE_TAG} -f infra/images/Dockerfile.e2e . --push
