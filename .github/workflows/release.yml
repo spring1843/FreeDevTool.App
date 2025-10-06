@@ -92,7 +92,7 @@ jobs:
           echo "2. Extract the archive" >> ${CHANGELOG_FILE}
           echo "3. Run \`make deps\`" >> ${CHANGELOG_FILE}
           echo "4. Run \`make start\`" >> ${CHANGELOG_FILE}
-          echo "5. Open http://localhost:5000 in your browser" >> ${CHANGELOG_FILE}
+          echo "5. Open http://localhost:9500 in your browser" >> ${CHANGELOG_FILE}
           echo "" >> ${CHANGELOG_FILE}
           echo "## 🔗 Links" >> ${CHANGELOG_FILE}
           echo "" >> ${CHANGELOG_FILE}

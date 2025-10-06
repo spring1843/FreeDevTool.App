@@ -92,7 +92,7 @@ echo ""
 echo "🎉 To start the application:"
 echo "   make start"
 echo ""
-echo "🌐 Then open http://localhost:5000 in your browser"
+echo "🌐 Then open http://localhost:9500 in your browser"
 EOF
 
 chmod +x "$RELEASE_DIR/install.sh"
@@ -108,7 +108,7 @@ echo.
 echo 🎉 To start the application:
 echo    make start
 echo.
-echo 🌐 Then open http://localhost:5000 in your browser
+echo 🌐 Then open http://localhost:9500 in your browser
 pause
 EOF
 
@@ -136,7 +136,7 @@ make deps
 make start
 \`\`\`
 
-Then open http://localhost:5000 in your browser.
+Then open http://localhost:9500 in your browser.
 
 ## What's Included
 
