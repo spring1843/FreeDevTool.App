@@ -82,6 +82,16 @@ Not implemented
 
 ## Quick Start
 
+### Run With Docker
+
+(Install docker)[https://docs.docker.com/engine/install/], pick a (release)[https://github.com/spring1843/FreeDevTool.App/releases] tag e.g. v0.0.2, replace it with the variable in the following command and run it.
+
+```bash
+docker run -it -p 9500:9500 ghcr.io/spring1843/freedevtool.app/app:{RELEASE_TAG}
+```
+
+Then browse (https://localhost:9500)[https://localhost:9500] to use a locally running version of the application.
+
 ### Development Setup
 
 ```bash
