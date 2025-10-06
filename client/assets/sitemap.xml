@@ -1,197 +1,147 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Homepage -->
   <url>
     <loc>https://freedevtool.app/</loc>
-    <description>FreeDevTool.App – Free, Secure, Open Source, and Offline developer utilities</description>
   </url>
-  <!-- Tools -->
   <url>
     <loc>https://freedevtool.app/tools/date-converter</loc>
-    <description>Convert between timestamps, dates, and formats</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/json-yaml-converter</loc>
-    <description>Convert between JSON and YAML formats</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/timezone-converter</loc>
-    <description>Convert time across multiple timezones with precision</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/unit-converter</loc>
-    <description>Convert between units of weight, distance, area, volume, pressure</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/url-to-json</loc>
-    <description>Convert URLs to JSON with parameter parsing and TLD lookup</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/csv-to-json</loc>
-    <description>Convert CSV data to JSON format with delimiter selection</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/number-base-converter</loc>
-    <description>Convert numbers between different bases (2-64)</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/json-formatter</loc>
-    <description>Format and beautify JSON with validation</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/jsonc-formatter</loc>
-    <description>Format JSON with Comments files</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/html-formatter</loc>
-    <description>Beautify HTML with proper indentation and validate for errors</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/yaml-formatter</loc>
-    <description>Format and beautify YAML configuration files</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/markdown-formatter</loc>
-    <description>Format Markdown with live preview</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/css-formatter</loc>
-    <description>Format CSS, LESS, and SCSS stylesheets with Prettier</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/typescript-formatter</loc>
-    <description>Format JavaScript and TypeScript code with Prettier</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/graphql-formatter</loc>
-    <description>Format GraphQL schemas and queries</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/time-formatter</loc>
-    <description>Format time to all existing time standards</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/base64</loc>
-    <description>Encode and decode Base64 data</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/url-encoder</loc>
-    <description>URL encode and decode strings</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/jwt-decoder</loc>
-    <description>Decode and inspect JWT tokens</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/tls-decoder</loc>
-    <description>Decode TLS certificates</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/md5-hash</loc>
-    <description>Generate MD5 hashes</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/bcrypt-hash</loc>
-    <description>Generate and verify BCrypt hashes</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/text-diff</loc>
-    <description>Compare text differences side by side</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/regex-tester</loc>
-    <description>Test regular expressions with live matches</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/text-sort</loc>
-    <description>Sort lines of text alphabetically or numerically</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/text-counter</loc>
-    <description>Count words, characters, and lines in text</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/qr-generator</loc>
-    <description>Generate QR codes for text and URLs</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/barcode-generator</loc>
-    <description>Generate various barcode formats</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/lorem-generator</loc>
-    <description>Generate Lorem Ipsum placeholder text</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/unicode-characters</loc>
-    <description>Browse and copy Unicode characters from various scripts</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/password-generator</loc>
-    <description>Generate secure passwords with custom criteria</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/uuid-generator</loc>
-    <description>Generate UUIDs (v1, v4) for unique identifiers</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/search-replace</loc>
-    <description>Find and replace text with regex support</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/text-split</loc>
-    <description>Split text by delimiters or patterns</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/world-clock</loc>
-    <description>View time across multiple cities and timezones</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/timer</loc>
-    <description>Countdown timer with audio alerts</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/stopwatch</loc>
-    <description>Precision stopwatch with lap times</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/countdown</loc>
-    <description>Count down to a specific date and time</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/datetime-diff</loc>
-    <description>Calculate differences between dates and times</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/metronome</loc>
-    <description>Multi-tone metronome with custom timing intervals</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/compound-interest</loc>
-    <description>Calculate compound interest and investment growth</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/debt-repayment</loc>
-    <description>Plan debt payoff strategies and calculate payments</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/color-palette-generator</loc>
-    <description>Generate beautiful color palettes and schemes</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/webcam-test</loc>
-    <description>Test your camera and record video clips</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/microphone-test</loc>
-    <description>Test microphone with audio level monitoring and recording</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/keyboard-test</loc>
-    <description>Test keyboard keys and see which buttons are pressed</description>
   </url>
   <url>
     <loc>https://freedevtool.app/tools/browser-info</loc>
-    <description>Display comprehensive browser and system information</description>
   </url>
 </urlset>
