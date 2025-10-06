@@ -142,6 +142,7 @@ export default function JWTDecoder() {
             />
           </div>
           <TextArea
+            id="input"
             value={token}
             onChange={e => handleTokenChange(e.target.value)}
             placeholder="Paste your JWT token here..."
@@ -165,6 +166,7 @@ export default function JWTDecoder() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="output1"
               value={header}
               readOnly={true}
               placeholder="Decoded header will appear here..."
@@ -185,6 +187,7 @@ export default function JWTDecoder() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="output2"
               value={payload}
               readOnly={true}
               placeholder="Decoded payload will appear here..."
@@ -205,6 +208,7 @@ export default function JWTDecoder() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="output3"
               value={signature}
               data-default-input="true"
               readOnly={true}

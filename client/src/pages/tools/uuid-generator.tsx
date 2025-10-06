@@ -260,6 +260,7 @@ export default function UUIDGenerator() {
                   All UUIDs (for copying):
                 </Label>
                 <TextArea
+                  id="output"
                   value={uuids.join("\n")}
                   readOnly={true}
                   className="mt-2 min-h-[100px] font-mono text-sm bg-slate-50 dark:bg-slate-900"

@@ -332,6 +332,7 @@ Jane Smith      jane@example.com        25      Marketing`,
             </div>
 
             <TextArea
+              id="input"
               value={csvInput}
               onChange={e => setCsvInput(e.target.value)}
               placeholder="name,email,age
@@ -443,6 +444,7 @@ Jane Smith,jane@example.com,25"
             </div>
 
             <TextArea
+              id="output"
               value={jsonOutput}
               readOnly
               placeholder="JSON output will appear here..."

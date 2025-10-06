@@ -18,16 +18,24 @@ test.describe("JSON Formatter Tool", () => {
     const inputEditor = page.locator("#input");
     await expect(inputEditor).toBeVisible();
 
-    const editorContentValue = await page.evaluate(() => {
+    const inputEditorValue = await page.evaluate(() => {
       const lines = Array.from(
         document.querySelectorAll("#input .cm-content .cm-line")
       );
       return lines.map(line => line.textContent || "").join("\n");
     });
 
-    // Verify the default JSON contains expected values
-    expect(editorContentValue).toContain(DEFAULT_JSON);
+    expect(inputEditorValue).toBe(DEFAULT_JSON);
 
+    const outputEditorValue = await page.evaluate(() => {
+      const lines = Array.from(
+        document.querySelectorAll("#output .cm-content .cm-line")
+      );
+      return lines.map(line => line.textContent || "").join("\n");
+    });
+
+    // the output should have 14 lines
+    expect(outputEditorValue.split("\n").length).toBe(14);
     await expectNoErrors(page);
   });
 });

@@ -158,6 +158,7 @@ export default function TextSplit() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="input"
               value={text}
               onChange={e => setText(e.target.value)}
               placeholder="Enter text to split..."

@@ -170,6 +170,7 @@ export default function TextSort() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="input"
               value={input}
               onChange={e => setInput(e.target.value)}
               placeholder="Enter lines of text to sort..."
@@ -192,6 +193,7 @@ export default function TextSort() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="output"
               value={sortedOutput}
               readOnly={true}
               placeholder="Sorted text will appear here..."

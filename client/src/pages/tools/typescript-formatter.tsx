@@ -105,6 +105,7 @@ export default function TypeScriptFormatter() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="input"
               value={input}
               onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your JavaScript or TypeScript code here..."
@@ -127,6 +128,7 @@ export default function TypeScriptFormatter() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="output"
               value={output}
               readOnly={true}
               placeholder="Formatted JavaScript/TypeScript will appear here..."

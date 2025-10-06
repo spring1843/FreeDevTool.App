@@ -92,6 +92,7 @@ export default function GraphQLFormatter() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="input"
               value={input}
               onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your GraphQL schema, query, or mutation here..."
@@ -113,6 +114,7 @@ export default function GraphQLFormatter() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="output"
               value={output}
               readOnly={true}
               placeholder="Formatted GraphQL will appear here..."

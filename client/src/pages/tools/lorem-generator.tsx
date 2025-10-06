@@ -332,6 +332,7 @@ export default function LoremGenerator() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="output"
               value={generated}
               readOnly={true}
               placeholder="Generated lorem ipsum will appear here..."

@@ -130,6 +130,7 @@ export default function Base64Encoder() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="input"
               value={plainText}
               onChange={e => handlePlainTextChange(e.target.value)}
               placeholder="Enter text to encode..."
@@ -151,6 +152,7 @@ export default function Base64Encoder() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="output"
               value={encodedText}
               onChange={e => handleEncodedTextChange(e.target.value)}
               placeholder="Enter Base64 encoded text to decode..."

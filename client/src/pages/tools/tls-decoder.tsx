@@ -186,6 +186,7 @@ export default function TLSDecoder() {
             </Button>
           </div>
           <TextArea
+            id="input"
             value={certificate}
             onChange={e => handleCertificateChange(e.target.value)}
             placeholder="Paste your X.509 certificate here (PEM format)..."

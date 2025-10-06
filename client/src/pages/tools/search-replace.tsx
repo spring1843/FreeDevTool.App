@@ -203,6 +203,7 @@ export default function SearchReplace() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="input"
               value={text}
               onChange={e => setText(e.target.value)}
               placeholder="Enter text to search and replace..."
@@ -224,6 +225,7 @@ export default function SearchReplace() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="output"
               value={result}
               readOnly={true}
               placeholder="Search and replace results will appear here..."

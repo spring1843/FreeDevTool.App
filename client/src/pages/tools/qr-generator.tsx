@@ -341,9 +341,9 @@ export default function QRGenerator() {
               </div>
 
               <div>
-                <Label htmlFor="input-text">{currentPreset.name} Content</Label>
+                <Label htmlFor="input">{currentPreset.name} Content</Label>
                 <TextArea
-                  id="input-text"
+                  id="input"
                   placeholder={currentPreset.placeholder}
                   value={inputText}
                   onChange={e => setInputText(e.target.value)}

@@ -331,6 +331,7 @@ export default function BcryptHash() {
         </CardHeader>
         <CardContent>
           <TextArea
+            id="output"
             value={hash}
             readOnly={true}
             placeholder="Generated bcrypt hash will appear here..."

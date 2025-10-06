@@ -103,6 +103,7 @@ export default function URLEncoder() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="input"
               value={plainText}
               onChange={e => handlePlainTextChange(e.target.value)}
               placeholder="Enter text to URL encode..."
@@ -125,6 +126,7 @@ export default function URLEncoder() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="output"
               value={encodedText}
               onChange={e => handleEncodedTextChange(e.target.value)}
               placeholder="URL encoded text will appear here..."

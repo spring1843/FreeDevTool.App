@@ -283,6 +283,7 @@ export default function MD5Hash() {
         </CardHeader>
         <CardContent>
           <TextArea
+            id="output"
             value={hashResult || "Hash will appear here after generation..."}
             readOnly={true}
             data-testid="hash-output"

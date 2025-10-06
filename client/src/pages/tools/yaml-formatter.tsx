@@ -89,6 +89,7 @@ export default function YAMLFormatter() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="input"
               value={input}
               onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your YAML here..."
@@ -111,6 +112,7 @@ export default function YAMLFormatter() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="output"
               value={output}
               readOnly={true}
               placeholder="Formatted YAML will appear here..."
