@@ -16,7 +16,7 @@ jobs:
     name: Continuous Integration
     permissions:
       contents: read
-      packages: read
+      packages: write
     runs-on: ubuntu-latest
 
     steps:
@@ -62,4 +62,13 @@ jobs:
             playwright-report/
           retention-days: 7
 
-      - run: make build-image
+      - name: Log in to the Docker registry
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u ${{ github.repository }} --password-stdin
+
+      - name: Build Images when a PR is opened
+        if: github.event_name == 'pull_request'
+        run: make build-all-images
+
+      - name: Build and Push Images when merged to main
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: make build-and-push-image

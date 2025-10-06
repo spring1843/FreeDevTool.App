@@ -85,8 +85,15 @@ build-image: ## Build the Docker image for the app
 build-and-push-image: build-image # Build and push the Docker image for the app
 	docker push ${IMAGE_TAG}
 
-build-and-push-e2e-image: ## Build the Docker image for end-to-end testing
-	docker build --platform linux/amd64 -t ${E2E_IMAGE_TAG} -f infra/images/Dockerfile.e2e . --push
+build-e2e-image: ## Build the Docker image for end-to-end testing
+	docker build --platform linux/amd64 -t ${E2E_IMAGE_TAG} -f infra/images/Dockerfile.e2e .
+
+build-and-push-e2e-image: build-e2e-image ## Build the Docker image for end-to-end testing
+	docker push ${E2E_IMAGE_TAG}
+
+build-all-images: build-image build-e2e-image ## Build all Docker images
+
+push-all-images: build-and-push-image build-and-push-e2e-image ## Build and push all Docker images
 
 ## Code Quality Commands
 
