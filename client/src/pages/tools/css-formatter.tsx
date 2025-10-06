@@ -192,6 +192,7 @@ export default function CSSFormatter() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="input"
               value={input}
               onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your CSS here..."
@@ -214,6 +215,7 @@ export default function CSSFormatter() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="output"
               value={output}
               readOnly={true}
               placeholder="Formatted CSS will appear here..."

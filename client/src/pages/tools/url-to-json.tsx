@@ -308,6 +308,7 @@ export default function URLToJSON() {
               {jsonOutput ? (
                 <div className="space-y-4">
                   <TextArea
+                    id="output"
                     value={jsonOutput}
                     readOnly={true}
                     className="font-mono text-sm min-h-[300px] resize-none"

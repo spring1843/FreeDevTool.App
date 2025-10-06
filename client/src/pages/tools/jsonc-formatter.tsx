@@ -81,6 +81,7 @@ export default function JSONCFormatter() {
           </CardHeader>
           <CardContent className="space-y-4">
             <TextArea
+              id="input"
               data-testid="jsonc-input"
               value={input}
               onChange={e => handleInputChange(e.target.value)}
@@ -118,6 +119,7 @@ export default function JSONCFormatter() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="output"
               data-testid="jsonc-output"
               value={output}
               readOnly

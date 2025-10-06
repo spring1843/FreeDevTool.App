@@ -219,6 +219,7 @@ export default function TextDiff() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="input1"
               value={text1}
               onChange={e => setText1(e.target.value)}
               placeholder="Enter original text here..."
@@ -242,6 +243,7 @@ export default function TextDiff() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="input2"
               value={text2}
               onChange={e => setText2(e.target.value)}
               placeholder="Enter modified text here..."

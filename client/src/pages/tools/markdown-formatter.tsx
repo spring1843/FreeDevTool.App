@@ -90,6 +90,7 @@ export default function MarkdownFormatter() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="input"
               value={input}
               onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your Markdown here..."
@@ -111,6 +112,7 @@ export default function MarkdownFormatter() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="output"
               value={output}
               readOnly={true}
               placeholder="Formatted Markdown will appear here..."

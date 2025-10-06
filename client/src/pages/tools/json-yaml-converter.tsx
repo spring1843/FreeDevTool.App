@@ -112,6 +112,7 @@ export default function JSONYAMLConverter() {
             </CardHeader>
             <CardContent>
               <TextArea
+                id="input1"
                 value={jsonInput}
                 onChange={e => handleJsonInputChange(e.target.value)}
                 placeholder="Paste your JSON here..."
@@ -136,6 +137,7 @@ export default function JSONYAMLConverter() {
             </CardHeader>
             <CardContent>
               <TextArea
+                id="output1"
                 value={yamlOutput}
                 readOnly={true}
                 placeholder="YAML output will appear here..."
@@ -160,6 +162,7 @@ export default function JSONYAMLConverter() {
             </CardHeader>
             <CardContent>
               <TextArea
+                id="input2"
                 value={yamlInput}
                 onChange={e => handleYamlInputChange(e.target.value)}
                 placeholder="Paste your YAML here..."
@@ -182,6 +185,7 @@ export default function JSONYAMLConverter() {
             </CardHeader>
             <CardContent>
               <TextArea
+                id="output2"
                 value={jsonOutput}
                 readOnly={true}
                 placeholder="JSON output will appear here..."

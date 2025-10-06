@@ -149,6 +149,7 @@ export default function HTMLFormatter() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="input"
               value={input}
               onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your HTML here..."
@@ -179,6 +180,7 @@ export default function HTMLFormatter() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="output"
               value={output}
               readOnly={true}
               placeholder="Formatted HTML will appear here..."

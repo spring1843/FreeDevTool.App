@@ -94,6 +94,7 @@ export default function TextCounter() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="input"
               autoFocus={true}
               value={fields.text}
               onChange={e => updateField("text", e.target.value)}

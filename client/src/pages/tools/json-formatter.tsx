@@ -134,6 +134,7 @@ export default function JsonFormatter() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="input"
               value={input}
               onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your JSON here..."
@@ -155,6 +156,7 @@ export default function JsonFormatter() {
           </CardHeader>
           <CardContent>
             <TextArea
+              id="output"
               value={output}
               readOnly={true}
               placeholder="Formatted JSON will appear here..."
