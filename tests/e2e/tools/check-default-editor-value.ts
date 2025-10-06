@@ -8,7 +8,7 @@ export async function checkEditorsForDefault(
   defaultInput: string,
   outputCheckCondition: (output: string) => boolean
 ): Promise<void> {
-  checkInputForDefault(page, inputName, defaultInput);
+  await checkInputForDefault(page, inputName, defaultInput);
 
   const outputEditorValue = await page.evaluate((name: string) => {
     const lines = Array.from(
