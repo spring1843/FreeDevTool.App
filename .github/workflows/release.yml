@@ -13,7 +13,7 @@ on:
 
 jobs:
   build-and-release:
-    container: ghcr.io/spring1843/freedevtool.app/e2e:240d332
+    container: ghcr.io/spring1843/freedevtool.app/e2e:e9c0ff7
     permissions:
       contents: write
       pages: write
