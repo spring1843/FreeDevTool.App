@@ -35,6 +35,11 @@ export default function MicrophoneTest() {
   const chunksRef = useRef<Blob[]>([]);
   const audioRef = useRef<HTMLAudioElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animationFrameRef = useRef<number | null>(null);
+  const isRecordingRef = useRef<boolean>(false);
   const { toast } = useToast();
 
   const requestPermission = async () => {
@@ -119,6 +124,54 @@ export default function MicrophoneTest() {
     getBasicDevices();
   }, []);
 
+  // Draw waveform
+  const drawWaveform = () => {
+    if (!analyserRef.current || !canvasRef.current) return;
+
+    const canvas = canvasRef.current;
+    const canvasCtx = canvas.getContext("2d");
+    if (!canvasCtx) return;
+
+    const analyser = analyserRef.current;
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    analyser.getByteTimeDomainData(dataArray);
+
+    // Clear canvas
+    canvasCtx.fillStyle = "rgb(15, 23, 42)"; // dark slate background
+    canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw waveform
+    canvasCtx.lineWidth = 2;
+    canvasCtx.strokeStyle = "rgb(59, 130, 246)"; // blue
+    canvasCtx.beginPath();
+
+    const sliceWidth = (canvas.width * 1.0) / bufferLength;
+    let x = 0;
+
+    for (let i = 0; i < bufferLength; i++) {
+      const v = dataArray[i] / 128.0;
+      const y = (v * canvas.height) / 2;
+
+      if (i === 0) {
+        canvasCtx.moveTo(x, y);
+      } else {
+        canvasCtx.lineTo(x, y);
+      }
+
+      x += sliceWidth;
+    }
+
+    canvasCtx.lineTo(canvas.width, canvas.height / 2);
+    canvasCtx.stroke();
+
+    // Continue animation if recording
+    if (isRecordingRef.current) {
+      animationFrameRef.current = requestAnimationFrame(drawWaveform);
+    }
+  };
+
   // Start recording
   const startRecording = async () => {
     try {
@@ -136,6 +189,19 @@ export default function MicrophoneTest() {
       const mediaStream =
         await navigator.mediaDevices.getUserMedia(constraints);
       streamRef.current = mediaStream;
+
+      // Set up audio analyser for waveform
+      const audioContext = new (window.AudioContext ||
+        (window as typeof window & { webkitAudioContext?: typeof AudioContext })
+          .webkitAudioContext)();
+      const analyser = audioContext.createAnalyser();
+      const source = audioContext.createMediaStreamSource(mediaStream);
+
+      analyser.fftSize = 2048;
+      source.connect(analyser);
+
+      audioContextRef.current = audioContext;
+      analyserRef.current = analyser;
 
       chunksRef.current = [];
       const mediaRecorder = new MediaRecorder(mediaStream, {
@@ -157,11 +223,27 @@ export default function MicrophoneTest() {
           streamRef.current.getTracks().forEach(track => track.stop());
           streamRef.current = null;
         }
+
+        // Clean up audio context
+        if (audioContextRef.current) {
+          audioContextRef.current.close();
+          audioContextRef.current = null;
+        }
+
+        // Stop animation
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
+          animationFrameRef.current = null;
+        }
       };
 
       mediaRecorder.start();
       mediaRecorderRef.current = mediaRecorder;
       setIsRecording(true);
+      isRecordingRef.current = true;
+
+      // Start waveform visualization
+      drawWaveform();
 
       toast({
         title: "Recording Started",
@@ -186,7 +268,9 @@ export default function MicrophoneTest() {
           "Microphone access is blocked due to security restrictions.";
       } else {
         errorMessage =
-          error instanceof Error ? error.message : "Failed to start recording";
+          error instanceof Error
+            ? error.message
+            : "Failed to start recording";
       }
 
       setError(`Recording failed: ${errorMessage}`);
@@ -201,6 +285,7 @@ export default function MicrophoneTest() {
   // Stop recording
   const stopRecording = () => {
     if (mediaRecorderRef.current && isRecording) {
+      isRecordingRef.current = false;
       mediaRecorderRef.current.stop();
       setIsRecording(false);
 
@@ -319,6 +404,17 @@ export default function MicrophoneTest() {
             </div>
           )}
 
+          {/* Waveform Visualization */}
+          <div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden bg-slate-950">
+            <canvas
+              ref={canvasRef}
+              width={800}
+              height={200}
+              className="w-full h-[200px]"
+              data-testid="waveform-canvas"
+            />
+          </div>
+
           <div className="space-y-2">
             {!hasPermission ? (
               <Button
@@ -392,7 +488,8 @@ export default function MicrophoneTest() {
 
           <div className="text-xs text-slate-600 dark:text-slate-400 space-y-1">
             <p>
-              <strong>Status:</strong> {isRecording ? "Recording" : "Ready"}
+              <strong>Status:</strong>{" "}
+              {isRecording ? "Recording" : "Ready"}
             </p>
             <p>
               <strong>Devices:</strong> {devices.length} microphone(s) found
@@ -419,11 +516,9 @@ export default function MicrophoneTest() {
             <h4 className="font-semibold mb-2">Testing Your Microphone:</h4>
             <ul className="space-y-1 text-slate-600 dark:text-slate-400">
               <li>• Click "Request Microphone Permission" to allow access</li>
-              <li>
-                • Select your microphone from the dropdown (if multiple
-                available)
-              </li>
+              <li>• Select your microphone from the dropdown (if multiple available)</li>
               <li>• Click "Start Recording" to begin recording</li>
+              <li>• Watch the waveform visualizer respond to your voice</li>
               <li>• Speak into your microphone</li>
               <li>• Click "Stop Recording" when finished</li>
               <li>• Play back your recording to verify quality</li>
