@@ -113,6 +113,11 @@ export default function MicrophoneTest() {
         );
         if (audioDevices.length > 0) {
           setDevices(audioDevices);
+          // Always select the first device when devices are available
+          const firstDevice = audioDevices[0];
+          if (firstDevice.deviceId && firstDevice.deviceId !== "") {
+            setSelectedDevice(firstDevice.deviceId);
+          }
         }
       } catch (err: unknown) {
         setError(
