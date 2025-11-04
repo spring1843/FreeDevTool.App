@@ -184,10 +184,7 @@ export default function Stopwatch() {
       </div>
 
       <Card className="mb-6">
-        <CardHeader>
-          <CardTitle className="text-center">Timer</CardTitle>
-        </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <div className="text-center mb-6">
             <div className="text-6xl font-mono font-bold text-blue-600 dark:text-blue-400 mb-4">
               {formatTime(time)}
