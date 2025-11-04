@@ -231,7 +231,7 @@ export default function WebcamTest() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {devices.length > 0 && (
+          {devices.length > 0 && devices.some(device => device.label) && (
             <div>
               <Label htmlFor="device-select">Camera Device</Label>
               <Select
