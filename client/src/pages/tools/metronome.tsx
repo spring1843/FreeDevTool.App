@@ -305,11 +305,29 @@ export default function Metronome() {
   };
 
   const updateToneSchedule = (id: string, updates: Partial<ToneSchedule>) => {
-    setToneSchedules(
-      toneSchedules.map(schedule =>
+    setToneSchedules(prevSchedules => {
+      const newSchedules = prevSchedules.map(schedule =>
         schedule.id === id ? { ...schedule, ...updates } : schedule
-      )
-    );
+      );
+
+      // If metronome is running and interval changed, reschedule this tone
+      if (isRunningRef.current && updates.intervalSeconds !== undefined) {
+        const updatedSchedule = newSchedules.find(s => s.id === id);
+        if (updatedSchedule && updatedSchedule.enabled) {
+          // Clear existing timeout
+          const existingTimeout = toneTimeoutsRef.current.get(id);
+          if (existingTimeout) {
+            clearTimeout(existingTimeout);
+            toneTimeoutsRef.current.delete(id);
+          }
+
+          // Reschedule with new interval starting now
+          scheduleNextTone(updatedSchedule, Date.now());
+        }
+      }
+
+      return newSchedules;
+    });
   };
 
   const testTone = (frequency: number, scheduleId: string) => {
