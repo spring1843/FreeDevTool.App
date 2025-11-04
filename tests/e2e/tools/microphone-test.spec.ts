@@ -4,10 +4,6 @@ import { setupJSErrorCollection, expectNoErrors } from "./utils";
 test.describe("Microphone Test Tool", () => {
   test.beforeEach(async ({ page }) => {
     await setupJSErrorCollection(page);
-
-    // Deny microphone permission by default
-    await page.context().grantPermissions([], { origin: page.url() });
-
     await page.goto("/tools/microphone-test");
   });
 
