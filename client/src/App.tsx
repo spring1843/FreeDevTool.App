@@ -75,7 +75,7 @@ const CSVToJSON = lazy(() => import("@/pages/tools/csv-to-json"));
 const NumberBaseConverter = lazy(
   () => import("@/pages/tools/number-base-converter")
 );
-import NotFound from "@/pages/not-found";
+const NotFound = lazy(() => import("@/pages/not-found"));
 
 function Router() {
   return (
