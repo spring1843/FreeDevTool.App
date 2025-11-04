@@ -375,7 +375,7 @@ export default function TimeFormatter() {
                       )}
                     </Button>
                   </div>
-                  <div className="font-mono text-lg text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-900 p-3 rounded border">
+                  <div className="font-mono text-lg text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-900 p-3 rounded border border-slate-200 dark:border-slate-700">
                     {format.value}
                   </div>
                 </div>
