@@ -350,7 +350,7 @@ export default function TimeFormatter() {
               {formats.map((format, index) => (
                 <div
                   key={index}
-                  className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-slate-50 dark:bg-slate-800/50"
+                  className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-slate-100 dark:bg-slate-900"
                   data-testid={`format-${index}`}
                 >
                   <div className="flex items-start justify-between mb-2">
@@ -375,7 +375,7 @@ export default function TimeFormatter() {
                       )}
                     </Button>
                   </div>
-                  <div className="font-mono text-lg text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-900 p-3 rounded border border-slate-200 dark:border-slate-700">
+                  <div className="font-mono text-lg text-slate-900 dark:text-slate-100 bg-slate-50 dark:bg-slate-950 p-3 rounded border border-slate-200 dark:border-slate-700">
                     {format.value}
                   </div>
                 </div>
