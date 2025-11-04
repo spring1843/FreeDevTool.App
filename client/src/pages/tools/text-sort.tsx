@@ -98,7 +98,8 @@ export default function TextSort() {
               Text Sorter
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
-              Sort lines of text alphabetically, numerically, or by length with optional deduplication
+              Sort lines of text alphabetically, numerically, or by length with
+              optional deduplication
             </p>
           </div>
           <SecurityBanner variant="compact" />
@@ -161,7 +162,7 @@ export default function TextSort() {
               <Checkbox
                 id="unique"
                 checked={unique}
-                onCheckedChange={(checked) => setUnique(checked === true)}
+                onCheckedChange={checked => setUnique(checked === true)}
                 data-testid="checkbox-unique"
               />
               <div className="grid gap-1.5 leading-none">
