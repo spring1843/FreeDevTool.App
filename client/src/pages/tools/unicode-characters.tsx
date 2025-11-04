@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -195,6 +195,7 @@ export default function UnicodeCharacters() {
   const MAX_UNICODE = 0x10ffff; // Maximum Unicode code point
 
   const { toast } = useToast();
+  const characterGridRef = useRef<HTMLDivElement>(null);
 
   // Get characters from selected block
   const getBlockCharacters = (block: UnicodeBlock): string[] => {
@@ -775,6 +776,13 @@ export default function UnicodeCharacters() {
                     onClick={() => {
                       setViewMode("category");
                       setSelectedCategory(category);
+                      // Scroll to character grid after state updates
+                      setTimeout(() => {
+                        characterGridRef.current?.scrollIntoView({
+                          behavior: "smooth",
+                          block: "start",
+                        });
+                      }, 100);
                     }}
                     className="w-full justify-start text-xs"
                     data-testid={`quick-category-${category.toLowerCase().replace(/\s+/g, "-")}`}
@@ -788,7 +796,7 @@ export default function UnicodeCharacters() {
         </div>
 
         {/* Character Grid */}
-        <div className="lg:col-span-3">
+        <div className="lg:col-span-3" ref={characterGridRef}>
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
