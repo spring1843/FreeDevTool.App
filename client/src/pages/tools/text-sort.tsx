@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ArrowUpDown, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
@@ -25,13 +26,14 @@ export default function TextSort() {
   const [sortType, setSortType] = useState<SortType>("alphabetical");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
   const [caseSensitive, setCaseSensitive] = useState(false);
+  const [unique, setUnique] = useState(false);
   const [sortedOutput, setSortedOutput] = useState("");
   const { theme } = useTheme();
 
   const sortText = useCallback(() => {
     const lines = input.split("\n").filter(line => line.trim() !== "");
 
-    const sorted = [...lines];
+    let sorted = [...lines];
 
     switch (sortType) {
       case "alphabetical":
@@ -66,14 +68,20 @@ export default function TextSort() {
       sorted.reverse();
     }
 
+    // Remove duplicates if unique option is enabled
+    if (unique) {
+      sorted = Array.from(new Set(sorted));
+    }
+
     setSortedOutput(sorted.join("\n"));
-  }, [input, sortType, sortOrder, caseSensitive]);
+  }, [input, sortType, sortOrder, caseSensitive, unique]);
 
   const handleReset = () => {
     setInput(DEFAULT_TEXT_SORT);
     setSortType("alphabetical");
     setSortOrder("asc");
     setCaseSensitive(false);
+    setUnique(false);
     setSortedOutput("");
   };
 
@@ -90,7 +98,8 @@ export default function TextSort() {
               Text Sorter
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
-              Sort lines of text alphabetically, numerically, or by length
+              Sort lines of text alphabetically, numerically, or by length with
+              optional deduplication
             </p>
           </div>
           <SecurityBanner variant="compact" />
@@ -142,12 +151,35 @@ export default function TextSort() {
                 id="case-sensitive"
                 checked={caseSensitive}
                 onCheckedChange={setCaseSensitive}
+                data-testid="switch-case-sensitive"
               />
               <Label htmlFor="case-sensitive">Case Sensitive</Label>
             </div>
           </div>
 
-          <div className="flex gap-3">
+          <div className="border-t pt-4 mt-4">
+            <div className="flex items-start space-x-2">
+              <Checkbox
+                id="unique"
+                checked={unique}
+                onCheckedChange={checked => setUnique(checked === true)}
+                data-testid="checkbox-unique"
+              />
+              <div className="grid gap-1.5 leading-none">
+                <Label
+                  htmlFor="unique"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Remove duplicate lines
+                </Label>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Keep only unique entries in sorted output
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-3 mt-6">
             <Button
               onClick={sortText}
               className="bg-blue-600 hover:bg-blue-700 text-white"
