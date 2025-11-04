@@ -84,7 +84,7 @@ export default function WebcamTest() {
       const constraints: MediaStreamConstraints = {
         video:
           selectedDevice && selectedDevice !== ""
-            ? { deviceId: selectedDevice }
+            ? { deviceId: { exact: selectedDevice } }
             : true,
         audio: false,
       };
