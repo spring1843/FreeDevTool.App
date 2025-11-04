@@ -526,7 +526,7 @@ export default function NumberBaseConverter() {
                   {results.map(result => (
                     <div
                       key={result.base}
-                      className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-slate-50 dark:bg-slate-800/50"
+                      className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-slate-100 dark:bg-slate-900"
                     >
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">

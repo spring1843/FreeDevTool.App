@@ -408,7 +408,9 @@ export default function MicrophoneTest() {
           )}
 
           {/* Waveform Visualization - Only show during recording */}
-          <div className={`border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden bg-slate-950 ${isRecording ? '' : 'hidden'}`}>
+          <div
+            className={`border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden bg-slate-950 ${isRecording ? "" : "hidden"}`}
+          >
             <canvas
               ref={canvasRef}
               width={800}

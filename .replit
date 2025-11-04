@@ -11,26 +11,6 @@ build = ["sh", "-c", "make build"]
 run = ["sh", "-c", "npm start"]
 
 [[ports]]
-localPort = 3000
-externalPort = 3000
-
-[[ports]]
-localPort = 9500
-externalPort = 80
-
-[[ports]]
-localPort = 33495
-externalPort = 3002
-
-[[ports]]
-localPort = 35329
-externalPort = 4200
-
-[[ports]]
-localPort = 36491
-externalPort = 3001
-
-[[ports]]
 localPort = 43061
 externalPort = 3002
 
