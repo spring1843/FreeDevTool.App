@@ -309,7 +309,7 @@ export default function Metronome() {
       const newSchedules = prevSchedules.map(schedule =>
         schedule.id === id ? { ...schedule, ...updates } : schedule
       );
-      
+
       // If metronome is running and interval changed, reschedule this tone
       if (isRunningRef.current && updates.intervalSeconds !== undefined) {
         const updatedSchedule = newSchedules.find(s => s.id === id);
@@ -320,12 +320,12 @@ export default function Metronome() {
             clearTimeout(existingTimeout);
             toneTimeoutsRef.current.delete(id);
           }
-          
+
           // Reschedule with new interval starting now
           scheduleNextTone(updatedSchedule, Date.now());
         }
       }
-      
+
       return newSchedules;
     });
   };
