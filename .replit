@@ -12,19 +12,7 @@ run = ["sh", "-c", "npm start"]
 
 [[ports]]
 localPort = 3000
-externalPort = 3000
-
-[[ports]]
-localPort = 9500
 externalPort = 80
-
-[[ports]]
-localPort = 36491
-externalPort = 3001
-
-[[ports]]
-localPort = 39101
-externalPort = 3003
 
 [[ports]]
 localPort = 43061
