@@ -17,6 +17,8 @@ export default function Stopwatch() {
   const [isRunning, setIsRunning] = useState(false);
   const [laps, setLaps] = useState<LapTime[]>([]);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const startTimeRef = useRef<number>(0);
+  const elapsedBeforePauseRef = useRef<number>(0);
 
   const formatTime = (milliseconds: number) => {
     const totalSeconds = Math.floor(milliseconds / 1000);
@@ -30,9 +32,11 @@ export default function Stopwatch() {
   const startStopwatch = () => {
     if (!isRunning) {
       setIsRunning(true);
+      startTimeRef.current = Date.now();
       intervalRef.current = setInterval(() => {
-        setTime(prevTime => prevTime + 1);
-      }, 1);
+        const elapsed = Date.now() - startTimeRef.current + elapsedBeforePauseRef.current;
+        setTime(elapsed);
+      }, 10);
     }
   };
 
@@ -41,6 +45,7 @@ export default function Stopwatch() {
       setIsRunning(false);
       clearInterval(intervalRef.current);
       intervalRef.current = null;
+      elapsedBeforePauseRef.current = time;
     }
   };
 
@@ -48,6 +53,7 @@ export default function Stopwatch() {
     setIsRunning(false);
     setTime(0);
     setLaps([]);
+    elapsedBeforePauseRef.current = 0;
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
@@ -100,9 +106,11 @@ export default function Stopwatch() {
           } else {
             // Start when stopped
             setIsRunning(true);
+            startTimeRef.current = Date.now();
             intervalRef.current = setInterval(() => {
-              setTime(prevTime => prevTime + 1);
-            }, 1);
+              const elapsed = Date.now() - startTimeRef.current + elapsedBeforePauseRef.current;
+              setTime(elapsed);
+            }, 10);
           }
           break;
         case " ":
@@ -113,6 +121,7 @@ export default function Stopwatch() {
               setIsRunning(false);
               clearInterval(intervalRef.current);
               intervalRef.current = null;
+              elapsedBeforePauseRef.current = time;
             }
           }
           break;
@@ -122,6 +131,7 @@ export default function Stopwatch() {
           setIsRunning(false);
           setTime(0);
           setLaps([]);
+          elapsedBeforePauseRef.current = 0;
           if (intervalRef.current) {
             clearInterval(intervalRef.current);
             intervalRef.current = null;
