@@ -358,7 +358,7 @@ export default function Timer() {
         s: newTimerSeconds,
       });
     }
-    
+
     toast({
       title: "URL Copied",
       description: "Timer URL has been copied to clipboard",

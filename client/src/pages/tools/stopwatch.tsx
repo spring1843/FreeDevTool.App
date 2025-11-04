@@ -34,7 +34,8 @@ export default function Stopwatch() {
       setIsRunning(true);
       startTimeRef.current = Date.now();
       intervalRef.current = setInterval(() => {
-        const elapsed = Date.now() - startTimeRef.current + elapsedBeforePauseRef.current;
+        const elapsed =
+          Date.now() - startTimeRef.current + elapsedBeforePauseRef.current;
         setTime(elapsed);
       }, 10);
     }
@@ -108,7 +109,10 @@ export default function Stopwatch() {
             setIsRunning(true);
             startTimeRef.current = Date.now();
             intervalRef.current = setInterval(() => {
-              const elapsed = Date.now() - startTimeRef.current + elapsedBeforePauseRef.current;
+              const elapsed =
+                Date.now() -
+                startTimeRef.current +
+                elapsedBeforePauseRef.current;
               setTime(elapsed);
             }, 10);
           }
