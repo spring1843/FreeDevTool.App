@@ -94,7 +94,8 @@ export default function MicrophoneTest() {
         device => device.kind === "audioinput"
       );
       setDevices(audioDevices);
-      if (audioDevices.length > 0 && !selectedDevice) {
+      // Always select the first device when devices are available
+      if (audioDevices.length > 0) {
         const firstDevice = audioDevices[0];
         if (firstDevice.deviceId && firstDevice.deviceId !== "") {
           setSelectedDevice(firstDevice.deviceId);
@@ -397,11 +398,11 @@ export default function MicrophoneTest() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div>
-              <label className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 block">
-                Select Microphone
-              </label>
-              <div className="flex gap-2">
+            {devices.length > 0 && devices.some(device => device.label) && (
+              <div>
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 block">
+                  Select Microphone
+                </label>
                 <Select
                   value={selectedDevice || ""}
                   onValueChange={setSelectedDevice}
@@ -431,16 +432,8 @@ export default function MicrophoneTest() {
                       ))}
                   </SelectContent>
                 </Select>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={refreshDevices}
-                  data-testid="refresh-devices"
-                >
-                  <RefreshCw className="w-4 h-4" />
-                </Button>
               </div>
-            </div>
+            )}
 
             <div className="space-y-2">
               {!hasPermission ? (
