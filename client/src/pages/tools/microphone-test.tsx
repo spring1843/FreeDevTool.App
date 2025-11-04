@@ -268,9 +268,7 @@ export default function MicrophoneTest() {
           "Microphone access is blocked due to security restrictions.";
       } else {
         errorMessage =
-          error instanceof Error
-            ? error.message
-            : "Failed to start recording";
+          error instanceof Error ? error.message : "Failed to start recording";
       }
 
       setError(`Recording failed: ${errorMessage}`);
@@ -404,16 +402,18 @@ export default function MicrophoneTest() {
             </div>
           )}
 
-          {/* Waveform Visualization */}
-          <div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden bg-slate-950">
-            <canvas
-              ref={canvasRef}
-              width={800}
-              height={200}
-              className="w-full h-[200px]"
-              data-testid="waveform-canvas"
-            />
-          </div>
+          {/* Waveform Visualization - Only show during recording */}
+          {isRecording && (
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden bg-slate-950">
+              <canvas
+                ref={canvasRef}
+                width={800}
+                height={200}
+                className="w-full h-[200px]"
+                data-testid="waveform-canvas"
+              />
+            </div>
+          )}
 
           <div className="space-y-2">
             {!hasPermission ? (
@@ -488,8 +488,7 @@ export default function MicrophoneTest() {
 
           <div className="text-xs text-slate-600 dark:text-slate-400 space-y-1">
             <p>
-              <strong>Status:</strong>{" "}
-              {isRecording ? "Recording" : "Ready"}
+              <strong>Status:</strong> {isRecording ? "Recording" : "Ready"}
             </p>
             <p>
               <strong>Devices:</strong> {devices.length} microphone(s) found
@@ -516,7 +515,10 @@ export default function MicrophoneTest() {
             <h4 className="font-semibold mb-2">Testing Your Microphone:</h4>
             <ul className="space-y-1 text-slate-600 dark:text-slate-400">
               <li>• Click "Request Microphone Permission" to allow access</li>
-              <li>• Select your microphone from the dropdown (if multiple available)</li>
+              <li>
+                • Select your microphone from the dropdown (if multiple
+                available)
+              </li>
               <li>• Click "Start Recording" to begin recording</li>
               <li>• Watch the waveform visualizer respond to your voice</li>
               <li>• Speak into your microphone</li>
