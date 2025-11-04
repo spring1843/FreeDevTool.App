@@ -452,7 +452,8 @@ export default function MicrophoneTest() {
             )}
           </div>
 
-          {recordedBlob ? <div className="space-y-2">
+          {recordedBlob ? (
+            <div className="space-y-2">
               <div className="flex gap-2">
                 <Button
                   onClick={playRecording}
@@ -481,11 +482,14 @@ export default function MicrophoneTest() {
                 </TooltipProvider>
               </div>
               <audio ref={audioRef} style={{ display: "none" }} />
-            </div> : null}
+            </div>
+          ) : null}
 
-          {error ? <Alert variant="destructive">
+          {error ? (
+            <Alert variant="destructive">
               <AlertDescription className="text-sm">{error}</AlertDescription>
-            </Alert> : null}
+            </Alert>
+          ) : null}
 
           <div className="text-xs text-slate-600 dark:text-slate-400 space-y-1">
             <p>
@@ -494,10 +498,12 @@ export default function MicrophoneTest() {
             <p>
               <strong>Devices:</strong> {devices.length} microphone(s) found
             </p>
-            {recordedBlob ? <p>
+            {recordedBlob ? (
+              <p>
                 <strong>Recording:</strong>{" "}
                 {(recordedBlob.size / 1024).toFixed(2)} KB
-              </p> : null}
+              </p>
+            ) : null}
           </div>
         </CardContent>
       </Card>
