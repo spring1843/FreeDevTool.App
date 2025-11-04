@@ -10,11 +10,12 @@ import {
 } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
-  Mic,
-  Play,
-  Square,
-  Download,
-} from "lucide-react";
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Mic, Play, Square, Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
@@ -150,7 +151,7 @@ export default function MicrophoneTest() {
       mediaRecorder.onstop = () => {
         const blob = new Blob(chunksRef.current, { type: "audio/webm" });
         setRecordedBlob(blob);
-        
+
         // Stop the stream
         if (streamRef.current) {
           streamRef.current.getTracks().forEach(track => track.stop());
@@ -185,9 +186,7 @@ export default function MicrophoneTest() {
           "Microphone access is blocked due to security restrictions.";
       } else {
         errorMessage =
-          error instanceof Error
-            ? error.message
-            : "Failed to start recording";
+          error instanceof Error ? error.message : "Failed to start recording";
       }
 
       setError(`Recording failed: ${errorMessage}`);
@@ -364,13 +363,22 @@ export default function MicrophoneTest() {
                   <Play className="w-4 h-4 mr-2" />
                   {isPlaying ? "Stop Playback" : "Play Recording"}
                 </Button>
-                <Button
-                  onClick={downloadRecording}
-                  variant="outline"
-                  data-testid="download-recording"
-                >
-                  <Download className="w-4 h-4" />
-                </Button>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        onClick={downloadRecording}
+                        variant="outline"
+                        data-testid="download-recording"
+                      >
+                        <Download className="w-4 h-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Download recording</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
               <audio ref={audioRef} style={{ display: "none" }} />
             </div>
@@ -384,8 +392,7 @@ export default function MicrophoneTest() {
 
           <div className="text-xs text-slate-600 dark:text-slate-400 space-y-1">
             <p>
-              <strong>Status:</strong>{" "}
-              {isRecording ? "Recording" : "Ready"}
+              <strong>Status:</strong> {isRecording ? "Recording" : "Ready"}
             </p>
             <p>
               <strong>Devices:</strong> {devices.length} microphone(s) found
@@ -412,7 +419,10 @@ export default function MicrophoneTest() {
             <h4 className="font-semibold mb-2">Testing Your Microphone:</h4>
             <ul className="space-y-1 text-slate-600 dark:text-slate-400">
               <li>• Click "Request Microphone Permission" to allow access</li>
-              <li>• Select your microphone from the dropdown (if multiple available)</li>
+              <li>
+                • Select your microphone from the dropdown (if multiple
+                available)
+              </li>
               <li>• Click "Start Recording" to begin recording</li>
               <li>• Speak into your microphone</li>
               <li>• Click "Stop Recording" when finished</li>
