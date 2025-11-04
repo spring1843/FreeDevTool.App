@@ -441,7 +441,7 @@ export default function UnitConverter() {
 
           {/* Result Section */}
           {result ? (
-            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-slate-50 dark:bg-slate-800/50">
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-slate-100 dark:bg-slate-900">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
                   Result
