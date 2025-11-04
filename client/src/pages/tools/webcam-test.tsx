@@ -64,7 +64,8 @@ export default function WebcamTest() {
       );
       setDevices(videoDevices);
 
-      if (videoDevices.length > 0 && !selectedDevice) {
+      // Always select the first device when devices are available
+      if (videoDevices.length > 0) {
         const firstDevice = videoDevices[0];
         if (firstDevice.deviceId && firstDevice.deviceId !== "") {
           setSelectedDevice(firstDevice.deviceId);
@@ -84,7 +85,7 @@ export default function WebcamTest() {
       const constraints: MediaStreamConstraints = {
         video:
           selectedDevice && selectedDevice !== ""
-            ? { deviceId: selectedDevice }
+            ? { deviceId: { exact: selectedDevice } }
             : true,
         audio: false,
       };
@@ -230,36 +231,33 @@ export default function WebcamTest() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div>
-            <Label htmlFor="device-select">Camera Device</Label>
-            <Select
-              value={selectedDevice || ""}
-              onValueChange={setSelectedDevice}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select camera device..." />
-              </SelectTrigger>
-              <SelectContent>
-                {devices.map(device => (
-                  <SelectItem
-                    key={device.deviceId}
-                    value={
-                      device.deviceId ||
-                      `device-${Math.random().toString(36).substr(2, 9)}`
-                    }
-                  >
-                    {device.label ||
-                      `Camera ${device.deviceId?.slice(0, 8) || "Unknown"}...`}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {devices.length === 0 && (
-              <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                No camera devices found. Please ensure a camera is connected.
-              </div>
-            )}
-          </div>
+          {devices.length > 0 && devices.some(device => device.label) && (
+            <div>
+              <Label htmlFor="device-select">Camera Device</Label>
+              <Select
+                value={selectedDevice || ""}
+                onValueChange={setSelectedDevice}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select camera device..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {devices.map(device => (
+                    <SelectItem
+                      key={device.deviceId}
+                      value={
+                        device.deviceId ||
+                        `device-${Math.random().toString(36).substr(2, 9)}`
+                      }
+                    >
+                      {device.label ||
+                        `Camera ${device.deviceId?.slice(0, 8) || "Unknown"}...`}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
 
           <div className="flex gap-3">
             {!hasPermission ? (
