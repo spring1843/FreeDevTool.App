@@ -740,34 +740,6 @@ export default function Metronome() {
                 >
                   <Music className="w-4 h-4 mr-2" />C Major Chord Progression
                 </Button>
-
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setToneSchedules([
-                      {
-                        id: "1",
-                        note: "G4",
-                        frequency: NOTES["G4"],
-                        intervalSeconds: 0.4,
-                        enabled: true,
-                      },
-                      {
-                        id: "2",
-                        note: "D#4/Eb4",
-                        frequency: NOTES["D#4/Eb4"],
-                        intervalSeconds: 1.6,
-                        enabled: true,
-                      },
-                    ]);
-                  }}
-                  className="w-full justify-start"
-                  data-testid="beethoven-symphony-5-preset"
-                >
-                  <Music className="w-4 h-4 mr-2" />
-                  Beethoven Symphony #5
-                </Button>
               </div>
             </div>
 
