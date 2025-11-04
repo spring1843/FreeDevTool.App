@@ -358,7 +358,12 @@ export default function Timer() {
         s: newTimerSeconds,
       });
     }
-  }, [timers, newTimerHours, newTimerMinutes, newTimerSeconds]);
+
+    toast({
+      title: "URL Copied",
+      description: "Timer URL has been copied to clipboard",
+    });
+  }, [timers, newTimerHours, newTimerMinutes, newTimerSeconds, toast]);
 
   const getAlarmText = (count: number) => {
     switch (count) {
