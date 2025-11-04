@@ -408,17 +408,15 @@ export default function MicrophoneTest() {
           )}
 
           {/* Waveform Visualization - Only show during recording */}
-          {isRecording && (
-            <div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden bg-slate-950">
-              <canvas
-                ref={canvasRef}
-                width={800}
-                height={200}
-                className="w-full h-[200px]"
-                data-testid="waveform-canvas"
-              />
-            </div>
-          )}
+          <div className={`border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden bg-slate-950 ${isRecording ? '' : 'hidden'}`}>
+            <canvas
+              ref={canvasRef}
+              width={800}
+              height={200}
+              className="w-full h-[200px]"
+              data-testid="waveform-canvas"
+            />
+          </div>
 
           <div className="space-y-2">
             {!hasPermission ? (
