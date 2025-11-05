@@ -30,9 +30,9 @@ function buildToolsMetadata(): Record<
   const allTools = getAllTools();
   allTools.forEach(tool => {
     metadata[tool.path] = {
-      title: tool.seo.title,
-      description: tool.seo.description,
-      keywords: tool.seo.keywords,
+      title: tool.metadata.title + " | FreeDevTool.App",
+      description: tool.metadata.description,
+      keywords: tool.metadata.keywords.join(", "),
     };
   });
 
