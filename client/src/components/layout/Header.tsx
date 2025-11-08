@@ -174,7 +174,14 @@ export function Header({ onMenuClick }: HeaderProps) {
                       FreeDevTool.App
                     </h1>
                     <p className="text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
-                      Free, Secure, Open Source, and Offline
+                      <a
+                        href="https://github.com/spring1843/FreeDevTool.App/blob/main/Security.md"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Secure
+                      </a>{" "}
+                      Developer Tools
                     </p>
                   </div>
                 </Link>

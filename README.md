@@ -16,6 +16,8 @@ FreeDevTool.App is a comprehensive web-based collection of open source developer
 - **Air-Gapped Compatible**: Designed to work in completely isolated environments
 - **Enterprise Ready**: Designed to be safe for handling sensitive company data and proprietary information
 
+Read more pm our [Security](./SECURITY.md).
+
 ### Developer Focused
 
 - **By Developers, For Developers**: Built to solve real problems we face daily
@@ -25,7 +27,7 @@ FreeDevTool.App is a comprehensive web-based collection of open source developer
 ### Open & Accessible
 
 - **100% Open Source**: Community-driven development with transparent codebase
-- **Free Core Features**: All current tools are free to use since computation happens in your browser
+- **Completely Free**: All current tools are free to use since computation happens in your browser
 - **Universal Access**: Works on desktop, mobile, and TV displays with responsive design
 
 ## User Preferences
