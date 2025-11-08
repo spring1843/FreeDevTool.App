@@ -47,6 +47,6 @@ We strive to:
 
 - Format all applicable files with `make format`.
 
-# Github Workflows
+# GitHub Workflows
 
 - Only `Makefile` commands should be used in .github/workflows, no shell or bash commands as much as possible

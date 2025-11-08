@@ -175,7 +175,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                     </h1>
                     <p className="text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
                       <a
-                        href="https://github.com/spring1843/FreeDevTool.App/blob/main/Security.md"
+                        href="https://github.com/spring1843/FreeDevTool.App/blob/main/SECURITY.md"
                         target="_blank"
                         rel="noreferrer"
                       >
