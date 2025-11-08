@@ -168,23 +168,23 @@ export function Header({ onMenuClick }: HeaderProps) {
                 </div>
 
                 {/* Text Logo - links to homepage */}
-                <Link href="/">
-                  <div className="hidden sm:block cursor-pointer hover:opacity-80 transition-opacity">
-                    <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-100 whitespace-nowrap">
+                <div className="hidden sm:block hover:opacity-80 transition-opacity">
+                  <Link href="/">
+                    <h1 className="text-xl cursor-pointer font-semibold text-slate-900 dark:text-slate-100 whitespace-nowrap">
                       FreeDevTool.App
                     </h1>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
-                      <a
-                        href="https://github.com/spring1843/FreeDevTool.App/blob/main/SECURITY.md"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        Secure
-                      </a>{" "}
-                      Developer Tools
-                    </p>
-                  </div>
-                </Link>
+                  </Link>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                    <a
+                      href="https://github.com/spring1843/FreeDevTool.App/blob/main/SECURITY.md"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Secure
+                    </a>{" "}
+                    Developer Tools
+                  </p>
+                </div>
               </div>
             </div>
 
