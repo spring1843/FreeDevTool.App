@@ -35,7 +35,6 @@ Read more pm our [Security](./SECURITY.md).
 Preferred communication style: Simple, everyday language.
 Preferred UI behavior: All menu sections collapsed by default, with minimize buttons (< and ^) for maximum screen real estate optimization suitable for TV displays. Sidebar should be collapsed by default.
 Preferred terminology: "Camera" instead of "Webcam" for video capture devices.
-Monetization: Application includes advertisements. Current features are free since computation happens in user browsers, but future premium features may be introduced.
 
 ## Recent Updates (August 16, 2025)
 
