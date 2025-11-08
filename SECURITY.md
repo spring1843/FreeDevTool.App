@@ -14,7 +14,7 @@ FreeDevTool.App is designed as a secure, offline tool for everyday development t
 
 ## Strict CSP (Content Security Policy)
 
-We [apply](https://github.com/spring1843/FreeDevTool.App/blob/68053bd519fada6f3d7fca5b5c4533ac0a65bc1a/client/index.html#L11) a strict [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP) in all out pages that ensures at browser level that:
+We [apply](https://github.com/spring1843/FreeDevTool.App/blob/68053bd519fada6f3d7fca5b5c4533ac0a65bc1a/client/index.html#L11) a strict [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP) in all our pages that ensures at browser level that:
 
 * No external scripts can be loaded
 * No outbound calls can be made
