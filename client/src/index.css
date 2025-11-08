@@ -372,16 +372,6 @@
     transform-origin: left center;
   }
 
-  /* Ad slots */
-  .ad-slot {
-    border: 2px dashed;
-    padding: 20px;
-    text-align: center;
-    font-size: 12px;
-    opacity: 0.7;
-    margin: 20px 0;
-  }
-
   /* Flat design - remove all border radius */
   * {
     border-radius: 0 !important;
