@@ -6,6 +6,14 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1"
     />
+    <!--
+  Security & Privacy: CSP meta tag blocks external scripts, enforces
+  a sandbox, and prevents outbound calls. All processing is offline
+  and local—your data never leaves your browser.
+
+  Read more about FreeDevTool.App's security policies:
+    https://github.com/spring1843/FreeDevTool.App/blob/main/Security.md
+-->
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' ws: wss:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self';"
@@ -21,8 +29,6 @@
       name="keywords"
       content="offline developer tools, privacy-focused dev utilities, open source coding tools, no network requests, local processing developer tools, privacy-first utilities"
     />
-
-    <!-- Open Graph tags for professional sharing -->
     <meta
       property="og:title"
       content="FreeDevTool.App - Free, Secure, Open Source, and Offline Developer Tools"
@@ -34,7 +40,6 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://freedevtool.app" />
 
-    <!-- Security and Privacy focused meta tags -->
     <meta name="robots" content="index, follow" />
     <meta name="referrer" content="no-referrer" />
 
@@ -70,7 +75,6 @@
   </head>
   <body>
     <div id="root">
-      <!-- Fallback loading screen in case JavaScript fails to load -->
       <div
         style="
           display: flex;
@@ -86,7 +90,12 @@
             Loading FreeDevTool.App...
           </div>
           <div style="font-size: 14px; color: #666">
-            Free, secure, offline developer tools
+            <a
+              href="https://github.com/spring1843/FreeDevTool.App/blob/main/Security.md"
+              target="_blank"
+              >Secure</a
+            >
+            Developer Tools
           </div>
         </div>
       </div>
