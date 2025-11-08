@@ -9,7 +9,7 @@ FreeDevTool.App is designed as a secure, offline tool for everyday development t
 - **Offline Processing**: All computations, data manipulations, and tool executions happen locally in your browser using JavaScript. The app is a standalone front-end with no back-end infrastructure.
 - **Data Flow**: We serve static assets (e.g., HTML, CSS, JS) from our servers during the initial page load, but no data is ever sent back. No API calls, dynamic requests, or external scripts are loaded at runtime.
 - **No Tracking or Analytics**: We do not use cookies, local storage for tracking purposes, or any form of user monitoring. If local storage is used (e.g., for user preferences like theme settings), it is optional, transparent, and fully under your control.
-- **Open Source Transparency**: The entire codebase is open source, hosted on a public [Github repo](https://github.com/spring1843/freedevtool.app/), allowing public inspection, contributions, and independent audits. We encourage community reviews to verify our claims.
+- **Open Source Transparency**: The entire codebase is open source, hosted on a public [GitHub repo](https://github.com/spring1843/freedevtool.app/), allowing public inspection, contributions, and independent audits. We encourage community reviews to verify our claims.
 - **No Monetization Intrusions**: FreeDevTool.App is and will remain completely free. We will never display advertisements. In the future, we may accept non-intrusive sponsorships (e.g., a simple "Sponsored by" mention), but these will not involve tracking or data collection.
 
 ## Strict CSP (Content Security Policy)
@@ -37,4 +37,4 @@ If circumstances require changes to this policy (e.g., due to legal requirements
 
 ## Contact Us
 
-If you have questions, suggestions, or concerns about our security practices, reach out via [Github Issues](https://github.com/spring1843/FreeDevTool.App/issues). We're committed to continuous improvement while upholding our privacy-first mission.
+If you have questions, suggestions, or concerns about our security practices, reach out via [GitHub Issues](https://github.com/spring1843/FreeDevTool.App/issues). We're committed to continuous improvement while upholding our privacy-first mission.
