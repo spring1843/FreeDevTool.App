@@ -300,21 +300,6 @@
     opacity: 0.5;
   }
 
-  /* Advertisement spots */
-  .ad-slot {
-    border: 2px dashed #ccc;
-    background: #f9f9f9;
-    text-align: center;
-    padding: 20px;
-    margin: 20px 0;
-    border-radius: 0 !important;
-  }
-
-  .dark .ad-slot {
-    border-color: #555;
-    background: #2a2a2a;
-  }
-
   /* Word-level diff highlighting */
   .diff-word-modified {
     background-color: hsl(142 76% 70%);
@@ -385,16 +370,6 @@
     background: currentColor;
     height: 2px;
     transform-origin: left center;
-  }
-
-  /* Ad slots */
-  .ad-slot {
-    border: 2px dashed;
-    padding: 20px;
-    text-align: center;
-    font-size: 12px;
-    opacity: 0.7;
-    margin: 20px 0;
   }
 
   /* Flat design - remove all border radius */

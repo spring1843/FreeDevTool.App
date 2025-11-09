@@ -16,7 +16,7 @@ FreeDevTool.App is a comprehensive web-based collection of open source developer
 - **Air-Gapped Compatible**: Designed to work in completely isolated environments
 - **Enterprise Ready**: Designed to be safe for handling sensitive company data and proprietary information
 
-Read more pm our [Security](./SECURITY.md).
+Read more on our [Security](./SECURITY.md).
 
 ### Developer Focused
 
@@ -35,7 +35,6 @@ Read more pm our [Security](./SECURITY.md).
 Preferred communication style: Simple, everyday language.
 Preferred UI behavior: All menu sections collapsed by default, with minimize buttons (< and ^) for maximum screen real estate optimization suitable for TV displays. Sidebar should be collapsed by default.
 Preferred terminology: "Camera" instead of "Webcam" for video capture devices.
-Monetization: Application includes advertisements. Current features are free since computation happens in user browsers, but future premium features may be introduced.
 
 ## Recent Updates (August 16, 2025)
 
