@@ -164,7 +164,7 @@ export default function Home() {
                     </CardHeader>
                     <CardContent>
                       <p className="text-sm text-slate-600 dark:text-slate-400 mb-3">
-                        {tool.description}
+                        {tool.metadata.description}
                       </p>
                       <div className="flex items-center justify-between">
                         <span className="text-xs bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded font-mono">

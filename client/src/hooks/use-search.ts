@@ -23,12 +23,15 @@ export function useSearch() {
     Object.entries(toolsData).forEach(([section, data]) => {
       data.tools.forEach(tool => {
         const nameMatch = tool.name.toLowerCase().includes(query);
-        const descriptionMatch = tool.description.toLowerCase().includes(query);
+        const descriptionMatch = tool.metadata.description
+          .toLowerCase()
+          .includes(query);
         const shortcutMatch = tool.shortcut.toLowerCase().includes(query);
 
         if (nameMatch || descriptionMatch || shortcutMatch) {
           results.push({
             ...tool,
+            description: tool.metadata.description,
             section,
             color: data.color,
           });
@@ -57,7 +60,7 @@ export function useSearch() {
         const query = searchQuery.toLowerCase();
         return (
           tool.name.toLowerCase().includes(query) ||
-          tool.description.toLowerCase().includes(query) ||
+          tool.metadata.description.toLowerCase().includes(query) ||
           tool.shortcut.toLowerCase().includes(query)
         );
       });

@@ -554,7 +554,7 @@ export function Sidebar({
                                 ) : null}
                               </div>
                               <p className="text-sm text-slate-600 dark:text-slate-400">
-                                {tool.description}
+                                {tool.metadata.description}
                               </p>
                               {tool.experimental ? (
                                 <p className="text-xs text-orange-600 dark:text-orange-400">

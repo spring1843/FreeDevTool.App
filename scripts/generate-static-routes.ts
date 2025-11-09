@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -30,7 +31,7 @@ function buildToolsMetadata(): Record<
   const allTools = getAllTools();
   allTools.forEach(tool => {
     metadata[tool.path] = {
-      title: tool.metadata.title + " | FreeDevTool.App",
+      title: `${tool.metadata.title} | FreeDevTool.App`,
       description: tool.metadata.description,
       keywords: tool.metadata.keywords.join(", "),
     };
