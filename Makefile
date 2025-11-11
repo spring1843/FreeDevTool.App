@@ -25,7 +25,7 @@ E2E_IMAGE:=${IMAGE_REPO}/e2e
 E2E_IMAGE_TAG:=${E2E_IMAGE}:${GIT_SHA_SHORT}
 E2E_IMAGE_USE:=${E2E_IMAGE}:e9c0ff7
 PWD:=$(shell pwd)
-STAGE_CLOUDFRONT_ID:=E2NUAU9IQEBYJ6
+STAGE_CLOUDFRONT_ID:=E17MASS8004CRI
 PROD_CLOUDFRONT_ID:=FOO
 
 ## Setup Commands
@@ -174,11 +174,8 @@ health: status ## Comprehensive health check
 
 ## Deployment Commands
 
-build-stage:
-	@npm run build:static
-
-copy-static-assets-to-stage:
-	aws s3 sync ./dist/public s3://freedevtool-staging-website
+copy-static-assets-to-stage: build-static
+	aws s3 sync ./dist/public s3://freedevtool-staging
 
 deploy-to-stage: copy-static-assets-to-stage
 	aws cloudfront create-invalidation --distribution-id ${STAGE_CLOUDFRONT_ID} --paths "/*"
@@ -191,10 +188,12 @@ apply-cloudformation-stage:
 		--no-fail-on-empty-changeset
 
 copy-static-assets-to-production:
-	aws s3 sync ./dist/public s3://freedevtool-production-website
+	aws s3 sync ./dist/public s3://freedevtool-production
 
-deploy-to-production: copy-static-assets-to-productproductionion
+invalidate-stage-cloudfront:
 	aws cloudfront create-invalidation --distribution-id ${PROD_CLOUDFRONT_ID} --paths "/*"
+
+deploy-to-production: copy-static-assets-to-productproductionion invalidate-stage-cloudfront
 
 apply-cloudformation-production:
 	aws cloudformation deploy \
