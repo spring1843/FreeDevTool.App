@@ -129,7 +129,7 @@ Resources:
         - Key: Project
           Value: freedevtool
 
-  # Route 53 DNS Record - CNAME pointing to CloudFront
+  # Route 53 DNS Record - Alias records pointing to CloudFront
   DNSRecordIPV4:
     Type: AWS::Route53::RecordSet
     Properties:
