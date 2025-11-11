@@ -174,13 +174,23 @@ health: status ## Comprehensive health check
 
 ## Deployment Commands
 
-copy-static-assets-to-stage: build-static
-	aws s3 sync ./dist/public s3://freedevtool-staging
+copy-static-assets-to-stage:
+	aws s3 sync ./dist/public s3://freedevtool-staging-website
 
-invalidate-cloudfront-stage:  copy-static-assets-to-stage
+invalidate-stage-cdn:
 	aws cloudfront create-invalidation --distribution-id ${STAGE_CLOUDFRONT_ID} --paths "/*"
 
-deploy-to-stage: invalidate-cloudfront-stage
+deploy-to-stage: build-static copy-static-assets-to-stage invalidate-stage-cdn
+
+copy-static-assets-to-production:
+	aws s3 sync ./dist/public s3://freedevtool-production-website
+
+invalidate-production-cdn:
+	aws cloudfront create-invalidation --distribution-id ${PROD_CLOUDFRONT_ID} --paths "/*"
+
+deploy-to-production: build-static copy-static-assets-to-production invalidate-production-cdn
+
+## Infra Commands
 
 warm-cache-stage: ## Warm CloudFront cache for staging (shortcut for warm-cache DOMAIN=stage.freedevtool.app)
 	npx tsx scripts/warm-cache.ts https://stage.freedevtool.app
@@ -192,18 +202,10 @@ apply-cloudformation-stage:
 		--region us-east-1 \
 		--no-fail-on-empty-changeset
 
-copy-static-assets-to-production: build-static
-	aws s3 sync ./dist/public s3://freedevtool-production
-
-invalidate-cloudfront-production: copy-static-assets-to-production
-	aws cloudfront create-invalidation --distribution-id ${PROD_CLOUDFRONT_ID} --paths "/*"
-
-deploy-to-production: invalidate-cloudfront-production
-
 apply-cloudformation-production:
 	aws cloudformation deploy \
 		--template-file infra/cloudformation/production.yaml \
-		--stack-name freedevtool-production \
+		--stack-name freedevtool-staging \
 		--region us-east-1 \
 		--no-fail-on-empty-changeset
 

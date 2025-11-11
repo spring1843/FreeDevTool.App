@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   ci:
-    container: ghcr.io/spring1843/freedevtool.app/e2e:e9c0ff7
+    container: ghcr.io/spring1843/freedevtool.app/e2e:v0.0.4
     name: Continuous Integration
     permissions:
       contents: read
@@ -78,3 +78,17 @@ jobs:
       - name: Build and Push Images when merged to main
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: make build-and-push-image
+
+      - name: Configure AWS Credentials
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: aws-actions/configure-aws-credentials@v5.1.0
+        with:
+          role-to-assume: 'arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/${{ vars.AWS_ROLE_STAGE }}'
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Deploy to Stage
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: make deploy-to-stage
+
+      - name: Preload Stage Cache
+        run: make warm-cache DOMAIN=stage.freedevtool.app
