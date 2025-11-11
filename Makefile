@@ -81,6 +81,9 @@ dev: ## Start development server with verbose logging
 build: ## Build the application for production
 	npm run build
 
+build-static: ## Build the application for production
+	npm run build:static
+
 build-image: ## Build the Docker image for the app
 	docker build --platform linux/amd64 -t ${IMAGE_TAG} -f infra/images/Dockerfile .
 
