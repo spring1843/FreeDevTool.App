@@ -1,7 +1,7 @@
 # Development Makefile for DevTools Suite
 # Comprehensive development workflow management
 
-.PHONY: help setup start stop restart dev build lint lint-fix format type-check test clean deps install status health deploy prepare-deploy ci all apply-cloudformation-stage
+.PHONY: help setup start stop restart dev build lint lint-fix format type-check test clean deps install status health deploy prepare-deploy ci all apply-cloudformation-stage warm-cache-stage warm-cache-production
 
 # Default target
 .DEFAULT_GOAL := help
@@ -182,6 +182,9 @@ invalidate-cloudfront-stage:  copy-static-assets-to-stage
 
 deploy-to-stage: invalidate-cloudfront-stage
 
+warm-cache-stage: ## Warm CloudFront cache for staging (shortcut for warm-cache DOMAIN=stage.freedevtool.app)
+	npx tsx scripts/warm-cache.ts https://stage.freedevtool.app
+
 apply-cloudformation-stage:
 	aws cloudformation deploy \
 		--template-file infra/cloudformation/stage.yaml \
@@ -203,6 +206,9 @@ apply-cloudformation-production:
 		--stack-name freedevtool-production \
 		--region us-east-1 \
 		--no-fail-on-empty-changeset
+
+warm-cache-production:
+	npx tsx scripts/warm-cache.ts https://freedevtool.app
 
 ## Documentation
 
