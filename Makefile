@@ -200,10 +200,6 @@ invalidate-cloudfront-production: copy-static-assets-to-production
 
 deploy-to-production: invalidate-cloudfront-production
 
-warm-cache-stage: ## Warm CloudFront cache for production (shortcut for warm-cache DOMAIN=freedevtool.app)
-	npx tsx scripts/warm-cache.ts https://stage.freedevtool.app
-
-
 apply-cloudformation-production:
 	aws cloudformation deploy \
 		--template-file infra/cloudformation/production.yaml \
