@@ -187,10 +187,10 @@ warm-cache-stage: ## Warm CloudFront cache for staging (shortcut for warm-cache 
 
 apply-cloudformation-stage:
 	aws cloudformation deploy \
-	        --template-file infra/cloudformation/stage.yaml \
-	        --stack-name freedevtool-staging \
-	        --region us-east-1 \
-	        --no-fail-on-empty-changeset
+		--template-file infra/cloudformation/stage.yaml \
+		--stack-name freedevtool-staging \
+		--region us-east-1 \
+		--no-fail-on-empty-changeset
 
 copy-static-assets-to-production: build-static
 	aws s3 sync ./dist/public s3://freedevtool-production
@@ -200,18 +200,19 @@ invalidate-cloudfront-production: copy-static-assets-to-production
 
 deploy-to-production: invalidate-cloudfront-production
 
-warm-cache-prod: ## Warm CloudFront cache for production (shortcut for warm-cache DOMAIN=freedevtool.app)
-	@$(MAKE) warm-cache DOMAIN=freedevtool.app
+warm-cache-stage: ## Warm CloudFront cache for production (shortcut for warm-cache DOMAIN=freedevtool.app)
+	npx tsx scripts/warm-cache.ts https://stage.freedevtool.app
 
-warm-cache-production:
-	npx tsx scripts/warm-cache.ts https://freedevtool.app
 
 apply-cloudformation-production:
 	aws cloudformation deploy \
-	        --template-file infra/cloudformation/production.yaml \
-	        --stack-name freedevtool-production \
-	        --region us-east-1 \
-	        --no-fail-on-empty-changeset
+		--template-file infra/cloudformation/production.yaml \
+		--stack-name freedevtool-production \
+		--region us-east-1 \
+		--no-fail-on-empty-changeset
+
+warm-cache-production:
+	npx tsx scripts/warm-cache.ts https://freedevtool.app
 
 ## Documentation
 
