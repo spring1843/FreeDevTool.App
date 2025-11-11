@@ -31,8 +31,8 @@ PROD_CLOUDFRONT_ID:=E1CLKXJU2N6KW7
 ## Setup Commands
 
 setup: ## Complete project setup - install dependencies, browsers, and prepare for development
-        make deps
-        make e2e-install
+	make deps
+	make e2e-install
 
 ## Combined Commands
 
@@ -41,7 +41,7 @@ all: clean setup lint type-check test build ## Run full development setup with a
 pre-commit: format type-check lint-fix ## Pre-commit hook (fix, format, check)
 
 ci-containerized:  ## Run CI checks inside a container that has dependencies installed
-        docker run --rm -v "${PWD}:/app" ${E2E_IMAGE_USE} make setup && make ci
+	docker run --rm -v "${PWD}:/app" ${E2E_IMAGE_USE} make setup && make ci
 
 ci-without-e2e: pre-commit build test ## CI commands without end-to-end tests, for environments that can't run e2e tests
 
@@ -50,51 +50,51 @@ ci: ci-without-e2e e2e-test ## Commands run in the CI. Good to run before pushin
 install: deps ## Install dependencies (alias for deps)
 
 deps: ## Install all dependencies
-        npm install
+	npm install
 
 deps-update: ## Update all dependencies
-        npm update
+	npm update
 
 deps-audit: ## Audit dependencies for security issues
-        npm audit
+	npm audit
 
 deps-audit-fix: ## Fix dependency security issues
-        npm audit fix
+	npm audit fix
 
 ## Core Development Commands
 
 help: ## Display this help message
-        @grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "$(GREEN)%-20s$(NC) %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "$(GREEN)%-20s$(NC) %s\n", $$1, $$2}'
 
 start: ## Start the development server
-        npm run dev
+	npm run dev
 
 stop: ## Stop the development server (if running in background)
-        @pkill -f "tsx server/index.ts" || true
-        @pkill -f "vite" || true
+	@pkill -f "tsx server/index.ts" || true
+	@pkill -f "vite" || true
 
 restart: stop start ## Restart the development server
 
 dev: ## Start development server with verbose logging
-        NODE_ENV=development DEBUG=* npm run dev
+	NODE_ENV=development DEBUG=* npm run dev
 
 build: clean
-        npm run build
+	npm run build
 
 build-static: clean
-        npm run build:static
+	npm run build:static
 
 build-image: ## Build the Docker image for the app
-        docker build --platform linux/amd64 -t ${IMAGE_TAG} -f infra/images/Dockerfile .
+	docker build --platform linux/amd64 -t ${IMAGE_TAG} -f infra/images/Dockerfile .
 
 build-and-push-image: build-image # Build and push the Docker image for the app
-        docker push ${IMAGE_TAG}
+	docker push ${IMAGE_TAG}
 
 build-e2e-image: ## Build the Docker image for end-to-end testing
-        docker build --platform linux/amd64 -t ${E2E_IMAGE_TAG} -f infra/images/Dockerfile.e2e .
+	docker build --platform linux/amd64 -t ${E2E_IMAGE_TAG} -f infra/images/Dockerfile.e2e .
 
 build-and-push-e2e-image: build-e2e-image ## Build the Docker image for end-to-end testing
-        docker push ${E2E_IMAGE_TAG}
+	docker push ${E2E_IMAGE_TAG}
 
 build-all-images: build-image build-e2e-image ## Build all Docker images
 
@@ -103,82 +103,82 @@ push-all-images: build-and-push-image build-and-push-e2e-image ## Build and push
 ## Code Quality Commands
 
 lint: ## Run ESLint to check for code issues
-        npx eslint . --ext ts,tsx --report-unused-disable-directives
+	npx eslint . --ext ts,tsx --report-unused-disable-directives
 
 lint-fix: ## Run ESLint with automatic fixing
-        npx eslint . --ext ts,tsx --fix
+	npx eslint . --ext ts,tsx --fix
 
 format: ## Format code with Prettier
-        npx prettier --list-different --write "**/*.{ts,tsx,js,jsx,json,css,md,html,yaml,yml}"
+	npx prettier --list-different --write "**/*.{ts,tsx,js,jsx,json,css,md,html,yaml,yml}"
 
 format-check: ## Check if code is properly formatted
-        npx prettier --check "**/*.{ts,tsx,js,jsx,json,css,md,html,yaml,yml}"
+	npx prettier --check "**/*.{ts,tsx,js,jsx,json,css,md,html,yaml,yml}"
 
 type-check: ## Run TypeScript type checking
-        npx tsc --noEmit
+	npx tsc --noEmit
 
 ## Testing Commands
 
 test: ## Run unit tests
-        npx vitest run
+	npx vitest run
 
 test-watch: ## Run tests in watch mode
-        npx vitest
+	npx vitest
 
 test-ui: ## Run tests with UI interface
-        npx vitest --ui
+	npx vitest --ui
 
 test-coverage: ## Run tests with coverage report
-        npx vitest run --coverage
+	npx vitest run --coverage
 
 e2e-test: ## Run end-to-end tests with Playwright
-        npx playwright test
+	npx playwright test
 
 e2e-test-ui: ## Run end-to-end tests with UI
-        npx playwright test --ui
+	npx playwright test --ui
 
 e2e-install: ## Install Playwright browsers
-        npx playwright install
-        npx playwright install-deps
+	npx playwright install
+	npx playwright install-deps
 
 ## Maintenance Commands
 
 clean: ## Clean build artifacts and temporary files
-        rm -rf dist/
-        rm -rf node_modules/.cache/
-        rm -rf .next/
+	rm -rf dist/
+	rm -rf node_modules/.cache/
+	rm -rf .next/
 
 clean-all: clean ## Clean everything including node_modules
-        rm -rf node_modules/
-        npm install
+	rm -rf node_modules/
+	npm install
 
 cache-clear: ## Clear npm and build caches
-        npm cache clean --force
-        rm -rf node_modules/.cache/
+	npm cache clean --force
+	rm -rf node_modules/.cache/
 
 ## Status and Health Commands
 
 status: ## Show project status and health check
-        @echo "$(GREEN)Node version:$(NC) $$(node --version)"
-        @echo "$(GREEN)NPM version:$(NC) $$(npm --version)"
-        @npm list --depth=0 2>/dev/null | head -20 || true
-        @git status --porcelain 2>/dev/null || echo "Not a git repository"
+	@echo "$(GREEN)Node version:$(NC) $$(node --version)"
+	@echo "$(GREEN)NPM version:$(NC) $$(npm --version)"
+	@npm list --depth=0 2>/dev/null | head -20 || true
+	@git status --porcelain 2>/dev/null || echo "Not a git repository"
 
 health: status ## Comprehensive health check
-        @echo -n "$(GREEN)TypeScript:$(NC) "
-        @npx tsc --noEmit >/dev/null 2>&1 && echo "✓ OK" || echo "✗ Errors found"
-        @echo -n "$(GREEN)ESLint:$(NC) "
-        @npx eslint . --ext ts,tsx --max-warnings 0 >/dev/null 2>&1 && echo "✓ OK" || echo "✗ Issues found"
-        @echo -n "$(GREEN)Prettier:$(NC) "
-        @npx prettier --check "**/*.{ts,tsx,js,jsx,json,css,md}" >/dev/null 2>&1 && echo "✓ OK" || echo "✗ Formatting needed"
+	@echo -n "$(GREEN)TypeScript:$(NC) "
+	@npx tsc --noEmit >/dev/null 2>&1 && echo "✓ OK" || echo "✗ Errors found"
+	@echo -n "$(GREEN)ESLint:$(NC) "
+	@npx eslint . --ext ts,tsx --max-warnings 0 >/dev/null 2>&1 && echo "✓ OK" || echo "✗ Issues found"
+	@echo -n "$(GREEN)Prettier:$(NC) "
+	@npx prettier --check "**/*.{ts,tsx,js,jsx,json,css,md}" >/dev/null 2>&1 && echo "✓ OK" || echo "✗ Formatting needed"
 
 ## Deployment Commands
 
 copy-static-assets-to-stage: build-static
-        aws s3 sync ./dist/public s3://freedevtool-staging
+	aws s3 sync ./dist/public s3://freedevtool-staging
 
 invalidate-cloudfront-stage:  copy-static-assets-to-stage
-        aws cloudfront create-invalidation --distribution-id ${STAGE_CLOUDFRONT_ID} --paths "/*"
+	aws cloudfront create-invalidation --distribution-id ${STAGE_CLOUDFRONT_ID} --paths "/*"
 
 deploy-to-stage: invalidate-cloudfront-stage
 
@@ -193,10 +193,10 @@ apply-cloudformation-stage:
                 --no-fail-on-empty-changeset
 
 copy-static-assets-to-production: build-static
-        aws s3 sync ./dist/public s3://freedevtool-production
+	aws s3 sync ./dist/public s3://freedevtool-production
 
 invalidate-cloudfront-production: copy-static-assets-to-production
-        aws cloudfront create-invalidation --distribution-id ${PROD_CLOUDFRONT_ID} --paths "/*"
+	aws cloudfront create-invalidation --distribution-id ${PROD_CLOUDFRONT_ID} --paths "/*"
 
 deploy-to-production: invalidate-cloudfront-production
 
@@ -213,35 +213,35 @@ apply-cloudformation-production:
 ## Documentation
 
 docs: ## Open project documentation
-        @echo "See replit.md for project documentation"
+	@echo "See replit.md for project documentation"
 
 ## Environment Commands
 
 env-check: ## Check environment variables and configuration
-        @echo "$(GREEN)NODE_ENV:$(NC) $${NODE_ENV:-development}"
-        @echo "$(GREEN)Working Directory:$(NC) $$(pwd)"
-        @echo "$(GREEN)Package Manager:$(NC) npm"
+	@echo "$(GREEN)NODE_ENV:$(NC) $${NODE_ENV:-development}"
+	@echo "$(GREEN)Working Directory:$(NC) $$(pwd)"
+	@echo "$(GREEN)Package Manager:$(NC) npm"
 
 ## Advanced Development Commands
 
 dev-https: ## Start development server with HTTPS (if configured)
-        HTTPS=true npm run dev
+	HTTPS=true npm run dev
 
 dev-debug: ## Start development server with debugging enabled
-        NODE_ENV=development DEBUG=express:* npm run dev
+	NODE_ENV=development DEBUG=express:* npm run dev
 
 benchmark: ## Run performance benchmarks (placeholder)
-        @echo "$(YELLOW)Benchmarking not yet implemented$(NC)"
+	@echo "$(YELLOW)Benchmarking not yet implemented$(NC)"
 
 profile: ## Profile application performance (placeholder)
-        @echo "$(YELLOW)Profiling not yet implemented$(NC)"
+	@echo "$(YELLOW)Profiling not yet implemented$(NC)"
 
 ## Information Commands
 
 version: ## Show version information
-        @echo "$(GREEN)Project:$(NC) DevTools Suite v1.0.0"
-        @echo "$(GREEN)Node:$(NC) $$(node --version)"
-        @echo "$(GREEN)NPM:$(NC) $$(npm --version)"
-        @echo "$(GREEN)TypeScript:$(NC) $$(npx tsc --version | cut -d' ' -f2)"
+	@echo "$(GREEN)Project:$(NC) DevTools Suite v1.0.0"
+	@echo "$(GREEN)Node:$(NC) $$(node --version)"
+	@echo "$(GREEN)NPM:$(NC) $$(npm --version)"
+	@echo "$(GREEN)TypeScript:$(NC) $$(npx tsc --version | cut -d' ' -f2)"
 
 info: version status ## Show comprehensive project information
