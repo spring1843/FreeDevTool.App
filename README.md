@@ -105,7 +105,7 @@ make start    # Start the development server
 ```bash
 make help     # Show all available commands
 make deps     # Install dependencies
-make build    # Build for production
+make build-static    # Build for production
 make test     # Run tests
 make lint     # Check code quality
 make format   # Format code

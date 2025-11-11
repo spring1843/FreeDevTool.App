@@ -25,8 +25,8 @@ E2E_IMAGE:=${IMAGE_REPO}/e2e
 E2E_IMAGE_TAG:=${E2E_IMAGE}:${GIT_SHA_SHORT}
 E2E_IMAGE_USE:=${E2E_IMAGE}:e9c0ff7
 PWD:=$(shell pwd)
-STAGE_CLOUDFRONT_ID:=E2NUAU9IQEBYJ6
-PROD_CLOUDFRONT_ID:=FOO
+STAGE_CLOUDFRONT_ID:=E17MASS8004CRI
+PROD_CLOUDFRONT_ID:=E1CLKXJU2N6KW7
 
 ## Setup Commands
 
@@ -78,8 +78,11 @@ restart: stop start ## Restart the development server
 dev: ## Start development server with verbose logging
 	NODE_ENV=development DEBUG=* npm run dev
 
-build: ## Build the application for production
+build: clean
 	npm run build
+
+build-static: clean
+	npm run build:static
 
 build-image: ## Build the Docker image for the app
 	docker build --platform linux/amd64 -t ${IMAGE_TAG} -f infra/images/Dockerfile .
@@ -171,14 +174,13 @@ health: status ## Comprehensive health check
 
 ## Deployment Commands
 
-build-stage:
-	@npm run build:static
+copy-static-assets-to-stage: build-static
+	aws s3 sync ./dist/public s3://freedevtool-staging
 
-copy-static-assets-to-stage:
-	aws s3 sync ./dist/public s3://freedevtool-staging-website
-
-deploy-to-stage: copy-static-assets-to-stage
+invalidate-cloudfront-stage:  copy-static-assets-to-stage
 	aws cloudfront create-invalidation --distribution-id ${STAGE_CLOUDFRONT_ID} --paths "/*"
+
+deploy-to-stage: invalidate-cloudfront-stage
 
 apply-cloudformation-stage:
 	aws cloudformation deploy \
@@ -187,16 +189,18 @@ apply-cloudformation-stage:
 		--region us-east-1 \
 		--no-fail-on-empty-changeset
 
-copy-static-assets-to-production:
-	aws s3 sync ./dist/public s3://freedevtool-production-website
+copy-static-assets-to-production: build-static
+	aws s3 sync ./dist/public s3://freedevtool-production
 
-deploy-to-production: copy-static-assets-to-productproductionion
+invalidate-cloudfront-production: copy-static-assets-to-production
 	aws cloudfront create-invalidation --distribution-id ${PROD_CLOUDFRONT_ID} --paths "/*"
+
+deploy-to-production: invalidate-cloudfront-production
 
 apply-cloudformation-production:
 	aws cloudformation deploy \
 		--template-file infra/cloudformation/production.yaml \
-		--stack-name freedevtool-staging \
+		--stack-name freedevtool-production \
 		--region us-east-1 \
 		--no-fail-on-empty-changeset
 
