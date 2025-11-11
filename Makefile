@@ -1,7 +1,7 @@
 # Development Makefile for DevTools Suite
 # Comprehensive development workflow management
 
-.PHONY: help setup start stop restart dev build lint lint-fix format type-check test clean deps install status health deploy prepare-deploy ci all
+.PHONY: help setup start stop restart dev build lint lint-fix format type-check test clean deps install status health deploy prepare-deploy ci all apply-cloudformation-stage
 
 # Default target
 .DEFAULT_GOAL := help
@@ -25,6 +25,8 @@ E2E_IMAGE:=${IMAGE_REPO}/e2e
 E2E_IMAGE_TAG:=${E2E_IMAGE}:${GIT_SHA_SHORT}
 E2E_IMAGE_USE:=${E2E_IMAGE}:e9c0ff7
 PWD:=$(shell pwd)
+STAGE_CLOUDFRONT_ID:=E2NUAU9IQEBYJ6
+PROD_CLOUDFRONT_ID:=FOO
 
 ## Setup Commands
 
@@ -169,12 +171,34 @@ health: status ## Comprehensive health check
 
 ## Deployment Commands
 
-prepare-deploy: lint type-check build ## Prepare for deployment (lint, type-check, build)
+build-stage:
+	@npm run build:static
 
-deploy-check: prepare-deploy ## Check if ready for deployment
-	@echo "$(GREEN)✓ Linting passed$(NC)"
-	@echo "$(GREEN)✓ Type checking passed$(NC)"
-	@echo "$(GREEN)✓ Build successful$(NC)"
+copy-static-assets-to-stage:
+	aws s3 sync ./dist/public s3://freedevtool-staging-website
+
+deploy-to-stage: copy-static-assets-to-stage
+	aws cloudfront create-invalidation --distribution-id ${STAGE_CLOUDFRONT_ID} --paths "/*"
+
+apply-cloudformation-stage:
+	aws cloudformation deploy \
+		--template-file infra/cloudformation/stage.yaml \
+		--stack-name freedevtool-staging \
+		--region us-east-1 \
+		--no-fail-on-empty-changeset
+
+copy-static-assets-to-production:
+	aws s3 sync ./dist/public s3://freedevtool-production-website
+
+deploy-to-production: copy-static-assets-to-productproductionion
+	aws cloudfront create-invalidation --distribution-id ${PROD_CLOUDFRONT_ID} --paths "/*"
+
+apply-cloudformation-production:
+	aws cloudformation deploy \
+		--template-file infra/cloudformation/production.yaml \
+		--stack-name freedevtool-staging \
+		--region us-east-1 \
+		--no-fail-on-empty-changeset
 
 ## Documentation
 
