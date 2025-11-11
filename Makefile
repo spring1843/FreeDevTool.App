@@ -1,7 +1,7 @@
 # Development Makefile for DevTools Suite
 # Comprehensive development workflow management
 
-.PHONY: help setup start stop restart dev build lint lint-fix format type-check test clean deps install status health deploy prepare-deploy ci all
+.PHONY: help setup start stop restart dev build lint lint-fix format type-check test clean deps install status health deploy prepare-deploy ci all apply-cloudformation-stage
 
 # Default target
 .DEFAULT_GOAL := help
@@ -175,6 +175,17 @@ deploy-check: prepare-deploy ## Check if ready for deployment
 	@echo "$(GREEN)✓ Linting passed$(NC)"
 	@echo "$(GREEN)✓ Type checking passed$(NC)"
 	@echo "$(GREEN)✓ Build successful$(NC)"
+
+
+apply-cloudformation-stage: ## Deploy staging CloudFormation stack to AWS
+	@echo "$(BLUE)Deploying CloudFormation stack for staging environment...$(NC)"
+	aws cloudformation deploy \
+		--template-file infra/cloudformation/stage.yaml \
+		--stack-name freedevtool-staging \
+		--region us-east-1 \
+		--no-fail-on-empty-changeset
+	@echo "$(GREEN)✓ CloudFormation stack deployed successfully$(NC)"
+	@echo "$(YELLOW)Run 'aws cloudformation describe-stacks --stack-name freedevtool-staging --query "Stacks[0].Outputs"' to view outputs$(NC)"
 
 ## Documentation
 
