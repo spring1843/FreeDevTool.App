@@ -1,25 +1,12 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: 'Staging Environment - S3 Static Website with CloudFront Distribution and Origin Access Control'
 
-Parameters:
-  ProjectName:
-    Type: String
-    Default: 'freedevtool'
-    Description: 'Project name used for resource naming'
-  
-  Environment:
-    Type: String
-    Default: 'staging'
-    Description: 'Environment name (staging)'
-    AllowedValues:
-      - staging
-
 Resources:
   # S3 Bucket for static website content
   WebsiteBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub '${ProjectName}-${Environment}-website'
+      BucketName: 'freedevtool-staging-website'
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
         BlockPublicPolicy: true
@@ -34,20 +21,20 @@ Resources:
             NoncurrentVersionExpirationInDays: 30
       Tags:
         - Key: Environment
-          Value: !Ref Environment
+          Value: staging
         - Key: Project
-          Value: !Ref ProjectName
+          Value: freedevtool
 
   # Origin Access Control for CloudFront (replaces legacy OAI)
   CloudFrontOriginAccessControl:
     Type: AWS::CloudFront::OriginAccessControl
     Properties:
       OriginAccessControlConfig:
-        Name: !Sub '${ProjectName}-${Environment}-oac'
+        Name: 'freedevtool-staging-oac'
         OriginAccessControlOriginType: s3
         SigningBehavior: always
         SigningProtocol: sigv4
-        Description: !Sub 'OAC for ${ProjectName} ${Environment} static website'
+        Description: 'OAC for freedevtool staging static website'
 
   # S3 Bucket Policy - Allow CloudFront OAC to read objects
   WebsiteBucketPolicy:
@@ -72,7 +59,7 @@ Resources:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
-        Comment: !Sub '${ProjectName} ${Environment} static website distribution'
+        Comment: 'freedevtool staging static website distribution'
         Enabled: true
         HttpVersion: http2and3
         IPV6Enabled: true
@@ -125,9 +112,9 @@ Resources:
         
       Tags:
         - Key: Environment
-          Value: !Ref Environment
+          Value: staging
         - Key: Project
-          Value: !Ref ProjectName
+          Value: freedevtool
 
 Outputs:
   WebsiteBucketName:
