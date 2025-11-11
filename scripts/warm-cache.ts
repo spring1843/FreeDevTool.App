@@ -126,7 +126,7 @@ async function warmCacheInBatches(
     // Progress indicator
     const completed = Math.min(i + options.concurrency, urls.length);
     const progress = ((completed / urls.length) * 100).toFixed(0);
-    console.log(`Progress: ${completed}/${urls.length} (${progress}%)`);
+    console.warn(`Progress: ${completed}/${urls.length} (${progress}%)`);
   }
 
   return results;
@@ -152,13 +152,13 @@ function printResults(results: PageResult[]): void {
   const successful = results.filter(r => r.success);
   const failed = results.filter(r => !r.success);
 
-  console.log("\n" + "=".repeat(80));
-  console.log("CACHE WARMING COMPLETE");
-  console.log("=".repeat(80));
+  console.warn(`\n${"=".repeat(80)}`);
+  console.warn("CACHE WARMING COMPLETE");
+  console.warn("=".repeat(80));
 
-  console.log(`\nTotal pages: ${results.length}`);
-  console.log(`✓ Successful: ${successful.length}`);
-  console.log(`✗ Failed: ${failed.length}`);
+  console.warn(`\nTotal pages: ${results.length}`);
+  console.warn(`✓ Successful: ${successful.length}`);
+  console.warn(`✗ Failed: ${failed.length}`);
 
   if (successful.length > 0) {
     const avgTime =
@@ -166,21 +166,21 @@ function printResults(results: PageResult[]): void {
     const minTime = Math.min(...successful.map(r => r.time));
     const maxTime = Math.max(...successful.map(r => r.time));
 
-    console.log(`\nTiming Stats:`);
-    console.log(`  Average: ${avgTime.toFixed(0)}ms`);
-    console.log(`  Min: ${minTime}ms`);
-    console.log(`  Max: ${maxTime}ms`);
+    console.warn(`\nTiming Stats:`);
+    console.warn(`  Average: ${avgTime.toFixed(0)}ms`);
+    console.warn(`  Min: ${minTime}ms`);
+    console.warn(`  Max: ${maxTime}ms`);
   }
 
   if (failed.length > 0) {
-    console.log(`\nFailed Pages:`);
+    console.warn(`\nFailed Pages:`);
     failed.forEach(result => {
-      console.log(`  ✗ ${result.url}`);
-      console.log(`    Error: ${result.error || "Unknown error"}`);
+      console.warn(`  ✗ ${result.url}`);
+      console.warn(`    Error: ${result.error || "Unknown error"}`);
     });
   }
 
-  console.log("\n" + "=".repeat(80));
+  console.warn(`\n${"=".repeat(80)}`);
 }
 
 async function main() {
@@ -201,23 +201,23 @@ async function main() {
     retries: 3, // Retry failed requests
   };
 
-  console.log("FreeDevTool Cache Warmer");
-  console.log("=".repeat(80));
-  console.log(`Base URL: ${baseUrl}`);
-  console.log(`Concurrency: ${options.concurrency}`);
-  console.log(`Timeout: ${options.timeout}ms`);
-  console.log(`Retries: ${options.retries}`);
-  console.log("=".repeat(80));
+  console.warn("FreeDevTool Cache Warmer");
+  console.warn("=".repeat(80));
+  console.warn(`Base URL: ${baseUrl}`);
+  console.warn(`Concurrency: ${options.concurrency}`);
+  console.warn(`Timeout: ${options.timeout}ms`);
+  console.warn(`Retries: ${options.retries}`);
+  console.warn("=".repeat(80));
 
   const urls = getAllPageUrls(baseUrl);
-  console.log(`\nFound ${urls.length} pages to warm\n`);
+  console.warn(`\nFound ${urls.length} pages to warm\n`);
 
   const startTime = Date.now();
   const results = await warmCacheInBatches(urls, options);
   const totalTime = Date.now() - startTime;
 
   printResults(results);
-  console.log(`Total time: ${(totalTime / 1000).toFixed(1)}s\n`);
+  console.warn(`Total time: ${(totalTime / 1000).toFixed(1)}s\n`);
 
   // Exit with error code if any pages failed
   const failed = results.filter(r => !r.success);
