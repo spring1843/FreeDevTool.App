@@ -1,0 +1,162 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Staging Environment - S3 Static Website with CloudFront Distribution and Origin Access Control'
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: 'freedevtool'
+    Description: 'Project name used for resource naming'
+  
+  Environment:
+    Type: String
+    Default: 'staging'
+    Description: 'Environment name (staging)'
+    AllowedValues:
+      - staging
+
+Resources:
+  # S3 Bucket for static website content
+  WebsiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub '${ProjectName}-${Environment}-website'
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration:
+        Status: Enabled
+      LifecycleConfiguration:
+        Rules:
+          - Id: DeleteOldVersions
+            Status: Enabled
+            NoncurrentVersionExpirationInDays: 30
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Project
+          Value: !Ref ProjectName
+
+  # Origin Access Control for CloudFront (replaces legacy OAI)
+  CloudFrontOriginAccessControl:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: !Sub '${ProjectName}-${Environment}-oac'
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+        Description: !Sub 'OAC for ${ProjectName} ${Environment} static website'
+
+  # S3 Bucket Policy - Allow CloudFront OAC to read objects
+  WebsiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref WebsiteBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowCloudFrontServicePrincipalReadOnly
+            Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action: s3:GetObject
+            Resource: !Sub '${WebsiteBucket.Arn}/*'
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Sub 'arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}'
+
+  # CloudFront Distribution
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Comment: !Sub '${ProjectName} ${Environment} static website distribution'
+        Enabled: true
+        HttpVersion: http2and3
+        IPV6Enabled: true
+        DefaultRootObject: index.html
+        
+        # Origins
+        Origins:
+          - Id: S3Origin
+            DomainName: !GetAtt WebsiteBucket.RegionalDomainName
+            S3OriginConfig: {}
+            OriginAccessControlId: !Ref CloudFrontOriginAccessControl
+        
+        # Default Cache Behavior
+        DefaultCacheBehavior:
+          TargetOriginId: S3Origin
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          CachedMethods:
+            - GET
+            - HEAD
+          Compress: true
+          # Use AWS Managed Cache Policy - CachingOptimized
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+          # Use AWS Managed Origin Request Policy - CORS-S3Origin
+          OriginRequestPolicyId: 88a5eaf4-2fd4-4709-b370-b4c650ea3fcf
+          # Use AWS Managed Response Headers Policy - SecurityHeadersPolicy
+          ResponseHeadersPolicyId: 67f7725c-6f97-4210-82d7-5512b31e9d03
+        
+        # Custom Error Responses for SPA routing
+        CustomErrorResponses:
+          - ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+            ErrorCachingMinTTL: 300
+          - ErrorCode: 404
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+            ErrorCachingMinTTL: 300
+        
+        # Price Class - Use only North America and Europe for staging cost optimization
+        PriceClass: PriceClass_100
+        
+        # Viewer Certificate - CloudFront default certificate
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: true
+          MinimumProtocolVersion: TLSv1.2_2021
+        
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Project
+          Value: !Ref ProjectName
+
+Outputs:
+  WebsiteBucketName:
+    Description: 'S3 bucket name for uploading static files'
+    Value: !Ref WebsiteBucket
+    Export:
+      Name: !Sub '${AWS::StackName}-BucketName'
+  
+  CloudFrontDistributionId:
+    Description: 'CloudFront distribution ID for cache invalidation'
+    Value: !Ref CloudFrontDistribution
+    Export:
+      Name: !Sub '${AWS::StackName}-DistributionId'
+  
+  CloudFrontDomainName:
+    Description: 'CloudFront distribution domain name'
+    Value: !GetAtt CloudFrontDistribution.DomainName
+    Export:
+      Name: !Sub '${AWS::StackName}-DomainName'
+  
+  WebsiteURL:
+    Description: 'Staging website URL'
+    Value: !Sub 'https://${CloudFrontDistribution.DomainName}'
+  
+  DeploymentCommands:
+    Description: 'Commands to deploy your static site'
+    Value: !Sub |
+      # Sync files to S3:
+      aws s3 sync ./dist/public/ s3://${WebsiteBucket} --delete --cache-control "public, max-age=31536000, immutable"
+      
+      # Invalidate CloudFront cache:
+      aws cloudfront create-invalidation --distribution-id ${CloudFrontDistribution} --paths "/*"
