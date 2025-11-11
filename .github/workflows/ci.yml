@@ -91,4 +91,4 @@ jobs:
         run: make deploy-to-stage
 
       - name: Preload Stage Cache
-        run: make warm-cache DOMAIN=stage.freedevtool.app
+        run: make warm-cache-stage
