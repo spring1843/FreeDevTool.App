@@ -1,6 +1,24 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: 'Staging Environment - S3 Static Website with CloudFront Distribution and Origin Access Control'
 
+# PREREQUISITE: Before deploying this stack, create an ACM certificate for stage.freedevtool.app in us-east-1
+# and update the ACM_CERTIFICATE_ARN value below with the certificate ARN.
+# 
+# To create the certificate:
+# 1. aws acm request-certificate \
+#      --domain-name stage.freedevtool.app \
+#      --validation-method DNS \
+#      --region us-east-1
+# 2. Add the DNS validation CNAME record to your Route 53 hosted zone
+# 3. Wait for certificate to be issued
+# 4. Update ACM_CERTIFICATE_ARN below with the certificate ARN
+
+# IMPORTANT: Replace this ARN with your actual ACM certificate ARN
+Mappings:
+  Config:
+    ACM:
+      CertificateArn: 'arn:aws:acm:us-east-1:ACCOUNT_ID:certificate/CERTIFICATE_ID'
+
 Resources:
   # S3 Bucket for static website content
   WebsiteBucket:
@@ -65,6 +83,10 @@ Resources:
         IPV6Enabled: true
         DefaultRootObject: index.html
         
+        # Custom Domain
+        Aliases:
+          - stage.freedevtool.app
+        
         # Origins
         Origins:
           - Id: S3Origin
@@ -105,9 +127,10 @@ Resources:
         # Price Class - Use only North America and Europe for staging cost optimization
         PriceClass: PriceClass_100
         
-        # Viewer Certificate - CloudFront default certificate
+        # Viewer Certificate - ACM certificate for custom domain
         ViewerCertificate:
-          CloudFrontDefaultCertificate: true
+          AcmCertificateArn: !FindInMap [Config, ACM, CertificateArn]
+          SslSupportMethod: sni-only
           MinimumProtocolVersion: TLSv1.2_2021
         
       Tags:
@@ -136,8 +159,20 @@ Outputs:
       Name: !Sub '${AWS::StackName}-DomainName'
   
   WebsiteURL:
-    Description: 'Staging website URL'
+    Description: 'Staging website URL (CloudFront domain)'
     Value: !Sub 'https://${CloudFrontDistribution.DomainName}'
+  
+  CustomDomainURL:
+    Description: 'Staging website URL (custom domain)'
+    Value: 'https://stage.freedevtool.app'
+  
+  DNSSetupInstructions:
+    Description: 'DNS CNAME record to create'
+    Value: !Sub |
+      Create a CNAME record in your DNS provider:
+      Name: stage.freedevtool.app
+      Type: CNAME
+      Value: ${CloudFrontDistribution.DomainName}
   
   DeploymentCommands:
     Description: 'Commands to deploy your static site'
