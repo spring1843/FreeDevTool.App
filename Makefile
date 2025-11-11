@@ -182,25 +182,8 @@ invalidate-cloudfront-stage:  copy-static-assets-to-stage
 
 deploy-to-stage: invalidate-cloudfront-stage
 
-warm-cache: ## Warm CloudFront cache for any domain (Usage: make warm-cache DOMAIN=stage.freedevtool.app)
-	@if [ -z "$(DOMAIN)" ]; then \
-	        echo "$(RED)Error: DOMAIN parameter required$(NC)"; \
-	        echo "Usage: make warm-cache DOMAIN=stage.freedevtool.app"; \
-	        echo "   or: make warm-cache DOMAIN=freedevtool.app"; \
-	        exit 1; \
-	fi
-	@if [ "$(DOMAIN)" != "stage.freedevtool.app" ] && [ "$(DOMAIN)" != "freedevtool.app" ]; then \
-	        echo "$(RED)Error: Invalid DOMAIN '$(DOMAIN)'$(NC)"; \
-	        echo "Allowed domains:"; \
-	        echo "  - stage.freedevtool.app"; \
-	        echo "  - freedevtool.app"; \
-	        exit 1; \
-	fi
-	@echo "$(GREEN)Warming cache for https://$(DOMAIN)...$(NC)"
-	npx tsx scripts/warm-cache.ts https://$(DOMAIN)
-
 warm-cache-stage: ## Warm CloudFront cache for staging (shortcut for warm-cache DOMAIN=stage.freedevtool.app)
-	@$(MAKE) warm-cache DOMAIN=stage.freedevtool.app
+	npx tsx scripts/warm-cache.ts https://stage.freedevtool.app
 
 apply-cloudformation-stage:
 	aws cloudformation deploy \
@@ -219,6 +202,9 @@ deploy-to-production: invalidate-cloudfront-production
 
 warm-cache-prod: ## Warm CloudFront cache for production (shortcut for warm-cache DOMAIN=freedevtool.app)
 	@$(MAKE) warm-cache DOMAIN=freedevtool.app
+
+warm-cache-production:
+	npx tsx scripts/warm-cache.ts https://freedevtool.app
 
 apply-cloudformation-production:
 	aws cloudformation deploy \
