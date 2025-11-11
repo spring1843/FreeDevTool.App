@@ -8,7 +8,7 @@ Description: 'Staging Environment - S3 Static Website with CloudFront Distributi
 Mappings:
   Config:
     Route53:
-      HostedZoneId: 'Z1234567890ABC'  # REPLACE with your actual hosted zone ID
+      HostedZoneId: 'Z08420001ZIINIX60XR7X'
 
 Conditions:
   IsUsEast1: !Equals [!Ref 'AWS::Region', 'us-east-1']
