@@ -26,7 +26,7 @@ E2E_IMAGE_TAG:=${E2E_IMAGE}:${GIT_SHA_SHORT}
 E2E_IMAGE_USE:=${E2E_IMAGE}:e9c0ff7
 PWD:=$(shell pwd)
 STAGE_CLOUDFRONT_ID:=E2NUAU9IQEBYJ6
-PROD_CLOUDFRONT_ID:=E2NUAU9IQEBYJ6
+PROD_CLOUDFRONT_ID:=FOO
 
 ## Setup Commands
 
@@ -182,7 +182,7 @@ deploy-to-stage: copy-static-assets-to-stage
 
 apply-cloudformation-stage:
 	aws cloudformation deploy \
-		--template-file infra/cloudformation/production.yaml \
+		--template-file infra/cloudformation/stage.yaml \
 		--stack-name freedevtool-staging \
 		--region us-east-1 \
 		--no-fail-on-empty-changeset

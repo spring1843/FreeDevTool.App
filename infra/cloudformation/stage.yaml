@@ -41,11 +41,8 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: 'freedevtool-staging-website'
-      PublicAccessBlockConfiguration:
-        BlockPublicAcls: true
-        BlockPublicPolicy: true
-        IgnorePublicAcls: true
-        RestrictPublicBuckets: true
+      WebsiteConfiguration:  # Enable static hosting
+        IndexDocument: index.html
       VersioningConfiguration:
         Status: Enabled
       LifecycleConfiguration:
@@ -59,18 +56,7 @@ Resources:
         - Key: Project
           Value: freedevtool
 
-  # Origin Access Control for CloudFront (replaces legacy OAI)
-  CloudFrontOriginAccessControl:
-    Type: AWS::CloudFront::OriginAccessControl
-    Properties:
-      OriginAccessControlConfig:
-        Name: 'freedevtool-staging-oac'
-        OriginAccessControlOriginType: s3
-        SigningBehavior: always
-        SigningProtocol: sigv4
-        Description: 'OAC for freedevtool staging static website'
-
-  # S3 Bucket Policy - Allow CloudFront OAC to read objects
+  # S3 Bucket Policy - Public Website Hosting
   WebsiteBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
@@ -78,37 +64,31 @@ Resources:
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
-          - Sid: AllowCloudFrontServicePrincipalReadOnly
-            Effect: Allow
-            Principal:
-              Service: cloudfront.amazonaws.com
-            Action: s3:GetObject
-            Resource: !Sub '${WebsiteBucket.Arn}/*'
-            Condition:
-              StringEquals:
-                AWS:SourceArn: !Sub 'arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}'
+         - Sid: AllowPublicRead
+           Effect: Allow
+           Principal: '*'
+           Action: s3:GetObject
+           Resource: !Sub '${WebsiteBucket.Arn}/*'
 
   # CloudFront Distribution
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
-        Comment: 'freedevtool staging static website distribution'
+        Comment: 'freedevtool.app staging'
         Enabled: true
         HttpVersion: http2and3
         IPV6Enabled: true
         DefaultRootObject: index.html
         
-        # Custom Domain
         Aliases:
           - stage.freedevtool.app
         
-        # Origins
         Origins:
           - Id: S3Origin
-            DomainName: !GetAtt WebsiteBucket.RegionalDomainName
-            S3OriginConfig: {}
-            OriginAccessControlId: !Ref CloudFrontOriginAccessControl
+            DomainName: !Sub '${WebsiteBucket}.s3-website-${AWS::Region}.amazonaws.com'
+            CustomOriginConfig:
+              OriginProtocolPolicy: http-only
         
         # Default Cache Behavior
         DefaultCacheBehavior:
@@ -128,17 +108,6 @@ Resources:
           OriginRequestPolicyId: 88a5eaf4-2fd4-4709-b370-b4c650ea3fcf
           # Use AWS Managed Response Headers Policy - SecurityHeadersPolicy
           ResponseHeadersPolicyId: 67f7725c-6f97-4210-82d7-5512b31e9d03
-        
-        # Custom Error Responses for SPA routing
-        CustomErrorResponses:
-          - ErrorCode: 403
-            ResponseCode: 200
-            ResponsePagePath: /index.html
-            ErrorCachingMinTTL: 300
-          - ErrorCode: 404
-            ResponseCode: 200
-            ResponsePagePath: /index.html
-            ErrorCachingMinTTL: 300
         
         # Price Class - Use only North America and Europe for staging cost optimization
         PriceClass: PriceClass_100
