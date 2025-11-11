@@ -1,7 +1,7 @@
 # Development Makefile for DevTools Suite
 # Comprehensive development workflow management
 
-.PHONY: help setup start stop restart dev build lint lint-fix format type-check test clean deps install status health deploy prepare-deploy ci all apply-cloudformation-stage warm-cache-stage warm-cache-prod
+.PHONY: help setup start stop restart dev build lint lint-fix format type-check test clean deps install status health deploy prepare-deploy ci all apply-cloudformation-stage warm-cache warm-cache-stage warm-cache-prod
 
 # Default target
 .DEFAULT_GOAL := help
@@ -182,15 +182,32 @@ invalidate-cloudfront-stage:  copy-static-assets-to-stage
 
 deploy-to-stage: invalidate-cloudfront-stage
 
-warm-cache-stage: ## Warm CloudFront cache for staging (visit all pages)
-	npx tsx scripts/warm-cache.ts https://stage.freedevtool.app
+warm-cache: ## Warm CloudFront cache for any domain (Usage: make warm-cache DOMAIN=stage.freedevtool.app)
+	@if [ -z "$(DOMAIN)" ]; then \
+	        echo "$(RED)Error: DOMAIN parameter required$(NC)"; \
+	        echo "Usage: make warm-cache DOMAIN=stage.freedevtool.app"; \
+	        echo "   or: make warm-cache DOMAIN=freedevtool.app"; \
+	        exit 1; \
+	fi
+	@if [ "$(DOMAIN)" != "stage.freedevtool.app" ] && [ "$(DOMAIN)" != "freedevtool.app" ]; then \
+	        echo "$(RED)Error: Invalid DOMAIN '$(DOMAIN)'$(NC)"; \
+	        echo "Allowed domains:"; \
+	        echo "  - stage.freedevtool.app"; \
+	        echo "  - freedevtool.app"; \
+	        exit 1; \
+	fi
+	@echo "$(GREEN)Warming cache for https://$(DOMAIN)...$(NC)"
+	npx tsx scripts/warm-cache.ts https://$(DOMAIN)
+
+warm-cache-stage: ## Warm CloudFront cache for staging (shortcut for warm-cache DOMAIN=stage.freedevtool.app)
+	@$(MAKE) warm-cache DOMAIN=stage.freedevtool.app
 
 apply-cloudformation-stage:
 	aws cloudformation deploy \
-                --template-file infra/cloudformation/stage.yaml \
-                --stack-name freedevtool-staging \
-                --region us-east-1 \
-                --no-fail-on-empty-changeset
+	        --template-file infra/cloudformation/stage.yaml \
+	        --stack-name freedevtool-staging \
+	        --region us-east-1 \
+	        --no-fail-on-empty-changeset
 
 copy-static-assets-to-production: build-static
 	aws s3 sync ./dist/public s3://freedevtool-production
@@ -200,15 +217,15 @@ invalidate-cloudfront-production: copy-static-assets-to-production
 
 deploy-to-production: invalidate-cloudfront-production
 
-warm-cache-prod: ## Warm CloudFront cache for production (visit all pages)
-	npx tsx scripts/warm-cache.ts https://freedevtool.app
+warm-cache-prod: ## Warm CloudFront cache for production (shortcut for warm-cache DOMAIN=freedevtool.app)
+	@$(MAKE) warm-cache DOMAIN=freedevtool.app
 
 apply-cloudformation-production:
 	aws cloudformation deploy \
-                --template-file infra/cloudformation/production.yaml \
-                --stack-name freedevtool-production \
-                --region us-east-1 \
-                --no-fail-on-empty-changeset
+	        --template-file infra/cloudformation/production.yaml \
+	        --stack-name freedevtool-production \
+	        --region us-east-1 \
+	        --no-fail-on-empty-changeset
 
 ## Documentation
 
