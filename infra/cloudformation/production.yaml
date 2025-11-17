@@ -152,6 +152,54 @@ Resources:
         DNSName: !GetAtt CloudFrontDistribution.DomainName
         EvaluateTargetHealth: false
 
+  # IAM Role for CI/CD deployment
+  ProductionDeploymentRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: freedevtool-production-deployment-role
+      Description: 'Role for deploying static files to S3 and invalidating CloudFront cache in production'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+            Action: 'sts:AssumeRole'
+            Condition:
+              StringEquals:
+                'sts:ExternalId': 'freedevtool-production-deploy'
+      Policies:
+        - PolicyName: S3DeploymentPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              # Allow uploading and replacing files in the S3 bucket
+              - Effect: Allow
+                Action:
+                  - 's3:PutObject'
+                  - 's3:GetObject'
+                  - 's3:DeleteObject'
+                  - 's3:ListBucket'
+                Resource:
+                  - !Sub '${WebsiteBucket.Arn}'
+                  - !Sub '${WebsiteBucket.Arn}/*'
+        - PolicyName: CloudFrontInvalidationPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              # Allow invalidating CloudFront distribution cache
+              - Effect: Allow
+                Action:
+                  - 'cloudfront:CreateInvalidation'
+                  - 'cloudfront:GetInvalidation'
+                  - 'cloudfront:ListInvalidations'
+                Resource: !Sub 'arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}'
+      Tags:
+        - Key: Environment
+          Value: production
+        - Key: Purpose
+          Value: deployment
+
 Outputs:
   WebsiteBucketName:
     Description: 'S3 bucket name for uploading static files'
@@ -183,9 +231,18 @@ Outputs:
     Description: 'ACM certificate ARN for freedevtool.app'
     Value: !Ref SSLCertificate
   
+  ProductionDeploymentRoleArn:
+    Description: 'IAM Role ARN for production deployment (use with aws sts assume-role)'
+    Value: !GetAtt ProductionDeploymentRole.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-DeploymentRoleArn'
+  
   DeploymentCommands:
     Description: 'Commands to deploy your static site'
     Value: !Sub |
+      # Assume the deployment role:
+      aws sts assume-role --role-arn ${ProductionDeploymentRole.Arn} --role-session-name production-deploy --external-id freedevtool-production-deploy
+      
       # Sync files to S3:
       aws s3 sync ./dist/public/ s3://${WebsiteBucket} --delete --cache-control "public, max-age=31536000, immutable"
       

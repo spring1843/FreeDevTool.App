@@ -203,6 +203,7 @@ apply-cloudformation-stage:
 		--template-file infra/cloudformation/stage.yaml \
 		--stack-name freedevtool-staging \
 		--region us-east-1 \
+		--capabilities CAPABILITY_NAMED_IAM \
 		--no-fail-on-empty-changeset
 
 apply-cloudformation-production:
@@ -210,6 +211,7 @@ apply-cloudformation-production:
 		--template-file infra/cloudformation/production.yaml \
 		--stack-name freedevtool-production \
 		--region us-east-1 \
+		--capabilities CAPABILITY_NAMED_IAM \
 		--no-fail-on-empty-changeset
 
 ## Documentation
