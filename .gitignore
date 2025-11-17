@@ -8,3 +8,4 @@ vite.config.ts.*
 test-results
 playwright-report
 attached_assets
+.replit
