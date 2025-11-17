@@ -4,6 +4,7 @@ import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Link, Unlink, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_URL_ENCODER } from "@/data/defaults";
@@ -12,6 +13,7 @@ export default function URLEncoder() {
   const [plainText, setPlainText] = useState(DEFAULT_URL_ENCODER);
   const [encodedText, setEncodedText] = useState("");
   const { theme } = useTheme();
+  const { toast } = useToast();
 
   const encodeURL = useCallback(() => {
     try {
@@ -23,14 +25,43 @@ export default function URLEncoder() {
     }
   }, [plainText]);
 
+  const handleEncodeClick = () => {
+    try {
+      const encoded = encodeURIComponent(plainText);
+      setEncodedText(encoded);
+      toast({
+        title: "URL encoded successfully",
+        description: "Plain text has been converted to URL-safe format",
+      });
+    } catch (error: unknown) {
+      console.error("Encoding error:", error);
+      setEncodedText("Error: Invalid input for URL encoding");
+      toast({
+        title: "Encoding failed",
+        description: "Could not encode the URL",
+        variant: "destructive",
+      });
+    }
+  };
+
   const decodeURL = () => {
     try {
       const decoded = decodeURIComponent(encodedText);
       setPlainText(decoded);
+      toast({
+        title: "URL decoded successfully",
+        description: "Encoded text has been converted back to plain text",
+      });
     } catch (error: unknown) {
       setPlainText(
         `Error: Invalid input for URL decoding: ${error instanceof Error ? error.message : "Unknown error"}`
       );
+      toast({
+        title: "Decoding failed",
+        description:
+          error instanceof Error ? error.message : "Could not decode the URL",
+        variant: "destructive",
+      });
     }
   };
 
@@ -43,9 +74,6 @@ export default function URLEncoder() {
 
   const handleEncodedTextChange = (value: string) => {
     setEncodedText(value);
-    if (plainText !== DEFAULT_URL_ENCODER) {
-      setPlainText("");
-    }
   };
 
   const handleReset = () => {
@@ -75,7 +103,7 @@ export default function URLEncoder() {
 
       <div className="mb-6 flex gap-3">
         <Button
-          onClick={encodeURL}
+          onClick={handleEncodeClick}
           className="bg-blue-600 hover:bg-blue-700 text-white"
         >
           <Link className="w-4 h-4 mr-2" />

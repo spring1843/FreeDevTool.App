@@ -1,15 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Copy,
-  Monitor,
-  Globe,
-  HardDrive,
-  Cpu,
-  RefreshCw,
-  RotateCcw,
-} from "lucide-react";
+import { Copy, Monitor, Globe, HardDrive, Cpu, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface BrowserInfo {
@@ -272,6 +264,10 @@ export default function BrowserInfo() {
     setBrowserInfo(newInfo);
     setLastUpdated(new Date());
     setRefreshCount(prev => prev + 1);
+    toast({
+      title: "Browser information refreshed",
+      description: "All browser data has been updated successfully",
+    });
   };
 
   useEffect(() => {
@@ -376,14 +372,6 @@ export default function BrowserInfo() {
               >
                 <Copy className="w-4 h-4" />
                 <span>Copy All</span>
-              </Button>
-              <Button
-                onClick={refreshInfo}
-                variant="outline"
-                size="sm"
-                data-testid="reset-browser-info-button"
-              >
-                <RotateCcw className="w-4 h-4" />
               </Button>
             </div>
           </CardTitle>
