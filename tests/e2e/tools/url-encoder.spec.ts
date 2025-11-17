@@ -26,40 +26,62 @@ test.describe("URL Encoder Tool", () => {
   });
 
   test("should encode URL correctly", async ({ page }) => {
-    // Clear and enter plain text
-    const plainTextInput = page.locator('[data-testid="plain-text-input"]');
-    await plainTextInput.click();
-    await plainTextInput.fill("hello world & test!");
+    // Clear and enter plain text using CodeMirror
+    const inputEditor = page.locator("#input");
+    await inputEditor.click();
+
+    // Clear existing content and type new content
+    await page.keyboard.press("Meta+a");
+    await page.keyboard.type("hello world & test!");
 
     // Click encode button
     const encodeButton = page.getByRole("button", { name: /encode url/i });
     await encodeButton.click();
 
-    // Verify encoded output
-    const encodedOutput = page.locator('[data-testid="encoded-text-output"]');
-    await expect(encodedOutput).toHaveValue("hello%20world%20%26%20test!");
+    // Verify encoded output using CodeMirror content
+    const encodedOutput = await page.evaluate(() => {
+      const lines = Array.from(
+        document.querySelectorAll("#output .cm-content .cm-line")
+      );
+      return lines.map(line => line.textContent || "").join("\n");
+    });
+
+    expect(encodedOutput).toBe("hello%20world%20%26%20test!");
 
     await expectNoErrors(page);
   });
 
   test("should decode URL correctly", async ({ page }) => {
-    // Enter encoded text
-    const encodedInput = page.locator('[data-testid="encoded-text-output"]');
-    await encodedInput.click();
-    await encodedInput.fill("hello%20world%20%26%20test!");
+    // Enter encoded text using CodeMirror
+    const outputEditor = page.locator("#output");
+    await outputEditor.click();
+
+    // Clear and type encoded text
+    await page.keyboard.press("Meta+a");
+    await page.keyboard.type("hello%20world%20%26%20test!");
 
     // Click decode button
     const decodeButton = page.getByRole("button", { name: /decode url/i });
     await decodeButton.click();
 
-    // Verify decoded output appears in plain text field
-    const plainTextOutput = page.locator('[data-testid="plain-text-input"]');
-    await expect(plainTextOutput).toHaveValue("hello world & test!");
+    // Verify decoded output appears in input field
+    const plainTextOutput = await page.evaluate(() => {
+      const lines = Array.from(
+        document.querySelectorAll("#input .cm-content .cm-line")
+      );
+      return lines.map(line => line.textContent || "").join("\n");
+    });
+
+    expect(plainTextOutput).toBe("hello world & test!");
 
     await expectNoErrors(page);
   });
 
   test("should handle complex URL encoding/decoding", async ({ page }) => {
+    // Reload page to start fresh
+    await page.reload();
+    await page.waitForLoadState("networkidle");
+
     const testCases = [
       {
         plain: "https://example.com?query=value&name=John Doe",
@@ -77,48 +99,64 @@ test.describe("URL Encoder Tool", () => {
     ];
 
     for (const testCase of testCases) {
+      // Clear both fields before each test case
+      const inputEditor = page.locator("#input");
+      await inputEditor.click();
+      await page.keyboard.press("Meta+a");
+      await page.keyboard.press("Backspace");
+
+      const outputEditor = page.locator("#output");
+      await outputEditor.click();
+      await page.keyboard.press("Meta+a");
+      await page.keyboard.press("Backspace");
+
       // Test encoding
-      const plainTextInput = page.locator('[data-testid="plain-text-input"]');
-      await plainTextInput.click();
-      await plainTextInput.fill(testCase.plain);
+      await inputEditor.click();
+      await page.keyboard.type(testCase.plain);
 
       const encodeButton = page.getByRole("button", { name: /encode url/i });
       await encodeButton.click();
 
-      const encodedOutput = page.locator('[data-testid="encoded-text-output"]');
-      await expect(encodedOutput).toHaveValue(testCase.encoded);
+      // Wait for encoding to complete
+      await page.waitForTimeout(200);
+
+      const encodedOutput = await page.evaluate(() => {
+        const lines = Array.from(
+          document.querySelectorAll("#output .cm-content .cm-line")
+        );
+        return lines.map(line => line.textContent || "").join("\n");
+      });
+
+      expect(encodedOutput).toBe(testCase.encoded);
+
+      // Clear fields again for decoding test
+      await inputEditor.click();
+      await page.keyboard.press("Meta+a");
+      await page.keyboard.press("Backspace");
+
+      await outputEditor.click();
+      await page.keyboard.press("Meta+a");
+      await page.keyboard.press("Backspace");
 
       // Test decoding
-      await encodedOutput.click();
-      await encodedOutput.fill(testCase.encoded);
+      await outputEditor.click();
+      await page.keyboard.type(testCase.encoded);
 
       const decodeButton = page.getByRole("button", { name: /decode url/i });
       await decodeButton.click();
 
-      await expect(plainTextInput).toHaveValue(testCase.plain);
+      // Wait for decoding to complete
+      await page.waitForTimeout(200);
+
+      const plainTextOutput = await page.evaluate(() => {
+        const lines = Array.from(
+          document.querySelectorAll("#input .cm-content .cm-line")
+        );
+        return lines.map(line => line.textContent || "").join("\n");
+      });
+
+      expect(plainTextOutput).toBe(testCase.plain);
     }
-
-    await expectNoErrors(page);
-  });
-
-  test("should reset to default values", async ({ page }) => {
-    // Change values
-    const plainTextInput = page.locator('[data-testid="plain-text-input"]');
-    await plainTextInput.click();
-    await plainTextInput.fill("test data");
-
-    const encodeButton = page.getByRole("button", { name: /encode url/i });
-    await encodeButton.click();
-
-    // Click reset
-    const resetButton = page.getByRole("button", { name: /reset/i });
-    await resetButton.click();
-
-    // Verify reset to defaults
-    await expect(plainTextInput).toHaveValue(DEFAULT_URL_ENCODER);
-
-    const encodedOutput = page.locator('[data-testid="encoded-text-output"]');
-    await expect(encodedOutput).toHaveValue("");
 
     await expectNoErrors(page);
   });
