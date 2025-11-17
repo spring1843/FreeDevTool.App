@@ -10,10 +10,6 @@ deploymentTarget = "cloudrun"
 build = ["sh", "-c", "make build"]
 run = ["sh", "-c", "npm start"]
 
-[[ports]]
-localPort = 46623
-externalPort = 3001
-
 [env]
 PORT = "9500"
 
@@ -37,3 +33,7 @@ author = "agent"
 task = "shell.exec"
 args = "npm run dev"
 waitForPort = 9500
+
+[[ports]]
+localPort = 3000
+externalPort = 80
