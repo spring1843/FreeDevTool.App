@@ -89,6 +89,9 @@ build-static: clean
 build-image: ## Build the Docker image for the app
 	docker build --platform linux/amd64 -t ${IMAGE_TAG} -f infra/images/Dockerfile .
 
+run-image: build-image ## Run the Docker image locally on port 9090
+	docker run --rm -p 9090:9090 ${IMAGE_TAG}
+
 build-and-push-image: build-image # Build and push the Docker image for the app
 	docker push ${IMAGE_TAG}
 

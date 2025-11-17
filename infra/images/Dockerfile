@@ -24,16 +24,8 @@ RUN rm -rf ./*
 # Copy built static files from builder
 COPY --from=builder /app/dist/public ./
 
-# Copy entrypoint script
-COPY infra/images/runtime-files/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY infra/images/runtime-files/nginx.conf /etc/nginx/nginx.conf
 
-# Default port (can be overridden with -e PORT=xxxx)
-ENV PORT=9090
+EXPOSE 9090
 
-EXPOSE ${PORT}
-
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD wget --quiet --tries=1 --spider http://localhost:${PORT}/health || exit 1
-
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
