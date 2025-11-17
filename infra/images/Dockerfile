@@ -12,24 +12,28 @@ RUN make deps
 
 COPY . .
 
-RUN make build
+RUN make build-static
 
-FROM node:24
+FROM nginx:alpine
 
-WORKDIR /app
+WORKDIR /usr/share/nginx/html
 
-COPY package*.json ./
-COPY Makefile ./
-RUN make deps
+# Remove default nginx static assets
+RUN rm -rf ./*
 
-COPY --from=builder /app/dist ./dist
+# Copy built static files from builder
+COPY --from=builder /app/dist/public ./
 
-EXPOSE 9500
+# Copy entrypoint script
+COPY infra/images/runtime-files/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-ENV NODE_ENV=production
-ENV PORT=9500
+# Default port (can be overridden with -e PORT=xxxx)
+ENV PORT=9090
+
+EXPOSE ${PORT}
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:9500', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
+  CMD wget --quiet --tries=1 --spider http://localhost:${PORT}/health || exit 1
 
-ENTRYPOINT ["node", "dist/index.js"]
+ENTRYPOINT ["/entrypoint.sh"]
