@@ -19,7 +19,7 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: "assets/favicon-32x32.png",
+          src: "assets/*.png",
           dest: "assets",
         },
         {
@@ -48,6 +48,20 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        assetFileNames: assetInfo => {
+          // Don't hash icon/favicon files - preserve original names
+          if (
+            assetInfo.names?.[0]?.match(/\.(png|ico)$/) &&
+            assetInfo.names[0].match(/favicon|apple-touch-icon|android-chrome/)
+          ) {
+            return "assets/[name][extname]";
+          }
+          return "assets/[name]-[hash][extname]";
+        },
+      },
+    },
   },
   server: {
     fs: {
