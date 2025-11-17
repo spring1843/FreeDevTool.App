@@ -9,6 +9,9 @@ Mappings:
   Config:
     Route53:
       HostedZoneId: 'Z08420001ZIINIX60XR7X'
+    GitHub:
+      Organization: 'spring1843'
+      Repository: 'freedevtool.app'
 
 Conditions:
   IsUsEast1: !Equals [!Ref 'AWS::Region', 'us-east-1']
@@ -157,17 +160,23 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       RoleName: freedevtool-stage-deployment-role
-      Description: 'Role for deploying static files to S3 and invalidating CloudFront cache in staging'
+      Description: 'Role for deploying static files to S3 and invalidating CloudFront cache in staging from GitHub Actions'
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
+          # Allow GitHub Actions to assume this role via OIDC (using production's OIDC provider)
           - Effect: Allow
             Principal:
-              AWS: !Sub 'arn:aws:iam::${AWS::AccountId}:root'
-            Action: 'sts:AssumeRole'
+              Federated: !Sub 'arn:aws:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com'
+            Action: 'sts:AssumeRoleWithWebIdentity'
             Condition:
               StringEquals:
-                'sts:ExternalId': 'freedevtool-stage-deploy'
+                'token.actions.githubusercontent.com:aud': 'sts.amazonaws.com'
+              StringLike:
+                'token.actions.githubusercontent.com:sub': !Sub
+                  - 'repo:${Org}/${Repo}:ref:refs/heads/main'
+                  - Org: !FindInMap [Config, GitHub, Organization]
+                    Repo: !FindInMap [Config, GitHub, Repository]
       Policies:
         - PolicyName: S3DeploymentPolicy
           PolicyDocument:
@@ -230,7 +239,7 @@ Outputs:
     Value: !Ref SSLCertificate
   
   StageDeploymentRoleArn:
-    Description: 'IAM Role ARN for staging deployment (use with aws sts assume-role)'
+    Description: 'IAM Role ARN for staging deployment (use with GitHub Actions OIDC)'
     Value: !GetAtt StageDeploymentRole.Arn
     Export:
       Name: !Sub '${AWS::StackName}-DeploymentRoleArn'
@@ -238,11 +247,15 @@ Outputs:
   DeploymentCommands:
     Description: 'Commands to deploy your static site'
     Value: !Sub |
-      # Assume the deployment role:
-      aws sts assume-role --role-arn ${StageDeploymentRole.Arn} --role-session-name stage-deploy --external-id freedevtool-stage-deploy
+      # GitHub Actions will automatically assume this role using OIDC
+      # No manual credential configuration needed!
 
-      # Sync files to S3:
-      aws s3 sync ./dist/public/ s3://${WebsiteBucket} --delete --cache-control "public, max-age=31536000, immutable"
+      # For manual deployment, you can still use:
+      # aws s3 sync ./dist/public/ s3://${WebsiteBucket} --delete --cache-control "public, max-age=31536000, immutable"
+      # aws cloudfront create-invalidation --distribution-id ${CloudFrontDistribution} --paths "/*"
       
-      # Invalidate CloudFront cache:
-      aws cloudfront create-invalidation --distribution-id ${CloudFrontDistribution} --paths "/*"
+      # GitHub Actions workflow configuration:
+      # - uses: aws-actions/configure-aws-credentials@v5
+      #   with:
+      #     role-to-assume: ${StageDeploymentRole.Arn}
+      #     aws-region: us-east-1
