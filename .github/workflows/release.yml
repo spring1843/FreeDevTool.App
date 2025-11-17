@@ -157,4 +157,4 @@ jobs:
         run: make deploy-to-production
 
       - name: Preload Production Cache
-        run: make warm-cache DOMAIN=freedevtool.app
+        run: make warm-cache-production
