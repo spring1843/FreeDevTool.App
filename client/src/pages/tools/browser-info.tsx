@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Copy,
-  Monitor,
-  Globe,
-  HardDrive,
-  Cpu,
-  RefreshCw,
-} from "lucide-react";
+import { Copy, Monitor, Globe, HardDrive, Cpu, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface BrowserInfo {
