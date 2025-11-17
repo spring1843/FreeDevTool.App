@@ -86,6 +86,8 @@ jobs:
           echo "" >> ${CHANGELOG_FILE}
           echo "---" >> ${CHANGELOG_FILE}
           echo "" >> ${CHANGELOG_FILE}
+          echo "## 🐳 Run Locally" >> ${CHANGELOG_FILE}
+          echo "Using Docker: `docker run -p 9090:9090 ghcr.io/spring1843/freedevtool.app/app:${CURRENT_TAG}`" >> ${CHANGELOG_FILE}
           echo "## 📦 Installation" >> ${CHANGELOG_FILE}
           echo "" >> ${CHANGELOG_FILE}
           echo '1. Download `freedevtool-app.tar.gz` or `freedevtool-app.zip`' >> ${CHANGELOG_FILE}
