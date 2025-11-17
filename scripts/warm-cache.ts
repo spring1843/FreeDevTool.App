@@ -32,6 +32,7 @@ interface AssetResult {
   url: string;
   success: boolean;
   time: number;
+  cacheStatus?: string;
 }
 
 async function fetchWithTimeout(
@@ -108,15 +109,21 @@ async function extractAssetUrls(
   return Array.from(urls);
 }
 
-async function warmAsset(url: string, timeout: number): Promise<AssetResult> {
+async function warmAsset(
+  url: string,
+  timeout: number,
+  verifyCache = false
+): Promise<AssetResult> {
   const startTime = Date.now();
   try {
     const response = await fetchWithTimeout(url, timeout);
     const time = Date.now() - startTime;
+    const cacheStatus = response.headers.get("x-cache") || "Unknown";
     return {
       url,
       success: response.ok,
       time,
+      cacheStatus: verifyCache ? cacheStatus : undefined,
     };
   } catch {
     const time = Date.now() - startTime;
@@ -132,7 +139,9 @@ async function warmPage(
   url: string,
   options: WarmCacheOptions,
   downloadedAssets: Set<string>,
-  downloadedPages: Set<string>
+  downloadedPages: Set<string>,
+  cacheMisses: string[],
+  verifyCache = false
 ): Promise<PageResult> {
   const startTime = Date.now();
 
@@ -142,6 +151,14 @@ async function warmPage(
       const time = Date.now() - startTime;
 
       if (response.ok) {
+        // Check cache status for verification round
+        if (verifyCache) {
+          const cacheStatus = response.headers.get("x-cache") || "";
+          if (!cacheStatus.toLowerCase().includes("hit from cloudfront")) {
+            cacheMisses.push(url);
+          }
+        }
+
         // Mark page as downloaded
         downloadedPages.add(url);
 
@@ -156,8 +173,24 @@ async function warmPage(
 
         // Warm cache for new assets in parallel
         const assetResults = await Promise.all(
-          newAssets.map(assetUrl => warmAsset(assetUrl, options.timeout))
+          newAssets.map(assetUrl =>
+            warmAsset(assetUrl, options.timeout, verifyCache)
+          )
         );
+
+        // Check cache status for assets in verification round
+        if (verifyCache) {
+          for (const assetResult of assetResults) {
+            if (
+              assetResult.cacheStatus &&
+              !assetResult.cacheStatus
+                .toLowerCase()
+                .includes("hit from cloudfront")
+            ) {
+              cacheMisses.push(assetResult.url);
+            }
+          }
+        }
 
         // Mark assets as downloaded
         newAssets.forEach(assetUrl => downloadedAssets.add(assetUrl));
@@ -228,27 +261,42 @@ interface WarmCacheResult {
   pageResults: PageResult[];
   downloadedAssets: Set<string>;
   downloadedPages: Set<string>;
+  cacheMisses: string[];
 }
 
 async function warmCacheInBatches(
   urls: string[],
-  options: WarmCacheOptions
+  options: WarmCacheOptions,
+  verifyCache = false
 ): Promise<WarmCacheResult> {
   const results: PageResult[] = [];
   const downloadedAssets = new Set<string>();
   const downloadedPages = new Set<string>();
+  const cacheMisses: string[] = [];
 
   for (let i = 0; i < urls.length; i += options.concurrency) {
     const batch = urls.slice(i, i + options.concurrency);
     const batchResults = await Promise.all(
       batch.map(url =>
-        warmPage(url, options, downloadedAssets, downloadedPages)
+        warmPage(
+          url,
+          options,
+          downloadedAssets,
+          downloadedPages,
+          cacheMisses,
+          verifyCache
+        )
       )
     );
     results.push(...batchResults);
   }
 
-  return { pageResults: results, downloadedAssets, downloadedPages };
+  return {
+    pageResults: results,
+    downloadedAssets,
+    downloadedPages,
+    cacheMisses,
+  };
 }
 
 function getAllPageUrls(baseUrl: string): string[] {
@@ -271,7 +319,8 @@ function getAllPageUrls(baseUrl: string): string[] {
 function printResults(
   results: PageResult[],
   downloadedAssets: Set<string>,
-  downloadedPages: Set<string>
+  downloadedPages: Set<string>,
+  cacheMisses: string[]
 ): void {
   const successful = results.filter(r => r.success);
   const failed = results.filter(r => !r.success);
@@ -310,6 +359,15 @@ function printResults(
     failed.forEach(result => {
       console.warn(`  ✗ ${result.url}`);
       console.warn(`    Error: ${result.error || "Unknown error"}`);
+    });
+  }
+
+  if (cacheMisses.length > 0) {
+    console.warn(
+      `\n⚠️  Cache Misses (${cacheMisses.length} resources not cached by CloudFront):`
+    );
+    cacheMisses.sort().forEach(resource => {
+      console.warn(`  ✗ ${resource}`);
     });
   }
 
@@ -357,17 +415,39 @@ async function main() {
   const urls = getAllPageUrls(baseUrl);
   console.warn(`\nFound ${urls.length} pages to warm\n`);
 
+  // First pass: warm the cache
+  console.warn("=".repeat(80));
+  console.warn("ROUND 1: Warming cache...");
+  console.warn("=".repeat(80));
+
   const startTime = Date.now();
-  const { pageResults, downloadedAssets, downloadedPages } =
-    await warmCacheInBatches(urls, options);
+  const firstPass = await warmCacheInBatches(urls, options, false);
+  const firstPassTime = Date.now() - startTime;
+
+  console.warn(`\nRound 1 complete in ${(firstPassTime / 1000).toFixed(1)}s`);
+  console.warn(
+    `Cached ${firstPass.downloadedPages.size} pages and ${firstPass.downloadedAssets.size} assets\n`
+  );
+
+  // Second pass: verify cache hits
+  console.warn("=".repeat(80));
+  console.warn("ROUND 2: Verifying cache hits...");
+  console.warn("=".repeat(80));
+
+  const verifyStartTime = Date.now();
+  const { pageResults, downloadedAssets, downloadedPages, cacheMisses } =
+    await warmCacheInBatches(urls, options, true);
+  const verifyTime = Date.now() - verifyStartTime;
   const totalTime = Date.now() - startTime;
 
-  printResults(pageResults, downloadedAssets, downloadedPages);
+  console.warn(`\nRound 2 complete in ${(verifyTime / 1000).toFixed(1)}s`);
+
+  printResults(pageResults, downloadedAssets, downloadedPages, cacheMisses);
   console.warn(`Total time: ${(totalTime / 1000).toFixed(1)}s\n`);
 
-  // Exit with error code if any pages failed
+  // Exit with error code if any pages failed or cache misses found
   const failed = pageResults.filter(r => !r.success);
-  process.exit(failed.length > 0 ? 1 : 0);
+  process.exit(failed.length > 0 || cacheMisses.length > 0 ? 1 : 0);
 }
 
 main().catch(error => {
