@@ -8,7 +8,6 @@ import {
   HardDrive,
   Cpu,
   RefreshCw,
-  RotateCcw,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -272,6 +271,10 @@ export default function BrowserInfo() {
     setBrowserInfo(newInfo);
     setLastUpdated(new Date());
     setRefreshCount(prev => prev + 1);
+    toast({
+      title: "Browser information refreshed",
+      description: "All browser data has been updated successfully",
+    });
   };
 
   useEffect(() => {
@@ -376,14 +379,6 @@ export default function BrowserInfo() {
               >
                 <Copy className="w-4 h-4" />
                 <span>Copy All</span>
-              </Button>
-              <Button
-                onClick={refreshInfo}
-                variant="outline"
-                size="sm"
-                data-testid="reset-browser-info-button"
-              >
-                <RotateCcw className="w-4 h-4" />
               </Button>
             </div>
           </CardTitle>
