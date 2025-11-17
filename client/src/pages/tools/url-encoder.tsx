@@ -58,7 +58,8 @@ export default function URLEncoder() {
       );
       toast({
         title: "Decoding failed",
-        description: error instanceof Error ? error.message : "Could not decode the URL",
+        description:
+          error instanceof Error ? error.message : "Could not decode the URL",
         variant: "destructive",
       });
     }
