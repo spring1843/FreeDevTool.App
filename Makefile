@@ -17,6 +17,8 @@ GIT_TAG:=$(shell git describe --tags --abbrev=7 --always HEAD)
 GIT_SHA:=$(shell git rev-parse HEAD)
 GIT_SHA_SHORT:=$(shell git rev-parse --short HEAD)
 
+AWS_PAGER=""
+
 # Image tags
 IMAGE_REPO:=ghcr.io/spring1843/freedevtool.app
 IMAGE=${IMAGE_REPO}/app
@@ -178,7 +180,8 @@ copy-static-assets-to-stage:
 	aws s3 sync ./dist/public s3://freedevtool-staging
 
 invalidate-stage-cdn:
-	aws cloudfront create-invalidation --distribution-id ${STAGE_CLOUDFRONT_ID} --paths "/*"
+	INVALIDATION_ID=$$(aws cloudfront create-invalidation --distribution-id ${STAGE_CLOUDFRONT_ID} --paths "/*" --query 'Invalidation.Id' --output text); \
+	aws cloudfront wait invalidation-completed --distribution-id ${STAGE_CLOUDFRONT_ID} --id $$INVALIDATION_ID
 
 warm-cache-stage: ## Warm CloudFront cache for staging (shortcut for warm-cache DOMAIN=stage.freedevtool.app)
 	npx tsx scripts/warm-cache.ts https://stage.freedevtool.app
@@ -189,7 +192,8 @@ copy-static-assets-to-production:
 	aws s3 sync ./dist/public s3://freedevtool-production
 
 invalidate-production-cdn:
-	aws cloudfront create-invalidation --distribution-id ${PROD_CLOUDFRONT_ID} --paths "/*"
+	INVALIDATION_ID=$$(aws cloudfront create-invalidation --distribution-id ${PROD_CLOUDFRONT_ID} --paths "/*" --query 'Invalidation.Id' --output text); \
+	aws cloudfront wait invalidation-completed --distribution-id ${PROD_CLOUDFRONT_ID} --id $$INVALIDATION_ID
 
 warm-cache-production:
 	npx tsx scripts/warm-cache.ts https://freedevtool.app
