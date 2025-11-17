@@ -193,7 +193,7 @@ Resources:
                 'token.actions.githubusercontent.com:aud': 'sts.amazonaws.com'
               StringLike:
                 'token.actions.githubusercontent.com:sub': !Sub
-                  - 'repo:${Org}/${Repo}:ref:refs/heads/main'
+                  - 'repo:${Org}/${Repo}:ref:refs/tags/*'
                   - Org: !FindInMap [Config, GitHub, Organization]
                     Repo: !FindInMap [Config, GitHub, Repository]
       Policies:

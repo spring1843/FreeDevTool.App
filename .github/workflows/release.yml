@@ -155,6 +155,3 @@ jobs:
 
       - name: Deploy to Production
         run: make deploy-to-production
-
-      - name: Preload Production Cache
-        run: make warm-cache-production
