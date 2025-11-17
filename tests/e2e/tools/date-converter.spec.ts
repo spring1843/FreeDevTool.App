@@ -27,28 +27,14 @@ test.describe("Date Converter Tool", () => {
     await input.clear();
     await input.fill("-1000000000");
 
-    // Click convert button
-    await page.getByTestId("convert-button").click();
-
-    // Wait for conversion to complete
-    await page.waitForTimeout(500);
+    // Wait for auto-conversion to complete (auto-update is enabled by default)
+    await page.waitForTimeout(1000);
 
     // Verify no error is shown
     await expect(page.getByText("Invalid date input")).not.toBeVisible();
 
-    // Verify the ISO format shows 1938
-    const isoFormatSection = page.locator("text=ISO 8601").first();
-    await expect(isoFormatSection).toBeVisible();
-
-    // Check that 1938 appears in the converted output
-    await expect(page.locator("text=/1938/")).toBeVisible();
-
-    // Verify the Unix timestamp conversion (should match the input)
-    const unixTimestampValue = page
-      .locator('[class*="font-mono"]')
-      .filter({ hasText: "-1000000000" })
-      .first();
-    await expect(unixTimestampValue).toBeVisible();
+    // Verify the ISO format shows 1938-04-24 (the correct date for -1000000000)
+    await expect(page.getByText("1938-04-24T22:13:20.000Z")).toBeVisible();
   });
 
   test("should convert negative Unix timestamp -1 correctly", async ({
@@ -59,17 +45,14 @@ test.describe("Date Converter Tool", () => {
     await input.clear();
     await input.fill("-0000000001");
 
-    // Click convert button
-    await page.getByTestId("convert-button").click();
-
-    // Wait for conversion to complete
-    await page.waitForTimeout(500);
+    // Wait for auto-conversion to complete
+    await page.waitForTimeout(1000);
 
     // Verify no error is shown
     await expect(page.getByText("Invalid date input")).not.toBeVisible();
 
-    // Check that 1969 appears in the converted output (one second before 1970)
-    await expect(page.locator("text=/1969/")).toBeVisible();
+    // Check that the correct date appears (1969-12-31T23:59:59.000Z)
+    await expect(page.getByText("1969-12-31T23:59:59.000Z")).toBeVisible();
   });
 
   test("should convert positive Unix timestamp correctly (baseline)", async ({
@@ -80,16 +63,13 @@ test.describe("Date Converter Tool", () => {
     await input.clear();
     await input.fill("1699123456");
 
-    // Click convert button
-    await page.getByTestId("convert-button").click();
-
-    // Wait for conversion to complete
-    await page.waitForTimeout(500);
+    // Wait for auto-conversion to complete
+    await page.waitForTimeout(1000);
 
     // Verify no error is shown
     await expect(page.getByText("Invalid date input")).not.toBeVisible();
 
-    // Check that 2023 appears in the converted output
-    await expect(page.locator("text=/2023/")).toBeVisible();
+    // Check that the correct date appears (2023-11-04T18:44:16.000Z)
+    await expect(page.getByText("2023-11-04T18:44:16.000Z")).toBeVisible();
   });
 });
