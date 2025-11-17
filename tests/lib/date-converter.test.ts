@@ -2,13 +2,13 @@ import { describe, it, expect } from "vitest";
 
 // Test the date converter functions directly from the component
 const parseInputDate = (input: string): Date | null => {
-  // Try Unix timestamp (seconds)
-  if (/^\d{10}$/.test(input)) {
+  // Try Unix timestamp (seconds) - supports negative values for pre-epoch dates
+  if (/^-?\d{10}$/.test(input)) {
     return new Date(parseInt(input) * 1000);
   }
 
-  // Try Unix timestamp (milliseconds)
-  if (/^\d{13}$/.test(input)) {
+  // Try Unix timestamp (milliseconds) - supports negative values for pre-epoch dates
+  if (/^-?\d{13}$/.test(input)) {
     return new Date(parseInt(input));
   }
 
@@ -335,6 +335,34 @@ describe("Date Converter with Practical Formats", () => {
       const result = parseInputDate("1699123456000");
       expect(result).toBeInstanceOf(Date);
       expect(result!.getFullYear()).toBe(2023);
+    });
+
+    it("should parse negative Unix timestamp (seconds) for pre-epoch dates", () => {
+      const result = parseInputDate("-1000000000");
+      expect(result).toBeInstanceOf(Date);
+      expect(result!.getFullYear()).toBe(1938);
+      expect(result!.getUTCMonth()).toBe(3); // April (0-indexed)
+      expect(result!.getUTCDate()).toBe(24);
+      expect(result!.getUTCHours()).toBe(22);
+      expect(result!.getUTCMinutes()).toBe(13);
+      expect(result!.getUTCSeconds()).toBe(20);
+    });
+
+    it("should parse negative Unix timestamp (milliseconds) for pre-epoch dates", () => {
+      const result = parseInputDate("-1000000000000");
+      expect(result).toBeInstanceOf(Date);
+      expect(result!.getFullYear()).toBe(1938);
+    });
+
+    it("should parse -1 Unix timestamp (one second before epoch)", () => {
+      const result = parseInputDate("-0000000001");
+      expect(result).toBeInstanceOf(Date);
+      expect(result!.getFullYear()).toBe(1969);
+      expect(result!.getUTCMonth()).toBe(11); // December
+      expect(result!.getUTCDate()).toBe(31);
+      expect(result!.getUTCHours()).toBe(23);
+      expect(result!.getUTCMinutes()).toBe(59);
+      expect(result!.getUTCSeconds()).toBe(59);
     });
 
     it("should parse ISO 8601 format", () => {
