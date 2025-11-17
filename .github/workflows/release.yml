@@ -18,7 +18,6 @@ jobs:
       contents: write
       pages: write
       packages: write
-      id-token: write
 
     name: Build and Release
     runs-on: ubuntu-latest

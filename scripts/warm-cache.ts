@@ -142,6 +142,7 @@ function getAllPageUrls(baseUrl: string): string[] {
   for (const category of Object.values(toolsData)) {
     for (const tool of category.tools) {
       urls.push(`${baseUrl}${tool.path}`);
+      urls.push(`${baseUrl}${tool.path}/`);
     }
   }
 

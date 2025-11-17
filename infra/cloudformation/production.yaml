@@ -9,9 +9,6 @@ Mappings:
   Config:
     Route53:
       HostedZoneId: 'Z08420001ZIINIX60XR7X'
-    GitHub:
-      Organization: 'spring1843'
-      Repository: 'freedevtool.app'
 
 Conditions:
   IsUsEast1: !Equals [!Ref 'AWS::Region', 'us-east-1']
@@ -192,10 +189,7 @@ Resources:
               StringEquals:
                 'token.actions.githubusercontent.com:aud': 'sts.amazonaws.com'
               StringLike:
-                'token.actions.githubusercontent.com:sub': !Sub
-                  - 'repo:${Org}/${Repo}:ref:refs/tags/*'
-                  - Org: !FindInMap [Config, GitHub, Organization]
-                    Repo: !FindInMap [Config, GitHub, Repository]
+                'token.actions.githubusercontent.com:sub': !Sub 'repo:spring1843/FreeDevTool.App:ref:refs/tags/v*'
       Policies:
         - PolicyName: S3DeploymentPolicy
           PolicyDocument:
