@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { FileText, Copy, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
+import { useToast } from "@/hooks/use-toast";
 
 const loremWords = [
   "lorem",
@@ -106,6 +107,7 @@ export default function LoremGenerator() {
   const [startWithLorem, setStartWithLorem] = useState(true);
   const [generated, setGenerated] = useState("");
   const { theme } = useTheme();
+  const { toast } = useToast();
 
   const generateRandom = () => {
     const randomIndex = Math.floor(Math.random() * loremWords.length);
@@ -219,8 +221,17 @@ export default function LoremGenerator() {
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(generated);
+      toast({
+        title: "Copied to clipboard",
+        description: "Lorem ipsum text has been copied successfully",
+      });
     } catch (err) {
       console.error("Failed to copy to clipboard:", err);
+      toast({
+        title: "Copy failed",
+        description: "Could not copy text to clipboard",
+        variant: "destructive",
+      });
     }
   };
 
