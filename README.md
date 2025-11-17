@@ -91,7 +91,7 @@ Not implemented
 docker run -it -p 9090:9090 ghcr.io/spring1843/freedevtool.app/app:{RELEASE_TAG}
 ```
 
-Then browse [https://localhost:9500](https://localhost:9500).
+Then browse [https://localhost:9090](https://localhost:9090).
 
 ### Development Setup
 
