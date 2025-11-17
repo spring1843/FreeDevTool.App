@@ -18,6 +18,7 @@ jobs:
       contents: write
       pages: write
       packages: write
+      id-token: write
 
     name: Build and Release
     runs-on: ubuntu-latest
@@ -130,21 +131,6 @@ jobs:
         run: |
           make build-and-push-image IMAGE_TAG="ghcr.io/spring1843/freedevtool.app/app:${{ steps.version.outputs.version }}"
           make build-and-push-e2e-image E2E_IMAGE_TAG="ghcr.io/spring1843/freedevtool.app/e2e:${{ steps.version.outputs.version }}"
-
-      - name: Setup GitHub Pages
-        run: |
-          # Create a clean build directory for release
-          mkdir -p gh-pages-deploy
-
-          # Copy deployable public files
-          if [ -d "dist" ]; then
-            cp -r dist/public/* gh-pages-deploy/
-          fi
-
-      - name: Upload GitHub Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: gh-pages-deploy
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v5.1.0
