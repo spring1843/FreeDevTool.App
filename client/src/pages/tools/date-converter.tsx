@@ -159,13 +159,13 @@ export default function DateConverter() {
   const { toast } = useToast();
 
   const parseInputDate = (input: string): Date | null => {
-    // Try Unix timestamp (seconds)
-    if (/^\d{10}$/.test(input)) {
+    // Try Unix timestamp (seconds) - supports negative values for pre-epoch dates
+    if (/^-?\d{10}$/.test(input)) {
       return new Date(parseInt(input) * 1000);
     }
 
-    // Try Unix timestamp (milliseconds)
-    if (/^\d{13}$/.test(input)) {
+    // Try Unix timestamp (milliseconds) - supports negative values for pre-epoch dates
+    if (/^-?\d{13}$/.test(input)) {
       return new Date(parseInt(input));
     }
 
