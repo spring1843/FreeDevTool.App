@@ -43,9 +43,6 @@ export default function URLEncoder() {
 
   const handleEncodedTextChange = (value: string) => {
     setEncodedText(value);
-    if (plainText !== DEFAULT_URL_ENCODER) {
-      setPlainText("");
-    }
   };
 
   const handleReset = () => {
