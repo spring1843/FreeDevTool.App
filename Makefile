@@ -174,41 +174,45 @@ health: status ## Comprehensive health check
 
 ## Deployment Commands
 
-copy-static-assets-to-stage: build-static
+copy-static-assets-to-stage:
 	aws s3 sync ./dist/public s3://freedevtool-staging
 
-invalidate-cloudfront-stage:  copy-static-assets-to-stage
+invalidate-stage-cdn:
 	aws cloudfront create-invalidation --distribution-id ${STAGE_CLOUDFRONT_ID} --paths "/*"
-
-deploy-to-stage: invalidate-cloudfront-stage
 
 warm-cache-stage: ## Warm CloudFront cache for staging (shortcut for warm-cache DOMAIN=stage.freedevtool.app)
 	npx tsx scripts/warm-cache.ts https://stage.freedevtool.app
+
+deploy-to-stage: build-static copy-static-assets-to-stage invalidate-stage-cdn warm-cache-stage
+
+copy-static-assets-to-production:
+	aws s3 sync ./dist/public s3://freedevtool-production
+
+invalidate-production-cdn:
+	aws cloudfront create-invalidation --distribution-id ${PROD_CLOUDFRONT_ID} --paths "/*"
+
+warm-cache-production:
+	npx tsx scripts/warm-cache.ts https://freedevtool.app
+
+deploy-to-production: build-static copy-static-assets-to-production invalidate-production-cdn warm-cache-production
+
+## Infra Commands
 
 apply-cloudformation-stage:
 	aws cloudformation deploy \
 		--template-file infra/cloudformation/stage.yaml \
 		--stack-name freedevtool-staging \
 		--region us-east-1 \
+		--capabilities CAPABILITY_NAMED_IAM \
 		--no-fail-on-empty-changeset
-
-copy-static-assets-to-production: build-static
-	aws s3 sync ./dist/public s3://freedevtool-production
-
-invalidate-cloudfront-production: copy-static-assets-to-production
-	aws cloudfront create-invalidation --distribution-id ${PROD_CLOUDFRONT_ID} --paths "/*"
-
-deploy-to-production: invalidate-cloudfront-production
 
 apply-cloudformation-production:
 	aws cloudformation deploy \
 		--template-file infra/cloudformation/production.yaml \
 		--stack-name freedevtool-production \
 		--region us-east-1 \
+		--capabilities CAPABILITY_NAMED_IAM \
 		--no-fail-on-empty-changeset
-
-warm-cache-production:
-	npx tsx scripts/warm-cache.ts https://freedevtool.app
 
 ## Documentation
 

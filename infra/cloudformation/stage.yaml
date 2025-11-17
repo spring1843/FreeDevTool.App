@@ -9,6 +9,9 @@ Mappings:
   Config:
     Route53:
       HostedZoneId: 'Z08420001ZIINIX60XR7X'
+    GitHub:
+      Organization: 'spring1843'
+      Repository: 'freedevtool.app'
 
 Conditions:
   IsUsEast1: !Equals [!Ref 'AWS::Region', 'us-east-1']
@@ -152,6 +155,58 @@ Resources:
         DNSName: !GetAtt CloudFrontDistribution.DomainName
         EvaluateTargetHealth: false
 
+  # IAM Role for CI/CD deployment
+  StageDeploymentRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: freedevtool-stage-deployment-role
+      Description: 'Role for deploying static files to S3 and invalidating CloudFront cache in staging from GitHub Actions'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          # Allow GitHub Actions to assume this role via OIDC (using production's OIDC provider)
+          - Effect: Allow
+            Principal:
+              Federated: !Sub 'arn:aws:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com'
+            Action: 'sts:AssumeRoleWithWebIdentity'
+            Condition:
+              StringEquals:
+                'token.actions.githubusercontent.com:aud': 'sts.amazonaws.com'
+              StringLike:
+                'token.actions.githubusercontent.com:sub': !Sub
+                  - 'repo:${Org}/${Repo}:ref:refs/heads/main'
+                  - Org: !FindInMap [Config, GitHub, Organization]
+                    Repo: !FindInMap [Config, GitHub, Repository]
+      Policies:
+        - PolicyName: S3DeploymentPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 's3:PutObject'
+                  - 's3:GetObject'
+                  - 's3:DeleteObject'
+                  - 's3:ListBucket'
+                Resource:
+                  - !Sub '${WebsiteBucket.Arn}'
+                  - !Sub '${WebsiteBucket.Arn}/*'
+        - PolicyName: CloudFrontInvalidationPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'cloudfront:CreateInvalidation'
+                  - 'cloudfront:GetInvalidation'
+                  - 'cloudfront:ListInvalidations'
+                Resource: !Sub 'arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}'
+      Tags:
+        - Key: Environment
+          Value: staging
+        - Key: Purpose
+          Value: deployment
+
 Outputs:
   WebsiteBucketName:
     Description: 'S3 bucket name for uploading static files'
@@ -183,11 +238,24 @@ Outputs:
     Description: 'ACM certificate ARN for stage.freedevtool.app'
     Value: !Ref SSLCertificate
   
+  StageDeploymentRoleArn:
+    Description: 'IAM Role ARN for staging deployment (use with GitHub Actions OIDC)'
+    Value: !GetAtt StageDeploymentRole.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-DeploymentRoleArn'
+
   DeploymentCommands:
     Description: 'Commands to deploy your static site'
     Value: !Sub |
-      # Sync files to S3:
-      aws s3 sync ./dist/public/ s3://${WebsiteBucket} --delete --cache-control "public, max-age=31536000, immutable"
+      # GitHub Actions will automatically assume this role using OIDC
+      # No manual credential configuration needed!
+
+      # For manual deployment, you can still use:
+      # aws s3 sync ./dist/public/ s3://${WebsiteBucket} --delete --cache-control "public, max-age=31536000, immutable"
+      # aws cloudfront create-invalidation --distribution-id ${CloudFrontDistribution} --paths "/*"
       
-      # Invalidate CloudFront cache:
-      aws cloudfront create-invalidation --distribution-id ${CloudFrontDistribution} --paths "/*"
+      # GitHub Actions workflow configuration:
+      # - uses: aws-actions/configure-aws-credentials@v5
+      #   with:
+      #     role-to-assume: ${StageDeploymentRole.Arn}
+      #     aws-region: us-east-1

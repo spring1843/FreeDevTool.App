@@ -13,7 +13,7 @@ on:
 
 jobs:
   build-and-release:
-    container: ghcr.io/spring1843/freedevtool.app/e2e:e9c0ff7
+    container: ghcr.io/spring1843/freedevtool.app/e2e:v0.0.4
     permissions:
       contents: write
       pages: write
@@ -147,6 +147,14 @@ jobs:
         with:
           path: gh-pages-deploy
 
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v5.1.0
+        with:
+          role-to-assume: 'arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/${{ vars.AWS_ROLE_PRODUCTION }}'
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Deploy to Production
+        run: make deploy-to-production
+
+      - name: Preload Production Cache
+        run: make warm-cache-production
