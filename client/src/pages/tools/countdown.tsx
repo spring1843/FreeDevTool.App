@@ -387,66 +387,66 @@ export default function Countdown() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center">
-              <Clock className="w-5 h-5 mr-2" />
-              Time Remaining
-            </div>
-            <Badge variant="outline" className={status.color}>
-              {status.text}
-            </Badge>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {isComplete ? (
-            <div className="text-center mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-              <div className="text-2xl font-bold text-red-600 dark:text-red-400 mb-2">
-                🎉 Countdown Complete! 🎉
+      {targetDate && targetTime ? (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <div className="flex items-center">
+                <Clock className="w-5 h-5 mr-2" />
+                Time Remaining
               </div>
-              <div className="text-red-700 dark:text-red-300">
-                Target time has been reached
+              <Badge variant="outline" className={status.color}>
+                {status.text}
+              </Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {isComplete ? (
+              <div className="text-center mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                <div className="text-2xl font-bold text-red-600 dark:text-red-400 mb-2">
+                  🎉 Countdown Complete! 🎉
+                </div>
+                <div className="text-red-700 dark:text-red-300">
+                  Target time has been reached
+                </div>
               </div>
-            </div>
-          ) : null}
+            ) : null}
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
-                {timeComponents.days}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                  {timeComponents.days}
+                </div>
+                <div className="text-sm text-blue-700 dark:text-blue-300">
+                  Days
+                </div>
               </div>
-              <div className="text-sm text-blue-700 dark:text-blue-300">
-                Days
+              <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                <div className="text-3xl font-bold text-green-600 dark:text-green-400">
+                  {timeComponents.hours}
+                </div>
+                <div className="text-sm text-green-700 dark:text-green-300">
+                  Hours
+                </div>
+              </div>
+              <div className="text-center p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                <div className="text-3xl font-bold text-yellow-600 dark:text-yellow-400">
+                  {timeComponents.minutes}
+                </div>
+                <div className="text-sm text-yellow-700 dark:text-yellow-300">
+                  Minutes
+                </div>
+              </div>
+              <div className="text-center p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                <div className="text-3xl font-bold text-red-600 dark:text-red-400">
+                  {timeComponents.seconds}
+                </div>
+                <div className="text-sm text-red-700 dark:text-red-300">
+                  Seconds
+                </div>
               </div>
             </div>
-            <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-              <div className="text-3xl font-bold text-green-600 dark:text-green-400">
-                {timeComponents.hours}
-              </div>
-              <div className="text-sm text-green-700 dark:text-green-300">
-                Hours
-              </div>
-            </div>
-            <div className="text-center p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
-              <div className="text-3xl font-bold text-yellow-600 dark:text-yellow-400">
-                {timeComponents.minutes}
-              </div>
-              <div className="text-sm text-yellow-700 dark:text-yellow-300">
-                Minutes
-              </div>
-            </div>
-            <div className="text-center p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
-              <div className="text-3xl font-bold text-red-600 dark:text-red-400">
-                {timeComponents.seconds}
-              </div>
-              <div className="text-sm text-red-700 dark:text-red-300">
-                Seconds
-              </div>
-            </div>
-          </div>
 
-          {targetDate && targetTime ? (
             <div className="mt-6 text-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
               <div className="text-sm text-gray-600 dark:text-gray-400">
                 Target:
@@ -468,9 +468,9 @@ export default function Countdown() {
               </div>
               <div className="text-xs text-gray-500 mt-1">({timeZone})</div>
             </div>
-          ) : null}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      ) : null}
     </div>
   );
 }
