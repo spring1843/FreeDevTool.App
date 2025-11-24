@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Copy, Monitor, Globe, HardDrive, Cpu, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useTheme } from "@/providers/theme-provider";
 
 interface BrowserInfo {
   // Navigator properties
@@ -98,8 +99,9 @@ export default function BrowserInfo() {
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [refreshCount, setRefreshCount] = useState<number>(0);
   const { toast } = useToast();
+  const { theme } = useTheme();
 
-  const getBrowserInfo = (): BrowserInfo => {
+  const getBrowserInfo = useCallback((): BrowserInfo => {
     const nav = navigator as Navigator & {
       connection?: {
         type?: string;
@@ -187,15 +189,8 @@ export default function BrowserInfo() {
       timezoneOffset: new Date().getTimezoneOffset(),
       currentTime: new Date().toISOString(),
 
-      // System preferences
-      systemTheme:
-        window.matchMedia &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "dark"
-          : window.matchMedia &&
-              window.matchMedia("(prefers-color-scheme: light)").matches
-            ? "light"
-            : "no-preference",
+      // System preferences (using actual app theme instead of system preference)
+      systemTheme: theme,
       reducedMotion:
         window.matchMedia &&
         window.matchMedia("(prefers-reduced-motion: reduce)").matches,
@@ -257,7 +252,7 @@ export default function BrowserInfo() {
       // Device memory (if available)
       deviceMemory: nav.deviceMemory,
     };
-  };
+  }, [theme]);
 
   const refreshInfo = () => {
     const newInfo = getBrowserInfo();
@@ -271,12 +266,12 @@ export default function BrowserInfo() {
   };
 
   useEffect(() => {
-    // Load browser info immediately when component mounts
+    // Load browser info immediately when component mounts and when theme changes
     const info = getBrowserInfo();
     setBrowserInfo(info);
     setLastUpdated(new Date());
     setRefreshCount(1);
-  }, []); // Only run once on mount
+  }, [getBrowserInfo]); // Re-run when getBrowserInfo changes (which happens when theme changes)
 
   const copyToClipboard = async (text: string) => {
     try {
