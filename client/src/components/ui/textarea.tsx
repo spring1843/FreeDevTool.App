@@ -184,7 +184,7 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         onDrop={handleDrop}
         data-testid="textarea-drop-area"
       >
-        <div className="absolute top-1 right-1 z-10 flex gap-1">
+        <div className="absolute top-2 right-2 z-10 flex gap-1 bg-background/80 backdrop-blur-sm rounded-md p-1">
           <Button
             onClick={handleCopy}
             size="sm"
@@ -233,7 +233,7 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         </div>
 
         <CodeMirror
-          className={baseClassName}
+          className={cn(baseClassName, "pr-32")}
           value={value}
           extensions={extensions}
           basicSetup={{
