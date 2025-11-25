@@ -290,7 +290,10 @@ export default function LoremGenerator() {
                 value={count}
                 onChange={e =>
                   setCount(
-                    Math.max(1, Math.min(MAX_WORDS_LIMIT, parseInt(e.target.value) || 1))
+                    Math.max(
+                      1,
+                      Math.min(MAX_WORDS_LIMIT, parseInt(e.target.value) || 1)
+                    )
                   )
                 }
                 data-testid="count-input"
