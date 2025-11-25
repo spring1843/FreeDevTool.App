@@ -277,8 +277,15 @@ export default function CompoundInterestCalculator() {
                 id="contribution"
                 type="number"
                 value={monthlyContribution}
-                onChange={e => setMonthlyContribution(Number(e.target.value))}
+                onChange={({ target: { value } }) => {
+                  // Only allow up to 8 digits (count only numeric digits, excluding decimal point)
+                  const numericDigits = value.replace(/[^0-9]/g, "");
+                  if (value === "" || numericDigits.length <= 8) {
+                    setMonthlyContribution(Number(value) || 0);
+                  }
+                }}
                 placeholder="Monthly amount"
+                max={99999999}
               />
             </div>
 
