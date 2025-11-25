@@ -39,19 +39,24 @@ export default function DateTimeDiff() {
   // Set interesting default values
   const getDefaultValues = () => {
     const now = new Date();
-    const oneYearAgo = new Date(now);
-    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    const date = `${year}-${month}-${day}`;
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const time = `${hours}:${minutes}`;
 
     return {
-      startDate: oneYearAgo.toISOString().split("T")[0],
-      startTime: "00:00",
-      endDate: now.toISOString().split("T")[0],
-      endTime: now.toTimeString().slice(0, 5),
+      startDate: date,
+      startTime: time,
+      endDate: date,
+      endTime: time,
       timezone: getUserTimezone(),
     };
   };
 
-  const { fields, updateField, resetFields } = usePersistentForm(
+  const { fields, updateField, updateFields, resetFields } = usePersistentForm(
     "datetime-diff",
     getDefaultValues()
   );
@@ -255,15 +260,24 @@ export default function DateTimeDiff() {
   // Set current date/time
   const setCurrentDateTime = (field: "start" | "end") => {
     const now = new Date();
-    const date = now.toISOString().split("T")[0];
-    const time = now.toTimeString().split(" ")[0].substring(0, 5);
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    const date = `${year}-${month}-${day}`;
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const time = `${hours}:${minutes}`;
 
     if (field === "start") {
-      updateField("startDate", date);
-      updateField("startTime", time);
+      updateFields({
+        startDate: date,
+        startTime: time,
+      } as Partial<typeof fields>);
     } else {
-      updateField("endDate", date);
-      updateField("endTime", time);
+      updateFields({
+        endDate: date,
+        endTime: time,
+      } as Partial<typeof fields>);
     }
   };
 
