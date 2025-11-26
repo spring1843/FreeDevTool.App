@@ -36,20 +36,6 @@ Preferred communication style: Simple, everyday language.
 Preferred UI behavior: All menu sections collapsed by default, with minimize buttons (< and ^) for maximum screen real estate optimization suitable for TV displays. Sidebar should be collapsed by default.
 Preferred terminology: "Camera" instead of "Webcam" for video capture devices.
 
-## Recent Updates (August 16, 2025)
-
-- **CI-Dependent Releases**: Release workflow now requires CI to pass before allowing releases, with emergency bypass option
-- **Make Target Integration**: Updated all build scripts and release automation to use make targets instead of npm commands
-- **Release Automation**: Comprehensive GitHub Actions workflows with automated building, packaging, and changelog generation
-- **Search Testing**: Added end-to-end tests for search functionality including text tool discovery and keyboard navigation
-- **Enhanced Mobile UX**: Improved hamburger menu with larger touch targets, better accessibility, and enhanced sidebar layout
-- **Centralized Architecture**: Created unified data source for all components (sidebar, homepage, search, demo) to eliminate inconsistencies
-- **Navigation Fixes**: Resolved double "/tools" path issues and demo system routing for seamless user experience
-- **UI Optimization**: Sidebar defaults to collapsed state for maximum screen real estate, especially for TV displays
-- **Keyboard Shortcuts**: Updated Ctrl+J for JSON Formatter, moved JSON↔YAML to Ctrl+Shift+Y
-- **Code Quality**: Simplified HTML validation logic, fixed barcode centering, improved TypeScript error handling
-- **Documentation**: Renamed replit.md to README.md with comprehensive tenets section
-
 ## System Architecture
 
 ### Frontend Architecture
@@ -62,7 +48,7 @@ The client-side is a React with TypeScript application, built on a component-bas
 
 ### Backend Architecture
 
-There is no back-end, this is entirely a stand-alone, and self sufficient front-end application
+There is no back-end, this is entirely a stand-alone, and self sufficient front-end application that can be served using a webserver like Nginx.
 
 ### Data Storage Solutions
 
@@ -141,12 +127,6 @@ make test-coverage # Run tests with coverage
 - **Radix UI**: Headless UI components.
 - **shadcn/ui**: Component library based on Radix UI.
 - **Lucide React**: Icon library.
-
-### Database and ORM
-
-- **Drizzle ORM**: Type-safe SQL ORM for PostgreSQL.
-- **@neondatabase/serverless**: PostgreSQL driver.
-- **Drizzle Kit**: CLI for database migrations.
 
 ### Development and Build Tools
 
