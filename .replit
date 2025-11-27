@@ -38,7 +38,10 @@ waitForPort = 9500
 localPort = 3000
 externalPort = 80
 
-[userenv]
+[[ports]]
+localPort = 9500
+externalPort = 80
 
-[userenv.shared]
-PORT = "9500"
+[[ports]]
+localPort = 37035
+externalPort = 3000
