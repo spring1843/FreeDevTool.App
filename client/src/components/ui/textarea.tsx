@@ -8,6 +8,15 @@ import { css } from "@codemirror/lang-css";
 import { html } from "@codemirror/lang-html";
 import { yaml } from "@codemirror/lang-yaml";
 import { markdown } from "@codemirror/lang-markdown";
+import { less } from "@codemirror/lang-less";
+import { sql } from "@codemirror/lang-sql";
+import { rust } from "@codemirror/lang-rust";
+import { php } from "@codemirror/lang-php";
+import { python } from "@codemirror/lang-python";
+import { go } from "@codemirror/lang-go";
+import { java } from "@codemirror/lang-java";
+import { cpp } from "@codemirror/lang-cpp";
+import { json } from "@codemirror/lang-json";
 import { Copy, Download, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -46,26 +55,89 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
           return javascript({ jsx: true, typescript: true });
         case "css":
           return css();
+        case "less":
+          return less();
+        case "scss":
+          // Approximate with CSS highlighting (no SCSS package installed)
+          return css();
         case "html":
           return html();
         case "yaml":
           return yaml();
         case "markdown":
           return markdown();
+        case "graphql":
+          // Approximate with JavaScript highlighting to avoid adding heavy deps
+          return javascript({ jsx: false });
+        case "python":
+          return python();
+        case "php":
+          return php();
+        case "rust":
+          return rust();
+        case "sql":
+          return sql();
+        case "go":
+          return go();
+        case "java":
+          return java();
+        case "cpp":
+        case "c++":
+          return cpp();
+        case "json":
+          return json();
+        case "text":
+        case "plain":
+        case "plaintext":
+          // Minimal setup: no specific language extension
+          return [];
         default:
           return javascript({ jsx: true }); // Default to JavaScript if lang is not provided or recognized
       }
     };
 
-    // Language selection state (defaults to provided prop)
-    const availableLanguages = [
-      "javascript",
-      "typescript",
-      "css",
-      "html",
-      "yaml",
-      "markdown",
-    ] as const;
+    // Canonical language values (identifiers) and display labels
+    const LANGUAGES = {
+      javascript: { value: "javascript", label: "JavaScript" },
+      typescript: { value: "typescript", label: "TypeScript" },
+      css: { value: "css", label: "CSS" },
+      less: { value: "less", label: "LESS" },
+      scss: { value: "scss", label: "SCSS" },
+      html: { value: "html", label: "HTML" },
+      yaml: { value: "yaml", label: "YAML" },
+      markdown: { value: "markdown", label: "Markdown" },
+      graphql: { value: "graphql", label: "GraphQL" },
+      plaintext: { value: "plaintext", label: "Plain Text" },
+      go: { value: "go", label: "Go" },
+      java: { value: "java", label: "Java" },
+      cpp: { value: "cpp", label: "C++" },
+      json: { value: "json", label: "JSON" },
+      php: { value: "php", label: "PHP" },
+      python: { value: "python", label: "Python" },
+      rust: { value: "rust", label: "Rust" },
+      sql: { value: "sql", label: "SQL" },
+    };
+
+    const LANGUAGE_OPTIONS = [
+      LANGUAGES.javascript,
+      LANGUAGES.typescript,
+      LANGUAGES.css,
+      LANGUAGES.less,
+      LANGUAGES.scss,
+      LANGUAGES.html,
+      LANGUAGES.yaml,
+      LANGUAGES.markdown,
+      LANGUAGES.graphql,
+      LANGUAGES.plaintext,
+      LANGUAGES.go,
+      LANGUAGES.java,
+      LANGUAGES.cpp,
+      LANGUAGES.json,
+      LANGUAGES.php,
+      LANGUAGES.python,
+      LANGUAGES.rust,
+      LANGUAGES.sql,
+    ].sort((a, b) => a.label.localeCompare(b.label));
     const [currentLang, setCurrentLang] = React.useState<string | undefined>(
       props.lang
     );
@@ -81,7 +153,8 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         // Consumers expect e.target.value; other fields are not used.
         target: { value: val } as unknown as EventTarget & HTMLTextAreaElement,
       }) as unknown as React.ChangeEvent<HTMLTextAreaElement>;
-    const extensions = [getLanguageExtension(currentLang)];
+    const langExt = getLanguageExtension(currentLang);
+    const extensions = Array.isArray(langExt) ? langExt : [langExt];
     const { toast } = useToast();
 
     const handleCopy = async () => {
@@ -197,8 +270,14 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
 
     // Format bytes to human readable string
     const formatBytes = (bytes: number): string => {
-      if (bytes < 1024) return `${bytes} B`;
-      const units = ["kB", "MB", "GB", "TB"];
+      // Use full unit names for clarity
+      if (bytes < 1024) return `${bytes} Bytes`;
+      const units = [
+        "Kilobytes",
+        "Megabytes",
+        "Gigabytes",
+        "Terabytes",
+      ] as const;
       let i = -1;
       let size = bytes;
       do {
@@ -398,7 +477,7 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
             <select
               aria-label="Select language"
               title="Language"
-              value={currentLang || "javascript"}
+              value={currentLang || LANGUAGES.javascript.value}
               onChange={e => setCurrentLang(e.target.value)}
               className={cn(
                 "h-5 rounded border bg-background px-1 text-xs",
@@ -406,9 +485,9 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
               )}
               data-testid="language-select"
             >
-              {availableLanguages.map(l => (
-                <option key={l} value={l} className="text-xs">
-                  {l}
+              {LANGUAGE_OPTIONS.map(opt => (
+                <option key={opt.value} value={opt.value} className="text-xs">
+                  {opt.label}
                 </option>
               ))}
             </select>
