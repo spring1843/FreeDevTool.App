@@ -1,7 +1,9 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import CodeMirror from "@uiw/react-codemirror";
+import { EditorView } from "@codemirror/view";
 import type { ViewUpdate } from "@codemirror/view";
+import type { Extension } from "@codemirror/state";
 import { javascript } from "@codemirror/lang-javascript";
 import { cn } from "@/lib/utils";
 import { css } from "@codemirror/lang-css";
@@ -20,20 +22,18 @@ import { json } from "@codemirror/lang-json";
 import { Copy, Download, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-// Detect mobile/touch devices - use simple textarea instead of CodeMirror for better performance
+// Detect mobile/touch devices for optimized CodeMirror configuration
 const useIsMobile = () => {
   const [isMobile, setIsMobile] = React.useState(false);
 
   React.useEffect(() => {
     const checkMobile = () => {
-      // Check for touch capability and small screen width
       const hasTouchScreen =
         "ontouchstart" in window ||
         navigator.maxTouchPoints > 0 ||
         // @ts-expect-error - msMaxTouchPoints is IE-specific
         navigator.msMaxTouchPoints > 0;
       const isSmallScreen = window.innerWidth <= 768;
-      // Also check user agent for mobile devices
       const isMobileUA =
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
           navigator.userAgent
@@ -48,6 +48,41 @@ const useIsMobile = () => {
 
   return isMobile;
 };
+
+// Mobile-optimized CodeMirror theme extension
+// Adds touch-action: manipulation to prevent iOS touch delays and pointer capture issues
+const mobileThemeExtension = EditorView.theme({
+  "&": {
+    touchAction: "manipulation",
+  },
+  ".cm-content": {
+    touchAction: "manipulation",
+  },
+  ".cm-scroller": {
+    touchAction: "pan-x pan-y",
+    overscrollBehavior: "contain",
+  },
+});
+
+// Extension to release pointer capture on touch end - prevents focus lock on iOS
+const releasePointerCaptureExtension = EditorView.domEventHandlers({
+  pointerup(event, view) {
+    const target = event.target as HTMLElement;
+    if (target.hasPointerCapture?.(event.pointerId)) {
+      target.releasePointerCapture(event.pointerId);
+    }
+    return false;
+  },
+  touchend(event, view) {
+    if (document.activeElement instanceof HTMLElement) {
+      const isOutsideEditor = !view.dom.contains(event.target as Node);
+      if (isOutsideEditor) {
+        document.activeElement.blur();
+      }
+    }
+    return false;
+  },
+});
 
 // Define props for the CodeMirror component
 export interface TextAreaProps {
@@ -68,7 +103,6 @@ export interface TextAreaProps {
 const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
   ({ className, value, onChange, theme = "light", ...props }) => {
     const isMobile = useIsMobile();
-    const mobileTextareaRef = React.useRef<HTMLTextAreaElement>(null);
 
     const baseClassName = cn(
       // Make the editor visually attach to the top navbar: no top rounding
@@ -502,61 +536,57 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
           </div>
         </div>
 
-        {isMobile ? (
-          // Simple native textarea for mobile - much better performance
-          <textarea
-            ref={mobileTextareaRef}
-            className={cn(
-              baseClassName,
-              "p-3 font-mono resize-none",
-              theme === "dark"
-                ? "bg-slate-900 text-slate-100"
-                : "bg-white text-slate-900"
-            )}
-            value={value}
-            onChange={onChange}
-            onSelect={e => {
-              // Update cursor position for status bar
-              const target = e.target as HTMLTextAreaElement;
-              const pos = target.selectionStart;
-              const textBefore = (value || "").substring(0, pos);
-              const lines = textBefore.split("\n");
-              setCursor({
-                line: lines.length,
-                ch: (lines[lines.length - 1]?.length || 0) + 1,
-              });
-            }}
-            placeholder={props.placeholder}
-            readOnly={props.readOnly}
-            id={props.id}
-            autoFocus={props.autoFocus}
-            style={{
-              minHeight: props.minHeight || "200px",
-            }}
-            data-testid="mobile-textarea"
-          />
-        ) : (
-          <CodeMirror
-            className={baseClassName}
-            value={value}
-            extensions={extensions}
-            basicSetup={{
-              lineNumbers: true,
-              foldGutter: true,
-            }}
-            theme={codeMirrorTheme}
-            onChange={val => {
-              if (onChange) onChange(createSyntheticChangeEvent(val));
-            }}
-            minHeight={props.minHeight}
-            lang={props.lang}
-            placeholder={props.placeholder}
-            readOnly={props.readOnly}
-            id={props.id}
-            autoFocus={props.autoFocus}
-            onUpdate={handleEditorUpdate}
-          />
-        )}
+        <CodeMirror
+          className={baseClassName}
+          value={value}
+          extensions={
+            isMobile
+              ? [
+                  ...extensions,
+                  mobileThemeExtension,
+                  releasePointerCaptureExtension,
+                ]
+              : extensions
+          }
+          basicSetup={
+            isMobile
+              ? {
+                  // Minimal setup for mobile - disable expensive features
+                  lineNumbers: true,
+                  foldGutter: false,
+                  highlightActiveLine: false,
+                  highlightSelectionMatches: false,
+                  closeBrackets: false,
+                  autocompletion: false,
+                  rectangularSelection: false,
+                  crosshairCursor: false,
+                  dropCursor: false,
+                  allowMultipleSelections: false,
+                  indentOnInput: false,
+                  bracketMatching: false,
+                  closeBracketsKeymap: false,
+                  searchKeymap: false,
+                  foldKeymap: false,
+                  completionKeymap: false,
+                  lintKeymap: false,
+                }
+              : {
+                  lineNumbers: true,
+                  foldGutter: true,
+                }
+          }
+          theme={codeMirrorTheme}
+          onChange={val => {
+            if (onChange) onChange(createSyntheticChangeEvent(val));
+          }}
+          minHeight={props.minHeight}
+          lang={props.lang}
+          placeholder={props.placeholder}
+          readOnly={props.readOnly}
+          id={props.id}
+          autoFocus={props.autoFocus}
+          onUpdate={isMobile ? undefined : handleEditorUpdate}
+        />
         {/* Status bar below editor with status on the left and language selector on the right */}
         <div
           className="w-full flex justify-between items-center px-2 py-1 text-xs text-muted-foreground bg-muted rounded-b-md border-t"

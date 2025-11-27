@@ -6,7 +6,7 @@ is a web-based collection of 49+ open-source, free, and completely offline devel
 
 ## Recent Changes
 
-- **November 27, 2025**: Fixed mobile performance/focus lock issue on CodeMirror TextArea. The root cause was `handleEditorUpdate` calling `setCursor` on every CodeMirror update (including touch moves), flooding React with state updates that blocked the main thread on iOS. Fix: Debounced cursor position updates using `requestAnimationFrame` - stores latest position in ref and batches to one React update per frame. Also includes pointerdown handler in Layout.tsx that blurs CodeMirror when touching outside as additional safeguard.
+- **November 27, 2025**: Fixed mobile performance/focus lock issue on CodeMirror TextArea. Root cause: Full CodeMirror stack with expensive extensions (foldGutter, autocompletion, highlightActiveLine, etc.) plus onUpdate cursor tracking saturated iOS main thread during touch events, blocking navbar taps. Fix: Mobile-optimized CodeMirror configuration that (1) disables expensive extensions (foldGutter, highlightActiveLine, closeBrackets, autocompletion, etc.), (2) adds custom theme extension with touch-action: manipulation CSS, (3) adds DOM event handler to release pointer capture on touchend/pointerup, and (4) disables onUpdate cursor tracking on mobile. Syntax highlighting preserved while maintaining responsive UI.
 
 ## User Preferences
 
