@@ -117,8 +117,8 @@ export default function TextSort() {
               Text Sorter
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
-              Sort lines of text alphabetically, randomly, numerically, or by length with
-              optional deduplication
+              Sort lines of text alphabetically, randomly, numerically, or by
+              length with optional deduplication
             </p>
           </div>
           <SecurityBanner variant="compact" />
