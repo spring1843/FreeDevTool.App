@@ -249,37 +249,82 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         onDrop={handleDrop}
         data-testid="textarea-drop-area"
       >
-        <div className="absolute top-1 right-1 z-10 flex gap-1">
-          <Button
-            onClick={handleCopy}
-            size="sm"
-            variant="ghost"
-            title="Copy To clipboard"
-            data-testid="copy-all-button"
-          >
-            <Copy className="w-4 h-4" />
-          </Button>
-          <Button
-            onClick={handleDownload}
-            size="sm"
-            variant="ghost"
-            title="Download file"
-            data-testid="download-button"
-          >
-            <Download className="w-4 h-4" />
-          </Button>
+        {/* Toolbar / Navbar above the editor */}
+        <div
+          className={cn(
+            // Match the status bar styling: compact, subtle, no extra spacing
+            "w-full flex items-center justify-end px-2 py-1 text-xs text-muted-foreground",
+            // Use complementary borders and rounded corners (top bar vs bottom bar)
+            "bg-muted rounded-t-md border"
+          )}
+          data-testid="textarea-toolbar"
+        >
+          <div className="relative group">
+            <Button
+              onClick={handleCopy}
+              size="sm"
+              variant="ghost"
+              aria-label="Copy content to clipboard"
+              title="Copy content to clipboard"
+              data-testid="copy-all-button"
+              className="p-0 h-5 w-5"
+            >
+              <Copy className="w-3.5 h-3.5" />
+            </Button>
+            <span
+              className={cn(
+                "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
+                "border"
+              )}
+            >
+              Copy
+            </span>
+          </div>
+          <div className="relative group">
+            <Button
+              onClick={handleDownload}
+              size="sm"
+              variant="ghost"
+              aria-label="Download content as a file"
+              title="Download content as a file"
+              data-testid="download-button"
+              className="p-0 h-5 w-5"
+            >
+              <Download className="w-3.5 h-3.5" />
+            </Button>
+            <span
+              className={cn(
+                "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
+                "border"
+              )}
+            >
+              Download
+            </span>
+          </div>
           {/* Only show upload if not readOnly */}
           {!props.readOnly && (
             <>
-              <Button
-                onClick={handleUploadClick}
-                size="sm"
-                variant="ghost"
-                title="Upload file"
-                data-testid="upload-button"
-              >
-                <Upload className="w-4 h-4" />
-              </Button>
+              <div className="relative group">
+                <Button
+                  onClick={handleUploadClick}
+                  size="sm"
+                  variant="ghost"
+                  aria-label="Import from a file"
+                  title="Import from a file"
+                  data-testid="upload-button"
+                  className="p-0 h-5 w-5"
+                >
+                  <Upload className="w-3.5 h-3.5" />
+                </Button>
+                <span
+                  className={cn(
+                    "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
+                    "border"
+                  )}
+                >
+                  Upload
+                </span>
+              </div>
               {/* Hidden file input for upload */}
               <input
                 ref={fileInputRef}
