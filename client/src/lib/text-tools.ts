@@ -274,9 +274,15 @@ export function countTextStats(text: string): TextStats {
 
   // Count sentences (match sentence endings, handle trailing fragments)
   const trimmed = text.trimEnd();
-  const matches = [...trimmed.matchAll(/[.!?]+/g)];
+  const matches = Array.from(trimmed.matchAll(/[.!?]+/g));
   let sentences = matches.length;
-  if (trimmed.length > 0 && (matches.length === 0 || (matches[matches.length - 1].index! + matches[matches.length - 1][0].length < trimmed.length))) {
+  if (
+    trimmed.length > 0 &&
+    (matches.length === 0 ||
+      matches[matches.length - 1].index! +
+        matches[matches.length - 1][0].length <
+        trimmed.length)
+  ) {
     sentences += 1;
   }
   // Count paragraphs (split by double newlines or more)
