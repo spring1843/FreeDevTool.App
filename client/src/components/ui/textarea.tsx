@@ -71,7 +71,7 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         await navigator.clipboard.writeText(value || "");
         toast({
           title: "Copied to clipboard",
-          description: "The content has been copied.",
+          description: `The content has been copied (${formatBytes(contentSize)}).`,
           duration: 2000,
         });
       } catch {
@@ -103,7 +103,7 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         URL.revokeObjectURL(url);
         toast({
           title: "Download started",
-          description: `Saved as ${randomName}`,
+          description: `Saved as ${randomName} (${formatBytes(contentSize)})`,
           duration: 2000,
         });
       } catch {
@@ -148,7 +148,7 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
           }
           toast({
             title: "File uploaded",
-            description: `Loaded ${file.name}`,
+            description: `Loaded ${file.name} (${formatBytes(file.size)})`,
             duration: 2000,
           });
         } catch {
