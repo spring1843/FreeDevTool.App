@@ -41,12 +41,8 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
     const baseClassName = cn(
       // Make the editor visually attach to the top navbar: no top rounding
       // so the navbar's rounded-t-md forms the top corners; keep bottom round.
-      // Constrain height on small touch devices to avoid swallowing the entire viewport and
-      // blocking interactions with menus; allow vertical scroll inside.
       "w-full rounded-b-md border border-input bg-background text-sm",
       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-      // Mobile constraints
-      "max-h-[55vh] overflow-auto md:max-h-none",
       className
     );
 
@@ -159,12 +155,6 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
       }) as unknown as React.ChangeEvent<HTMLTextAreaElement>;
     const langExt = getLanguageExtension(currentLang);
     const extensions = Array.isArray(langExt) ? langExt : [langExt];
-
-    // Refs for focus management on touch devices
-    // Store a loose reference to the editor view; avoid 'any' by using unknown
-    // since we don't rely on specific EditorView methods here beyond presence.
-    const editorViewRef = React.useRef<unknown>(null);
-    const editorWrapperRef = React.useRef<HTMLDivElement>(null);
     const { toast } = useToast();
 
     const handleCopy = async () => {
@@ -312,26 +302,6 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
       });
     }, []);
 
-    // Touch outside to blur editor (mobile usability: allow menu interactions again)
-    React.useEffect(() => {
-      const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
-      if (!isTouch) return;
-
-      const handleTouchStart = (e: TouchEvent) => {
-        if (!editorWrapperRef.current) return;
-        if (editorWrapperRef.current.contains(e.target as Node)) return; // inside editor
-        // Blur the CodeMirror contentEditable so the virtual keyboard dismisses
-        const active = document.activeElement as HTMLElement | null;
-        if (active && editorWrapperRef.current.contains(active)) {
-          active.blur();
-        }
-      };
-      document.addEventListener("touchstart", handleTouchStart, {
-        passive: true,
-      });
-      return () => document.removeEventListener("touchstart", handleTouchStart);
-    }, []);
-
     // Use theme prop for CodeMirror theme
     const codeMirrorTheme = theme === "dark" ? "dark" : "light";
 
@@ -375,7 +345,6 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         data-testid="textarea-drop-area"
-        ref={editorWrapperRef}
       >
         {/* Toolbar / Navbar above the editor */}
         <div className="flex justify-end">
@@ -492,10 +461,6 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
           autoFocus={props.autoFocus}
           // Add onUpdate handler for cursor tracking
           onUpdate={handleEditorUpdate}
-          // capture view instance for potential future advanced mobile management
-          onCreateEditor={view => {
-            editorViewRef.current = view;
-          }}
         />
         {/* Status bar below editor with status on the left and language selector on the right */}
         <div
