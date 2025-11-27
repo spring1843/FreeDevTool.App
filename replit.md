@@ -4,6 +4,10 @@
 
 is a web-based collection of 49+ open-source, free, and completely offline developer tools. It offers a wide range of utilities including converters, formatters, encoders, text tools, timing utilities, financial calculators, hardware tests, and generators. Designed with privacy in mind, all processing occurs locally without network dependencies, making it suitable for sensitive business environments and air-gapped systems.
 
+## Recent Changes
+
+- **November 27, 2025**: Fixed mobile focus lock issue on CodeMirror TextArea. When users on mobile devices browsed pages with CodeMirror editors (JSON formatter, etc.), they couldn't interact with menus after focusing on the editor. Fix includes: pointerdown handler in Layout.tsx that blurs CodeMirror when touching anywhere outside the editor, plus touch-action CSS rules to allow proper touch event propagation.
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
