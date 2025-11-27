@@ -36,8 +36,7 @@ interface DateTimeDifference {
 }
 
 export default function DateTimeDiff() {
-  // Set interesting default values
-  const getDefaultValues = () => {
+  const formatCurrentDateTime = () => {
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, "0");
@@ -46,12 +45,21 @@ export default function DateTimeDiff() {
     const hours = String(now.getHours()).padStart(2, "0");
     const minutes = String(now.getMinutes()).padStart(2, "0");
     const time = `${hours}:${minutes}`;
+    return { date, time };
+  };
 
+  // Set interesting default values
+  const getDefaultValues = () => {
+    const { date, time } = formatCurrentDateTime();
+    // end time is 1 hour after time
+    const endTime = new Date(new Date().setHours(new Date().getHours() + 1))
+      .toTimeString()
+      .slice(0, 5);
     return {
       startDate: date,
       startTime: time,
       endDate: date,
-      endTime: time,
+      endTime,
       timezone: getUserTimezone(),
     };
   };
@@ -259,25 +267,17 @@ export default function DateTimeDiff() {
 
   // Set current date/time
   const setCurrentDateTime = (field: "start" | "end") => {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
-    const date = `${year}-${month}-${day}`;
-    const hours = String(now.getHours()).padStart(2, "0");
-    const minutes = String(now.getMinutes()).padStart(2, "0");
-    const time = `${hours}:${minutes}`;
-
+    const { date, time } = formatCurrentDateTime();
     if (field === "start") {
       updateFields({
         startDate: date,
         startTime: time,
-      } as Partial<typeof fields>);
+      });
     } else {
       updateFields({
         endDate: date,
         endTime: time,
-      } as Partial<typeof fields>);
+      });
     }
   };
 
