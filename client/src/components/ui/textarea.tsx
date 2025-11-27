@@ -30,7 +30,9 @@ export interface TextAreaProps {
 const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
   ({ className, value, onChange, theme = "light", ...props }) => {
     const baseClassName = cn(
-      "w-full rounded-md border border-input bg-background text-sm",
+      // Make the editor visually attach to the top navbar: no top rounding
+      // so the navbar's rounded-t-md forms the top corners; keep bottom round.
+      "w-full rounded-b-md border border-input bg-background text-sm",
       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
       className
     );
@@ -272,7 +274,7 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
               // Compact toolbar sized to its contents (no full-width stretch)
               "inline-flex items-center gap-2 text-xs text-muted-foreground",
               // Remove outer spacing so the toolbar borders align flush with editor borders
-              "bg-muted rounded-t-md border px-1 py-1"
+              "bg-muted rounded-t-md border px-1 py-0"
             )}
             data-testid="textarea-toolbar"
           >
