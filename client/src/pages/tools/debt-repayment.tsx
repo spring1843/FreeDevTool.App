@@ -177,7 +177,7 @@ export default function DebtRepaymentCalculator() {
                 onChange={e => setMonthlyPayment(Number(e.target.value))}
                 placeholder="Monthly payment amount"
               />
-              <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              <div className="text-sm text-gray-600 dark:text-gray-400 mt-1 break-words min-w-0">
                 Minimum payment: {formatCurrency(minimumPayment)}
               </div>
             </div>
@@ -209,7 +209,7 @@ export default function DebtRepaymentCalculator() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                  <div className="text-2xl font-bold text-red-600 dark:text-red-400">
+                  <div className="text-2xl font-bold text-red-600 dark:text-red-400 break-words min-w-0 overflow-x-auto">
                     {formatTime(result.payoffTime)}
                   </div>
                   <div className="text-sm text-red-700 dark:text-red-300">
@@ -217,7 +217,7 @@ export default function DebtRepaymentCalculator() {
                   </div>
                 </div>
                 <div className="text-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
-                  <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">
+                  <div className="text-2xl font-bold text-orange-600 dark:text-orange-400 break-words min-w-0 overflow-x-auto">
                     {formatCurrency(result.totalInterest)}
                   </div>
                   <div className="text-sm text-orange-700 dark:text-orange-300">
@@ -227,21 +227,30 @@ export default function DebtRepaymentCalculator() {
               </div>
 
               <div className="space-y-2">
-                <Badge variant="outline" className="w-full justify-between p-2">
+                <Badge
+                  variant="outline"
+                  className="w-full justify-between p-2 flex-wrap"
+                >
                   <span>Original Debt:</span>
-                  <span className="font-semibold">
+                  <span className="font-semibold break-words min-w-0">
                     {formatCurrency(principal)}
                   </span>
                 </Badge>
-                <Badge variant="outline" className="w-full justify-between p-2">
+                <Badge
+                  variant="outline"
+                  className="w-full justify-between p-2 flex-wrap"
+                >
                   <span>Total Payments:</span>
-                  <span className="font-semibold">
+                  <span className="font-semibold break-words min-w-0">
                     {formatCurrency(result.totalPayments)}
                   </span>
                 </Badge>
-                <Badge variant="outline" className="w-full justify-between p-2">
+                <Badge
+                  variant="outline"
+                  className="w-full justify-between p-2 flex-wrap"
+                >
                   <span>Interest Paid:</span>
-                  <span className="font-semibold">
+                  <span className="font-semibold break-words min-w-0">
                     {formatCurrency(result.totalInterest)}
                   </span>
                 </Badge>
