@@ -508,7 +508,7 @@ export default function PasswordGenerator() {
                       </div>
                     </div>
 
-                    <div className="font-mono text-sm bg-slate-50 dark:bg-slate-800 p-3 rounded border">
+                    <div className="font-mono text-sm bg-slate-50 dark:bg-slate-800 p-3 rounded border overflow-x-auto break-all min-w-0">
                       {isVisible ? password : "•".repeat(password.length)}
                     </div>
 

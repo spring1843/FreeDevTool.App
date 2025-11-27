@@ -11,6 +11,7 @@ import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_TEXT_SPLIT } from "@/data/defaults";
+import { CopyButton } from "@/components/ui/copy-button";
 
 export default function TextSplit() {
   const [text, setText] = useState(DEFAULT_TEXT_SPLIT);
@@ -177,8 +178,13 @@ export default function TextSplit() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
-              Split Results
-              <Badge variant="outline">{splitResult.length} parts</Badge>
+              <span>Split Results</span>
+              <div className="flex items-center gap-2">
+                <Badge variant="outline">{splitResult.length} parts</Badge>
+                {splitResult.length > 0 && (
+                  <CopyButton text={splitResult.join("\n")} variant="outline" />
+                )}
+              </div>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -193,9 +199,12 @@ export default function TextSplit() {
                       <div className="font-mono text-sm flex-1 break-words">
                         {part || "<empty>"}
                       </div>
-                      <Badge variant="outline" className="ml-2 text-xs">
-                        {index + 1}
-                      </Badge>
+                      <div className="flex items-center gap-1">
+                        <CopyButton text={part} />
+                        <Badge variant="outline" className="text-xs">
+                          {index + 1}
+                        </Badge>
+                      </div>
                     </div>
                     <div className="text-xs text-gray-500 mt-1">
                       Length: {part.length} characters

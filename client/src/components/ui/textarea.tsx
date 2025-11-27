@@ -8,7 +8,17 @@ import { css } from "@codemirror/lang-css";
 import { html } from "@codemirror/lang-html";
 import { yaml } from "@codemirror/lang-yaml";
 import { markdown } from "@codemirror/lang-markdown";
+import { less } from "@codemirror/lang-less";
+import { sql } from "@codemirror/lang-sql";
+import { rust } from "@codemirror/lang-rust";
+import { php } from "@codemirror/lang-php";
+import { python } from "@codemirror/lang-python";
+import { go } from "@codemirror/lang-go";
+import { java } from "@codemirror/lang-java";
+import { cpp } from "@codemirror/lang-cpp";
+import { json } from "@codemirror/lang-json";
 import { Copy, Download, Upload } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 // Define props for the CodeMirror component
 export interface TextAreaProps {
@@ -29,7 +39,9 @@ export interface TextAreaProps {
 const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
   ({ className, value, onChange, theme = "light", ...props }) => {
     const baseClassName = cn(
-      "w-full rounded-md border border-input bg-background text-sm",
+      // Make the editor visually attach to the top navbar: no top rounding
+      // so the navbar's rounded-t-md forms the top corners; keep bottom round.
+      "w-full rounded-b-md border border-input bg-background text-sm",
       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
       className
     );
@@ -43,16 +55,95 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
           return javascript({ jsx: true, typescript: true });
         case "css":
           return css();
+        case "less":
+          return less();
+        case "scss":
+          // Approximate with CSS highlighting (no SCSS package installed)
+          return css();
         case "html":
           return html();
         case "yaml":
           return yaml();
         case "markdown":
           return markdown();
+        case "graphql":
+          // Approximate with JavaScript highlighting to avoid adding heavy deps
+          return javascript({ jsx: false });
+        case "python":
+          return python();
+        case "php":
+          return php();
+        case "rust":
+          return rust();
+        case "sql":
+          return sql();
+        case "go":
+          return go();
+        case "java":
+          return java();
+        case "cpp":
+        case "c++":
+          return cpp();
+        case "json":
+          return json();
+        case "text":
+        case "plain":
+        case "plaintext":
+          // Minimal setup: no specific language extension
+          return [];
         default:
           return javascript({ jsx: true }); // Default to JavaScript if lang is not provided or recognized
       }
     };
+
+    // Canonical language values (identifiers) and display labels
+    const LANGUAGES = {
+      javascript: { value: "javascript", label: "JavaScript" },
+      typescript: { value: "typescript", label: "TypeScript" },
+      css: { value: "css", label: "CSS" },
+      less: { value: "less", label: "LESS" },
+      scss: { value: "scss", label: "SCSS" },
+      html: { value: "html", label: "HTML" },
+      yaml: { value: "yaml", label: "YAML" },
+      markdown: { value: "markdown", label: "Markdown" },
+      graphql: { value: "graphql", label: "GraphQL" },
+      plaintext: { value: "plaintext", label: "Plain Text" },
+      go: { value: "go", label: "Go" },
+      java: { value: "java", label: "Java" },
+      cpp: { value: "cpp", label: "C++" },
+      json: { value: "json", label: "JSON" },
+      php: { value: "php", label: "PHP" },
+      python: { value: "python", label: "Python" },
+      rust: { value: "rust", label: "Rust" },
+      sql: { value: "sql", label: "SQL" },
+    };
+
+    const LANGUAGE_OPTIONS = [
+      LANGUAGES.javascript,
+      LANGUAGES.typescript,
+      LANGUAGES.css,
+      LANGUAGES.less,
+      LANGUAGES.scss,
+      LANGUAGES.html,
+      LANGUAGES.yaml,
+      LANGUAGES.markdown,
+      LANGUAGES.graphql,
+      LANGUAGES.plaintext,
+      LANGUAGES.go,
+      LANGUAGES.java,
+      LANGUAGES.cpp,
+      LANGUAGES.json,
+      LANGUAGES.php,
+      LANGUAGES.python,
+      LANGUAGES.rust,
+      LANGUAGES.sql,
+    ].sort((a, b) => a.label.localeCompare(b.label));
+    const [currentLang, setCurrentLang] = React.useState<string | undefined>(
+      props.lang
+    );
+    React.useEffect(() => {
+      setCurrentLang(props.lang);
+    }, [props.lang]);
 
     // Create a minimal synthetic ChangeEvent compatible with e.target.value usage.
     const createSyntheticChangeEvent = (
@@ -62,10 +153,27 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         // Consumers expect e.target.value; other fields are not used.
         target: { value: val } as unknown as EventTarget & HTMLTextAreaElement,
       }) as unknown as React.ChangeEvent<HTMLTextAreaElement>;
-    const extensions = [getLanguageExtension(props.lang)];
+    const langExt = getLanguageExtension(currentLang);
+    const extensions = Array.isArray(langExt) ? langExt : [langExt];
+    const { toast } = useToast();
 
-    const handleCopy = () => {
-      navigator.clipboard.writeText(value || "");
+    const handleCopy = async () => {
+      try {
+        await navigator.clipboard.writeText(value || "");
+        toast({
+          title: "Copied to clipboard",
+          description: `The content has been copied (${formatBytes(contentSize)}).`,
+          duration: 2000,
+        });
+      } catch {
+        // Provide a gentle failure notice without breaking flow
+        toast({
+          title: "Copy failed",
+          description: "Unable to copy content to clipboard.",
+          variant: "destructive",
+          duration: 2500,
+        });
+      }
     };
 
     // Download handler
@@ -74,15 +182,29 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         ? props.fileExtension.replace(/^\./, "")
         : "txt";
       const randomName = `file_${Math.random().toString(36).slice(2, 10)}.${extension}`;
-      const blob = new Blob([value || ""], { type: "text/plain" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = randomName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      try {
+        const blob = new Blob([value || ""], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = randomName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        toast({
+          title: "Download started",
+          description: `Saved as ${randomName} (${formatBytes(contentSize)})`,
+          duration: 2000,
+        });
+      } catch {
+        toast({
+          title: "Download failed",
+          description: "Could not create or save the file.",
+          variant: "destructive",
+          duration: 2500,
+        });
+      }
     };
 
     // Ref for hidden file input
@@ -90,18 +212,52 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
 
     // Handler for upload button click
     const handleUploadClick = () => {
-      fileInputRef.current?.click();
+      try {
+        fileInputRef.current?.click();
+      } catch {
+        toast({
+          title: "Upload failed",
+          description: "Could not open file picker.",
+          variant: "destructive",
+          duration: 2500,
+        });
+      }
     };
 
     // Handler for file input change
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
-      if (!file) return;
+      if (!file) {
+        // User canceled or no file selected; no toast needed
+        return;
+      }
       const reader = new FileReader();
       reader.onload = () => {
-        if (onChange) {
-          onChange(createSyntheticChangeEvent(reader.result as string));
+        try {
+          if (onChange) {
+            onChange(createSyntheticChangeEvent(reader.result as string));
+          }
+          toast({
+            title: "File uploaded",
+            description: `Loaded ${file.name} (${formatBytes(file.size)})`,
+            duration: 2000,
+          });
+        } catch {
+          toast({
+            title: "Upload failed",
+            description: "Could not read the selected file.",
+            variant: "destructive",
+            duration: 2500,
+          });
         }
+      };
+      reader.onerror = () => {
+        toast({
+          title: "Upload failed",
+          description: "An error occurred while reading the file.",
+          variant: "destructive",
+          duration: 2500,
+        });
       };
       reader.readAsText(file);
       // Reset input value so same file can be uploaded again
@@ -114,8 +270,14 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
 
     // Format bytes to human readable string
     const formatBytes = (bytes: number): string => {
-      if (bytes < 1024) return `${bytes} B`;
-      const units = ["kB", "MB", "GB", "TB"];
+      // Use full unit names for clarity
+      if (bytes < 1024) return `${bytes} Bytes`;
+      const units = [
+        "Kilobytes",
+        "Megabytes",
+        "Gigabytes",
+        "Terabytes",
+      ] as const;
       let i = -1;
       let size = bytes;
       do {
@@ -184,52 +346,99 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         onDrop={handleDrop}
         data-testid="textarea-drop-area"
       >
-        <div className="absolute top-1 right-1 z-10 flex gap-1">
-          <Button
-            onClick={handleCopy}
-            size="sm"
-            variant="ghost"
-            title="Copy To clipboard"
-            data-testid="copy-all-button"
+        {/* Toolbar / Navbar above the editor */}
+        <div className="flex justify-end">
+          <div
+            className={cn(
+              // Compact toolbar sized to its contents (no full-width stretch)
+              "inline-flex items-center gap-2 text-xs text-muted-foreground",
+              // Remove outer spacing so the toolbar borders align flush with editor borders
+              "bg-muted rounded-t-md border px-1 py-0"
+            )}
+            data-testid="textarea-toolbar"
           >
-            <Copy className="w-4 h-4" />
-          </Button>
-          <Button
-            onClick={handleDownload}
-            size="sm"
-            variant="ghost"
-            title="Download file"
-            data-testid="download-button"
-          >
-            <Download className="w-4 h-4" />
-          </Button>
-          {/* Only show upload if not readOnly */}
-          {!props.readOnly && (
-            <>
+            <div className="relative group">
               <Button
-                onClick={handleUploadClick}
+                onClick={handleCopy}
                 size="sm"
                 variant="ghost"
-                title="Upload file"
-                data-testid="upload-button"
+                aria-label="Copy content to clipboard"
+                title="Copy content to clipboard"
+                data-testid="copy-all-button"
+                className="p-0 h-5 w-5"
               >
-                <Upload className="w-4 h-4" />
+                <Copy className="w-3.5 h-3.5" />
               </Button>
-              {/* Hidden file input for upload */}
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept={
-                  props.fileExtension
-                    ? `.${props.fileExtension.replace(/^\./, "")}`
-                    : undefined
-                }
-                style={{ display: "none" }}
-                onChange={handleFileChange}
-                data-testid="upload-input"
-              />
-            </>
-          )}
+              <span
+                className={cn(
+                  "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
+                  "border"
+                )}
+              >
+                Copy
+              </span>
+            </div>
+            <div className="relative group">
+              <Button
+                onClick={handleDownload}
+                size="sm"
+                variant="ghost"
+                aria-label="Download content as a file"
+                title="Download content as a file"
+                data-testid="download-button"
+                className="p-0 h-5 w-5"
+              >
+                <Download className="w-3.5 h-3.5" />
+              </Button>
+              <span
+                className={cn(
+                  "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
+                  "border"
+                )}
+              >
+                Download
+              </span>
+            </div>
+            {/* Only show upload if not readOnly */}
+            {!props.readOnly && (
+              <>
+                <div className="relative group">
+                  <Button
+                    onClick={handleUploadClick}
+                    size="sm"
+                    variant="ghost"
+                    aria-label="Import from a file"
+                    title="Import from a file"
+                    data-testid="upload-button"
+                    className="p-0 h-5 w-5"
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                  </Button>
+                  <span
+                    className={cn(
+                      "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
+                      "border"
+                    )}
+                  >
+                    Upload
+                  </span>
+                </div>
+                {/* Hidden file input for upload */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept={
+                    props.fileExtension
+                      ? `.${props.fileExtension.replace(/^\./, "")}`
+                      : undefined
+                  }
+                  style={{ display: "none" }}
+                  onChange={handleFileChange}
+                  data-testid="upload-input"
+                />
+              </>
+            )}
+          </div>
         </div>
 
         <CodeMirror
@@ -253,16 +462,36 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
           // Add onUpdate handler for cursor tracking
           onUpdate={handleEditorUpdate}
         />
-        {/* Status bar below editor */}
+        {/* Status bar below editor with status on the left and language selector on the right */}
         <div
           className="w-full flex justify-between items-center px-2 py-1 text-xs text-muted-foreground bg-muted rounded-b-md border-t"
           style={{ fontFamily: "monospace" }}
           data-testid="textarea-status-bar"
         >
           <span>
-            Line {cursor.line}, Char {cursor.ch}
+            Line {cursor.line}, Char {cursor.ch}, Size{" "}
+            {formatBytes(contentSize)}
           </span>
-          <span>Size: {formatBytes(contentSize)}</span>
+          <label className="flex items-center gap-1">
+            <span className="sr-only">Select language</span>
+            <select
+              aria-label="Select language"
+              title="Language"
+              value={currentLang || LANGUAGES.javascript.value}
+              onChange={e => setCurrentLang(e.target.value)}
+              className={cn(
+                "h-5 rounded border bg-background px-1 text-xs",
+                "focus:outline-none"
+              )}
+              data-testid="language-select"
+            >
+              {LANGUAGE_OPTIONS.map(opt => (
+                <option key={opt.value} value={opt.value} className="text-xs">
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
       </div>
     );

@@ -18,7 +18,7 @@ import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_TEXT_SORT } from "@/data/defaults";
 
-type SortType = "alphabetical" | "numerical" | "length" | "reverse";
+type SortType = "alphabetical" | "numerical" | "length" | "reverse" | "random";
 type SortOrder = "asc" | "desc";
 
 export default function TextSort() {
@@ -27,13 +27,19 @@ export default function TextSort() {
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
   const [caseSensitive, setCaseSensitive] = useState(false);
   const [unique, setUnique] = useState(false);
+  const [trimLines, setTrimLines] = useState(false);
   const [sortedOutput, setSortedOutput] = useState("");
   const { theme } = useTheme();
 
   const sortText = useCallback(() => {
-    const lines = input.split("\n").filter(line => line.trim() !== "");
+    // Split into raw lines first (preserve original ordering prior to sort)
+    const rawLines = input.split("\n");
+    // Optionally trim each line before filtering empties & sorting/deduping
+    const processed = rawLines
+      .map(l => (trimLines ? l.trim() : l))
+      .filter(line => line.trim() !== "");
 
-    let sorted = [...lines];
+    let sorted = [...processed];
 
     switch (sortType) {
       case "alphabetical":
@@ -59,22 +65,34 @@ export default function TextSort() {
       case "reverse":
         sorted.reverse();
         break;
+      case "random": {
+        for (let i = sorted.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [sorted[i], sorted[j]] = [sorted[j], sorted[i]];
+        }
+        break;
+      }
       default: {
         // Handle default case
       }
     }
 
-    if (sortOrder === "desc" && sortType !== "reverse") {
+    if (
+      sortOrder === "desc" &&
+      sortType !== "reverse" &&
+      sortType !== "random"
+    ) {
       sorted.reverse();
     }
 
     // Remove duplicates if unique option is enabled
     if (unique) {
+      // Deduplicate after optional trimming so lines differing only by surrounding whitespace are merged
       sorted = Array.from(new Set(sorted));
     }
 
     setSortedOutput(sorted.join("\n"));
-  }, [input, sortType, sortOrder, caseSensitive, unique]);
+  }, [input, sortType, sortOrder, caseSensitive, unique, trimLines]);
 
   const handleReset = () => {
     setInput(DEFAULT_TEXT_SORT);
@@ -82,6 +100,7 @@ export default function TextSort() {
     setSortOrder("asc");
     setCaseSensitive(false);
     setUnique(false);
+    setTrimLines(false);
     setSortedOutput("");
   };
 
@@ -98,8 +117,8 @@ export default function TextSort() {
               Text Sorter
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
-              Sort lines of text alphabetically, numerically, or by length with
-              optional deduplication
+              Sort lines of text alphabetically, randomly, numerically, or by
+              length with optional deduplication
             </p>
           </div>
           <SecurityBanner variant="compact" />
@@ -126,6 +145,7 @@ export default function TextSort() {
                   <SelectItem value="numerical">Numerical</SelectItem>
                   <SelectItem value="length">By Length</SelectItem>
                   <SelectItem value="reverse">Reverse Lines</SelectItem>
+                  <SelectItem value="random">Randomize</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -157,7 +177,27 @@ export default function TextSort() {
             </div>
           </div>
 
-          <div className="border-t pt-4 mt-4">
+          <div className="border-t pt-4 mt-4 space-y-4">
+            <div className="flex items-start space-x-2">
+              <Checkbox
+                id="trim-lines"
+                checked={trimLines}
+                onCheckedChange={checked => setTrimLines(checked === true)}
+                data-testid="checkbox-trim-lines"
+              />
+              <div className="grid gap-1.5 leading-none">
+                <Label
+                  htmlFor="trim-lines"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Trim lines before processing
+                </Label>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Removes leading and trailing whitespace prior to sorting &
+                  deduplication
+                </p>
+              </div>
+            </div>
             <div className="flex items-start space-x-2">
               <Checkbox
                 id="unique"
@@ -173,7 +213,7 @@ export default function TextSort() {
                   Remove duplicate lines
                 </Label>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
-                  Keep only unique entries in sorted output
+                  Keeps only unique entries (after optional trimming)
                 </p>
               </div>
             </div>

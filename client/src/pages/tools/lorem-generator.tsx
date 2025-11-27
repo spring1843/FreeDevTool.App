@@ -17,6 +17,8 @@ import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useToast } from "@/hooks/use-toast";
 
+const MAX_WORDS_LIMIT = 1000;
+
 const loremWords = [
   "lorem",
   "ipsum",
@@ -284,11 +286,14 @@ export default function LoremGenerator() {
                 id="count"
                 type="number"
                 min="1"
-                max="100"
+                max={MAX_WORDS_LIMIT}
                 value={count}
                 onChange={e =>
                   setCount(
-                    Math.max(1, Math.min(100, parseInt(e.target.value) || 1))
+                    Math.max(
+                      1,
+                      Math.min(MAX_WORDS_LIMIT, parseInt(e.target.value) || 1)
+                    )
                   )
                 }
                 data-testid="count-input"
