@@ -268,6 +268,12 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
     const [cursor, setCursor] = React.useState({ line: 1, ch: 1 });
     const [contentSize, setContentSize] = React.useState(0);
 
+    // Ref to track pending cursor update for debouncing
+    const cursorUpdateRef = React.useRef<number | null>(null);
+    const pendingCursorRef = React.useRef<{ line: number; ch: number } | null>(
+      null
+    );
+
     // Format bytes to human readable string
     const formatBytes = (bytes: number): string => {
       // Use full unit names for clarity
@@ -292,14 +298,34 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
       setContentSize(new Blob([value || ""]).size);
     }, [value]);
 
-    // Handler for CodeMirror view updates
+    // Cleanup pending animation frame on unmount
+    React.useEffect(() => () => {
+        if (cursorUpdateRef.current !== null) {
+          cancelAnimationFrame(cursorUpdateRef.current);
+        }
+      }, []);
+
+    // Handler for CodeMirror view updates - debounced to prevent mobile performance issues
     const handleEditorUpdate = React.useCallback((view: ViewUpdate) => {
       const pos = view.state.selection.main.head;
       const line = view.state.doc.lineAt(pos);
-      setCursor({
+      const newCursor = {
         line: line.number,
         ch: pos - line.from + 1,
-      });
+      };
+
+      // Store the latest cursor position
+      pendingCursorRef.current = newCursor;
+
+      // Only schedule an update if one isn't already pending
+      if (cursorUpdateRef.current === null) {
+        cursorUpdateRef.current = requestAnimationFrame(() => {
+          cursorUpdateRef.current = null;
+          if (pendingCursorRef.current) {
+            setCursor(pendingCursorRef.current);
+          }
+        });
+      }
     }, []);
 
     // Use theme prop for CodeMirror theme
