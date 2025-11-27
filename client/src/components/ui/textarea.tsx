@@ -55,6 +55,22 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
       }
     };
 
+    // Language selection state (defaults to provided prop)
+    const availableLanguages = [
+      "javascript",
+      "typescript",
+      "css",
+      "html",
+      "yaml",
+      "markdown",
+    ] as const;
+    const [currentLang, setCurrentLang] = React.useState<string | undefined>(
+      props.lang
+    );
+    React.useEffect(() => {
+      setCurrentLang(props.lang);
+    }, [props.lang]);
+
     // Create a minimal synthetic ChangeEvent compatible with e.target.value usage.
     const createSyntheticChangeEvent = (
       val: string
@@ -63,7 +79,7 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         // Consumers expect e.target.value; other fields are not used.
         target: { value: val } as unknown as EventTarget & HTMLTextAreaElement,
       }) as unknown as React.ChangeEvent<HTMLTextAreaElement>;
-    const extensions = [getLanguageExtension(props.lang)];
+    const extensions = [getLanguageExtension(currentLang)];
     const { toast } = useToast();
 
     const handleCopy = async () => {
@@ -259,6 +275,9 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
           )}
           data-testid="textarea-toolbar"
         >
+          {/* Spacer to keep actions right-aligned */}
+          <div className="mr-auto" />
+
           <div className="relative group">
             <Button
               onClick={handleCopy}
@@ -363,16 +382,36 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
           // Add onUpdate handler for cursor tracking
           onUpdate={handleEditorUpdate}
         />
-        {/* Status bar below editor */}
+        {/* Status bar below editor with status on the left and language selector on the right */}
         <div
           className="w-full flex justify-between items-center px-2 py-1 text-xs text-muted-foreground bg-muted rounded-b-md border-t"
           style={{ fontFamily: "monospace" }}
           data-testid="textarea-status-bar"
         >
           <span>
-            Line {cursor.line}, Char {cursor.ch}
+            Line {cursor.line}, Char {cursor.ch}, Size{" "}
+            {formatBytes(contentSize)}
           </span>
-          <span>Size: {formatBytes(contentSize)}</span>
+          <label className="flex items-center gap-1">
+            <span className="sr-only">Select language</span>
+            <select
+              aria-label="Select language"
+              title="Language"
+              value={currentLang || "javascript"}
+              onChange={e => setCurrentLang(e.target.value)}
+              className={cn(
+                "h-5 rounded border bg-background px-1 text-xs",
+                "focus:outline-none"
+              )}
+              data-testid="language-select"
+            >
+              {availableLanguages.map(l => (
+                <option key={l} value={l} className="text-xs">
+                  {l}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
       </div>
     );
