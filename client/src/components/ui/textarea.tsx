@@ -20,6 +20,35 @@ import { json } from "@codemirror/lang-json";
 import { Copy, Download, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+// Detect mobile/touch devices - use simple textarea instead of CodeMirror for better performance
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => {
+      // Check for touch capability and small screen width
+      const hasTouchScreen =
+        "ontouchstart" in window ||
+        navigator.maxTouchPoints > 0 ||
+        // @ts-expect-error - msMaxTouchPoints is IE-specific
+        navigator.msMaxTouchPoints > 0;
+      const isSmallScreen = window.innerWidth <= 768;
+      // Also check user agent for mobile devices
+      const isMobileUA =
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        );
+      setIsMobile((hasTouchScreen && isSmallScreen) || isMobileUA);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  return isMobile;
+};
+
 // Define props for the CodeMirror component
 export interface TextAreaProps {
   className?: string;
@@ -38,6 +67,9 @@ export interface TextAreaProps {
 
 const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
   ({ className, value, onChange, theme = "light", ...props }) => {
+    const isMobile = useIsMobile();
+    const mobileTextareaRef = React.useRef<HTMLTextAreaElement>(null);
+
     const baseClassName = cn(
       // Make the editor visually attach to the top navbar: no top rounding
       // so the navbar's rounded-t-md forms the top corners; keep bottom round.
@@ -299,11 +331,14 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
     }, [value]);
 
     // Cleanup pending animation frame on unmount
-    React.useEffect(() => () => {
+    React.useEffect(
+      () => () => {
         if (cursorUpdateRef.current !== null) {
           cancelAnimationFrame(cursorUpdateRef.current);
         }
-      }, []);
+      },
+      []
+    );
 
     // Handler for CodeMirror view updates - debounced to prevent mobile performance issues
     const handleEditorUpdate = React.useCallback((view: ViewUpdate) => {
@@ -467,27 +502,61 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
           </div>
         </div>
 
-        <CodeMirror
-          className={baseClassName}
-          value={value}
-          extensions={extensions}
-          basicSetup={{
-            lineNumbers: true,
-            foldGutter: true,
-          }}
-          theme={codeMirrorTheme}
-          onChange={val => {
-            if (onChange) onChange(createSyntheticChangeEvent(val));
-          }}
-          minHeight={props.minHeight}
-          lang={props.lang}
-          placeholder={props.placeholder}
-          readOnly={props.readOnly}
-          id={props.id}
-          autoFocus={props.autoFocus}
-          // Add onUpdate handler for cursor tracking
-          onUpdate={handleEditorUpdate}
-        />
+        {isMobile ? (
+          // Simple native textarea for mobile - much better performance
+          <textarea
+            ref={mobileTextareaRef}
+            className={cn(
+              baseClassName,
+              "p-3 font-mono resize-none",
+              theme === "dark"
+                ? "bg-slate-900 text-slate-100"
+                : "bg-white text-slate-900"
+            )}
+            value={value}
+            onChange={onChange}
+            onSelect={e => {
+              // Update cursor position for status bar
+              const target = e.target as HTMLTextAreaElement;
+              const pos = target.selectionStart;
+              const textBefore = (value || "").substring(0, pos);
+              const lines = textBefore.split("\n");
+              setCursor({
+                line: lines.length,
+                ch: (lines[lines.length - 1]?.length || 0) + 1,
+              });
+            }}
+            placeholder={props.placeholder}
+            readOnly={props.readOnly}
+            id={props.id}
+            autoFocus={props.autoFocus}
+            style={{
+              minHeight: props.minHeight || "200px",
+            }}
+            data-testid="mobile-textarea"
+          />
+        ) : (
+          <CodeMirror
+            className={baseClassName}
+            value={value}
+            extensions={extensions}
+            basicSetup={{
+              lineNumbers: true,
+              foldGutter: true,
+            }}
+            theme={codeMirrorTheme}
+            onChange={val => {
+              if (onChange) onChange(createSyntheticChangeEvent(val));
+            }}
+            minHeight={props.minHeight}
+            lang={props.lang}
+            placeholder={props.placeholder}
+            readOnly={props.readOnly}
+            id={props.id}
+            autoFocus={props.autoFocus}
+            onUpdate={handleEditorUpdate}
+          />
+        )}
         {/* Status bar below editor with status on the left and language selector on the right */}
         <div
           className="w-full flex justify-between items-center px-2 py-1 text-xs text-muted-foreground bg-muted rounded-b-md border-t"
