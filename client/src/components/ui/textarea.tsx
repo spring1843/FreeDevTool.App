@@ -1,8 +1,7 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import CodeMirror from "@uiw/react-codemirror";
-import { EditorView } from "@codemirror/view";
-import type { ViewUpdate } from "@codemirror/view";
+import { EditorView, type ViewUpdate } from "@codemirror/view";
 import { javascript } from "@codemirror/lang-javascript";
 import { cn } from "@/lib/utils";
 import { css } from "@codemirror/lang-css";
@@ -65,16 +64,16 @@ const mobileThemeExtension = EditorView.theme({
 
 // Extension to release pointer capture on touch end - prevents focus lock on iOS
 const releasePointerCaptureExtension = EditorView.domEventHandlers({
-  pointerup(event, view) {
+  pointerup(event, _view) {
     const target = event.target as HTMLElement;
     if (target.hasPointerCapture?.(event.pointerId)) {
       target.releasePointerCapture(event.pointerId);
     }
     return false;
   },
-  touchend(event, view) {
+  touchend(event, _view) {
     if (document.activeElement instanceof HTMLElement) {
-      const isOutsideEditor = !view.dom.contains(event.target as Node);
+      const isOutsideEditor = !_view.dom.contains(event.target as Node);
       if (isOutsideEditor) {
         document.activeElement.blur();
       }
