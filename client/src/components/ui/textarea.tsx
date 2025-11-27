@@ -266,99 +266,98 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         data-testid="textarea-drop-area"
       >
         {/* Toolbar / Navbar above the editor */}
-        <div
-          className={cn(
-            // Match the status bar styling: compact, subtle, no extra spacing
-            "w-full flex items-center justify-end px-2 py-1 text-xs text-muted-foreground",
-            // Use complementary borders and rounded corners (top bar vs bottom bar)
-            "bg-muted rounded-t-md border"
-          )}
-          data-testid="textarea-toolbar"
-        >
-          {/* Spacer to keep actions right-aligned */}
-          <div className="mr-auto" />
-
-          <div className="relative group">
-            <Button
-              onClick={handleCopy}
-              size="sm"
-              variant="ghost"
-              aria-label="Copy content to clipboard"
-              title="Copy content to clipboard"
-              data-testid="copy-all-button"
-              className="p-0 h-5 w-5"
-            >
-              <Copy className="w-3.5 h-3.5" />
-            </Button>
-            <span
-              className={cn(
-                "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
-                "border"
-              )}
-            >
-              Copy
-            </span>
+        <div className="flex justify-end">
+          <div
+            className={cn(
+              // Compact toolbar sized to its contents (no full-width stretch)
+              "inline-flex items-center gap-2 text-xs text-muted-foreground",
+              // Remove outer spacing so the toolbar borders align flush with editor borders
+              "bg-muted rounded-t-md border px-1 py-1"
+            )}
+            data-testid="textarea-toolbar"
+          >
+            <div className="relative group">
+              <Button
+                onClick={handleCopy}
+                size="sm"
+                variant="ghost"
+                aria-label="Copy content to clipboard"
+                title="Copy content to clipboard"
+                data-testid="copy-all-button"
+                className="p-0 h-5 w-5"
+              >
+                <Copy className="w-3.5 h-3.5" />
+              </Button>
+              <span
+                className={cn(
+                  "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
+                  "border"
+                )}
+              >
+                Copy
+              </span>
+            </div>
+            <div className="relative group">
+              <Button
+                onClick={handleDownload}
+                size="sm"
+                variant="ghost"
+                aria-label="Download content as a file"
+                title="Download content as a file"
+                data-testid="download-button"
+                className="p-0 h-5 w-5"
+              >
+                <Download className="w-3.5 h-3.5" />
+              </Button>
+              <span
+                className={cn(
+                  "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
+                  "border"
+                )}
+              >
+                Download
+              </span>
+            </div>
+            {/* Only show upload if not readOnly */}
+            {!props.readOnly && (
+              <>
+                <div className="relative group">
+                  <Button
+                    onClick={handleUploadClick}
+                    size="sm"
+                    variant="ghost"
+                    aria-label="Import from a file"
+                    title="Import from a file"
+                    data-testid="upload-button"
+                    className="p-0 h-5 w-5"
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                  </Button>
+                  <span
+                    className={cn(
+                      "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
+                      "border"
+                    )}
+                  >
+                    Upload
+                  </span>
+                </div>
+                {/* Hidden file input for upload */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept={
+                    props.fileExtension
+                      ? `.${props.fileExtension.replace(/^\./, "")}`
+                      : undefined
+                  }
+                  style={{ display: "none" }}
+                  onChange={handleFileChange}
+                  data-testid="upload-input"
+                />
+              </>
+            )}
           </div>
-          <div className="relative group">
-            <Button
-              onClick={handleDownload}
-              size="sm"
-              variant="ghost"
-              aria-label="Download content as a file"
-              title="Download content as a file"
-              data-testid="download-button"
-              className="p-0 h-5 w-5"
-            >
-              <Download className="w-3.5 h-3.5" />
-            </Button>
-            <span
-              className={cn(
-                "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
-                "border"
-              )}
-            >
-              Download
-            </span>
-          </div>
-          {/* Only show upload if not readOnly */}
-          {!props.readOnly && (
-            <>
-              <div className="relative group">
-                <Button
-                  onClick={handleUploadClick}
-                  size="sm"
-                  variant="ghost"
-                  aria-label="Import from a file"
-                  title="Import from a file"
-                  data-testid="upload-button"
-                  className="p-0 h-5 w-5"
-                >
-                  <Upload className="w-3.5 h-3.5" />
-                </Button>
-                <span
-                  className={cn(
-                    "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
-                    "border"
-                  )}
-                >
-                  Upload
-                </span>
-              </div>
-              {/* Hidden file input for upload */}
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept={
-                  props.fileExtension
-                    ? `.${props.fileExtension.replace(/^\./, "")}`
-                    : undefined
-                }
-                style={{ display: "none" }}
-                onChange={handleFileChange}
-                data-testid="upload-input"
-              />
-            </>
-          )}
         </div>
 
         <CodeMirror
