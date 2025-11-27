@@ -72,16 +72,16 @@ export function Layout({ children }: LayoutProps) {
   useEffect(() => {
     const blurCodeMirror = () => {
       // Blur any focused CodeMirror editors
-      const focusedEditors = document.querySelectorAll('.cm-editor.cm-focused');
-      focusedEditors.forEach((editor) => {
-        const contentArea = editor.querySelector('.cm-content') as HTMLElement;
+      const focusedEditors = document.querySelectorAll(".cm-editor.cm-focused");
+      focusedEditors.forEach(editor => {
+        const contentArea = editor.querySelector(".cm-content") as HTMLElement;
         if (contentArea) {
           contentArea.blur();
         }
       });
       // Also blur any active element that might be inside CodeMirror
       if (document.activeElement instanceof HTMLElement) {
-        const isInEditor = document.activeElement.closest('.cm-editor');
+        const isInEditor = document.activeElement.closest(".cm-editor");
         if (isInEditor) {
           document.activeElement.blur();
         }
@@ -90,17 +90,19 @@ export function Layout({ children }: LayoutProps) {
 
     const handlePointerDown = (event: PointerEvent) => {
       const target = event.target as HTMLElement;
-      
+
       // If touch/click is NOT inside a CodeMirror editor, blur any focused editors
-      const isInsideEditor = target.closest('.cm-editor');
+      const isInsideEditor = target.closest(".cm-editor");
       if (!isInsideEditor) {
         blurCodeMirror();
       }
     };
 
     // Use pointerdown for better cross-device support (touch and mouse)
-    document.addEventListener('pointerdown', handlePointerDown, { passive: true });
-    return () => document.removeEventListener('pointerdown', handlePointerDown);
+    document.addEventListener("pointerdown", handlePointerDown, {
+      passive: true,
+    });
+    return () => document.removeEventListener("pointerdown", handlePointerDown);
   }, []);
 
   // Global keyboard shortcut handler
