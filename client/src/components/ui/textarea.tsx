@@ -9,6 +9,7 @@ import { html } from "@codemirror/lang-html";
 import { yaml } from "@codemirror/lang-yaml";
 import { markdown } from "@codemirror/lang-markdown";
 import { Copy, Download, Upload } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 // Define props for the CodeMirror component
 export interface TextAreaProps {
@@ -63,9 +64,25 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         target: { value: val } as unknown as EventTarget & HTMLTextAreaElement,
       }) as unknown as React.ChangeEvent<HTMLTextAreaElement>;
     const extensions = [getLanguageExtension(props.lang)];
+    const { toast } = useToast();
 
-    const handleCopy = () => {
-      navigator.clipboard.writeText(value || "");
+    const handleCopy = async () => {
+      try {
+        await navigator.clipboard.writeText(value || "");
+        toast({
+          title: "Copied to clipboard",
+          description: "The content has been copied.",
+          duration: 2000,
+        });
+      } catch {
+        // Provide a gentle failure notice without breaking flow
+        toast({
+          title: "Copy failed",
+          description: "Unable to copy content to clipboard.",
+          variant: "destructive",
+          duration: 2500,
+        });
+      }
     };
 
     // Download handler
@@ -74,15 +91,29 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         ? props.fileExtension.replace(/^\./, "")
         : "txt";
       const randomName = `file_${Math.random().toString(36).slice(2, 10)}.${extension}`;
-      const blob = new Blob([value || ""], { type: "text/plain" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = randomName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      try {
+        const blob = new Blob([value || ""], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = randomName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        toast({
+          title: "Download started",
+          description: `Saved as ${randomName}`,
+          duration: 2000,
+        });
+      } catch {
+        toast({
+          title: "Download failed",
+          description: "Could not create or save the file.",
+          variant: "destructive",
+          duration: 2500,
+        });
+      }
     };
 
     // Ref for hidden file input
@@ -90,18 +121,52 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
 
     // Handler for upload button click
     const handleUploadClick = () => {
-      fileInputRef.current?.click();
+      try {
+        fileInputRef.current?.click();
+      } catch {
+        toast({
+          title: "Upload failed",
+          description: "Could not open file picker.",
+          variant: "destructive",
+          duration: 2500,
+        });
+      }
     };
 
     // Handler for file input change
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
-      if (!file) return;
+      if (!file) {
+        // User canceled or no file selected; no toast needed
+        return;
+      }
       const reader = new FileReader();
       reader.onload = () => {
-        if (onChange) {
-          onChange(createSyntheticChangeEvent(reader.result as string));
+        try {
+          if (onChange) {
+            onChange(createSyntheticChangeEvent(reader.result as string));
+          }
+          toast({
+            title: "File uploaded",
+            description: `Loaded ${file.name}`,
+            duration: 2000,
+          });
+        } catch {
+          toast({
+            title: "Upload failed",
+            description: "Could not read the selected file.",
+            variant: "destructive",
+            duration: 2500,
+          });
         }
+      };
+      reader.onerror = () => {
+        toast({
+          title: "Upload failed",
+          description: "An error occurred while reading the file.",
+          variant: "destructive",
+          duration: 2500,
+        });
       };
       reader.readAsText(file);
       // Reset input value so same file can be uploaded again
