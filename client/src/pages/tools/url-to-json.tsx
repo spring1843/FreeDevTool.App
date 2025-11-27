@@ -72,6 +72,55 @@ export default function URLToJSON() {
       "gov",
       "mil",
       "int",
+      "io",
+      "co",
+      "ai",
+      "app",
+      "dev",
+      "me",
+      "info",
+      "biz",
+      "us",
+      "uk",
+      "ca",
+      "de",
+      "fr",
+      "jp",
+      "cn",
+      "au",
+      "in",
+      "br",
+      "ru",
+      "nl",
+      "es",
+      "it",
+      "pl",
+      "ch",
+      "se",
+      "no",
+      "fi",
+      "dk",
+      "be",
+      "at",
+      "nz",
+      "za",
+      "mx",
+      "sg",
+      "hk",
+      "kr",
+      "tw",
+      "id",
+      "th",
+      "vn",
+      "ph",
+      "my",
+      "xyz",
+      "online",
+      "site",
+      "tech",
+      "store",
+      "blog",
+      "cloud",
       "co.uk",
       "co.jp",
       "co.au",
@@ -87,6 +136,9 @@ export default function URLToJSON() {
       "edu.au",
       "gov.au",
     ];
+
+    // Single-part TLDs for validation
+    const singlePartTLDs = commonTLDs.filter(t => !t.includes("."));
 
     let tld = "";
     let domain = "";
@@ -104,10 +156,18 @@ export default function URLToJSON() {
       }
     }
 
-    // Single-part TLD
-    tld = parts[parts.length - 1];
-    domain = parts[parts.length - 2];
-    subdomain = parts.slice(0, -2).join(".");
+    // Single-part TLD - validate it's a known TLD
+    const potentialTLD = parts[parts.length - 1];
+    if (singlePartTLDs.includes(potentialTLD.toLowerCase())) {
+      tld = potentialTLD;
+      domain = parts[parts.length - 2];
+      subdomain = parts.slice(0, -2).join(".");
+    } else {
+      // Not a recognized TLD - treat the whole hostname as domain
+      tld = "";
+      domain = hostname;
+      subdomain = "";
+    }
 
     return { tld, domain, subdomain };
   };
