@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import CodeMirror from "@uiw/react-codemirror";
 import { EditorView } from "@codemirror/view";
 import type { ViewUpdate } from "@codemirror/view";
-import type { Extension } from "@codemirror/state";
 import { javascript } from "@codemirror/lang-javascript";
 import { cn } from "@/lib/utils";
 import { css } from "@codemirror/lang-css";
