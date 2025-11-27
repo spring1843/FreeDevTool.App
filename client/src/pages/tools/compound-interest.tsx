@@ -345,7 +345,7 @@ export default function CompoundInterestCalculator() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                  <div className="text-2xl font-bold text-green-600 dark:text-green-400 break-words min-w-0 overflow-x-auto">
                     {formatCurrency(result.finalAmount)}
                   </div>
                   <div className="text-sm text-green-700 dark:text-green-300">
@@ -353,7 +353,7 @@ export default function CompoundInterestCalculator() {
                   </div>
                 </div>
                 <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 break-words min-w-0 overflow-x-auto">
                     {formatCurrency(result.totalInterest)}
                   </div>
                   <div className="text-sm text-blue-700 dark:text-blue-300">
@@ -363,21 +363,30 @@ export default function CompoundInterestCalculator() {
               </div>
 
               <div className="space-y-2">
-                <Badge variant="outline" className="w-full justify-between p-2">
+                <Badge
+                  variant="outline"
+                  className="w-full justify-between p-2 flex-wrap"
+                >
                   <span>Initial Investment:</span>
-                  <span className="font-semibold">
+                  <span className="font-semibold break-words min-w-0">
                     {formatCurrency(principal)}
                   </span>
                 </Badge>
-                <Badge variant="outline" className="w-full justify-between p-2">
+                <Badge
+                  variant="outline"
+                  className="w-full justify-between p-2 flex-wrap"
+                >
                   <span>Total Contributions:</span>
-                  <span className="font-semibold">
+                  <span className="font-semibold break-words min-w-0">
                     {formatCurrency(result.totalContributions)}
                   </span>
                 </Badge>
-                <Badge variant="outline" className="w-full justify-between p-2">
+                <Badge
+                  variant="outline"
+                  className="w-full justify-between p-2 flex-wrap"
+                >
                   <span>Interest Earned:</span>
-                  <span className="font-semibold">
+                  <span className="font-semibold break-words min-w-0">
                     {formatCurrency(result.totalInterest)}
                   </span>
                 </Badge>
