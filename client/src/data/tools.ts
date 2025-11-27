@@ -436,7 +436,7 @@ export const toolsData: ToolData = {
         metadata: {
           title: "Text Sort - Sort Lines of Text",
           description:
-            "Sort lines of text alphabetically or numerically. Multiple sorting options including reverse and case-insensitive.",
+            "Sort lines of text alphabetically or randomly. Multiple sorting options including reverse and case-insensitive.",
           keywords: [
             "text sorter",
             "sort lines",
