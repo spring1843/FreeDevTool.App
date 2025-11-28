@@ -81,7 +81,7 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          sections: [
+          notices: [
             {
               title: "Features:",
               items: [
@@ -140,37 +140,23 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          sections: [
+          notices: [
             {
-              title: "Extracted Components:",
+              title: "Supported Formats:",
               items: [
-                { label: "Protocol:", text: "HTTP, HTTPS, FTP, etc." },
-                { label: "Hostname:", text: "Full domain name" },
-                { label: "TLD:", text: "Top-level domain (.com, .org, etc.)" },
-                { label: "Domain:", text: "Main domain name" },
-                { label: "Subdomain:", text: "www, api, etc." },
-                { label: "Port:", text: "Custom port numbers" },
-                { label: "Path:", text: "URL path segments" },
-                { label: "Query Parameters:", text: "Individual URL parameters" },
+                "Simple key=value pairs",
+                "Nested objects using dot notation",
+                "Arrays using bracket notation",
+                "URL-encoded special characters",
               ],
             },
             {
-              title: "Use Cases:",
+              title: "Features:",
               items: [
-                "API development and testing",
-                "URL analysis and debugging",
-                "Web scraping and automation",
-                "SEO and analytics tools",
-                "Documentation and training",
-                "Link validation and parsing",
-              ],
-            },
-            {
-              title: "Example URLs to try:",
-              items: [
-                "https://api.github.com/repos/owner/repo?per_page=100&sort=updated#readme",
-                "https://shop.example.co.uk:8080/products/electronics?category=laptops&brand=apple&sort=price",
-                "ftp://files.example.com/downloads/software/installer.exe",
+                "Automatic type detection (numbers, booleans)",
+                "Deep nesting support",
+                "Array index handling",
+                "Special character decoding",
               ],
             },
           ],
@@ -208,7 +194,7 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          sections: [
+          notices: [
             {
               title: "Common Bases:",
               items: [
@@ -255,16 +241,17 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          notice: {
-            type: "tips",
-            title: "Pro Tips",
-            items: [
-              "Use Ctrl+A to select all text quickly",
-              "The formatter will auto-detect and fix common JSON issues",
-              "Validation shows specific error locations",
-              "Minified JSON is optimized for data transmission",
-            ],
-          },
+          notices: [
+            {
+              title: "Pro Tips",
+              items: [
+                "Use Ctrl+A to select all text quickly",
+                "The formatter will auto-detect and fix common JSON issues",
+                "Validation shows specific error locations",
+                "Minified JSON is optimized for data transmission",
+              ],
+            },
+          ],
         },
       },
       {
@@ -282,7 +269,7 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          sections: [
+          notices: [
             {
               title: "JSONC (JSON with Comments)",
               items: [
@@ -323,7 +310,7 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          sections: [
+          notices: [
             {
               title: "Features:",
               items: [
@@ -361,7 +348,7 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          sections: [
+          notices: [
             {
               title: "YAML Features:",
               items: [
@@ -399,7 +386,7 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          sections: [
+          notices: [
             {
               title: "Markdown Features:",
               items: [
@@ -437,7 +424,7 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          sections: [
+          notices: [
             {
               title: "CSS Features:",
               items: [
@@ -475,7 +462,7 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          sections: [
+          notices: [
             {
               title: "TypeScript Features:",
               items: [
@@ -513,7 +500,7 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          sections: [
+          notices: [
             {
               title: "GraphQL Features:",
               items: [
@@ -550,7 +537,7 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          sections: [
+          notices: [
             {
               title: "Standard Formats:",
               items: [
@@ -610,11 +597,6 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          notice: {
-            type: "examples",
-            title: "URL Encoding Examples:",
-            items: [],
-          },
           examples: [
             { from: "Space", to: "%20" },
             { from: "@", to: "%40" },
@@ -671,16 +653,17 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          notice: {
-            type: "info",
-            title: "MD5 Information:",
-            items: [
-              "MD5 produces a 128-bit (16-byte) hash value",
-              "Commonly used for file integrity verification",
-              "Not recommended for security-sensitive applications",
-              "Use SHA-256 or bcrypt for password hashing",
-            ],
-          },
+          notices: [
+            {
+              title: "MD5 Information:",
+              items: [
+                "MD5 produces a 128-bit (16-byte) hash value",
+                "Commonly used for file integrity verification",
+                "Not recommended for security-sensitive applications",
+                "Use SHA-256 or bcrypt for password hashing",
+              ],
+            },
+          ],
         },
       },
       {
@@ -699,7 +682,7 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          sections: [
+          notices: [
             {
               title: "Bcrypt Features:",
               items: [
@@ -806,7 +789,7 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          sections: [
+          notices: [
             {
               title: "Supported QR Types:",
               items: [
@@ -853,7 +836,7 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          sections: [
+          notices: [
             {
               title: "Common Use Cases:",
               items: [
@@ -891,16 +874,17 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          notice: {
-            type: "info",
-            title: "About Lorem Ipsum:",
-            items: [
-              "Industry standard placeholder text since the 1500s",
-              "Based on a work by Cicero from 45 BC",
-              "Scrambled Latin text that's readable but meaningless",
-              "Perfect for focusing on design without content distraction",
-            ],
-          },
+          notices: [
+            {
+              title: "About Lorem Ipsum:",
+              items: [
+                "Industry standard placeholder text since the 1500s",
+                "Based on a work by Cicero from 45 BC",
+                "Scrambled Latin text that's readable but meaningless",
+                "Perfect for focusing on design without content distraction",
+              ],
+            },
+          ],
         },
       },
       {
@@ -919,16 +903,17 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          notice: {
-            type: "info",
-            title: "Unicode Information:",
-            items: [
-              "Unicode supports over 140,000 characters",
-              "Includes emojis, symbols, and scripts worldwide",
-              "UTF-8 is the most common encoding",
-              "Code points range from U+0000 to U+10FFFF",
-            ],
-          },
+          notices: [
+            {
+              title: "Unicode Information:",
+              items: [
+                "Unicode supports over 140,000 characters",
+                "Includes emojis, symbols, and scripts worldwide",
+                "UTF-8 is the most common encoding",
+                "Code points range from U+0000 to U+10FFFF",
+              ],
+            },
+          ],
         },
       },
       {
@@ -963,28 +948,17 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          notice: {
-            type: "info",
-            title: "UUID Information:",
-            items: [
-              {
-                label: "Version 1:",
-                text: "Timestamp-based, includes MAC address (or random node)",
-              },
-              {
-                label: "Version 4:",
-                text: "Randomly generated, most commonly used",
-              },
-              {
-                label: "Format:",
-                text: "8-4-4-4-12 hexadecimal digits (32 total)",
-              },
-              {
-                label: "Use cases:",
-                text: "Database keys, session IDs, file names, API tokens",
-              },
-            ],
-          },
+          notices: [
+            {
+              title: "UUID Information:",
+              items: [
+                { label: "Version 1:", text: "Timestamp-based, includes MAC address (or random node)" },
+                { label: "Version 4:", text: "Randomly generated, most commonly used" },
+                { label: "Format:", text: "8-4-4-4-12 hexadecimal digits (32 total)" },
+                { label: "Use cases:", text: "Database keys, session IDs, file names, API tokens" },
+              ],
+            },
+          ],
         },
       },
       {
@@ -1019,17 +993,18 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          notice: {
-            type: "info",
-            title: "Common Delimiters:",
-            items: [
-              { label: "Comma (,):", text: "CSV files, lists" },
-              { label: "Semicolon (;):", text: "European CSV, SQL" },
-              { label: "Tab:", text: "TSV files, spreadsheets" },
-              { label: "Pipe (|):", text: "Database exports, logs" },
-              { label: "Newline:", text: "Line-by-line processing" },
-            ],
-          },
+          notices: [
+            {
+              title: "Common Delimiters:",
+              items: [
+                { label: "Comma (,):", text: "CSV files, lists" },
+                { label: "Semicolon (;):", text: "European CSV, SQL" },
+                { label: "Tab:", text: "TSV files, spreadsheets" },
+                { label: "Pipe (|):", text: "Database exports, logs" },
+                { label: "Newline:", text: "Line-by-line processing" },
+              ],
+            },
+          ],
         },
       },
     ],
@@ -1121,7 +1096,7 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          sections: [
+          notices: [
             {
               title: "Project Planning",
               items: [
@@ -1252,16 +1227,17 @@ export const toolsData: ToolData = {
           keywords: ["webcam test", "camera test", "test camera", "video test"],
         },
         explanations: {
-          notice: {
-            type: "privacy",
-            title: "Privacy Notice:",
-            items: [
-              "All camera processing happens locally in your browser",
-              "No video or image data is transmitted to any server",
-              "Captured photos are saved directly to your device",
-              "Camera access requires explicit permission from your browser",
-            ],
-          },
+          notices: [
+            {
+              title: "Privacy Notice:",
+              items: [
+                "All camera processing happens locally in your browser",
+                "No video or image data is transmitted to any server",
+                "Captured photos are saved directly to your device",
+                "Camera access requires explicit permission from your browser",
+              ],
+            },
+          ],
         },
       },
       {
@@ -1280,16 +1256,17 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          notice: {
-            type: "privacy",
-            title: "Privacy Notice:",
-            items: [
-              "All audio processing happens locally in your browser",
-              "No audio data is transmitted to any server",
-              "Microphone access requires explicit permission",
-              "Close this tab to stop microphone access",
-            ],
-          },
+          notices: [
+            {
+              title: "Privacy Notice:",
+              items: [
+                "All audio processing happens locally in your browser",
+                "No audio data is transmitted to any server",
+                "Microphone access requires explicit permission",
+                "Close this tab to stop microphone access",
+              ],
+            },
+          ],
         },
       },
       {
@@ -1308,16 +1285,17 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          notice: {
-            type: "info",
-            title: "Keyboard Testing:",
-            items: [
-              "Press any key to test detection",
-              "Modifier keys are tracked separately",
-              "Dead keys and special keys are supported",
-              "Browser security may block some key combinations",
-            ],
-          },
+          notices: [
+            {
+              title: "Keyboard Testing:",
+              items: [
+                "Press any key to test detection",
+                "Modifier keys are tracked separately",
+                "Dead keys and special keys are supported",
+                "Browser security may block some key combinations",
+              ],
+            },
+          ],
         },
       },
     ],
