@@ -97,26 +97,51 @@ function renderExamples(examples: ToolExplanation["examples"]): ReactNode {
   );
 }
 
-function getGridCols(length: number): string {
-  if (length === 1) return "";
-  if (length === 2) return "md:grid-cols-2";
-  return "md:grid-cols-2 lg:grid-cols-3";
-}
+const sectionColors = [
+  {
+    bg: "bg-emerald-50 dark:bg-emerald-900/20",
+    border: "border-emerald-200 dark:border-emerald-800",
+    title: "text-emerald-800 dark:text-emerald-200",
+    text: "text-emerald-700 dark:text-emerald-300",
+  },
+  {
+    bg: "bg-amber-50 dark:bg-amber-900/20",
+    border: "border-amber-200 dark:border-amber-800",
+    title: "text-amber-800 dark:text-amber-200",
+    text: "text-amber-700 dark:text-amber-300",
+  },
+  {
+    bg: "bg-cyan-50 dark:bg-cyan-900/20",
+    border: "border-cyan-200 dark:border-cyan-800",
+    title: "text-cyan-800 dark:text-cyan-200",
+    text: "text-cyan-700 dark:text-cyan-300",
+  },
+  {
+    bg: "bg-rose-50 dark:bg-rose-900/20",
+    border: "border-rose-200 dark:border-rose-800",
+    title: "text-rose-800 dark:text-rose-200",
+    text: "text-rose-700 dark:text-rose-300",
+  },
+];
 
 function renderSections(sections: ToolExplanation["sections"]): ReactNode {
   if (!sections || sections.length === 0) return null;
 
-  const gridCols = getGridCols(sections.length);
-
   return (
-    <div className="p-4 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg">
-      <div className={`grid grid-cols-1 ${gridCols} gap-6 text-sm`}>
-        {sections.map((section, i) => (
-          <div key={i}>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {sections.map((section, i) => {
+        const colors = sectionColors[i % sectionColors.length];
+        return (
+          <div
+            key={i}
+            className={`p-4 ${colors.bg} border ${colors.border} rounded-lg`}
+          >
             {section.title ? (
-              <h4 className="font-semibold text-emerald-800 dark:text-emerald-200 mb-2">{section.title}</h4>
+              <h4 className={`font-semibold ${colors.title} mb-2`}>
+                {section.title}
+              </h4>
             ) : null}
-            <ul className="space-y-1 text-emerald-700 dark:text-emerald-300 list-disc list-inside">
+            <ul className={`space-y-1 ${colors.text} text-sm list-disc list-inside`}>
               {section.items.map((item, j) => (
                 <li key={j}>
                   {typeof item === "string" ? (
@@ -131,8 +156,8 @@ function renderSections(sections: ToolExplanation["sections"]): ReactNode {
               ))}
             </ul>
           </div>
-        ))}
-      </div>
+        );
+      })}
     </div>
   );
 }
