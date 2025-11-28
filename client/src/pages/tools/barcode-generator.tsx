@@ -229,7 +229,7 @@ export default function BarcodeGenerator() {
             <div>
               <Label htmlFor="format">Barcode Format</Label>
               <Select value={format} onValueChange={setFormat}>
-                <SelectTrigger>
+                <SelectTrigger data-testid="format-select">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>

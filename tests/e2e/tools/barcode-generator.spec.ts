@@ -64,9 +64,9 @@ test.describe("Barcode Generator Tool", () => {
     await expect(page.locator("canvas")).toBeVisible();
 
     // Change barcode format
-    const formatSelect = page.locator('[id="download"]');
+    const formatSelect = page.locator('[data-testid="format-select"]');
     await formatSelect.click();
-    await page.getByText("CODE 39", { exact: true }).click();
+    await page.getByRole("option", { name: "CODE 39" }).click();
 
     // Enter text compatible with Code 39
     await inputField.clear();
