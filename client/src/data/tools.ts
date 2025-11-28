@@ -1112,31 +1112,53 @@ export const toolsData: ToolData = {
         },
         explanations: {
           notice: {
-            type: "info",
-            title: "Security Notice",
+            type: "tips",
+            title: "MD5 is Broken for Security",
             items: [
-              "MD5 is not cryptographically secure for passwords",
-              "Use for data integrity, not password storage",
-              "Consider SHA-256 or bcrypt for security purposes",
-              "Implementation uses SHA-256 truncated to 32 chars to simulate MD5 length",
+              "1996: Theoretical collision attacks published",
+              "2004: First practical collision found (two different files → same hash)",
+              "2008: Researchers created fake SSL certificate using MD5 collision",
+              "Today: A collision can be found in seconds on a laptop—NEVER use for passwords or signatures",
             ],
           },
           sections: [
             {
-              title: "Features",
+              title: "The Rise and Fall of MD5",
               items: [
-                "Fast hash generation for integrity checking",
-                "Fixed 32-character hexadecimal output",
-                "Deterministic: same input → same hash",
-                "Copy result to clipboard",
+                "Created by Ron Rivest in 1991 to replace MD4 (which was even weaker)",
+                "MD5 = 'Message Digest Algorithm 5' — 128-bit hash (32 hex chars)",
+                "Was the gold standard for checksums throughout the 1990s-2000s",
+                "Still appears in older systems, ISO downloads, and legacy APIs",
               ],
             },
             {
-              title: "Use cases",
+              title: "When MD5 is Still Acceptable",
               items: [
-                "Verify file integrity",
-                "Compare outputs across systems",
-                "Generate quick fingerprints",
+                "File integrity checks where security isn't critical (detecting accidental corruption)",
+                "Cache keys or deduplication (where collisions are annoying, not dangerous)",
+                "Non-security checksums (comparing if two files are likely identical)",
+                "Legacy system compatibility where you can't change the algorithm",
+              ],
+            },
+            {
+              title: "What to Use Instead",
+              items: [
+                {
+                  label: "File integrity:",
+                  text: "SHA-256 (used by Git, package managers, Bitcoin)",
+                },
+                {
+                  label: "Passwords:",
+                  text: "bcrypt, scrypt, or Argon2 (intentionally slow)",
+                },
+                {
+                  label: "Digital signatures:",
+                  text: "SHA-256 or SHA-3 (collision-resistant)",
+                },
+                {
+                  label: "HMAC authentication:",
+                  text: "HMAC-SHA256 (keyed hashing)",
+                },
               ],
             },
           ],
