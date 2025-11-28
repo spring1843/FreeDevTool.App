@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import CodeMirror from "@uiw/react-codemirror";
-import type { ViewUpdate } from "@codemirror/view";
+import { EditorView, type ViewUpdate } from "@codemirror/view";
 import { javascript } from "@codemirror/lang-javascript";
 import { cn } from "@/lib/utils";
 import { css } from "@codemirror/lang-css";
@@ -19,6 +19,68 @@ import { cpp } from "@codemirror/lang-cpp";
 import { json } from "@codemirror/lang-json";
 import { Copy, Download, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+
+// Detect mobile/touch devices for optimized CodeMirror configuration
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => {
+      const hasTouchScreen =
+        "ontouchstart" in window ||
+        navigator.maxTouchPoints > 0 ||
+        // @ts-expect-error - msMaxTouchPoints is IE-specific
+        navigator.msMaxTouchPoints > 0;
+      const isSmallScreen = window.innerWidth <= 768;
+      const isMobileUA =
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        );
+      setIsMobile((hasTouchScreen && isSmallScreen) || isMobileUA);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  return isMobile;
+};
+
+// Mobile-optimized CodeMirror theme extension
+// Adds touch-action: manipulation to prevent iOS touch delays and pointer capture issues
+const mobileThemeExtension = EditorView.theme({
+  "&": {
+    touchAction: "manipulation",
+  },
+  ".cm-content": {
+    touchAction: "manipulation",
+  },
+  ".cm-scroller": {
+    touchAction: "pan-x pan-y",
+    overscrollBehavior: "contain",
+  },
+});
+
+// Extension to release pointer capture on touch end - prevents focus lock on iOS
+const releasePointerCaptureExtension = EditorView.domEventHandlers({
+  pointerup(event, _view) {
+    const target = event.target as HTMLElement;
+    if (target.hasPointerCapture?.(event.pointerId)) {
+      target.releasePointerCapture(event.pointerId);
+    }
+    return false;
+  },
+  touchend(event, _view) {
+    if (document.activeElement instanceof HTMLElement) {
+      const isOutsideEditor = !_view.dom.contains(event.target as Node);
+      if (isOutsideEditor) {
+        document.activeElement.blur();
+      }
+    }
+    return false;
+  },
+});
 
 // Define props for the CodeMirror component
 export interface TextAreaProps {
@@ -38,6 +100,8 @@ export interface TextAreaProps {
 
 const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
   ({ className, value, onChange, theme = "light", ...props }) => {
+    const isMobile = useIsMobile();
+
     const baseClassName = cn(
       // Make the editor visually attach to the top navbar: no top rounding
       // so the navbar's rounded-t-md forms the top corners; keep bottom round.
@@ -268,6 +332,12 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
     const [cursor, setCursor] = React.useState({ line: 1, ch: 1 });
     const [contentSize, setContentSize] = React.useState(0);
 
+    // Ref to track pending cursor update for debouncing
+    const cursorUpdateRef = React.useRef<number | null>(null);
+    const pendingCursorRef = React.useRef<{ line: number; ch: number } | null>(
+      null
+    );
+
     // Format bytes to human readable string
     const formatBytes = (bytes: number): string => {
       // Use full unit names for clarity
@@ -292,14 +362,37 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
       setContentSize(new Blob([value || ""]).size);
     }, [value]);
 
-    // Handler for CodeMirror view updates
+    // Cleanup pending animation frame on unmount
+    React.useEffect(
+      () => () => {
+        if (cursorUpdateRef.current !== null) {
+          cancelAnimationFrame(cursorUpdateRef.current);
+        }
+      },
+      []
+    );
+
+    // Handler for CodeMirror view updates - debounced to prevent mobile performance issues
     const handleEditorUpdate = React.useCallback((view: ViewUpdate) => {
       const pos = view.state.selection.main.head;
       const line = view.state.doc.lineAt(pos);
-      setCursor({
+      const newCursor = {
         line: line.number,
         ch: pos - line.from + 1,
-      });
+      };
+
+      // Store the latest cursor position
+      pendingCursorRef.current = newCursor;
+
+      // Only schedule an update if one isn't already pending
+      if (cursorUpdateRef.current === null) {
+        cursorUpdateRef.current = requestAnimationFrame(() => {
+          cursorUpdateRef.current = null;
+          if (pendingCursorRef.current) {
+            setCursor(pendingCursorRef.current);
+          }
+        });
+      }
     }, []);
 
     // Use theme prop for CodeMirror theme
@@ -444,11 +537,42 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         <CodeMirror
           className={baseClassName}
           value={value}
-          extensions={extensions}
-          basicSetup={{
-            lineNumbers: true,
-            foldGutter: true,
-          }}
+          extensions={
+            isMobile
+              ? [
+                  ...extensions,
+                  mobileThemeExtension,
+                  releasePointerCaptureExtension,
+                ]
+              : extensions
+          }
+          basicSetup={
+            isMobile
+              ? {
+                  // Minimal setup for mobile - disable expensive features
+                  lineNumbers: true,
+                  foldGutter: false,
+                  highlightActiveLine: false,
+                  highlightSelectionMatches: false,
+                  closeBrackets: false,
+                  autocompletion: false,
+                  rectangularSelection: false,
+                  crosshairCursor: false,
+                  dropCursor: false,
+                  allowMultipleSelections: false,
+                  indentOnInput: false,
+                  bracketMatching: false,
+                  closeBracketsKeymap: false,
+                  searchKeymap: false,
+                  foldKeymap: false,
+                  completionKeymap: false,
+                  lintKeymap: false,
+                }
+              : {
+                  lineNumbers: true,
+                  foldGutter: true,
+                }
+          }
           theme={codeMirrorTheme}
           onChange={val => {
             if (onChange) onChange(createSyntheticChangeEvent(val));
@@ -459,8 +583,7 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
           readOnly={props.readOnly}
           id={props.id}
           autoFocus={props.autoFocus}
-          // Add onUpdate handler for cursor tracking
-          onUpdate={handleEditorUpdate}
+          onUpdate={isMobile ? undefined : handleEditorUpdate}
         />
         {/* Status bar below editor with status on the left and language selector on the right */}
         <div
