@@ -26,6 +26,7 @@ import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 import { DEFAULT_BCRYPT } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
 
 export default function BcryptHash() {
   const [plaintext, setPlaintext] = useState(DEFAULT_BCRYPT);
@@ -344,31 +345,7 @@ export default function BcryptHash() {
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-          <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-            Bcrypt Features:
-          </h3>
-          <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-            <li>• Adaptive hashing function for passwords</li>
-            <li>• Built-in salt generation</li>
-            <li>• Configurable work factor (rounds)</li>
-            <li>• Resistant to rainbow table attacks</li>
-          </ul>
-        </div>
-
-        <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-          <h3 className="font-semibold text-green-800 dark:text-green-200 mb-2">
-            Security Notes:
-          </h3>
-          <ul className="text-sm text-green-700 dark:text-green-300 space-y-1">
-            <li>• Use 10+ rounds for production</li>
-            <li>• Higher rounds increase security but slow hashing</li>
-            <li>• Each hash includes its own unique salt</li>
-            <li>• Same password produces different hashes</li>
-          </ul>
-        </div>
-      </div>
+      {getToolByPath("/tools/bcrypt-hash")?.getExplanations?.()}
     </div>
   );
 }

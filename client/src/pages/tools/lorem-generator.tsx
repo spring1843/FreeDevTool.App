@@ -16,6 +16,7 @@ import { FileText, Copy, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useToast } from "@/hooks/use-toast";
+import { getToolByPath } from "@/data/tools";
 
 const MAX_WORDS_LIMIT = 1000;
 
@@ -369,19 +370,7 @@ export default function LoremGenerator() {
         </Card>
       ) : null}
 
-      <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-          About Lorem Ipsum:
-        </h3>
-        <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-          <div>• Industry standard placeholder text since the 1500s</div>
-          <div>• Based on a work by Cicero from 45 BC</div>
-          <div>• Scrambled Latin text that's readable but meaningless</div>
-          <div>
-            • Perfect for focusing on design without content distraction
-          </div>
-        </div>
-      </div>
+      {getToolByPath("/tools/lorem-generator")?.getExplanations?.()}
     </div>
   );
 }

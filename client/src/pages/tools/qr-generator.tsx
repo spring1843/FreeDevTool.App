@@ -27,6 +27,7 @@ import { useToast } from "@/hooks/use-toast";
 
 import QRCodeLib from "qrcode-generator";
 import { DEFAULT_QR_GENERATOR } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
 
 // Standalone QR Code generation using qrcode-generator library
 const generateQRCode = (
@@ -468,47 +469,7 @@ export default function QRGenerator() {
           <CardTitle>QR Code Types & Usage</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-            <div>
-              <h4 className="font-semibold mb-2">Supported QR Types:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>
-                  • <strong>Plain Text:</strong> Any text content
-                </li>
-                <li>
-                  • <strong>Website URL:</strong> Links to web pages
-                </li>
-                <li>
-                  • <strong>Email:</strong> Email addresses with mailto links
-                </li>
-                <li>
-                  • <strong>Phone Number:</strong> Clickable phone numbers
-                </li>
-                <li>
-                  • <strong>SMS Message:</strong> Pre-filled text messages
-                </li>
-                <li>
-                  • <strong>WiFi Network:</strong> Network credentials for easy
-                  connection
-                </li>
-                <li>
-                  • <strong>Contact Card:</strong> vCard format contact
-                  information
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-2">Usage Tips:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• QR codes auto-generate as you type</li>
-                <li>• Larger sizes work better for complex content</li>
-                <li>• Test QR codes with different apps and devices</li>
-                <li>• WiFi format: NetworkName:Password:Security</li>
-                <li>• SMS format: PhoneNumber:Message</li>
-                <li>• Contact format: Name:Phone:Email</li>
-              </ul>
-            </div>
-          </div>
+          {getToolByPath("/tools/qr-generator")?.getExplanations?.()}
         </CardContent>
       </Card>
 
