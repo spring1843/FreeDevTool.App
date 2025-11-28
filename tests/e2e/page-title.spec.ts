@@ -1,11 +1,14 @@
 import { test, expect } from "@playwright/test";
 
+const SITE_NAME = "FreeDevTool.App";
+const HOMEPAGE_TITLE = `${SITE_NAME} | Free Developer Tools`;
+
 test.describe("Dynamic Page Title", () => {
   test("should show correct title on homepage", async ({ page }) => {
     await page.goto("/");
     await page.waitForLoadState("networkidle");
 
-    await expect(page).toHaveTitle("FreeDevTool.app | Free Developer Tools");
+    await expect(page).toHaveTitle(HOMEPAGE_TITLE);
   });
 
   test("should update title when navigating to a tool page", async ({
@@ -17,7 +20,9 @@ test.describe("Dynamic Page Title", () => {
     await page.goto("/tools/json-formatter");
     await page.waitForLoadState("networkidle");
 
-    await expect(page).toHaveTitle("JSON Formatter | FreeDevTool.app");
+    await expect(page).toHaveTitle(
+      `JSON Formatter - Format and Validate JSON | ${SITE_NAME}`
+    );
   });
 
   test("should update title on SPA navigation between tools", async ({
@@ -26,7 +31,9 @@ test.describe("Dynamic Page Title", () => {
     await page.goto("/tools/json-formatter");
     await page.waitForLoadState("networkidle");
 
-    await expect(page).toHaveTitle("JSON Formatter | FreeDevTool.app");
+    await expect(page).toHaveTitle(
+      `JSON Formatter - Format and Validate JSON | ${SITE_NAME}`
+    );
 
     const menuButton = page.locator('[data-testid="menu-button"]');
     await menuButton.click();
@@ -37,7 +44,9 @@ test.describe("Dynamic Page Title", () => {
 
     await page.waitForURL("/tools/yaml-formatter");
 
-    await expect(page).toHaveTitle("YAML Formatter | FreeDevTool.app");
+    await expect(page).toHaveTitle(
+      `YAML Formatter - Format and Validate YAML | ${SITE_NAME}`
+    );
   });
 
   test("should update title when navigating back to homepage", async ({
@@ -46,31 +55,45 @@ test.describe("Dynamic Page Title", () => {
     await page.goto("/tools/json-formatter");
     await page.waitForLoadState("networkidle");
 
-    await expect(page).toHaveTitle("JSON Formatter | FreeDevTool.app");
+    await expect(page).toHaveTitle(
+      `JSON Formatter - Format and Validate JSON | ${SITE_NAME}`
+    );
 
     await page.goto("/");
     await page.waitForLoadState("networkidle");
 
-    await expect(page).toHaveTitle("FreeDevTool.app | Free Developer Tools");
+    await expect(page).toHaveTitle(HOMEPAGE_TITLE);
   });
 
   test("should update title for various tools", async ({ page }) => {
     const toolsToTest = [
-      { path: "/tools/base64", expectedTitle: "Base64 Encoder" },
+      {
+        path: "/tools/base64",
+        expectedTitle: "Base64 Encoder/Decoder - Encode and Decode Base64",
+      },
       {
         path: "/tools/password-generator",
-        expectedTitle: "Password Generator",
+        expectedTitle: "Password Generator - Generate Secure Passwords",
       },
-      { path: "/tools/uuid-generator", expectedTitle: "UUID Generator" },
-      { path: "/tools/url-encoder", expectedTitle: "URL Encoder" },
-      { path: "/tools/md5-hash", expectedTitle: "MD5 Hash" },
+      {
+        path: "/tools/uuid-generator",
+        expectedTitle: "UUID Generator - Generate Unique Identifiers",
+      },
+      {
+        path: "/tools/url-encoder",
+        expectedTitle: "URL Encoder/Decoder - Encode and Decode URLs",
+      },
+      {
+        path: "/tools/md5-hash",
+        expectedTitle: "MD5 Hash Generator - Generate MD5 Hashes",
+      },
     ];
 
     for (const tool of toolsToTest) {
       await page.goto(tool.path);
       await page.waitForLoadState("networkidle");
 
-      await expect(page).toHaveTitle(`${tool.expectedTitle} | FreeDevTool.app`);
+      await expect(page).toHaveTitle(`${tool.expectedTitle} | ${SITE_NAME}`);
     }
   });
 });
