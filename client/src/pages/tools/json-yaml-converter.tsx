@@ -1,79 +1,86 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { convertJSONToYAML, convertYAMLToJSON } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { ArrowRight, ArrowLeft } from "lucide-react";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import { ArrowRight, ArrowLeft, ArrowRightLeft } from "lucide-react";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+} from "@/components/ui/tool-button";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
-import { DEFAULT_JSON, DEFAULT_YAML } from "@/data/defaults";
+import { DEFAULT_JSON } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
+const DEFAULT_YAML_OUTPUT = convertJSONToYAML(DEFAULT_JSON).converted;
+
 export default function JSONYAMLConverter() {
   const tool = getToolByPath("/tools/json-yaml-converter");
-  const [jsonInput, setJsonInput] = useState(DEFAULT_JSON);
-  const [yamlOutput, setYamlOutput] = useState("");
-  const [yamlInput, setYamlInput] = useState(DEFAULT_YAML);
-  const [jsonOutput, setJsonOutput] = useState("");
+  const [jsonText, setJsonText] = useState(DEFAULT_JSON);
+  const [yamlText, setYamlText] = useState("");
   const [error, setError] = useState<string | null>(null);
   const { theme } = useTheme();
 
   const convertToYAML = useCallback(() => {
-    const { converted, error: convertError } = convertJSONToYAML(jsonInput);
-    setYamlOutput(converted);
+    const { converted, error: convertError } = convertJSONToYAML(jsonText);
+    setYamlText(converted);
     setError(convertError || null);
-  }, [jsonInput]);
+  }, [jsonText]);
 
   const convertToJSON = useCallback(() => {
-    const { converted, error: convertError } = convertYAMLToJSON(yamlInput);
-    setJsonOutput(converted);
+    const { converted, error: convertError } = convertYAMLToJSON(yamlText);
+    setJsonText(converted);
     setError(convertError || null);
-  }, [yamlInput]);
+  }, [yamlText]);
 
-  const handleJsonInputChange = (value: string) => {
-    setJsonInput(value);
-    if (yamlOutput) {
-      setYamlOutput("");
+  const swapContent = () => {
+    const temp = jsonText;
+    setJsonText(yamlText);
+    setYamlText(temp);
+    setError(null);
+  };
+
+  const handleJsonChange = (value: string) => {
+    setJsonText(value);
+    if (yamlText) {
+      setYamlText("");
     }
   };
 
-  const handleYamlInputChange = (value: string) => {
-    setYamlInput(value);
-    if (jsonOutput) {
-      setJsonOutput("");
+  const handleYamlChange = (value: string) => {
+    setYamlText(value);
+    if (jsonText !== DEFAULT_JSON) {
+      setJsonText("");
     }
   };
 
   const handleReset = () => {
-    setJsonInput(DEFAULT_JSON);
-    setYamlOutput("");
-    setYamlInput(DEFAULT_YAML);
-    setJsonOutput("");
+    setJsonText(DEFAULT_JSON);
+    setYamlText("");
     setError(null);
   };
 
   const handleClear = () => {
-    setJsonInput("");
-    setYamlOutput("");
-    setYamlInput("");
-    setJsonOutput("");
+    setJsonText("");
+    setYamlText("");
     setError(null);
   };
 
   const hasModifiedData =
-    (jsonInput !== DEFAULT_JSON && jsonInput.trim() !== "") ||
-    (yamlInput !== DEFAULT_YAML && yamlInput.trim() !== "");
-  const isAtDefault = jsonInput === DEFAULT_JSON && yamlInput === DEFAULT_YAML;
+    (jsonText !== DEFAULT_JSON && jsonText.trim() !== "") ||
+    (yamlText !== DEFAULT_YAML_OUTPUT && yamlText.trim() !== "");
+  const isAtDefault =
+    jsonText === DEFAULT_JSON &&
+    (yamlText === "" || yamlText === DEFAULT_YAML_OUTPUT);
 
   useEffect(() => {
     convertToYAML();
-    convertToJSON();
-  }, [convertToYAML, convertToJSON]);
+  }, [convertToYAML]);
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -103,23 +110,33 @@ export default function JSONYAMLConverter() {
       ) : null}
 
       <div className="mb-6 flex flex-wrap gap-3">
-        <Button
+        <ToolButton
+          variant="custom"
           onClick={convertToYAML}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
+          icon={<ArrowRight className="w-4 h-4 mr-2" />}
+          tooltip="Convert JSON to YAML"
         >
-          <ArrowRight className="w-4 h-4 mr-2" />
-          JSON to YAML
-        </Button>
-        <Button
+          JSON → YAML
+        </ToolButton>
+        <ToolButton
+          variant="custom"
           onClick={convertToJSON}
-          className="bg-green-600 hover:bg-green-700 text-white"
+          icon={<ArrowLeft className="w-4 h-4 mr-2" />}
+          tooltip="Convert YAML to JSON"
         >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          YAML to JSON
-        </Button>
+          YAML → JSON
+        </ToolButton>
+        <ToolButton
+          variant="custom"
+          onClick={swapContent}
+          icon={<ArrowRightLeft className="w-4 h-4 mr-2" />}
+          tooltip="Swap content between JSON and YAML"
+        >
+          Swap
+        </ToolButton>
         <ResetButton
           onClick={handleReset}
-          tooltip="Reset to default examples"
+          tooltip="Reset to default example"
           hasModifiedData={hasModifiedData}
           disabled={isAtDefault}
         />
@@ -127,108 +144,58 @@ export default function JSONYAMLConverter() {
           onClick={handleClear}
           tooltip="Clear all inputs"
           hasModifiedData={hasModifiedData}
-          disabled={jsonInput.trim() === "" && yamlInput.trim() === ""}
+          disabled={jsonText.trim() === "" && yamlText.trim() === ""}
         />
       </div>
 
-      <div className="space-y-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-blue-600 dark:text-blue-400">
-                JSON Input
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <TextArea
-                id="input1"
-                value={jsonInput}
-                onChange={e => handleJsonInputChange(e.target.value)}
-                placeholder="Paste your JSON here..."
-                data-testid="json-input"
-                className="min-h-[300px] font-mono text-sm"
-                data-default-input="true"
-                rows={15}
-                autoFocus={true}
-                minHeight="300px"
-                lang="javascript"
-                fileExtension="json"
-                theme={theme}
-              />
-            </CardContent>
-          </Card>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-blue-600 dark:text-blue-400">
+              JSON
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TextArea
+              id="json-input"
+              value={jsonText}
+              onChange={e => handleJsonChange(e.target.value)}
+              placeholder="Paste your JSON here..."
+              data-testid="json-input"
+              className="min-h-[400px] font-mono text-sm"
+              data-default-input="true"
+              rows={20}
+              autoFocus={true}
+              minHeight="400px"
+              lang="json"
+              fileExtension="json"
+              theme={theme}
+            />
+          </CardContent>
+        </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-purple-600 dark:text-purple-400">
-                YAML Output
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <TextArea
-                id="output1"
-                value={yamlOutput}
-                readOnly={true}
-                placeholder="YAML output will appear here..."
-                data-testid="yaml-output"
-                className="min-h-[300px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
-                rows={15}
-                minHeight="300px"
-                lang="yaml"
-                fileExtension="yaml"
-                theme={theme}
-              />
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-green-600 dark:text-green-400">
-                YAML Input
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <TextArea
-                id="input2"
-                value={yamlInput}
-                onChange={e => handleYamlInputChange(e.target.value)}
-                placeholder="Paste your YAML here..."
-                data-testid="yaml-input"
-                className="min-h-[300px] font-mono text-sm"
-                rows={15}
-                minHeight="300px"
-                lang="yaml"
-                fileExtension="yaml"
-                theme={theme}
-              />
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-orange-600 dark:text-orange-400">
-                JSON Output
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <TextArea
-                id="output2"
-                value={jsonOutput}
-                readOnly={true}
-                placeholder="JSON output will appear here..."
-                data-testid="json-output"
-                className="min-h-[300px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
-                rows={15}
-                minHeight="300px"
-                lang="javascript"
-                fileExtension="json"
-                theme={theme}
-              />
-            </CardContent>
-          </Card>
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-purple-600 dark:text-purple-400">
+              YAML
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TextArea
+              id="yaml-input"
+              value={yamlText}
+              onChange={e => handleYamlChange(e.target.value)}
+              placeholder="Paste your YAML here..."
+              data-testid="yaml-output"
+              className="min-h-[400px] font-mono text-sm"
+              rows={20}
+              minHeight="400px"
+              lang="yaml"
+              fileExtension="yaml"
+              theme={theme}
+            />
+          </CardContent>
+        </Card>
       </div>
       <ToolExplanations explanations={tool?.explanations} />
     </div>
