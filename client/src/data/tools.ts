@@ -1132,21 +1132,82 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
+          notice: {
+            type: "info",
+            title: "TLS vs SSL: What's the Difference?",
+            items: [
+              { label: "SSL:", text: "Secure Sockets Layer (1995)—deprecated, has known vulnerabilities" },
+              { label: "TLS:", text: "Transport Layer Security (1999)—SSL's successor, what we actually use today" },
+              { label: "HTTPS:", text: "HTTP + TLS = encrypted web traffic. The padlock means TLS is active" },
+              { label: "Fun fact:", text: "Everyone says 'SSL certificate' but they mean TLS. SSL 3.0 was disabled in 2015" },
+            ],
+          },
           sections: [
             {
-              title: "Features",
+              title: "Certificate Fields Explained",
               items: [
-                "Parse PEM certificates and show fields",
-                "Inspect subject, issuer, validity",
-                "Support for chains",
+                { label: "Subject (CN):", text: "Who the cert is issued TO—usually the domain name (example.com)" },
+                { label: "Issuer:", text: "Who SIGNED the cert—the Certificate Authority (Let's Encrypt, DigiCert, etc.)" },
+                { label: "SANs:", text: "Subject Alternative Names—additional domains covered (www, api, mail subdomains)" },
+                { label: "Valid From/To:", text: "The cert's lifespan. Max is now 398 days (browsers enforce this)" },
+                { label: "Serial Number:", text: "Unique ID from the CA—used for revocation tracking" },
               ],
             },
             {
-              title: "Use cases",
+              title: "Certificate Types",
               items: [
-                "Debug TLS issues",
-                "Check expiration dates",
-                "Verify SANs and key usage",
+                { label: "DV (Domain):", text: "Proves you control the domain. Cheapest, fastest (Let's Encrypt = free!)" },
+                { label: "OV (Organization):", text: "Verifies the company exists. Shows org name in cert details" },
+                { label: "EV (Extended):", text: "Rigorous vetting process. Used to show green bar (browsers removed this)" },
+                { label: "Wildcard:", text: "*.example.com covers all subdomains (but not sub-subdomains)" },
+                { label: "Multi-domain:", text: "One cert for multiple unrelated domains via SANs" },
+              ],
+            },
+            {
+              title: "Common Certificate Errors",
+              items: [
+                "ERR_CERT_DATE_INVALID → Certificate expired or not yet valid (check server time!)",
+                "ERR_CERT_COMMON_NAME_INVALID → Domain doesn't match CN or SANs",
+                "ERR_CERT_AUTHORITY_INVALID → Self-signed or unknown CA (missing intermediate cert?)",
+                "ERR_CERT_REVOKED → CA revoked this cert (compromised key, mis-issuance)",
+                "NET_ERR_CERT_WEAK_KEY → RSA key too short (need 2048+ bits since 2013)",
+              ],
+            },
+            {
+              title: "The Certificate Chain",
+              items: [
+                "Your cert → Intermediate CA → Root CA (trust anchor in browser/OS)",
+                "Servers must send the full chain (except root)—missing intermediates break mobile!",
+                "Root CAs are pre-installed in browsers (about 150 trusted roots exist)",
+                "Certificate Transparency: All certs are logged publicly (crt.sh lets you search them)",
+              ],
+            },
+            {
+              title: "Key Algorithms in 2024",
+              items: [
+                { label: "RSA 2048:", text: "Still common, minimum acceptable size, being phased out" },
+                { label: "RSA 4096:", text: "More secure but slower handshakes—overkill for most sites" },
+                { label: "ECDSA P-256:", text: "Smaller keys, faster than RSA, now the default choice" },
+                { label: "Ed25519:", text: "Even faster, gaining support, not yet universal" },
+              ],
+            },
+            {
+              title: "Let's Encrypt Changed Everything",
+              items: [
+                "Launched 2015: Free, automated, open Certificate Authority",
+                "Issues 400+ million active certificates (50%+ of the web)",
+                "90-day certs encourage automation (certbot auto-renews)",
+                "Killed the $100+/year certificate industry for basic DV certs",
+                "Founded by EFF, Mozilla, and others to encrypt the entire web",
+              ],
+            },
+            {
+              title: "CLI Commands for Certificates",
+              items: [
+                "openssl s_client -connect example.com:443 → Fetch cert from live server",
+                "openssl x509 -in cert.pem -text -noout → Decode local PEM file",
+                "openssl verify -CAfile ca.pem cert.pem → Verify chain",
+                "curl -vI https://example.com 2>&1 | grep -A6 'Server certificate' → Quick check",
               ],
             },
           ],
