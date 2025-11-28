@@ -394,21 +394,75 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
+          notice: {
+            type: "info",
+            title: "CSV: The Simplest Data Format",
+            items: [
+              { label: "Origin:", text: "CSV predates personal computers—used in 1972 on IBM mainframes!" },
+              { label: "No standard:", text: "RFC 4180 exists but is just a guideline—Excel, Google Sheets, and databases all do it slightly differently" },
+              { label: "Still dominant:", text: "In 2024, CSV remains the #1 data exchange format for non-developers" },
+            ],
+          },
+          shortcuts: [
+            { key: "Ctrl+Shift+4", action: "Open CSV to JSON tool" },
+          ],
           sections: [
             {
-              title: "Features",
+              title: "Delimiter Options Explained",
               items: [
-                "Parse comma- and tab-separated values",
-                "Header row detection and field mapping",
-                "Output pretty or compact JSON",
+                { label: "Comma (,):", text: "Standard CSV—but breaks when data contains commas (addresses, numbers with thousand separators)" },
+                { label: "Semicolon (;):", text: "European standard—countries using comma as decimal separator (1.234,56) use semicolon for CSV" },
+                { label: "Tab (\\t):", text: "TSV format—safest choice, tabs rarely appear in data. Excel 'Export as Text' uses this" },
+                { label: "Pipe (|):", text: "Database dumps and legacy systems—visible separator that almost never appears in data" },
               ],
             },
             {
-              title: "Use cases",
+              title: "CSV Gotchas This Tool Handles",
               items: [
-                "Prepare data for APIs",
-                "Convert spreadsheets into JSON payloads",
-                "Clean and transform CSV exports",
+                "Quoted fields: \"New York, NY\" stays together despite the comma inside",
+                "Escaped quotes: \"She said \"\"Hello\"\"\" → She said \"Hello\"",
+                "Empty fields: a,,c → three fields, middle one is empty string",
+                "Trailing commas: Some exports add extra comma—we handle it gracefully",
+                "Mixed line endings: Windows (CRLF), Mac (CR), Unix (LF)—all supported",
+              ],
+            },
+            {
+              title: "Why Convert CSV to JSON?",
+              items: [
+                { label: "APIs:", text: "REST APIs expect JSON—not a single major API accepts CSV directly" },
+                { label: "JavaScript:", text: "JSON.parse() is native; CSV needs a library or custom parser" },
+                { label: "Type safety:", text: "JSON preserves numbers, booleans, nulls—CSV treats everything as strings" },
+                { label: "Nesting:", text: "JSON supports hierarchy; CSV is flat tables only" },
+                { label: "Databases:", text: "MongoDB, Elasticsearch, Firebase—all JSON-native" },
+              ],
+            },
+            {
+              title: "Common CSV Sources",
+              items: [
+                "Excel/Google Sheets: File → Download → CSV",
+                "Database exports: MySQL, PostgreSQL, SQLite all support CSV export",
+                "Bank statements: Most banks offer CSV transaction downloads",
+                "CRM exports: Salesforce, HubSpot, Mailchimp contact exports",
+                "Analytics: Google Analytics, Mixpanel, Amplitude data exports",
+                "Government data: Census, FDA, SEC—public data often in CSV",
+              ],
+            },
+            {
+              title: "JSON Output Formats",
+              items: [
+                { label: "Array of objects:", text: "[{name: 'Alice', age: 30}, ...] — most common, each row is an object" },
+                { label: "Pretty printed:", text: "Indented with newlines—human readable, larger file size" },
+                { label: "Minified:", text: "No whitespace—smaller file, harder to debug" },
+              ],
+            },
+            {
+              title: "Pro Tips",
+              items: [
+                "Clean headers first: Spaces become awkward keys—'First Name' → 'firstName' is better",
+                "Check for BOM: Excel UTF-8 exports add invisible \\uFEFF at start—can break parsing",
+                "Large files: For 100MB+ files, use streaming parsers (Papa Parse, csv-parse) instead",
+                "Date formats: CSV dates are strings—you'll need to parse them after conversion",
+                "Number precision: '0.1 + 0.2' in JSON is 0.30000000000000004—watch for financial data!",
               ],
             },
           ],
