@@ -156,6 +156,30 @@ function renderNoticeOrExamples(
   return null;
 }
 
+function checkSsrExists(): boolean {
+  if (typeof window === "undefined") return false;
+  const ssrElement = document.getElementById("ssr-explanations");
+  if (!ssrElement) return false;
+  return ssrElement.getAttribute("data-tool-path") === window.location.pathname;
+}
+
+function hydrateSsrExplanations(): void {
+  const ssrElement = document.getElementById("ssr-explanations");
+  const showMoreBtn = document.getElementById("ssr-show-more");
+
+  if (!ssrElement || !showMoreBtn) return;
+
+  showMoreBtn.addEventListener("click", () => {
+    const revealBlocks = ssrElement.querySelectorAll(
+      ".exp-reveal-mobile, .exp-reveal-desktop"
+    );
+    revealBlocks.forEach(block => {
+      block.classList.remove("exp-reveal-mobile", "exp-reveal-desktop");
+    });
+    showMoreBtn.style.display = "none";
+  });
+}
+
 export function ToolExplanations({
   explanations,
 }: {
@@ -163,6 +187,20 @@ export function ToolExplanations({
 }) {
   const [expanded, setExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [ssrExists, setSsrExists] = useState(checkSsrExists);
+
+  useEffect(() => {
+    const ssrElement = document.getElementById("ssr-explanations");
+    if (ssrElement) {
+      const ssrPath = ssrElement.getAttribute("data-tool-path");
+      if (ssrPath === window.location.pathname) {
+        hydrateSsrExplanations();
+      } else {
+        ssrElement.remove();
+        setSsrExists(false);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -172,6 +210,8 @@ export function ToolExplanations({
   }, []);
 
   if (!explanations) return null;
+
+  if (ssrExists) return null;
 
   const { notice, shortcuts, examples, sections } = explanations;
 
