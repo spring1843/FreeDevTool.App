@@ -383,13 +383,9 @@ export default function URLToJSON() {
         </div>
       </div>
 
-      <div className="flex justify-center my-8" />
-
       {renderToolExplanations(
         getToolByPath("/tools/url-to-json")?.explanations
       )}
-
-      <div className="flex justify-center mt-8" />
     </div>
   );
 }

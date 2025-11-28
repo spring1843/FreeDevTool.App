@@ -559,12 +559,9 @@ export default function NumberBaseConverter() {
         </div>
       </div>
 
-      <div className="flex justify-center my-8" />
-  
-            getToolByPath("/tools/number-base-converter")?.explanations
-          )}
-   
-      <div className="flex justify-center mt-8" />
+      {renderToolExplanations(
+        getToolByPath("/tools/number-base-converter")?.explanations
+      )}
     </div>
   );
 }

@@ -487,8 +487,6 @@ export default function TimezoneConverter() {
       {renderToolExplanations(
         getToolByPath("/tools/timezone-converter")?.explanations
       )}
-
-      <div className="flex justify-center mt-8" />
     </div>
   );
 }

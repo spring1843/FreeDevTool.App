@@ -462,13 +462,9 @@ export default function QRGenerator() {
         </Card>
       </div>
 
-      <div className="flex justify-center my-8" />
-
       {renderToolExplanations(
         getToolByPath("/tools/qr-generator")?.explanations
       )}
-
-      <div className="flex justify-center mt-8" />
     </div>
   );
 }
