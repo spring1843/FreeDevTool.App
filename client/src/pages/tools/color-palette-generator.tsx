@@ -33,6 +33,7 @@ import { useToast } from "@/hooks/use-toast";
 import { getParam, updateURL, generateShareableURL } from "@/lib/url-sharing";
 
 import { DEFAULT_COLOR_PALETTE_GENERATOR } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
 
 export default function ColorPaletteGenerator() {
   const [baseColor, setBaseColor] = useState(DEFAULT_COLOR_PALETTE_GENERATOR);
@@ -453,7 +454,16 @@ export default function ColorPaletteGenerator() {
         </Card>
       )}
 
-      <div className="flex justify-center mt-8" />
+      {getToolByPath("/tools/color-palette-generator")?.getExplanations?.() && (
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle>About This Tool</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {getToolByPath("/tools/color-palette-generator")?.getExplanations?.()}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

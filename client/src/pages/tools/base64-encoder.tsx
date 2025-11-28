@@ -8,6 +8,7 @@ import { SecurityBanner } from "@/components/ui/security-banner";
 import { useState, useEffect, useCallback } from "react";
 import { ToolButton, ResetButton } from "@/components/ui/tool-button";
 import { DEFAULT_BASE64 } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
 
 export default function Base64Encoder() {
   const [plainText, setPlainText] = useState(DEFAULT_BASE64);
@@ -166,6 +167,17 @@ export default function Base64Encoder() {
           </CardContent>
         </Card>
       </div>
+
+      {getToolByPath("/tools/base64")?.getExplanations?.() && (
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle>About This Tool</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {getToolByPath("/tools/base64")?.getExplanations?.()}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
