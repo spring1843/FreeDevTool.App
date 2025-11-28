@@ -68,7 +68,7 @@ deps-audit-fix: ## Fix dependency security issues
 help: ## Display this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "$(GREEN)%-20s$(NC) %s\n", $$1, $$2}'
 
-start: clean build ## Builds and serves static files
+start: clean build ## Build and serve static files locally (for preview)
 	npx serve dist/public
 
 stop: ## Stop the development server (if running in background)
