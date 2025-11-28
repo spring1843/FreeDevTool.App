@@ -3326,21 +3326,105 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
+          notice: {
+            type: "info",
+            title: "The Eighth Wonder of the World",
+            items: [
+              { label: "Einstein (maybe):", text: "'Compound interest is the eighth wonder of the world. He who understands it, earns it; he who doesn't, pays it.'" },
+              { label: "The magic:", text: "You earn interest on your interest—money making money making money" },
+              { label: "Time > Amount:", text: "$100/month from age 25 beats $200/month from age 35 (same contributions!)" },
+            ],
+          },
+          shortcuts: [
+            { key: "Ctrl+Shift+;", action: "Open Compound Interest Calculator" },
+          ],
           sections: [
             {
-              title: "Features",
+              title: "The Power of Starting Early",
               items: [
-                "Principal, rate, duration inputs",
-                "Compound frequency",
-                "Growth visualization",
+                { label: "Age 25:", text: "$200/month at 7% for 40 years = $525,000" },
+                { label: "Age 35:", text: "$200/month at 7% for 30 years = $244,000 (half the money!)" },
+                { label: "Age 45:", text: "$200/month at 7% for 20 years = $104,000" },
+                { label: "Lesson:", text: "10 years of delay costs you $281,000. Start now." },
               ],
             },
             {
-              title: "Use cases",
+              title: "The Rule of 72",
               items: [
-                "Plan savings goals",
-                "Compare investment scenarios",
-                "Educate on compounding",
+                "Divide 72 by your interest rate to find doubling time",
+                "At 6% → money doubles in 12 years (72 ÷ 6 = 12)",
+                "At 8% → money doubles in 9 years",
+                "At 12% → money doubles in 6 years",
+                "At 24% credit card debt → balance doubles in 3 years (scary!)",
+              ],
+            },
+            {
+              title: "Compounding Frequency Matters",
+              items: [
+                { label: "Annual:", text: "$10,000 at 10% = $11,000 after 1 year" },
+                { label: "Monthly:", text: "$10,000 at 10% = $11,047 after 1 year" },
+                { label: "Daily:", text: "$10,000 at 10% = $11,052 after 1 year" },
+                { label: "Continuous:", text: "$10,000 at 10% = $11,052 (theoretical max)" },
+                { label: "Over 30 years:", text: "Daily vs annual compounding adds ~$50,000 on $100,000 at 10%" },
+              ],
+            },
+            {
+              title: "Real-World Return Rates",
+              items: [
+                { label: "S&P 500:", text: "~10% historical average (7% after inflation)" },
+                { label: "Bonds:", text: "3-5% typical (lower risk, lower reward)" },
+                { label: "Savings account:", text: "0.5-5% (varies wildly by bank and era)" },
+                { label: "Real estate:", text: "8-12% including appreciation and rent" },
+                { label: "Crypto:", text: "Who knows? Could be +500% or -90%" },
+              ],
+            },
+            {
+              title: "Famous Compound Interest Stories",
+              items: [
+                "Warren Buffett made 99% of his wealth after age 50—compounding takes time",
+                "Manhattan was 'bought' for $24 in 1626—at 7% that's $8 trillion today",
+                "Benjamin Franklin left $4,500 to Boston in 1790—it grew to $5 million by 1990",
+                "A penny doubled daily for 30 days = $5.4 million (2^30 pennies)",
+                "Ronald Read, a janitor, died with $8 million—just consistent investing for 50 years",
+              ],
+            },
+            {
+              title: "The $1 Million Retirement Math",
+              items: [
+                "Starting at 25: Need to save $381/month at 7% to hit $1M by 65",
+                "Starting at 30: Need $548/month (44% more)",
+                "Starting at 35: Need $804/month (111% more)",
+                "Starting at 40: Need $1,214/month (219% more)",
+                "Starting at 45: Need $1,920/month (404% more!)",
+              ],
+            },
+            {
+              title: "Inflation: The Silent Wealth Killer",
+              items: [
+                { label: "Average inflation:", text: "3% per year historically (2022-2023 was 7-9%)" },
+                { label: "Real return:", text: "Nominal return minus inflation (10% - 3% = 7% real)" },
+                { label: "$100 today:", text: "Worth $74 in 10 years at 3% inflation" },
+                { label: "Savings accounts:", text: "At 0.5% interest and 3% inflation, you're LOSING 2.5%/year" },
+              ],
+            },
+            {
+              title: "Compound Interest vs Simple Interest",
+              items: [
+                "Simple: Interest only on principal ($1,000 × 10% × 10 years = $1,000 interest)",
+                "Compound: Interest on principal + accumulated interest ($1,000 → $2,594 at 10% for 10 years)",
+                "The difference: $594 of 'free' money from compounding",
+                "Over 30 years at 10%: Simple = $4,000 total, Compound = $17,449 total",
+                "Banks use compound interest against you (loans) and simple interest for you (some savings)",
+              ],
+            },
+            {
+              title: "Pro Tips for Investors",
+              items: [
+                "Automate contributions: Remove human temptation to skip months",
+                "Reinvest dividends: DRIP (Dividend Reinvestment Plan) supercharges compounding",
+                "Minimize fees: 1% annual fee costs $100,000+ over 30 years on $500k",
+                "Tax-advantaged accounts: 401(k), IRA grow tax-free (compound on the full amount)",
+                "Don't panic sell: Market dips are buying opportunities for long-term investors",
               ],
             },
           ],
