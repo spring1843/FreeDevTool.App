@@ -651,27 +651,73 @@ export const toolsData: ToolData = {
         explanations: {
           notice: {
             type: "info",
-            title: "YAML Basics",
+            title: "YAML: Yet Another Markup Language (or is it?)",
             items: [
-              "Human-readable serialization; strict indentation with spaces (no tabs)",
-              "Supports lists and dictionaries; widely used for configs",
+              { label: "Original name:", text: "'Yet Another Markup Language' (2001)" },
+              { label: "Renamed:", text: "'YAML Ain't Markup Language' — a recursive acronym emphasizing data over documents" },
+              { label: "Superset:", text: "All JSON is valid YAML (but not vice versa)" },
             ],
           },
           sections: [
             {
-              title: "Features",
+              title: "YAML's Infamous Gotchas",
               items: [
-                "Format YAML with consistent indentation",
-                "Helpful errors on invalid structure",
-                "Works for multi-document YAML",
+                { label: "Norway problem:", text: "NO (country code) becomes boolean false. Quote it: 'NO'" },
+                { label: "Time trap:", text: "12:30 becomes 750 (minutes). Use quotes: '12:30'" },
+                { label: "Version floats:", text: "3.10 becomes 3.1. Quote versions: '3.10'" },
+                { label: "Octal surprise:", text: "0777 is parsed as octal (511 decimal) in YAML 1.1" },
+                { label: "On/Off:", text: "on, off, yes, no all become booleans—quote them!" },
               ],
             },
             {
-              title: "Use cases",
+              title: "Where YAML Dominates",
               items: [
-                "Validate CI/CD or Kubernetes manifests",
-                "Beautify config files",
-                "Reduce indentation mistakes",
+                { label: "Kubernetes:", text: "All manifests (pods, deployments, services) are YAML" },
+                { label: "GitHub Actions:", text: ".github/workflows/*.yml for CI/CD pipelines" },
+                { label: "Docker Compose:", text: "docker-compose.yml for multi-container apps" },
+                { label: "Ansible:", text: "Playbooks and roles for infrastructure automation" },
+                { label: "OpenAPI/Swagger:", text: "API specifications (though JSON works too)" },
+                { label: "Home Assistant:", text: "Smart home automation config" },
+              ],
+            },
+            {
+              title: "YAML vs JSON vs TOML",
+              items: [
+                { label: "YAML:", text: "Most readable, but whitespace-sensitive. Great for configs humans edit" },
+                { label: "JSON:", text: "More verbose, no comments, but zero ambiguity. Best for APIs/data exchange" },
+                { label: "TOML:", text: "INI-style, explicit sections. Used by Rust (Cargo.toml), Python (pyproject.toml)" },
+              ],
+            },
+            {
+              title: "Syntax Quick Reference",
+              items: [
+                "key: value — basic key-value pair",
+                "- item — list item (dash + space)",
+                "nested:\\n  child: value — indentation creates hierarchy (2 spaces standard)",
+                "| — literal block scalar (preserves newlines)",
+                "> — folded block scalar (folds newlines to spaces)",
+                "&anchor / *alias — reuse values (DRY principle)",
+                "--- — document separator (multiple YAML docs in one file)",
+              ],
+            },
+            {
+              title: "Common Mistakes",
+              items: [
+                "Tabs instead of spaces: YAML only allows spaces for indentation",
+                "Inconsistent indentation: Pick 2 spaces and stick with it everywhere",
+                "Missing space after colon: 'key:value' fails, 'key: value' works",
+                "Unquoted special chars: Colons, #, @, and & need quoting in strings",
+                "Trailing whitespace: Some parsers are picky about spaces at line ends",
+              ],
+            },
+            {
+              title: "Pro Tips",
+              items: [
+                "Use yamllint for CI validation: catches issues before deployment",
+                "VS Code extension 'YAML' by Red Hat adds autocomplete for K8s schemas",
+                "Multi-line strings: Use | for code/scripts, > for long paragraphs",
+                "Anchors for DRY: Define once with &name, reference with *name",
+                "Convert to JSON to debug: Same data, but no ambiguity about parsing",
               ],
             },
           ],
