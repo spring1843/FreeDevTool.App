@@ -466,7 +466,9 @@ export default function MicrophoneTest() {
                 <ToolButton
                   variant="custom"
                   onClick={playRecording}
-                  tooltip={isPlaying ? "Stop playback" : "Play the recorded audio"}
+                  tooltip={
+                    isPlaying ? "Stop playback" : "Play the recorded audio"
+                  }
                   icon={<Play className="w-4 h-4 mr-2" />}
                   className="flex-1"
                 >

@@ -12,8 +12,6 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   QrCode,
-  Download,
-  Copy,
   Smartphone,
   Globe,
   Mail,

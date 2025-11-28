@@ -174,9 +174,23 @@ export default function KeyboardTest() {
                 <ToolButton
                   variant="custom"
                   onClick={toggleTesting}
-                  tooltip={isActive ? "Stop keyboard testing" : "Start keyboard testing"}
-                  icon={isActive ? <Square className="w-4 h-4 mr-2" /> : <Play className="w-4 h-4 mr-2" />}
-                  className={isActive ? "bg-destructive text-destructive-foreground hover:bg-destructive/90" : ""}
+                  tooltip={
+                    isActive
+                      ? "Stop keyboard testing"
+                      : "Start keyboard testing"
+                  }
+                  icon={
+                    isActive ? (
+                      <Square className="w-4 h-4 mr-2" />
+                    ) : (
+                      <Play className="w-4 h-4 mr-2" />
+                    )
+                  }
+                  className={
+                    isActive
+                      ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                      : ""
+                  }
                   size="sm"
                 >
                   {isActive ? "Stop Testing" : "Start Testing"}

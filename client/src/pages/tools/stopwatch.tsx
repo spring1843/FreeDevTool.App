@@ -240,7 +240,8 @@ export default function Stopwatch() {
                     data-testid="pause-button"
                   >
                     <Pause className="w-5 h-5 mr-2" />
-                    Pause <span className="text-xs opacity-75 ml-2">(Space)</span>
+                    Pause{" "}
+                    <span className="text-xs opacity-75 ml-2">(Space)</span>
                   </Button>
 
                   <Button

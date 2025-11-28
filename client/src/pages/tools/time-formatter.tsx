@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { TimezoneSelector } from "@/components/ui/timezone-selector";
 import { getUserTimezone } from "@/lib/time-tools";
 import { Clock, Copy, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   ResetButton,
   ClearButton,
@@ -363,7 +364,9 @@ export default function TimeFormatter() {
                     onClick={handleClear}
                     tooltip="Clear all inputs"
                     hasModifiedData={hasModifiedData}
-                    disabled={inputDate.trim() === "" && inputTime.trim() === ""}
+                    disabled={
+                      inputDate.trim() === "" && inputTime.trim() === ""
+                    }
                   />
                 </DataButtonGroup>
               </ToolButtonGroup>
