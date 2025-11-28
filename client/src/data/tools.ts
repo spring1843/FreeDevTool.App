@@ -3529,21 +3529,111 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
+          notice: {
+            type: "info",
+            title: "Color Theory in 30 Seconds",
+            items: [
+              { label: "Primary:", text: "Red, Blue, Yellow—can't be made by mixing other colors" },
+              { label: "Secondary:", text: "Orange, Green, Purple—mix two primaries" },
+              { label: "The wheel:", text: "Invented by Isaac Newton in 1666 (yes, the gravity guy)" },
+            ],
+          },
+          shortcuts: [
+            { key: "Ctrl+Shift+,", action: "Open Color Palette Generator" },
+          ],
           sections: [
             {
-              title: "Features",
+              title: "Palette Types Explained",
               items: [
-                "Generate harmonious palettes",
-                "Copy hex codes",
-                "Preview combinations",
+                { label: "Complementary:", text: "Opposite on the wheel (red/green)—high contrast, eye-catching" },
+                { label: "Analogous:", text: "Neighbors on the wheel—harmonious, found in nature (sunset colors)" },
+                { label: "Triadic:", text: "Three colors equally spaced—vibrant but balanced (primary colors)" },
+                { label: "Split-Complementary:", text: "Base + two adjacent to its complement—less tension than complementary" },
+                { label: "Tetradic:", text: "Four colors in rectangle—rich but hard to balance" },
+                { label: "Monochromatic:", text: "One hue, different shades/tints—elegant, impossible to mess up" },
               ],
             },
             {
-              title: "Use cases",
+              title: "Famous Brand Colors (Hex Codes)",
               items: [
-                "Design UI themes",
-                "Pick brand colors",
-                "Explore color theory",
+                { label: "Coca-Cola Red:", text: "#F40009 — The most recognized color in the world" },
+                { label: "Tiffany Blue:", text: "#0ABAB5 — Trademarked! Pantone 1837 (the year founded)" },
+                { label: "Facebook Blue:", text: "#1877F2 — Chosen because Zuckerberg is red-green colorblind" },
+                { label: "Spotify Green:", text: "#1DB954 — Stands out against every album cover" },
+                { label: "Netflix Red:", text: "#E50914 — Designed to pop on TV screens" },
+                { label: "Slack Purple:", text: "#4A154B — Aubergine, to feel 'business but fun'" },
+              ],
+            },
+            {
+              title: "The 60-30-10 Rule",
+              items: [
+                "60% dominant color: Walls, background, large areas (usually neutral)",
+                "30% secondary color: Furniture, accents, supporting elements",
+                "10% accent color: Pop of contrast, buttons, CTAs, highlights",
+                "Interior designers have used this for decades—works for websites too",
+                "Example: White background (60%), blue nav/cards (30%), orange buttons (10%)",
+              ],
+            },
+            {
+              title: "Color Psychology in Marketing",
+              items: [
+                { label: "Red:", text: "Urgency, excitement, hunger (fast food, sale signs)" },
+                { label: "Blue:", text: "Trust, security, calm (banks, tech companies, healthcare)" },
+                { label: "Green:", text: "Nature, health, money (organic brands, finance)" },
+                { label: "Yellow:", text: "Optimism, attention (warning signs, discount stickers)" },
+                { label: "Purple:", text: "Luxury, creativity, royalty (beauty brands, Twitch)" },
+                { label: "Orange:", text: "Fun, confidence, affordable (Amazon, Nickelodeon)" },
+                { label: "Black:", text: "Elegance, power, exclusivity (luxury brands, Apple)" },
+              ],
+            },
+            {
+              title: "Accessibility: WCAG Contrast",
+              items: [
+                "Normal text: 4.5:1 contrast ratio minimum (AA standard)",
+                "Large text (18pt+): 3:1 ratio minimum",
+                "AAA standard: 7:1 for normal, 4.5:1 for large (stricter)",
+                "White text on medium blue? Often fails—test with a contrast checker",
+                "8% of men are colorblind—never rely on color alone for meaning",
+              ],
+            },
+            {
+              title: "Dark Mode Color Tips",
+              items: [
+                "Don't just invert: Pure white (#FFFFFF) on black is too harsh—use #E0E0E0",
+                "Surface elevation: Lighter grays for raised elements (cards, modals)",
+                "Saturated colors: Reduce saturation for dark mode—neon on black hurts eyes",
+                "Shadows: Use less shadow, more border/background difference",
+                "Test in both modes: A color that works on white might disappear on dark",
+              ],
+            },
+            {
+              title: "Quick Color Inspiration Sources",
+              items: [
+                "Nature: Sunsets, forests, oceans—millions of years of evolution say these work",
+                "Movies: Film colorists are genius—screenshot your favorite scenes",
+                "Art: Study Monet, Rothko, Warhol for palette ideas",
+                "Dribbble/Behance: See what top designers are using this year",
+                "Your competitor: Don't copy exactly, but understand why their colors work",
+              ],
+            },
+            {
+              title: "Common Color Mistakes",
+              items: [
+                "Too many colors: Stick to 3-5 max. More = visual chaos",
+                "Vibrating colors: Red on blue or orange on cyan—literally hurts to look at",
+                "Low contrast text: Gray on gray = unreadable for many users",
+                "Ignoring context: That pastel looks great on Dribbble, but can users read it?",
+                "No system: Random colors per page. Build a design system with named colors",
+              ],
+            },
+            {
+              title: "Pro Tips",
+              items: [
+                "Start with one color you love, then generate the rest mathematically",
+                "Squint test: Blur your eyes—can you still tell elements apart?",
+                "Screenshot test: Take screenshots, put them in a grid—do they feel cohesive?",
+                "Print check: Colors look different on paper vs screen—preview if printing",
+                "Get feedback: You've stared too long. Fresh eyes catch issues you're blind to",
               ],
             },
           ],
