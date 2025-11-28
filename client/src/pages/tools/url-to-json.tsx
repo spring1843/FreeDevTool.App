@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Label } from "@/components/ui/label";
-import { CopyButton } from "@/components/ui/copy-button";
 import { Link, Globe, Hash, Share } from "lucide-react";
 import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 import {
@@ -264,15 +263,10 @@ export default function URLToJSON() {
         <div className="space-y-4">
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center">
-                  <Hash className="w-5 h-5 mr-2" />
-                  JSON Output
-                </CardTitle>
-                {jsonOutput ? (
-                  <CopyButton text={jsonOutput} variant="outline" size="sm" />
-                ) : null}
-              </div>
+              <CardTitle className="flex items-center">
+                <Hash className="w-5 h-5 mr-2" />
+                JSON Output
+              </CardTitle>
             </CardHeader>
             <CardContent>
               {jsonOutput ? (
