@@ -623,38 +623,74 @@ export const toolsData: ToolData = {
         explanations: {
           notice: {
             type: "info",
-            title: "Validation Issues",
+            title: "HTML: The Web's Foundation",
             items: [
-              "Shows errors and warnings (unclosed tags, missing attributes, accessibility/SEO) with counts",
+              { label: "Created:", text: "1991 by Tim Berners-Lee at CERN—originally just 18 tags!" },
+              { label: "HTML5:", text: "Released 2014 after 15 years of development, added <video>, <canvas>, <article>" },
+              { label: "Today:", text: "~115 standard elements, but most pages use fewer than 30" },
             ],
           },
           sections: [
             {
-              title: "Formatting Options",
+              title: "Common HTML Mistakes This Catches",
               items: [
-                { label: "Beautify", text: "Adds indentation and line breaks" },
-                { label: "Minify", text: "Removes whitespace and comments" },
-                {
-                  label: "Validation",
-                  text: "Checks common HTML issues and best practices",
-                },
+                { label: "Unclosed tags:", text: "<div><p>Text</div> ← Missing </p> breaks layout unpredictably" },
+                { label: "Missing alt:", text: "<img src='photo.jpg'> ← Screen readers can't describe this image" },
+                { label: "Empty href:", text: "<a href=''>Click</a> ← Reloads page instead of doing nothing" },
+                { label: "Inline styles:", text: "style='color:red' works but makes maintenance nightmare" },
+                { label: "Deprecated tags:", text: "<center>, <font>, <marquee>—use CSS instead (it's 2024!)" },
               ],
             },
             {
-              title: "Validation Features",
+              title: "Accessibility Must-Haves",
               items: [
-                "Detects unclosed/mismatched tags",
-                "Validates required attributes (e.g., alt, src)",
-                "Highlights accessibility and SEO problems",
-                "Suggests best-practice improvements",
+                "alt on images: Describe what's IN the image, not 'image of...'",
+                "label for inputs: <label for='email'>Email</label><input id='email'>",
+                "Heading hierarchy: Don't skip levels (h1 → h3 without h2)",
+                "Button vs link: <button> for actions, <a> for navigation",
+                "lang attribute: <html lang='en'> helps screen readers pronounce correctly",
               ],
             },
             {
-              title: "Use cases",
+              title: "SEO HTML Essentials",
               items: [
-                "Clean up templates",
-                "Improve readability for code reviews",
-                "Normalize markup before commit",
+                { label: "<title>:", text: "50-60 chars, unique per page, keyword near front" },
+                { label: "<meta description>:", text: "150-160 chars, compelling summary for search results" },
+                { label: "Semantic tags:", text: "<header>, <nav>, <main>, <article>, <footer>—helps Google understand structure" },
+                { label: "Heading structure:", text: "One <h1> per page, logical hierarchy signals importance" },
+                { label: "Image alt text:", text: "Helps Google Images understand and rank your images" },
+              ],
+            },
+            {
+              title: "HTML5 Semantic Elements",
+              items: [
+                { label: "<header>:", text: "Introductory content, typically contains logo and nav" },
+                { label: "<nav>:", text: "Navigation links (main menu, breadcrumbs)" },
+                { label: "<main>:", text: "Primary content—only ONE per page" },
+                { label: "<article>:", text: "Self-contained content (blog post, news story, comment)" },
+                { label: "<section>:", text: "Thematic grouping of content, usually with heading" },
+                { label: "<aside>:", text: "Tangentially related content (sidebars, pull quotes)" },
+                { label: "<footer>:", text: "Footer info—copyright, links, contact" },
+              ],
+            },
+            {
+              title: "Minification Benefits",
+              items: [
+                "Removes whitespace, comments, and unnecessary quotes",
+                "Typical savings: 10-30% file size reduction",
+                "Faster page loads = better SEO ranking (Core Web Vitals)",
+                "Combined with GZIP: 70-90% total reduction",
+                "Warning: Minified HTML is nearly unreadable—keep source files formatted!",
+              ],
+            },
+            {
+              title: "Modern HTML Best Practices",
+              items: [
+                "DOCTYPE: <!DOCTYPE html> is all you need (HTML5 simplified this)",
+                "charset: <meta charset='UTF-8'> should be in first 1024 bytes",
+                "viewport: <meta name='viewport' content='width=device-width, initial-scale=1'> for mobile",
+                "Avoid div soup: Use semantic elements instead of <div class='header'>",
+                "Self-closing tags: <br>, <img>, <input>—no need for <br /> anymore in HTML5",
               ],
             },
           ],
