@@ -2,6 +2,7 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import CodeMirror from "@uiw/react-codemirror";
 import { EditorView, type ViewUpdate } from "@codemirror/view";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { javascript } from "@codemirror/lang-javascript";
 import { cn } from "@/lib/utils";
 import { css } from "@codemirror/lang-css";
@@ -38,7 +39,15 @@ export interface TextAreaProps {
 }
 
 const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
-  ({ className, value, onChange, theme = "light", lineWrapping = false, ...props }) => {
+  ({
+    className,
+    value,
+    onChange,
+    theme = "light",
+    lineWrapping = false,
+    ...props
+  }) => {
+    const isMobile = useIsMobile();
     const baseClassName = cn(
       // Make the editor visually attach to the top navbar: no top rounding
       // so the navbar's rounded-t-md forms the top corners; keep bottom round.
@@ -155,9 +164,42 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         target: { value: val } as unknown as EventTarget & HTMLTextAreaElement,
       }) as unknown as React.ChangeEvent<HTMLTextAreaElement>;
     const langExt = getLanguageExtension(currentLang);
+
+    // Dynamically cap the editor's visible height by number of lines.
+    const wrapperRef = React.useRef<HTMLDivElement | null>(null);
+    const [lineHeightPx, setLineHeightPx] = React.useState<number>(18);
+
+    React.useEffect(() => {
+      const measure = () => {
+        if (!wrapperRef.current) return;
+        const line = wrapperRef.current.querySelector(
+          ".cm-editor .cm-line"
+        ) as HTMLElement | null;
+        if (line) {
+          const cs = window.getComputedStyle(line);
+          const lh = parseFloat(cs.lineHeight);
+          if (!Number.isNaN(lh) && lh > 0) setLineHeightPx(lh);
+        }
+      };
+      // initial measure and on next tick in case CodeMirror mounts after first paint
+      measure();
+      const id = window.setTimeout(measure, 50);
+      return () => window.clearTimeout(id);
+    }, [value, theme]);
+
+  const DESKTOP_MAX_LINES = 300;
+  const MOBILE_MAX_LINES = 100;
+  const maxVisibleLines = isMobile ? MOBILE_MAX_LINES : DESKTOP_MAX_LINES;
+    const maxHeightPx = Math.max(1, Math.round(lineHeightPx * maxVisibleLines));
+
+    const heightLimitExtension = EditorView.theme({
+      "&": { maxHeight: `${maxHeightPx}px`, overflow: "auto" },
+    });
+
     const extensions = [
       ...(Array.isArray(langExt) ? langExt : [langExt]),
       ...(lineWrapping ? [EditorView.lineWrapping] : []),
+      heightLimitExtension,
     ];
     const { toast } = useToast();
 
@@ -349,6 +391,7 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         data-testid="textarea-drop-area"
+        ref={wrapperRef}
       >
         {/* Toolbar / Navbar above the editor */}
         <div className="flex justify-end">
