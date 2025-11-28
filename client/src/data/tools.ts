@@ -2240,38 +2240,49 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          notice: {
-            type: "info",
-            title: "Keyboard",
-            items: [
-              { label: "Enter", text: "Start" },
-              { label: "Space/Esc", text: "Stop" },
-            ],
-          },
+          shortcuts: [
+            { key: "Enter", action: "Start metronome" },
+            { key: "Space", action: "Toggle start/stop" },
+            { key: "Escape", action: "Stop metronome" },
+          ],
           sections: [
             {
-              title: "Features",
+              title: "Tempo Guide (BPM)",
               items: [
-                "Multi-tone metronome: configure multiple notes and intervals",
-                "Enable/disable tones individually",
-                "Interval slider (0.1–10s) with quick presets",
-                "Visual play feedback per tone",
-                "Shareable URL with current tone schedules",
-                "Test tones before starting",
+                { label: "40-60 (Largo):", text: "Slow ballads, funeral marches, meditation music" },
+                { label: "60-80 (Adagio):", text: "Slow songs, blues, worship music" },
+                { label: "80-100 (Andante):", text: "Walking pace, easy listening, country" },
+                { label: "100-120 (Moderato):", text: "Pop, rock, most mainstream music" },
+                { label: "120-140 (Allegro):", text: "Dance, disco, upbeat pop, punk rock" },
+                { label: "140-180 (Vivace):", text: "Fast metal, drum & bass, hardcore punk" },
               ],
             },
             {
-              title: "Examples",
+              title: "Practice Tips",
               items: [
-                "Basic Beat (C5 + G4)",
-                "Complex Rhythm (A4, E4, A5)",
-                "C Major progression (C4, E4, G4, C5)",
+                "Start 20% slower than target tempo—speed builds on accuracy, not the reverse",
+                "Increase by 5 BPM only after playing perfectly 3 times in a row",
+                "Practice with the click on beats 2 and 4 (like a snare) for better groove feel",
+                "Record yourself—you'll hear timing issues you can't feel while playing",
+                "If you can't play it slow, you can't play it fast (muscle memory needs precision first)",
               ],
             },
             {
-              title: "Pro Tip",
+              title: "Beyond Basic Clicks",
               items: [
-                "Use intervals like 0.5s, 1.5s, and 3s to create polyrhythms that repeat every 6s",
+                "Add multiple tones at different intervals to create polyrhythms (3 against 4, etc.)",
+                "Use the accent tone (higher pitch) on beat 1 to feel downbeats",
+                "Try odd time signatures: set 7/8 by using 0.857s intervals at 60 BPM",
+                "Share your metronome setup via URL for band practice consistency",
+              ],
+            },
+            {
+              title: "Metronome History",
+              items: [
+                "Invented by Johann Maelzel in 1815 (patented the mechanical design)",
+                "Beethoven was first major composer to add metronome markings to scores",
+                "A4 = 440 Hz became the standard pitch in 1939 (before that, it varied wildly)",
+                "Digital metronomes replaced mechanical ones in the 1970s-80s",
               ],
             },
           ],
