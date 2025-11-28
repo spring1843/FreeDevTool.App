@@ -33,7 +33,7 @@ import {
   Play,
   Pause,
 } from "lucide-react";
-import { toolsData } from "@/data/tools";
+import { toolsData, getToolByPath } from "@/data/tools";
 import { useDemo } from "@/hooks/use-demo-hook";
 import { useTheme } from "@/providers/theme-provider";
 
@@ -104,6 +104,18 @@ export function Layout({ children }: LayoutProps) {
     });
     return () => document.removeEventListener("pointerdown", handlePointerDown);
   }, []);
+
+  // Update document title based on current location
+  useEffect(() => {
+    if (location === "/") {
+      document.title = "FreeDevTool.app - Free Developer Tools";
+    } else if (location.startsWith("/tools/")) {
+      const tool = getToolByPath(location);
+      if (tool) {
+        document.title = `${tool.name} - FreeDevTool.app`;
+      }
+    }
+  }, [location]);
 
   // Global keyboard shortcut handler
   useEffect(() => {
