@@ -1843,21 +1843,86 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
+          notice: {
+            type: "info",
+            title: "Unicode: One Standard to Rule Them All",
+            items: [
+              { label: "Before Unicode:", text: "Chaos—ASCII (128 chars), Latin-1 (256), Shift-JIS (Japanese), Big5 (Chinese)... files were garbled between systems" },
+              { label: "The fix:", text: "Unicode Consortium (1991) created one encoding for every character in every language" },
+              { label: "Today:", text: "149,813 characters covering 161 scripts, from English to Emoji to Egyptian Hieroglyphs" },
+            ],
+          },
           sections: [
             {
-              title: "Features",
+              title: "Unicode by the Numbers",
               items: [
-                "Browse and search Unicode symbols",
-                "Copy easily",
-                "Categorized character sets",
+                "Total possible code points: 1,114,112 (0x000000 to 0x10FFFF)",
+                "Currently assigned: ~149,000 (about 13% used)",
+                "New additions yearly: ~700-1,000 characters per version",
+                "Emoji alone: 3,782 (as of Unicode 15.1)",
+                "CJK ideographs: 97,680+ (Chinese/Japanese/Korean characters)",
+                "Private use area: 6,400 slots for custom characters",
               ],
             },
             {
-              title: "Use cases",
+              title: "Famous Unicode Characters",
               items: [
-                "Insert symbols in text",
-                "Explore character support",
-                "Design iconography",
+                { label: "U+0000:", text: "NULL—the very first code point (inherited from ASCII)" },
+                { label: "U+FFFD:", text: "�—the 'replacement character' shown when decoding fails" },
+                { label: "U+200B:", text: "Zero-width space—invisible but exists (copy this: '​' ← it's there!)" },
+                { label: "U+1F4A9:", text: "💩—the pile of poo emoji, hotly debated before approval" },
+                { label: "U+2603:", text: "☃—the snowman, used to test Unicode support" },
+              ],
+            },
+            {
+              title: "Useful Symbols for Developers",
+              items: [
+                "→ ← ↑ ↓ (arrows): Great for CLI tools and documentation",
+                "✓ ✗ (check/cross): Status indicators without images",
+                "• ◦ ‣ (bullets): List styling in plain text",
+                "│ ├ └ ─ (box drawing): ASCII art tables and trees",
+                "∞ ≈ ≠ ≤ ≥ (math): Technical documentation",
+                "© ® ™ (legal): Trademark and copyright notices",
+              ],
+            },
+            {
+              title: "Unicode Security Gotchas",
+              items: [
+                { label: "Homoglyphs:", text: "раypal.com ← That 'a' is Cyrillic! Used in phishing attacks" },
+                { label: "Invisible chars:", text: "U+200B (zero-width space) can hide in filenames and URLs" },
+                { label: "Right-to-left:", text: "U+202E reverses text direction—filename 'photo[RLO]gnp.exe' appears as 'photoexe.png'" },
+                { label: "Normalization:", text: "é can be 1 char or 2 (e + combining accent)—causes string comparison bugs" },
+              ],
+            },
+            {
+              title: "Emoji Evolution",
+              items: [
+                "1999: First emoji created by Shigetaka Kurita at NTT DoCoMo (Japan)",
+                "2010: Unicode 6.0 officially added emoji—722 characters",
+                "2015: Skin tone modifiers added (Fitzpatrick scale)",
+                "2019: Emoji 12.0 added gender-neutral options",
+                "Most used emoji: 😂 (Face with Tears of Joy)—15% of all emoji usage",
+                "Newest additions: Shaking face, pink heart, moose, and more (Unicode 15.0)",
+              ],
+            },
+            {
+              title: "How to Type Unicode",
+              items: [
+                { label: "Windows:", text: "Alt + numpad code (Alt+0169 = ©) or Win+. for emoji picker" },
+                { label: "Mac:", text: "Ctrl+Cmd+Space for emoji picker, or enable Unicode Hex Input keyboard" },
+                { label: "Linux:", text: "Ctrl+Shift+U then hex code (Ctrl+Shift+U 00A9 = ©)" },
+                { label: "HTML:", text: "&copy; or &#169; or &#x00A9; (all render as ©)" },
+                { label: "JavaScript:", text: "'\\u00A9' or '\\u{1F600}' for emoji (ES6+ required for latter)" },
+              ],
+            },
+            {
+              title: "Fun Unicode Blocks to Explore",
+              items: [
+                "Dingbats (U+2700): ✂ ✈ ✉ ✎—classic symbols from Zapf Dingbats font",
+                "Box Drawing (U+2500): Create ASCII art tables and UI borders",
+                "Miscellaneous Symbols (U+2600): ☀ ☁ ☂ ☃ ⚡—weather and more",
+                "Mathematical Operators (U+2200): ∀ ∃ ∈ ∑ ∏ √—for math docs",
+                "Playing Cards (U+1F0A0): 🂡 🂱 🃁 🃑—full deck of cards!",
               ],
             },
           ],
