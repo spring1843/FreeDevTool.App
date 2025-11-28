@@ -2465,40 +2465,73 @@ export const toolsData: ToolData = {
         explanations: {
           notice: {
             type: "info",
-            title: "Quick Presets",
+            title: "Time Perspective",
             items: [
-              {
-                label: "Future",
-                text: "5 min, 1 hour, 1 day, 1 week, 1 month, 1 year from now",
-              },
-              {
-                label: "Historical",
-                text: "Year 1 AD, 1000, Unix epoch (1970), Y2K, 2010 → now",
-              },
-              {
-                label: "Far Future",
-                text: "100/500/1000 years from now; to year 3000 or 10000",
-              },
+              { label: "1 million seconds:", text: "About 11.5 days" },
+              { label: "1 billion seconds:", text: "About 31.7 years (you've probably lived through one!)" },
+              { label: "Average lifespan:", text: "~2.5 billion seconds or ~28,000 days" },
             ],
           },
           sections: [
             {
-              title: "Features",
+              title: "Fun Calculations to Try",
               items: [
-                "Precise difference between start and end date/time",
-                "Readable summary (years, months, weeks, days, hours, minutes, seconds)",
-                "Totals in multiple units (years, months, weeks, days, hours, minutes, seconds)",
-                "Copy individual totals to clipboard",
-                "Set 'Now' for start or end instantly",
-                "Persistent inputs and quick presets",
+                "Your exact age: Enter your birthday → get your age in days, hours, even seconds",
+                "Relationship milestone: How many days since you met your partner/best friend?",
+                "Career duration: First day at work → today = your exact tenure",
+                "10,000 hours: Malcolm Gladwell's mastery threshold—when did you/will you hit it?",
+                "Moon landing: July 20, 1969 → now (over 20,000 days ago!)",
+                "Your 10,000th day alive: A milestone most people don't know about (~age 27)",
               ],
             },
             {
-              title: "Use cases",
+              title: "Business & Legal Uses",
               items: [
-                "Project planning and milestone tracking",
-                "Personal milestones (age, anniversaries, travel)",
-                "Business applications (contracts, SLAs, billing, warranties)",
+                { label: "Invoice aging:", text: "Invoice date → today = days outstanding (Net 30, 60, 90)" },
+                { label: "Contract terms:", text: "Start → end = exact contract duration for billing" },
+                { label: "Warranty check:", text: "Purchase date → now = is it still under warranty?" },
+                { label: "Employee tenure:", text: "Hire date → today for anniversary bonuses, vesting" },
+                { label: "Statute of limitations:", text: "Event date → filing deadline calculations" },
+              ],
+            },
+            {
+              title: "Project Management",
+              items: [
+                "Sprint length: Confirm your sprints are exactly 2 weeks (14 days)",
+                "Release countdown: Days until launch = remaining workdays at a glance",
+                "SLA tracking: Incident start → resolution = SLA compliance check",
+                "Vacation planning: Days between trips, or days until your next vacation",
+                "Deadline reality: 'Due in 3 weeks' = only 15 weekdays of actual work!",
+              ],
+            },
+            {
+              title: "Historical Time Spans",
+              items: [
+                "Unix Epoch (Jan 1, 1970) → now: The basis of all computer timestamps",
+                "Y2K (Jan 1, 2000) → now: A quarter century since the 'millennium bug'",
+                "iPhone launch (Jun 29, 2007) → now: The smartphone era's exact age",
+                "COVID-19 lockdowns (Mar 2020) → now: How long has it really been?",
+                "Your favorite movie/album release → now: Feel old yet?",
+              ],
+            },
+            {
+              title: "Why Months Are Weird",
+              items: [
+                "Months have 28, 29, 30, or 31 days—so '1 month' is ambiguous",
+                "February is shorter because Romans considered it unlucky",
+                "July and August both have 31 days because emperors had egos",
+                "This tool calculates month differences by actual calendar months, not 30-day periods",
+                "For precise billing, use days or hours instead of months",
+              ],
+            },
+            {
+              title: "Time Unit Conversions",
+              items: [
+                "1 day = 24 hours = 1,440 minutes = 86,400 seconds",
+                "1 week = 168 hours = 10,080 minutes",
+                "1 year = 365.25 days (accounting for leap years) = 8,766 hours",
+                "1 decade = 3,652.5 days ≈ 87,660 hours",
+                "1 century = 36,525 days = 876,600 hours = 52.6 million minutes",
               ],
             },
           ],
