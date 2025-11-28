@@ -1582,21 +1582,51 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
+          notice: {
+            type: "tips",
+            title: "Password Cracking Reality",
+            items: [
+              "8 chars with just lowercase: cracked in 5 seconds with modern GPU",
+              "8 chars with mixed case + numbers + symbols: ~8 hours",
+              "12 chars with full character set: ~34,000 years",
+              "16+ chars: Effectively uncrackable with current technology",
+            ],
+          },
           sections: [
             {
-              title: "Features",
+              title: "Why These Options Matter",
               items: [
-                "Adjust length and character sets",
-                "Generate multiple variants",
-                "Copy with one click",
+                {
+                  label: "Exclude similar (I, l, 1, O, 0):",
+                  text: "Prevents confusion when typing passwords manually",
+                },
+                {
+                  label: "Exclude ambiguous symbols:",
+                  text: "Some systems reject { } [ ] or treat them specially",
+                },
+                {
+                  label: "Multiple passwords:",
+                  text: "Generate a batch for new user accounts or API keys",
+                },
               ],
             },
             {
-              title: "Use cases",
+              title: "Most Common Passwords (Don't Use These!)",
               items: [
-                "Create credentials securely",
-                "Avoid weak patterns",
-                "Prototype auth flows",
+                "123456 — #1 for over a decade, used by 23 million accounts",
+                "password — Still in top 5 every year",
+                "qwerty — Keyboard patterns are instantly cracked",
+                "Your birthday/name — Found in seconds via social media",
+                "Company name + year — 'Acme2024' is the first guess attackers try",
+              ],
+            },
+            {
+              title: "Pro Security Tips",
+              items: [
+                "Use a password manager—one strong master password, unique passwords everywhere",
+                "Enable 2FA even with strong passwords (passwords can be phished)",
+                "16+ characters > complexity (length beats special characters)",
+                "Passphrases work too: 'correct-horse-battery-staple' is strong and memorable",
               ],
             },
           ],
