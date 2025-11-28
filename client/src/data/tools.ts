@@ -1313,21 +1313,63 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
+          notice: {
+            type: "examples",
+            title: "Regex Quick Reference",
+            items: [
+              { label: ".", text: "Any character except newline" },
+              { label: "\\d \\w \\s", text: "Digit, word char, whitespace" },
+              { label: "* + ?", text: "0+, 1+, 0 or 1 occurrences" },
+              { label: "[abc] [^abc]", text: "Character class / negated class" },
+              { label: "( ) \\1", text: "Capture group / backreference" },
+            ],
+          },
           sections: [
             {
-              title: "Features",
+              title: "Copy-Paste Patterns",
               items: [
-                "Live matching and highlighting",
-                "Supports JS regex syntax",
-                "Shows groups and matches",
+                "Email: ^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$",
+                "URL: https?://[\\w.-]+(?:/[\\w./-]*)?",
+                "Phone (US): \\(?\\d{3}\\)?[-.\\s]?\\d{3}[-.\\s]?\\d{4}",
+                "Date (YYYY-MM-DD): \\d{4}-\\d{2}-\\d{2}",
+                "IP Address: \\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}",
+                "Hex Color: #[0-9A-Fa-f]{6}\\b",
               ],
             },
             {
-              title: "Use cases",
+              title: "Flags Explained",
               items: [
-                "Design and verify regex patterns",
-                "Debug complex captures",
-                "Validate input formats",
+                {
+                  label: "g (global):",
+                  text: "Find ALL matches, not just the first one",
+                },
+                {
+                  label: "i (case-insensitive):",
+                  text: "'hello' matches 'Hello', 'HELLO', etc.",
+                },
+                {
+                  label: "m (multiline):",
+                  text: "^ and $ match start/end of each LINE, not just the string",
+                },
+              ],
+            },
+            {
+              title: "Common Regex Mistakes",
+              items: [
+                "Forgetting to escape special chars: . * + ? must be \\. \\* \\+ \\?",
+                "Greedy vs lazy: .* matches everything; .*? matches minimum",
+                "^ and $ only work per-line with multiline flag enabled",
+                "Character classes don't need escaping: [.] matches a literal dot",
+                "Backreferences start at \\1, not \\0 (\\0 is the whole match)",
+              ],
+            },
+            {
+              title: "Regex Origin Story",
+              items: [
+                "Invented by Stephen Kleene in 1951 to describe 'regular languages'",
+                "First implemented in text editors (ed, sed, grep) in the 1970s",
+                "Name 'grep' = 'global regular expression print'",
+                "Now built into every programming language, IDE, and text editor",
               ],
             },
           ],
