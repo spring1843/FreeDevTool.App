@@ -1156,7 +1156,7 @@ export const toolsData: ToolData = {
       {
         name: "Text Diff",
         path: "/tools/text-diff",
-        shortcut: "Ctrl+Shift!",
+        shortcut: "Ctrl+Shift+!",
         metadata: {
           title: "Text Diff - Compare Two Texts",
           description:
