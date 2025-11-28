@@ -21,12 +21,21 @@ import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function Countdown() {
   const tool = getToolByPath("/tools/countdown");
+  // Helpers to format local date/time strings consistently
+  const pad2 = (n: number) => String(n).padStart(2, "0");
+  const formatLocalDate = (d: Date) =>
+    `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+  const formatLocalTime = (d: Date, withSeconds = true) =>
+    withSeconds
+      ? `${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}`
+      : `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
   // Set interesting default values (New Year countdown)
   const getDefaultDateTime = () => {
     const now = new Date();
     const nextYear = new Date(now.getFullYear() + 1, 0, 1, 0, 0, 0); // Next New Year
     return {
-      date: nextYear.toISOString().split("T")[0],
+      // Use local date/time formatting to avoid UTC/local mismatches
+      date: formatLocalDate(nextYear),
       time: "00:00",
     };
   };
@@ -56,6 +65,12 @@ export default function Countdown() {
 
   const startCountdown = useCallback(() => {
     if (!targetDate || !targetTime) return;
+
+    // Ensure no overlapping intervals are running
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
 
     setIsActive(true);
     setIsComplete(false);
@@ -216,8 +231,9 @@ export default function Countdown() {
     }
 
     const { date } = preset;
-    const dateStr = date.toISOString().split("T")[0];
-    const timeStr = preset.time || date.toTimeString().slice(0, 5);
+    // Format both date and time in the same (local) timezone to prevent flicker
+    const dateStr = formatLocalDate(date);
+    const timeStr = preset.time || formatLocalTime(date, true);
 
     setTargetDate(dateStr);
     setTargetTime(timeStr);

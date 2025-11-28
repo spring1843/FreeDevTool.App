@@ -12,7 +12,7 @@ import {
   getValidatedParam,
 } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
-import { COMMON_TLDS } from "@/lib/tlds";
+import { extractDomainParts } from "@/data/domain-tlds";
 
 interface URLComponents {
   protocol?: string;
@@ -60,50 +60,8 @@ export default function URLToJSON() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputUrl]);
 
-  const extractTLD = (
-    hostname: string
-  ): { tld: string; domain: string; subdomain: string } => {
-    const parts = hostname.split(".");
-    if (parts.length < 2) {
-      return { tld: "", domain: hostname, subdomain: "" };
-    }
-
-    const commonTLDs = COMMON_TLDS;
-
-    // Single-part TLDs for validation
-    const singlePartTLDs = commonTLDs.filter(t => !t.includes("."));
-
-    let tld = "";
-    let domain = "";
-    let subdomain = "";
-
-    // Check for multi-part TLDs first
-    for (const multiTLD of commonTLDs.filter(t => t.includes("."))) {
-      if (hostname.endsWith(`.${multiTLD}`)) {
-        tld = multiTLD;
-        const remaining = hostname.slice(0, -(multiTLD.length + 1));
-        const remainingParts = remaining.split(".");
-        domain = remainingParts[remainingParts.length - 1];
-        subdomain = remainingParts.slice(0, -1).join(".");
-        return { tld, domain, subdomain };
-      }
-    }
-
-    // Single-part TLD - validate it's a known TLD
-    const potentialTLD = parts[parts.length - 1];
-    if (singlePartTLDs.includes(potentialTLD.toLowerCase())) {
-      tld = potentialTLD.toLowerCase();
-      domain = parts[parts.length - 2];
-      subdomain = parts.slice(0, -2).join(".");
-    } else {
-      // Not a recognized TLD - treat the whole hostname as domain
-      tld = "";
-      domain = hostname;
-      subdomain = "";
-    }
-
-    return { tld, domain, subdomain };
-  };
+  // Use optimized domain/TLD extraction backed by cached sets
+  const extractTLD = (hostname: string) => extractDomainParts(hostname);
 
   const parseURL = useCallback(() => {
     try {

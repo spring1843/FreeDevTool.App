@@ -10071,5 +10071,69 @@ export const COMMON_TLDS = [
   "鹿児島.jp",
 ];
 
+// Derived caches for fast lookup. Normalizes PSL-style wildcards and exceptions.
+// - Strips leading "*." wildcard markers
+// - Ignores exception rules prefixed with '!'
+// - Lowercases all entries for case-insensitive matching
+const CLEAN_TLDS: string[] = COMMON_TLDS.filter(Boolean)
+  .map(s => s.toLowerCase())
+  .filter(s => !s.startsWith("!"))
+  .map(s => (s.startsWith("*.") ? s.slice(2) : s));
+
+export const SINGLE_PART_TLDS: Set<string> = new Set(
+  CLEAN_TLDS.filter(s => !s.includes("."))
+);
+
+export const MULTI_PART_TLDS: Set<string> = new Set(
+  CLEAN_TLDS.filter(s => s.includes("."))
+);
+
+export const MAX_TLD_LABELS: number = Array.from(MULTI_PART_TLDS).reduce(
+  (max, t) => Math.max(max, t.split(".").length),
+  2
+);
+
+/**
+ * Extracts TLD/domain/subdomain from a hostname using cached TLD sets.
+ * Algorithm:
+ * - Try longest matching multi-part TLD by suffix (labels-based)
+ * - Fallback to single-part TLD (last label)
+ * - If no match, treat entire hostname as domain
+ */
+export function extractDomainParts(hostname: string): {
+  tld: string;
+  domain: string;
+  subdomain: string;
+} {
+  const host = (hostname || "").toLowerCase();
+  const parts = host.split(".").filter(Boolean);
+  if (parts.length < 2) {
+    return { tld: "", domain: host, subdomain: "" };
+  }
+
+  // Attempt multi-part TLD match from longest to shortest (>= 2 labels)
+  const maxLabels = Math.min(MAX_TLD_LABELS, parts.length);
+  for (let k = maxLabels; k >= 2; k--) {
+    const candidate = parts.slice(-k).join(".");
+    if (MULTI_PART_TLDS.has(candidate)) {
+      const remaining = parts.slice(0, -k);
+      const domain = remaining.pop() || "";
+      const subdomain = remaining.join(".");
+      return { tld: candidate, domain, subdomain };
+    }
+  }
+
+  // Single-part TLD fallback
+  const potentialTLD = parts[parts.length - 1];
+  if (SINGLE_PART_TLDS.has(potentialTLD)) {
+    const domain = parts[parts.length - 2];
+    const subdomain = parts.slice(0, -2).join(".");
+    return { tld: potentialTLD, domain, subdomain };
+  }
+
+  // Unknown TLD: treat full hostname as domain
+  return { tld: "", domain: host, subdomain: "" };
+}
+
 export const IsCommonTLD = (tld: string): boolean =>
   COMMON_TLDS.includes(tld.toLowerCase());
