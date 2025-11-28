@@ -1525,31 +1525,41 @@ export const toolsData: ToolData = {
         explanations: {
           notice: {
             type: "info",
-            title: "About Lorem Ipsum",
+            title: "The 500-Year-Old Text",
             items: [
-              "Industry standard placeholder text since the 1500s",
-              "Based on a work by Cicero (45 BC)",
-              "Scrambled Latin that's readable but meaningless",
-              "Perfect for focusing on design without content distraction",
+              "First used in the 1500s by an unknown typesetter arranging type specimens",
+              "Source: Cicero's 'de Finibus Bonorum et Malorum' (45 BC) — a treatise on ethics",
+              "'Lorem ipsum dolor sit amet' is actually scrambled Latin, not real sentences",
+              "Rediscovered in the 1960s when Letraset used it on dry-transfer sheets",
             ],
           },
           sections: [
             {
-              title: "Features",
+              title: "Why Designers Use Fake Text",
               items: [
-                "Generate paragraphs, sentences, or words",
-                "Option to start with 'Lorem ipsum'",
-                "Word/sentence/paragraph counts shown",
-                "Copy to clipboard",
-                "Monospace preview editor with fixed height",
+                "Readable content distracts — reviewers focus on words instead of layout",
+                "Real copy isn't always ready when designs need to be finalized",
+                "Latin-like text mimics natural word length distribution (unlike 'asdf asdf')",
+                "It's a signal: 'This is a placeholder, replace me before launch'",
               ],
             },
             {
-              title: "Use cases",
+              title: "Fun Alternatives People Use",
               items: [
-                "Fill mockups with realistic text",
-                "Test layout density and typography",
-                "Prototype content flows quickly",
+                "Hipster Ipsum: 'Artisan kombucha helvetica sustainable...'",
+                "Bacon Ipsum: 'Bacon ipsum dolor amet ribeye pork belly...'",
+                "Cupcake Ipsum: 'Cupcake gummies candy canes lemon drops...'",
+                "Zombie Ipsum: 'Zombie ipsum braaains reversus ab...'",
+                "Corporate Ipsum: 'Synergize holistic bandwidth leveraging...'",
+              ],
+            },
+            {
+              title: "Real Translation (Sort Of)",
+              items: [
+                "'Lorem ipsum dolor sit amet' ≈ 'Pain itself is love' (garbled)",
+                "The original Cicero text discusses the pursuit of pleasure and pain",
+                "About 80% of Lorem Ipsum words are real Latin; the rest are scrambled",
+                "There's even a hidden message in some versions: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit' appears 5× in original",
               ],
             },
           ],
