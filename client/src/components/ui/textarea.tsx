@@ -278,9 +278,13 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
     const maxVisibleLines = isMobile ? MOBILE_MAX_LINES : DESKTOP_MAX_LINES;
     const maxHeightPx = Math.max(1, Math.round(lineHeightPx * maxVisibleLines));
 
-    const heightLimitExtension = EditorView.theme({
-      "&": { maxHeight: `${maxHeightPx}px`, overflow: "auto" },
-    });
+    const heightLimitExtension = React.useMemo(
+      () =>
+        EditorView.theme({
+          "&": { maxHeight: `${maxHeightPx}px`, overflow: "auto" },
+        }),
+      [maxHeightPx]
+    );
 
     const extensions = [
       ...(Array.isArray(langExt) ? langExt : [langExt]),
