@@ -1,3 +1,34 @@
+import type { ReactNode } from "react";
+import {
+  barcodeGeneratorExplanations,
+  bcryptHashExplanations,
+  cssFormatterExplanations,
+  htmlFormatterExplanations,
+  jsonFormatterExplanations,
+  jsoncFormatterExplanations,
+  graphqlFormatterExplanations,
+  typescriptFormatterExplanations,
+  markdownFormatterExplanations,
+  yamlFormatterExplanations,
+  md5HashExplanations,
+  loremGeneratorExplanations,
+  uuidGeneratorExplanations,
+  urlEncoderExplanations,
+  textSplitExplanations,
+  webcamTestExplanations,
+  qrGeneratorExplanations,
+  keyboardTestExplanations,
+  microphoneTestExplanations,
+  unicodeCharactersExplanations,
+  timezoneConverterExplanations,
+  timeFormatterExplanations,
+  timerExplanations,
+  datetimeDiffExplanations,
+  numberBaseConverterExplanations,
+  urlToJsonExplanations,
+  metronomeExplanations,
+} from "./tool-explanations";
+
 // Global tools data with keyboard shortcuts
 export interface Tool {
   name: string;
@@ -9,6 +40,7 @@ export interface Tool {
     keywords: string[];
   };
   experimental?: boolean;
+  getExplanations?: () => ReactNode;
 }
 
 export interface ToolCategory {
@@ -75,6 +107,7 @@ export const toolsData: ToolData = {
             "world time converter",
           ],
         },
+        getExplanations: timezoneConverterExplanations,
       },
       {
         name: "Unit Converter",
@@ -108,6 +141,7 @@ export const toolsData: ToolData = {
             "parse URL",
           ],
         },
+        getExplanations: urlToJsonExplanations,
       },
       {
         name: "CSV to JSON",
@@ -140,6 +174,7 @@ export const toolsData: ToolData = {
             "decimal to binary",
           ],
         },
+        getExplanations: numberBaseConverterExplanations,
       },
     ],
   },
@@ -162,6 +197,7 @@ export const toolsData: ToolData = {
             "prettify JSON",
           ],
         },
+        getExplanations: jsonFormatterExplanations,
       },
       {
         name: "JSONC Formatter",
@@ -177,6 +213,7 @@ export const toolsData: ToolData = {
             "VS Code config formatter",
           ],
         },
+        getExplanations: jsoncFormatterExplanations,
       },
       {
         name: "HTML Beautifier",
@@ -193,6 +230,7 @@ export const toolsData: ToolData = {
             "HTML code formatter",
           ],
         },
+        getExplanations: htmlFormatterExplanations,
       },
       {
         name: "YAML Formatter",
@@ -209,6 +247,7 @@ export const toolsData: ToolData = {
             "config formatter",
           ],
         },
+        getExplanations: yamlFormatterExplanations,
       },
       {
         name: "Markdown Formatter",
@@ -225,6 +264,7 @@ export const toolsData: ToolData = {
             "prettify markdown",
           ],
         },
+        getExplanations: markdownFormatterExplanations,
       },
       {
         name: "CSS/LESS/SCSS Formatter",
@@ -241,6 +281,7 @@ export const toolsData: ToolData = {
             "CSS code formatter",
           ],
         },
+        getExplanations: cssFormatterExplanations,
       },
       {
         name: "JavaScript/TypeScript Formatter",
@@ -257,6 +298,7 @@ export const toolsData: ToolData = {
             "Prettier",
           ],
         },
+        getExplanations: typescriptFormatterExplanations,
       },
 
       {
@@ -273,6 +315,7 @@ export const toolsData: ToolData = {
             "GraphQL schema formatter",
           ],
         },
+        getExplanations: graphqlFormatterExplanations,
       },
       {
         name: "Time Formatter",
@@ -288,6 +331,7 @@ export const toolsData: ToolData = {
             "time format converter",
           ],
         },
+        getExplanations: timeFormatterExplanations,
       },
     ],
   },
@@ -314,7 +358,7 @@ export const toolsData: ToolData = {
       {
         name: "URL Encoder",
         path: "/tools/url-encoder",
-        shortcut: "Ctrl+Shift+~",
+        shortcut: "Ctrl+Shift+E",
         metadata: {
           title: "URL Encoder/Decoder - Encode and Decode URLs",
           description:
@@ -326,6 +370,7 @@ export const toolsData: ToolData = {
             "URI encoder",
           ],
         },
+        getExplanations: urlEncoderExplanations,
       },
       {
         name: "JWT Decoder",
@@ -374,6 +419,7 @@ export const toolsData: ToolData = {
             "checksum",
           ],
         },
+        getExplanations: md5HashExplanations,
       },
       {
         name: "BCrypt Hash",
@@ -390,6 +436,7 @@ export const toolsData: ToolData = {
             "BCrypt generator",
           ],
         },
+        getExplanations: bcryptHashExplanations,
       },
     ],
   },
@@ -476,6 +523,7 @@ export const toolsData: ToolData = {
             "barcode generator",
           ],
         },
+        getExplanations: qrGeneratorExplanations,
       },
       {
         name: "Barcode Generator",
@@ -492,6 +540,7 @@ export const toolsData: ToolData = {
             "EAN generator",
           ],
         },
+        getExplanations: barcodeGeneratorExplanations,
       },
       {
         name: "Lorem Generator",
@@ -508,6 +557,7 @@ export const toolsData: ToolData = {
             "lorem generator",
           ],
         },
+        getExplanations: loremGeneratorExplanations,
       },
       {
         name: "Unicode Characters",
@@ -524,6 +574,7 @@ export const toolsData: ToolData = {
             "character map",
           ],
         },
+        getExplanations: unicodeCharactersExplanations,
       },
       {
         name: "Password Generator",
@@ -556,6 +607,7 @@ export const toolsData: ToolData = {
             "UUID v4",
           ],
         },
+        getExplanations: uuidGeneratorExplanations,
       },
       {
         name: "Search & Replace",
@@ -588,6 +640,7 @@ export const toolsData: ToolData = {
             "text separator",
           ],
         },
+        getExplanations: textSplitExplanations,
       },
     ],
   },
@@ -626,6 +679,7 @@ export const toolsData: ToolData = {
             "time tracker",
           ],
         },
+        getExplanations: timerExplanations,
       },
       {
         name: "Stopwatch",
@@ -670,6 +724,7 @@ export const toolsData: ToolData = {
             "date calculator",
           ],
         },
+        getExplanations: datetimeDiffExplanations,
       },
       {
         name: "Metronome",
@@ -686,6 +741,7 @@ export const toolsData: ToolData = {
             "music metronome",
           ],
         },
+        getExplanations: metronomeExplanations,
       },
     ],
   },
@@ -764,6 +820,7 @@ export const toolsData: ToolData = {
             "Test your webcam and camera devices. Check video quality and device functionality in your browser.",
           keywords: ["webcam test", "camera test", "test camera", "video test"],
         },
+        getExplanations: webcamTestExplanations,
       },
       {
         name: "Microphone Test",
@@ -780,6 +837,7 @@ export const toolsData: ToolData = {
             "test microphone",
           ],
         },
+        getExplanations: microphoneTestExplanations,
       },
       {
         name: "Keyboard Test",
@@ -796,6 +854,7 @@ export const toolsData: ToolData = {
             "test keys",
           ],
         },
+        getExplanations: keyboardTestExplanations,
       },
     ],
   },
