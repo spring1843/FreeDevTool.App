@@ -166,11 +166,13 @@ export function ResetButton({
   disabled,
   tooltip = "Reset to default values",
   hasModifiedData = false,
+  iconOnly = false,
 }: {
   onClick: () => void;
   disabled?: boolean;
   tooltip?: string;
   hasModifiedData?: boolean;
+  iconOnly?: boolean;
 }) {
   const [showDialog, setShowDialog] = useState(false);
 
@@ -191,11 +193,12 @@ export function ResetButton({
               onClick={handleClick}
               disabled={disabled}
               aria-disabled={disabled ? "true" : undefined}
-              // Align test id with Playwright specs expecting 'reset-button'
               data-testid="reset-button"
+              variant="outline"
+              size={iconOnly ? "icon" : "default"}
             >
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Reset
+              <RefreshCw className={iconOnly ? "w-4 h-4" : "w-4 h-4 mr-2"} />
+              {!iconOnly && "Reset"}
             </Button>
           </TooltipTrigger>
           <TooltipContent>
@@ -239,11 +242,13 @@ export function ClearButton({
   disabled,
   tooltip = "Clear all inputs to start fresh",
   hasModifiedData = false,
+  iconOnly = false,
 }: {
   onClick: () => void;
   disabled?: boolean;
   tooltip?: string;
   hasModifiedData?: boolean;
+  iconOnly?: boolean;
 }) {
   const [showDialog, setShowDialog] = useState(false);
 
@@ -264,11 +269,12 @@ export function ClearButton({
               onClick={handleClick}
               disabled={disabled}
               aria-disabled={disabled ? "true" : undefined}
-              // Align test id with Playwright specs expecting 'clear-button'
               data-testid="clear-button"
+              variant="outline"
+              size={iconOnly ? "icon" : "default"}
             >
-              <Trash2 className="w-4 h-4 mr-2" />
-              Clear
+              <Trash2 className={iconOnly ? "w-4 h-4" : "w-4 h-4 mr-2"} />
+              {!iconOnly && "Clear"}
             </Button>
           </TooltipTrigger>
           <TooltipContent>

@@ -342,8 +342,8 @@ export default function ColorPaletteGenerator() {
             <div>
               <Label htmlFor="palette-type">Palette Type</Label>
               <Select value={selectedType} onValueChange={handleTypeChange}>
-                <SelectTrigger data-testid="palette-type-select">
-                  <SelectValue placeholder="Select palette type" />
+                <SelectTrigger data-testid="palette-type-select" className="w-[140px]">
+                  <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>
                   {paletteTypes.map(type => (
@@ -355,68 +355,67 @@ export default function ColorPaletteGenerator() {
               </Select>
             </div>
 
-            <div className="flex flex-col gap-2">
-              <div className="flex items-end gap-2">
-                <Button
-                  onClick={generatePalette}
-                  disabled={isGenerating}
-                  className="flex-1"
-                  data-testid="generate-palette-button"
-                >
-                  {isGenerating ? (
-                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                  ) : (
-                    <Palette className="w-4 h-4 mr-2" />
-                  )}
-                  Generate Palette
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={generateAllPalettes}
-                  disabled={isGenerating}
-                  data-testid="generate-all-button"
-                >
-                  All Types
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={shareCurrentPalette}
-                  data-testid="share-palette-button"
-                >
-                  <Share className="w-4 h-4" />
-                </Button>
-              </div>
-              <div className="flex items-end gap-2">
-                <ResetButton
-                  onClick={() => {
-                    setBaseColor(DEFAULT_COLOR_PALETTE_GENERATOR);
-                    setSelectedType("complementary");
-                    setGeneratedPalettes([]);
-                    updateUrl(DEFAULT_COLOR_PALETTE_GENERATOR, "complementary");
-                  }}
-                  tooltip="Reset all settings to defaults"
-                  hasModifiedData={
-                    baseColor !== DEFAULT_COLOR_PALETTE_GENERATOR ||
-                    selectedType !== "complementary"
-                  }
-                  disabled={
-                    baseColor === DEFAULT_COLOR_PALETTE_GENERATOR &&
-                    selectedType === "complementary"
-                  }
-                />
-                <ClearButton
-                  onClick={() => {
-                    setBaseColor("");
-                    setGeneratedPalettes([]);
-                  }}
-                  tooltip="Clear color input"
-                  hasModifiedData={
-                    baseColor !== DEFAULT_COLOR_PALETTE_GENERATOR &&
-                    baseColor.trim() !== ""
-                  }
-                  disabled={baseColor.trim() === ""}
-                />
-              </div>
+            <div className="flex items-end gap-2">
+              <Button
+                onClick={generatePalette}
+                disabled={isGenerating}
+                className="flex-1"
+                data-testid="generate-palette-button"
+              >
+                {isGenerating ? (
+                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <Palette className="w-4 h-4 mr-2" />
+                )}
+                Generate
+              </Button>
+              <Button
+                variant="outline"
+                onClick={generateAllPalettes}
+                disabled={isGenerating}
+                data-testid="generate-all-button"
+              >
+                All
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={shareCurrentPalette}
+                data-testid="share-palette-button"
+              >
+                <Share className="w-4 h-4" />
+              </Button>
+              <ResetButton
+                onClick={() => {
+                  setBaseColor(DEFAULT_COLOR_PALETTE_GENERATOR);
+                  setSelectedType("complementary");
+                  setGeneratedPalettes([]);
+                  updateUrl(DEFAULT_COLOR_PALETTE_GENERATOR, "complementary");
+                }}
+                tooltip="Reset all settings to defaults"
+                hasModifiedData={
+                  baseColor !== DEFAULT_COLOR_PALETTE_GENERATOR ||
+                  selectedType !== "complementary"
+                }
+                disabled={
+                  baseColor === DEFAULT_COLOR_PALETTE_GENERATOR &&
+                  selectedType === "complementary"
+                }
+                iconOnly
+              />
+              <ClearButton
+                onClick={() => {
+                  setBaseColor("");
+                  setGeneratedPalettes([]);
+                }}
+                tooltip="Clear color input"
+                hasModifiedData={
+                  baseColor !== DEFAULT_COLOR_PALETTE_GENERATOR &&
+                  baseColor.trim() !== ""
+                }
+                disabled={baseColor.trim() === ""}
+                iconOnly
+              />
             </div>
           </div>
         </CardContent>
