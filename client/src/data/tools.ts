@@ -1748,21 +1748,55 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
+          notice: {
+            type: "info",
+            title: "UUID Versions Explained",
+            items: [
+              { label: "v1 (Timestamp)", text: "Based on time + MAC address — sortable but reveals creation time" },
+              { label: "v4 (Random)", text: "122 random bits — most popular, no information leakage" },
+              { label: "v5 (Namespace)", text: "SHA-1 hash of namespace + name — deterministic, same input = same UUID" },
+              { label: "v7 (New!)", text: "Timestamp + random — sortable like v1 but no MAC address exposure" },
+            ],
+          },
           sections: [
             {
-              title: "Features",
+              title: "The Math of Uniqueness",
               items: [
-                "Generate UUIDs (e.g., v4)",
-                "Bulk creation",
-                "Copy and reuse easily",
+                "UUID v4 has 2¹²² possible values (5.3 × 10³⁶ combinations)",
+                "To have 50% chance of collision: generate 2.7 quintillion UUIDs",
+                "At 1 billion UUIDs/second, that takes 86 years of continuous generation",
+                "In practice: you'll never see a collision in any real-world application",
               ],
             },
             {
-              title: "Use cases",
+              title: "Where UUIDs Are Used",
               items: [
-                "Create identifiers for test data",
-                "Name resources uniquely",
-                "Seed databases",
+                "Database primary keys (PostgreSQL has native UUID type)",
+                "Distributed systems where nodes can't coordinate ID assignment",
+                "File names that must be unique without a central registry",
+                "Session tokens, API keys, and correlation IDs in logs",
+                "Bluetooth device pairing, USB device identification",
+              ],
+            },
+            {
+              title: "Format Options Explained",
+              items: [
+                {
+                  label: "Standard:",
+                  text: "8-4-4-4-12 format with hyphens (RFC 4122 compliant)",
+                },
+                {
+                  label: "No dashes:",
+                  text: "32 hex chars — used in URLs, filenames, some databases",
+                },
+                {
+                  label: "Brackets {uuid}:",
+                  text: "Microsoft GUID format (Windows registry, .NET)",
+                },
+                {
+                  label: "Uppercase:",
+                  text: "Some legacy systems require uppercase hex",
+                },
               ],
             },
           ],
