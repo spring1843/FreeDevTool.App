@@ -91,5 +91,12 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: make deploy-to-stage
 
-      - name: Preload Stage Cache
-        run: make warm-cache-stage
+      - name: Preload Stage Cache Few Times
+        run: |
+          make warm-cache-stage
+          make warm-cache-stage
+          make warm-cache-stage
+
+      - name: Run E2E Tests Against Stage
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: TARGET=https://stage.freedevtool.app make e2e-test

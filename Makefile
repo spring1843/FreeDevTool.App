@@ -136,8 +136,8 @@ test-ui: ## Run tests with UI interface
 test-coverage: ## Run tests with coverage report
 	npx vitest run --coverage
 
-e2e-test: ## Run end-to-end tests with Playwright
-	npx playwright test
+e2e-test: ## Run end-to-end tests with Playwright (use TARGET=https://host to test remote)
+	TARGET=$${TARGET} npx playwright test
 
 e2e-test-ui: ## Run end-to-end tests with UI
 	npx playwright test --ui
