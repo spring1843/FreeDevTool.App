@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import CodeMirror from "@uiw/react-codemirror";
-import type { ViewUpdate } from "@codemirror/view";
+import { EditorView, type ViewUpdate } from "@codemirror/view";
 import { javascript } from "@codemirror/lang-javascript";
 import { cn } from "@/lib/utils";
 import { css } from "@codemirror/lang-css";
@@ -34,10 +34,11 @@ export interface TextAreaProps {
   minHeight?: string;
   onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
   theme?: "light" | "dark";
+  lineWrapping?: boolean;
 }
 
 const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
-  ({ className, value, onChange, theme = "light", ...props }) => {
+  ({ className, value, onChange, theme = "light", lineWrapping = false, ...props }) => {
     const baseClassName = cn(
       // Make the editor visually attach to the top navbar: no top rounding
       // so the navbar's rounded-t-md forms the top corners; keep bottom round.
@@ -154,7 +155,10 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         target: { value: val } as unknown as EventTarget & HTMLTextAreaElement,
       }) as unknown as React.ChangeEvent<HTMLTextAreaElement>;
     const langExt = getLanguageExtension(currentLang);
-    const extensions = Array.isArray(langExt) ? langExt : [langExt];
+    const extensions = [
+      ...(Array.isArray(langExt) ? langExt : [langExt]),
+      ...(lineWrapping ? [EditorView.lineWrapping] : []),
+    ];
     const { toast } = useToast();
 
     const handleCopy = async () => {
