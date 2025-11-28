@@ -17,6 +17,7 @@ import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function UUIDGenerator() {
   const [uuids, setUuids] = useState<string[]>([]);
@@ -276,7 +277,7 @@ export default function UUIDGenerator() {
         </Card>
       )}
 
-      {getToolByPath("/tools/uuid-generator")?.getExplanations?.()}
+      {renderToolExplanations(getToolByPath("/tools/uuid-generator")?.explanations)}
     </div>
   );
 }

@@ -18,6 +18,7 @@ import { useLocation } from "wouter";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_CSS, DEFAULT_SCSS, DEFAULT_LESS } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 type FormatType = "css" | "scss" | "less";
 
@@ -232,7 +233,7 @@ export default function CSSFormatter() {
         </Card>
       </div>
 
-      {getToolByPath("/tools/css-formatter")?.getExplanations?.()}
+      {renderToolExplanations(getToolByPath("/tools/css-formatter")?.explanations)}
     </div>
   );
 }

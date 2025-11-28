@@ -10,6 +10,7 @@ import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_TYPESCRIPT } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function TypeScriptFormatter() {
   const [input, setInput] = useState(DEFAULT_TYPESCRIPT);
@@ -145,7 +146,7 @@ export default function TypeScriptFormatter() {
         </Card>
       </div>
 
-      {getToolByPath("/tools/typescript-formatter")?.getExplanations?.()}
+      {renderToolExplanations(getToolByPath("/tools/typescript-formatter")?.explanations)}
     </div>
   );
 }

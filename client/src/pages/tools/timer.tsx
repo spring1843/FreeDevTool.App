@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -692,7 +693,7 @@ export default function Timer() {
         </CardContent>
       </Card>
 
-      {getToolByPath("/tools/timer")?.getExplanations?.()}
+      {renderToolExplanations(getToolByPath("/tools/timer")?.explanations)}
     </div>
   );
 }

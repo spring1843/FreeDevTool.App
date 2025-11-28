@@ -8,6 +8,7 @@ import { Code, Minimize2, RotateCcw, AlertTriangle } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { DEFAULT_HTML } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -197,7 +198,7 @@ export default function HTMLFormatter() {
         </Card>
       </div>
 
-      {getToolByPath("/tools/html-formatter")?.getExplanations?.()}
+      {renderToolExplanations(getToolByPath("/tools/html-formatter")?.explanations)}
     </div>
   );
 }

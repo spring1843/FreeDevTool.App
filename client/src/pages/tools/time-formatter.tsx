@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -386,7 +387,7 @@ export default function TimeFormatter() {
         </Card>
       )}
 
-      {getToolByPath("/tools/time-formatter")?.getExplanations?.()}
+      {renderToolExplanations(getToolByPath("/tools/time-formatter")?.explanations)}
     </div>
   );
 }

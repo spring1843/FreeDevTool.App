@@ -51,6 +51,7 @@ const simpleMD5 = (input: string): string => {
 
 import { DEFAULT_MD5 } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function MD5Hash() {
   const [inputText, setInputText] = useState(DEFAULT_MD5);
@@ -296,7 +297,7 @@ export default function MD5Hash() {
         </CardContent>
       </Card>
 
-      {getToolByPath("/tools/md5-hash")?.getExplanations?.()}
+      {renderToolExplanations(getToolByPath("/tools/md5-hash")?.explanations)}
     </div>
   );
 }

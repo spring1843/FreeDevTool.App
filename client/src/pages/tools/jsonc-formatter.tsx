@@ -11,6 +11,7 @@ import { SecurityBanner } from "@/components/ui/security-banner";
 
 import { DEFAULT_JSONC } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function JSONCFormatter() {
   const [input, setInput] = useState(DEFAULT_JSONC);
@@ -146,7 +147,7 @@ export default function JSONCFormatter() {
           <CardTitle>About JSONC Format</CardTitle>
         </CardHeader>
         <CardContent>
-          {getToolByPath("/tools/jsonc-formatter")?.getExplanations?.()}
+          {renderToolExplanations(getToolByPath("/tools/jsonc-formatter")?.explanations)}
         </CardContent>
       </Card>
     </div>

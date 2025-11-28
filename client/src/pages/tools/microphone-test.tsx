@@ -20,6 +20,7 @@ import { useToast } from "@/hooks/use-toast";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function MicrophoneTest() {
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
@@ -511,7 +512,7 @@ export default function MicrophoneTest() {
 
       <div className="flex justify-center my-8" />
 
-      {getToolByPath("/tools/microphone-test")?.getExplanations?.()}
+      {renderToolExplanations(getToolByPath("/tools/microphone-test")?.explanations)}
 
       <div className="flex justify-center mt-8" />
     </div>

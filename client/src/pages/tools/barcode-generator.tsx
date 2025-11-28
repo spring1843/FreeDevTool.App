@@ -18,6 +18,7 @@ import JsBarcode from "jsbarcode";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_BARCODE_GENERATOR } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function BarcodeGenerator() {
   const [text, setText] = useState(DEFAULT_BARCODE_GENERATOR);
@@ -340,7 +341,7 @@ export default function BarcodeGenerator() {
         </Card>
       </div>
 
-      {getToolByPath("/tools/barcode-generator")?.getExplanations?.()}
+      {renderToolExplanations(getToolByPath("/tools/barcode-generator")?.explanations)}
     </div>
   );
 }

@@ -15,6 +15,7 @@ import { useState, useRef, useEffect } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function WebcamTest() {
   const [isActive, setIsActive] = useState(false);
@@ -359,7 +360,7 @@ export default function WebcamTest() {
         </CardContent>
       </Card>
 
-      {getToolByPath("/tools/webcam-test")?.getExplanations?.()}
+      {renderToolExplanations(getToolByPath("/tools/webcam-test")?.explanations)}
     </div>
   );
 }

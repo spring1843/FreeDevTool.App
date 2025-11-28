@@ -10,6 +10,7 @@ import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_MARKDOWN } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function MarkdownFormatter() {
   const [input, setInput] = useState(DEFAULT_MARKDOWN);
@@ -127,7 +128,7 @@ export default function MarkdownFormatter() {
         </Card>
       </div>
 
-      {getToolByPath("/tools/markdown-formatter")?.getExplanations?.()}
+      {renderToolExplanations(getToolByPath("/tools/markdown-formatter")?.explanations)}
     </div>
   );
 }

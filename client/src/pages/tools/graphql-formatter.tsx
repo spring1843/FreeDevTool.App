@@ -10,6 +10,7 @@ import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_GRAPHQL } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function GraphQLFormatter() {
   const [input, setInput] = useState(DEFAULT_GRAPHQL);
@@ -129,7 +130,7 @@ export default function GraphQLFormatter() {
         </Card>
       </div>
 
-      {getToolByPath("/tools/graphql-formatter")?.getExplanations?.()}
+      {renderToolExplanations(getToolByPath("/tools/graphql-formatter")?.explanations)}
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback, useRef } from "react";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -877,7 +878,7 @@ export default function UnicodeCharacters() {
 
       <div className="flex justify-center my-8" />
 
-      {getToolByPath("/tools/unicode-characters")?.getExplanations?.()}
+      {renderToolExplanations(getToolByPath("/tools/unicode-characters")?.explanations)}
 
       <div className="flex justify-center mt-8" />
     </div>

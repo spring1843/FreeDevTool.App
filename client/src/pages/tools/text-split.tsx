@@ -12,6 +12,7 @@ import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_TEXT_SPLIT } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 import { CopyButton } from "@/components/ui/copy-button";
 
 export default function TextSplit() {
@@ -222,7 +223,7 @@ export default function TextSplit() {
         </Card>
       </div>
 
-      {getToolByPath("/tools/text-split")?.getExplanations?.()}
+      {renderToolExplanations(getToolByPath("/tools/text-split")?.explanations)}
     </div>
   );
 }

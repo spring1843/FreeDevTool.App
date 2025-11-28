@@ -27,6 +27,7 @@ import { SecurityBanner } from "@/components/ui/security-banner";
 
 import { DEFAULT_BCRYPT } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function BcryptHash() {
   const [plaintext, setPlaintext] = useState(DEFAULT_BCRYPT);
@@ -345,7 +346,7 @@ export default function BcryptHash() {
         </CardContent>
       </Card>
 
-      {getToolByPath("/tools/bcrypt-hash")?.getExplanations?.()}
+      {renderToolExplanations(getToolByPath("/tools/bcrypt-hash")?.explanations)}
     </div>
   );
 }

@@ -11,6 +11,7 @@ import { ToolButton, ResetButton } from "@/components/ui/tool-button";
 
 import { DEFAULT_JSON } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function JsonFormatter() {
   const [input, setInput] = useState(DEFAULT_JSON);
@@ -173,7 +174,7 @@ export default function JsonFormatter() {
 
       {/* Pro Tips */}
       <div className="mt-8">
-        {getToolByPath("/tools/json-formatter")?.getExplanations?.()}
+        {renderToolExplanations(getToolByPath("/tools/json-formatter")?.explanations)}
       </div>
     </div>
   );

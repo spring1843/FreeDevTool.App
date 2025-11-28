@@ -28,6 +28,7 @@ import { useToast } from "@/hooks/use-toast";
 import QRCodeLib from "qrcode-generator";
 import { DEFAULT_QR_GENERATOR } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 // Standalone QR Code generation using qrcode-generator library
 const generateQRCode = (
@@ -469,7 +470,7 @@ export default function QRGenerator() {
           <CardTitle>QR Code Types & Usage</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {getToolByPath("/tools/qr-generator")?.getExplanations?.()}
+          {renderToolExplanations(getToolByPath("/tools/qr-generator")?.explanations)}
         </CardContent>
       </Card>
 

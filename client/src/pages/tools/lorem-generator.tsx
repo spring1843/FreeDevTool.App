@@ -17,6 +17,7 @@ import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useToast } from "@/hooks/use-toast";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 const MAX_WORDS_LIMIT = 1000;
 
@@ -370,7 +371,7 @@ export default function LoremGenerator() {
         </Card>
       ) : null}
 
-      {getToolByPath("/tools/lorem-generator")?.getExplanations?.()}
+      {renderToolExplanations(getToolByPath("/tools/lorem-generator")?.explanations)}
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -625,7 +626,7 @@ export default function Metronome() {
         </CardContent>
       </Card>
 
-      {getToolByPath("/tools/metronome")?.getExplanations?.()}
+      {renderToolExplanations(getToolByPath("/tools/metronome")?.explanations)}
     </div>
   );
 }

@@ -19,6 +19,7 @@ import {
 } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 interface ConversionResult {
   base: number;
@@ -566,7 +567,7 @@ export default function NumberBaseConverter() {
           <CardTitle>About Number Base Converter</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {getToolByPath("/tools/number-base-converter")?.getExplanations?.()}
+          {renderToolExplanations(getToolByPath("/tools/number-base-converter")?.explanations)}
         </CardContent>
       </Card>
 

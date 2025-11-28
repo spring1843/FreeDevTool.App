@@ -31,6 +31,7 @@ interface URLComponents {
 import { DEFAULT_URL_TO_JSON } from "@/data/defaults";
 import { Input } from "@/components/ui/input";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function URLToJSON() {
   const [inputUrl, setInputUrl] = useState(DEFAULT_URL_TO_JSON);
@@ -390,7 +391,7 @@ export default function URLToJSON() {
           <CardTitle>About URL to JSON Converter</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {getToolByPath("/tools/url-to-json")?.getExplanations?.()}
+          {renderToolExplanations(getToolByPath("/tools/url-to-json")?.explanations)}
         </CardContent>
       </Card>
 

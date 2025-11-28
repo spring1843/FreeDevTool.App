@@ -22,6 +22,7 @@ import {
 } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 interface TimezoneConversion {
   timezone: string;
@@ -489,7 +490,7 @@ export default function TimezoneConverter() {
           <CardTitle>About Timezone Converter</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {getToolByPath("/tools/timezone-converter")?.getExplanations?.()}
+          {renderToolExplanations(getToolByPath("/tools/timezone-converter")?.explanations)}
         </CardContent>
       </Card>
 

@@ -9,6 +9,7 @@ import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_YAML } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function YAMLFormatter() {
   const [input, setInput] = useState(DEFAULT_YAML);
@@ -129,7 +130,7 @@ export default function YAMLFormatter() {
         </Card>
       </div>
 
-      {getToolByPath("/tools/yaml-formatter")?.getExplanations?.()}
+      {renderToolExplanations(getToolByPath("/tools/yaml-formatter")?.explanations)}
     </div>
   );
 }

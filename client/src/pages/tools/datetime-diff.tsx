@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -717,7 +718,7 @@ export default function DateTimeDiff() {
         </div>
       </div>
 
-      {getToolByPath("/tools/datetime-diff")?.getExplanations?.()}
+      {renderToolExplanations(getToolByPath("/tools/datetime-diff")?.explanations)}
     </div>
   );
 }

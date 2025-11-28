@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_URL_ENCODER } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function URLEncoder() {
   const [plainText, setPlainText] = useState(DEFAULT_URL_ENCODER);
@@ -171,7 +172,7 @@ export default function URLEncoder() {
         </Card>
       </div>
 
-      {getToolByPath("/tools/url-encoder")?.getExplanations?.()}
+      {renderToolExplanations(getToolByPath("/tools/url-encoder")?.explanations)}
     </div>
   );
 }
