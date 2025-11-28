@@ -1,510 +1,5 @@
 import type { ToolExplanation } from "@/components/tool-explanations";
 
-// Tool explanation data - pure data objects for tool info sections
-const barcodeGeneratorExplanation: ToolExplanation = {
-  sections: [
-    {
-      title: "Common Use Cases:",
-      items: [
-        { label: "EAN-13/UPC:", text: "Retail products" },
-        { label: "CODE 128:", text: "Shipping and logistics" },
-        { label: "CODE 39:", text: "Industrial applications" },
-        { label: "ITF-14:", text: "Packaging and cases" },
-      ],
-    },
-    {
-      title: "Tips:",
-      items: [
-        "• Use CODE 128 for maximum compatibility",
-        "• EAN/UPC codes need specific lengths",
-        "• Test with your barcode scanner",
-        "• Consider printing size and resolution",
-      ],
-    },
-  ],
-};
-
-const bcryptHashExplanation: ToolExplanation = {
-  sections: [
-    {
-      title: "Bcrypt Features:",
-      items: [
-        "• Adaptive cost factor for future-proofing",
-        "• Built-in salt generation",
-        "• Resistant to rainbow table attacks",
-        "• Industry standard for password storage",
-      ],
-    },
-    {
-      title: "Cost Factor Guide:",
-      items: [
-        { label: "8-10:", text: "Fast, suitable for development" },
-        { label: "12:", text: "Recommended for production" },
-        { label: "14+:", text: "High security, slower performance" },
-      ],
-    },
-  ],
-};
-
-const md5HashExplanation: ToolExplanation = {
-  notice: {
-    type: "info",
-    title: "MD5 Information:",
-    items: [
-      "• MD5 produces a 128-bit (16-byte) hash value",
-      "• Commonly used for file integrity verification",
-      "• Not recommended for security-sensitive applications",
-      "• Use SHA-256 or bcrypt for password hashing",
-    ],
-  },
-};
-
-const jsonFormatterExplanation: ToolExplanation = {
-  notice: {
-    type: "tips",
-    title: "Pro Tips",
-    items: [
-      "• Use Ctrl+A to select all text quickly",
-      "• The formatter will auto-detect and fix common JSON issues",
-      "• Validation shows specific error locations",
-      "• Minified JSON is optimized for data transmission",
-    ],
-  },
-};
-
-const jsoncFormatterExplanation: ToolExplanation = {
-  sections: [
-    {
-      title: "",
-      items: [
-        { label: "JSONC (JSON with Comments)", text: "is an extension of JSON that allows comments:" },
-      ],
-    },
-    {
-      title: "",
-      items: [
-        { label: "Single-line comments:", text: "// This is a comment" },
-        { label: "Multi-line comments:", text: "/* This is a multi-line comment */" },
-        { label: "Use cases:", text: "Configuration files, VS Code settings, TypeScript configs" },
-        { label: "Popular tools:", text: "VS Code, TypeScript, Azure DevOps, and more" },
-      ],
-    },
-  ],
-};
-
-const htmlFormatterExplanation: ToolExplanation = {
-  sections: [
-    {
-      title: "Features:",
-      items: [
-        "• Automatic indentation and formatting",
-        "• Syntax highlighting with live preview",
-        "• Handles inline styles and scripts",
-        "• Supports custom indent size",
-      ],
-    },
-    {
-      title: "Best Practices:",
-      items: [
-        "• Use 2 or 4 spaces for standard formatting",
-        "• Keep nesting levels manageable",
-        "• Validate HTML before deployment",
-        "• Format regularly for maintainability",
-      ],
-    },
-  ],
-};
-
-const yamlFormatterExplanation: ToolExplanation = {
-  sections: [
-    {
-      title: "YAML Features:",
-      items: [
-        "• Human-readable data serialization",
-        "• Supports complex data structures",
-        "• Common in DevOps and configuration",
-        "• Indentation-based syntax",
-      ],
-    },
-    {
-      title: "Formatting Tips:",
-      items: [
-        "• Use consistent indentation (2 spaces recommended)",
-        "• Validate syntax before deployment",
-        "• Keep nesting levels reasonable",
-        "• Use quotes for special characters",
-      ],
-    },
-  ],
-};
-
-const markdownFormatterExplanation: ToolExplanation = {
-  sections: [
-    {
-      title: "Markdown Features:",
-      items: [
-        "• Headers, lists, and emphasis",
-        "• Code blocks with syntax highlighting",
-        "• Links and images",
-        "• Tables and blockquotes",
-      ],
-    },
-    {
-      title: "Formatting Tips:",
-      items: [
-        "• Use blank lines between sections",
-        "• Consistent heading hierarchy",
-        "• Preview before publishing",
-        "• Use reference-style links for readability",
-      ],
-    },
-  ],
-};
-
-const cssFormatterExplanation: ToolExplanation = {
-  sections: [
-    {
-      title: "CSS Features:",
-      items: [
-        "• Automatic property ordering",
-        "• Consistent indentation",
-        "• Selector formatting",
-        "• Media query organization",
-      ],
-    },
-    {
-      title: "Best Practices:",
-      items: [
-        "• Group related properties",
-        "• Use shorthand when appropriate",
-        "• Maintain consistent naming",
-        "• Comment complex sections",
-      ],
-    },
-  ],
-};
-
-const typescriptFormatterExplanation: ToolExplanation = {
-  sections: [
-    {
-      title: "TypeScript Features:",
-      items: [
-        "• Type annotation formatting",
-        "• Interface and type alignment",
-        "• Import organization",
-        "• Consistent spacing",
-      ],
-    },
-    {
-      title: "Formatting Tips:",
-      items: [
-        "• Use explicit return types",
-        "• Consistent type positioning",
-        "• Organize imports by type",
-        "• Format before committing",
-      ],
-    },
-  ],
-};
-
-const graphqlFormatterExplanation: ToolExplanation = {
-  sections: [
-    {
-      title: "GraphQL Features:",
-      items: [
-        "• Query and mutation formatting",
-        "• Schema definition styling",
-        "• Argument alignment",
-        "• Directive formatting",
-      ],
-    },
-    {
-      title: "Best Practices:",
-      items: [
-        "• Consistent field indentation",
-        "• Logical field ordering",
-        "• Clear variable naming",
-        "• Comment complex queries",
-      ],
-    },
-  ],
-};
-
-const timeFormatterExplanation: ToolExplanation = {
-  sections: [
-    {
-      title: "Standard Formats:",
-      items: [
-        { label: "ISO 8601:", text: "2024-01-15T10:30:00Z" },
-        { label: "RFC 2822:", text: "Mon, 15 Jan 2024 10:30:00 +0000" },
-        { label: "Unix:", text: "1705315800 (seconds since 1970)" },
-        { label: "Human:", text: "January 15, 2024 at 10:30 AM" },
-      ],
-    },
-    {
-      title: "Usage Tips:",
-      items: [
-        "• ISO 8601 is best for APIs and databases",
-        "• Unix timestamps are timezone-independent",
-        "• Use locale formats for user interfaces",
-        "• Always consider timezone handling",
-      ],
-    },
-  ],
-};
-
-const timezoneConverterExplanation: ToolExplanation = {
-  sections: [
-    {
-      title: "Features:",
-      items: [
-        "• Second-level time precision",
-        "• 100+ supported timezones worldwide",
-        "• Automatic daylight saving time handling",
-        "• Multiple target timezone conversion",
-        "• Real-time offset calculation",
-        "• Copy converted times to clipboard",
-      ],
-    },
-    {
-      title: "Usage Tips:",
-      items: [
-        "• Use 24-hour format for precise conversion",
-        "• Add/remove target timezones as needed",
-        '• Click "Now" to use current date/time',
-        "• Copy button includes both date and time",
-        "• UTC offsets adjust for DST automatically",
-        "• Perfect for scheduling global meetings",
-      ],
-    },
-  ],
-};
-
-const urlToJsonExplanation: ToolExplanation = {
-  sections: [
-    {
-      title: "Supported Formats:",
-      items: [
-        "• Simple key=value pairs",
-        "• Nested objects using dot notation",
-        "• Arrays using bracket notation",
-        "• URL-encoded special characters",
-      ],
-    },
-    {
-      title: "Features:",
-      items: [
-        "• Automatic type detection (numbers, booleans)",
-        "• Deep nesting support",
-        "• Array index handling",
-        "• Special character decoding",
-      ],
-    },
-  ],
-};
-
-const numberBaseConverterExplanation: ToolExplanation = {
-  sections: [
-    {
-      title: "Common Bases:",
-      items: [
-        { label: "Binary (2):", text: "Computer memory, flags" },
-        { label: "Octal (8):", text: "Unix permissions" },
-        { label: "Decimal (10):", text: "Human-readable numbers" },
-        { label: "Hexadecimal (16):", text: "Colors, memory addresses" },
-      ],
-    },
-    {
-      title: "Usage Tips:",
-      items: [
-        "• Use 0x prefix for hex in code",
-        "• Binary useful for bit manipulation",
-        "• Octal for Unix file permissions",
-        "• Base 64 for encoding binary data",
-      ],
-    },
-  ],
-};
-
-const urlEncoderExplanation: ToolExplanation = {
-  notice: {
-    type: "examples",
-    title: "URL Encoding Examples:",
-    items: [],
-  },
-  examples: [
-    { from: "Space", to: "%20" },
-    { from: "@", to: "%40" },
-    { from: "&", to: "%26" },
-    { from: "=", to: "%3D" },
-  ],
-};
-
-const qrGeneratorExplanation: ToolExplanation = {
-  sections: [
-    {
-      title: "Supported QR Types:",
-      items: [
-        { label: "Plain Text:", text: "Any text content" },
-        { label: "Website URL:", text: "Links to web pages" },
-        { label: "Email:", text: "Email addresses with mailto links" },
-        { label: "Phone Number:", text: "Clickable phone numbers" },
-        { label: "SMS Message:", text: "Pre-filled text messages" },
-        { label: "WiFi Network:", text: "Network credentials for easy connection" },
-        { label: "Contact Card:", text: "vCard format contact information" },
-      ],
-    },
-    {
-      title: "Customization Options:",
-      items: [
-        "• Adjustable size and error correction",
-        "• Multiple color options",
-        "• Download as PNG image",
-        "• Copy to clipboard",
-      ],
-    },
-  ],
-};
-
-const loremGeneratorExplanation: ToolExplanation = {
-  notice: {
-    type: "info",
-    title: "About Lorem Ipsum:",
-    items: [
-      "• Industry standard placeholder text since the 1500s",
-      "• Based on a work by Cicero from 45 BC",
-      "• Scrambled Latin text that's readable but meaningless",
-      "• Perfect for focusing on design without content distraction",
-    ],
-  },
-};
-
-const uuidGeneratorExplanation: ToolExplanation = {
-  notice: {
-    type: "info",
-    title: "UUID Information:",
-    items: [
-      { label: "Version 1:", text: "Timestamp-based, includes MAC address (or random node)" },
-      { label: "Version 4:", text: "Randomly generated, most commonly used" },
-      { label: "Format:", text: "8-4-4-4-12 hexadecimal digits (32 total)" },
-      { label: "Use cases:", text: "Database keys, session IDs, file names, API tokens" },
-    ],
-  },
-};
-
-const textSplitExplanation: ToolExplanation = {
-  notice: {
-    type: "info",
-    title: "Common Delimiters:",
-    items: [
-      { label: "Comma (,):", text: "CSV files, lists" },
-      { label: "Semicolon (;):", text: "European CSV, SQL" },
-      { label: "Tab:", text: "TSV files, spreadsheets" },
-      { label: "Pipe (|):", text: "Database exports, logs" },
-      { label: "Newline:", text: "Line-by-line processing" },
-    ],
-  },
-};
-
-const unicodeCharactersExplanation: ToolExplanation = {
-  notice: {
-    type: "info",
-    title: "Unicode Information:",
-    items: [
-      "• Unicode supports over 140,000 characters",
-      "• Includes emojis, symbols, and scripts worldwide",
-      "• UTF-8 is the most common encoding",
-      "• Code points range from U+0000 to U+10FFFF",
-    ],
-  },
-};
-
-const webcamTestExplanation: ToolExplanation = {
-  notice: {
-    type: "privacy",
-    title: "Privacy Notice:",
-    items: [
-      "• All camera processing happens locally in your browser",
-      "• No video or image data is transmitted to any server",
-      "• Captured photos are saved directly to your device",
-      "• Camera access requires explicit permission from your browser",
-    ],
-  },
-};
-
-const microphoneTestExplanation: ToolExplanation = {
-  notice: {
-    type: "privacy",
-    title: "Privacy Notice:",
-    items: [
-      "• All audio processing happens locally in your browser",
-      "• No audio data is transmitted to any server",
-      "• Microphone access requires explicit permission",
-      "• Close this tab to stop microphone access",
-    ],
-  },
-};
-
-const keyboardTestExplanation: ToolExplanation = {
-  notice: {
-    type: "info",
-    title: "Keyboard Testing:",
-    items: [
-      "• Press any key to test detection",
-      "• Modifier keys are tracked separately",
-      "• Dead keys and special keys are supported",
-      "• Browser security may block some key combinations",
-    ],
-  },
-};
-
-const timerExplanation: ToolExplanation = {
-  shortcuts: [
-    { key: "Enter", action: "Add new timer" },
-    { key: "Space", action: "Start/Pause first timer" },
-    { key: "Escape", action: "Stop all timers" },
-  ],
-};
-
-const datetimeDiffExplanation: ToolExplanation = {
-  sections: [
-    {
-      title: "Project Planning",
-      items: [
-        "• Calculate project durations",
-        "• Track milestone intervals",
-        "• Estimate delivery dates",
-        "• Plan sprint cycles",
-      ],
-    },
-    {
-      title: "Personal Events",
-      items: [
-        "• Count days until vacation",
-        "• Track age in various units",
-        "• Calculate anniversary dates",
-        "• Plan event timelines",
-      ],
-    },
-    {
-      title: "Business Uses",
-      items: [
-        "• Calculate contract periods",
-        "• Track subscription lengths",
-        "• Measure SLA compliance",
-        "• Plan budget cycles",
-      ],
-    },
-  ],
-};
-
-const metronomeExplanation: ToolExplanation = {
-  shortcuts: [
-    { key: "Space", action: "Start/Stop first metronome" },
-    { key: "Escape", action: "Stop all metronomes" },
-  ],
-};
-
 // Global tools data with keyboard shortcuts
 export interface Tool {
   name: string;
@@ -585,7 +80,32 @@ export const toolsData: ToolData = {
             "world time converter",
           ],
         },
-        explanations: timezoneConverterExplanation,
+        explanations: {
+          sections: [
+            {
+              title: "Features:",
+              items: [
+                "• Second-level time precision",
+                "• 100+ supported timezones worldwide",
+                "• Automatic daylight saving time handling",
+                "• Multiple target timezone conversion",
+                "• Real-time offset calculation",
+                "• Copy converted times to clipboard",
+              ],
+            },
+            {
+              title: "Usage Tips:",
+              items: [
+                "• Use 24-hour format for precise conversion",
+                "• Add/remove target timezones as needed",
+                '• Click "Now" to use current date/time',
+                "• Copy button includes both date and time",
+                "• UTC offsets adjust for DST automatically",
+                "• Perfect for scheduling global meetings",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "Unit Converter",
@@ -619,7 +139,28 @@ export const toolsData: ToolData = {
             "parse URL",
           ],
         },
-        explanations: urlToJsonExplanation,
+        explanations: {
+          sections: [
+            {
+              title: "Supported Formats:",
+              items: [
+                "• Simple key=value pairs",
+                "• Nested objects using dot notation",
+                "• Arrays using bracket notation",
+                "• URL-encoded special characters",
+              ],
+            },
+            {
+              title: "Features:",
+              items: [
+                "• Automatic type detection (numbers, booleans)",
+                "• Deep nesting support",
+                "• Array index handling",
+                "• Special character decoding",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "CSV to JSON",
@@ -652,7 +193,28 @@ export const toolsData: ToolData = {
             "decimal to binary",
           ],
         },
-        explanations: numberBaseConverterExplanation,
+        explanations: {
+          sections: [
+            {
+              title: "Common Bases:",
+              items: [
+                { label: "Binary (2):", text: "Computer memory, flags" },
+                { label: "Octal (8):", text: "Unix permissions" },
+                { label: "Decimal (10):", text: "Human-readable numbers" },
+                { label: "Hexadecimal (16):", text: "Colors, memory addresses" },
+              ],
+            },
+            {
+              title: "Usage Tips:",
+              items: [
+                "• Use 0x prefix for hex in code",
+                "• Binary useful for bit manipulation",
+                "• Octal for Unix file permissions",
+                "• Base 64 for encoding binary data",
+              ],
+            },
+          ],
+        },
       },
     ],
   },
@@ -675,7 +237,18 @@ export const toolsData: ToolData = {
             "prettify JSON",
           ],
         },
-        explanations: jsonFormatterExplanation,
+        explanations: {
+          notice: {
+            type: "tips",
+            title: "Pro Tips",
+            items: [
+              "• Use Ctrl+A to select all text quickly",
+              "• The formatter will auto-detect and fix common JSON issues",
+              "• Validation shows specific error locations",
+              "• Minified JSON is optimized for data transmission",
+            ],
+          },
+        },
       },
       {
         name: "JSONC Formatter",
@@ -691,7 +264,25 @@ export const toolsData: ToolData = {
             "VS Code config formatter",
           ],
         },
-        explanations: jsoncFormatterExplanation,
+        explanations: {
+          sections: [
+            {
+              title: "",
+              items: [
+                { label: "JSONC (JSON with Comments)", text: "is an extension of JSON that allows comments:" },
+              ],
+            },
+            {
+              title: "",
+              items: [
+                { label: "Single-line comments:", text: "// This is a comment" },
+                { label: "Multi-line comments:", text: "/* This is a multi-line comment */" },
+                { label: "Use cases:", text: "Configuration files, VS Code settings, TypeScript configs" },
+                { label: "Popular tools:", text: "VS Code, TypeScript, Azure DevOps, and more" },
+              ],
+            },
+          ],
+        },
       },
       {
         name: "HTML Beautifier",
@@ -708,7 +299,28 @@ export const toolsData: ToolData = {
             "HTML code formatter",
           ],
         },
-        explanations: htmlFormatterExplanation,
+        explanations: {
+          sections: [
+            {
+              title: "Features:",
+              items: [
+                "• Automatic indentation and formatting",
+                "• Syntax highlighting with live preview",
+                "• Handles inline styles and scripts",
+                "• Supports custom indent size",
+              ],
+            },
+            {
+              title: "Best Practices:",
+              items: [
+                "• Use 2 or 4 spaces for standard formatting",
+                "• Keep nesting levels manageable",
+                "• Validate HTML before deployment",
+                "• Format regularly for maintainability",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "YAML Formatter",
@@ -725,7 +337,28 @@ export const toolsData: ToolData = {
             "config formatter",
           ],
         },
-        explanations: yamlFormatterExplanation,
+        explanations: {
+          sections: [
+            {
+              title: "YAML Features:",
+              items: [
+                "• Human-readable data serialization",
+                "• Supports complex data structures",
+                "• Common in DevOps and configuration",
+                "• Indentation-based syntax",
+              ],
+            },
+            {
+              title: "Formatting Tips:",
+              items: [
+                "• Use consistent indentation (2 spaces recommended)",
+                "• Validate syntax before deployment",
+                "• Keep nesting levels reasonable",
+                "• Use quotes for special characters",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "Markdown Formatter",
@@ -742,7 +375,28 @@ export const toolsData: ToolData = {
             "prettify markdown",
           ],
         },
-        explanations: markdownFormatterExplanation,
+        explanations: {
+          sections: [
+            {
+              title: "Markdown Features:",
+              items: [
+                "• Headers, lists, and emphasis",
+                "• Code blocks with syntax highlighting",
+                "• Links and images",
+                "• Tables and blockquotes",
+              ],
+            },
+            {
+              title: "Formatting Tips:",
+              items: [
+                "• Use blank lines between sections",
+                "• Consistent heading hierarchy",
+                "• Preview before publishing",
+                "• Use reference-style links for readability",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "CSS/LESS/SCSS Formatter",
@@ -759,7 +413,28 @@ export const toolsData: ToolData = {
             "CSS code formatter",
           ],
         },
-        explanations: cssFormatterExplanation,
+        explanations: {
+          sections: [
+            {
+              title: "CSS Features:",
+              items: [
+                "• Automatic property ordering",
+                "• Consistent indentation",
+                "• Selector formatting",
+                "• Media query organization",
+              ],
+            },
+            {
+              title: "Best Practices:",
+              items: [
+                "• Group related properties",
+                "• Use shorthand when appropriate",
+                "• Maintain consistent naming",
+                "• Comment complex sections",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "JavaScript/TypeScript Formatter",
@@ -776,7 +451,28 @@ export const toolsData: ToolData = {
             "Prettier",
           ],
         },
-        explanations: typescriptFormatterExplanation,
+        explanations: {
+          sections: [
+            {
+              title: "TypeScript Features:",
+              items: [
+                "• Type annotation formatting",
+                "• Interface and type alignment",
+                "• Import organization",
+                "• Consistent spacing",
+              ],
+            },
+            {
+              title: "Formatting Tips:",
+              items: [
+                "• Use explicit return types",
+                "• Consistent type positioning",
+                "• Organize imports by type",
+                "• Format before committing",
+              ],
+            },
+          ],
+        },
       },
 
       {
@@ -793,7 +489,28 @@ export const toolsData: ToolData = {
             "GraphQL schema formatter",
           ],
         },
-        explanations: graphqlFormatterExplanation,
+        explanations: {
+          sections: [
+            {
+              title: "GraphQL Features:",
+              items: [
+                "• Query and mutation formatting",
+                "• Schema definition styling",
+                "• Argument alignment",
+                "• Directive formatting",
+              ],
+            },
+            {
+              title: "Best Practices:",
+              items: [
+                "• Consistent field indentation",
+                "• Logical field ordering",
+                "• Clear variable naming",
+                "• Comment complex queries",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "Time Formatter",
@@ -809,7 +526,28 @@ export const toolsData: ToolData = {
             "time format converter",
           ],
         },
-        explanations: timeFormatterExplanation,
+        explanations: {
+          sections: [
+            {
+              title: "Standard Formats:",
+              items: [
+                { label: "ISO 8601:", text: "2024-01-15T10:30:00Z" },
+                { label: "RFC 2822:", text: "Mon, 15 Jan 2024 10:30:00 +0000" },
+                { label: "Unix:", text: "1705315800 (seconds since 1970)" },
+                { label: "Human:", text: "January 15, 2024 at 10:30 AM" },
+              ],
+            },
+            {
+              title: "Usage Tips:",
+              items: [
+                "• ISO 8601 is best for APIs and databases",
+                "• Unix timestamps are timezone-independent",
+                "• Use locale formats for user interfaces",
+                "• Always consider timezone handling",
+              ],
+            },
+          ],
+        },
       },
     ],
   },
@@ -848,7 +586,19 @@ export const toolsData: ToolData = {
             "URI encoder",
           ],
         },
-        explanations: urlEncoderExplanation,
+        explanations: {
+          notice: {
+            type: "examples",
+            title: "URL Encoding Examples:",
+            items: [],
+          },
+          examples: [
+            { from: "Space", to: "%20" },
+            { from: "@", to: "%40" },
+            { from: "&", to: "%26" },
+            { from: "=", to: "%3D" },
+          ],
+        },
       },
       {
         name: "JWT Decoder",
@@ -897,7 +647,18 @@ export const toolsData: ToolData = {
             "checksum",
           ],
         },
-        explanations: md5HashExplanation,
+        explanations: {
+          notice: {
+            type: "info",
+            title: "MD5 Information:",
+            items: [
+              "• MD5 produces a 128-bit (16-byte) hash value",
+              "• Commonly used for file integrity verification",
+              "• Not recommended for security-sensitive applications",
+              "• Use SHA-256 or bcrypt for password hashing",
+            ],
+          },
+        },
       },
       {
         name: "BCrypt Hash",
@@ -914,7 +675,27 @@ export const toolsData: ToolData = {
             "BCrypt generator",
           ],
         },
-        explanations: bcryptHashExplanation,
+        explanations: {
+          sections: [
+            {
+              title: "Bcrypt Features:",
+              items: [
+                "• Adaptive cost factor for future-proofing",
+                "• Built-in salt generation",
+                "• Resistant to rainbow table attacks",
+                "• Industry standard for password storage",
+              ],
+            },
+            {
+              title: "Cost Factor Guide:",
+              items: [
+                { label: "8-10:", text: "Fast, suitable for development" },
+                { label: "12:", text: "Recommended for production" },
+                { label: "14+:", text: "High security, slower performance" },
+              ],
+            },
+          ],
+        },
       },
     ],
   },
@@ -1001,7 +782,31 @@ export const toolsData: ToolData = {
             "barcode generator",
           ],
         },
-        explanations: qrGeneratorExplanation,
+        explanations: {
+          sections: [
+            {
+              title: "Supported QR Types:",
+              items: [
+                { label: "Plain Text:", text: "Any text content" },
+                { label: "Website URL:", text: "Links to web pages" },
+                { label: "Email:", text: "Email addresses with mailto links" },
+                { label: "Phone Number:", text: "Clickable phone numbers" },
+                { label: "SMS Message:", text: "Pre-filled text messages" },
+                { label: "WiFi Network:", text: "Network credentials for easy connection" },
+                { label: "Contact Card:", text: "vCard format contact information" },
+              ],
+            },
+            {
+              title: "Customization Options:",
+              items: [
+                "• Adjustable size and error correction",
+                "• Multiple color options",
+                "• Download as PNG image",
+                "• Copy to clipboard",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "Barcode Generator",
@@ -1018,7 +823,28 @@ export const toolsData: ToolData = {
             "EAN generator",
           ],
         },
-        explanations: barcodeGeneratorExplanation,
+        explanations: {
+          sections: [
+            {
+              title: "Common Use Cases:",
+              items: [
+                { label: "EAN-13/UPC:", text: "Retail products" },
+                { label: "CODE 128:", text: "Shipping and logistics" },
+                { label: "CODE 39:", text: "Industrial applications" },
+                { label: "ITF-14:", text: "Packaging and cases" },
+              ],
+            },
+            {
+              title: "Tips:",
+              items: [
+                "• Use CODE 128 for maximum compatibility",
+                "• EAN/UPC codes need specific lengths",
+                "• Test with your barcode scanner",
+                "• Consider printing size and resolution",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "Lorem Generator",
@@ -1035,7 +861,18 @@ export const toolsData: ToolData = {
             "lorem generator",
           ],
         },
-        explanations: loremGeneratorExplanation,
+        explanations: {
+          notice: {
+            type: "info",
+            title: "About Lorem Ipsum:",
+            items: [
+              "• Industry standard placeholder text since the 1500s",
+              "• Based on a work by Cicero from 45 BC",
+              "• Scrambled Latin text that's readable but meaningless",
+              "• Perfect for focusing on design without content distraction",
+            ],
+          },
+        },
       },
       {
         name: "Unicode Characters",
@@ -1052,7 +889,18 @@ export const toolsData: ToolData = {
             "character map",
           ],
         },
-        explanations: unicodeCharactersExplanation,
+        explanations: {
+          notice: {
+            type: "info",
+            title: "Unicode Information:",
+            items: [
+              "• Unicode supports over 140,000 characters",
+              "• Includes emojis, symbols, and scripts worldwide",
+              "• UTF-8 is the most common encoding",
+              "• Code points range from U+0000 to U+10FFFF",
+            ],
+          },
+        },
       },
       {
         name: "Password Generator",
@@ -1085,7 +933,18 @@ export const toolsData: ToolData = {
             "UUID v4",
           ],
         },
-        explanations: uuidGeneratorExplanation,
+        explanations: {
+          notice: {
+            type: "info",
+            title: "UUID Information:",
+            items: [
+              { label: "Version 1:", text: "Timestamp-based, includes MAC address (or random node)" },
+              { label: "Version 4:", text: "Randomly generated, most commonly used" },
+              { label: "Format:", text: "8-4-4-4-12 hexadecimal digits (32 total)" },
+              { label: "Use cases:", text: "Database keys, session IDs, file names, API tokens" },
+            ],
+          },
+        },
       },
       {
         name: "Search & Replace",
@@ -1118,7 +977,19 @@ export const toolsData: ToolData = {
             "text separator",
           ],
         },
-        explanations: textSplitExplanation,
+        explanations: {
+          notice: {
+            type: "info",
+            title: "Common Delimiters:",
+            items: [
+              { label: "Comma (,):", text: "CSV files, lists" },
+              { label: "Semicolon (;):", text: "European CSV, SQL" },
+              { label: "Tab:", text: "TSV files, spreadsheets" },
+              { label: "Pipe (|):", text: "Database exports, logs" },
+              { label: "Newline:", text: "Line-by-line processing" },
+            ],
+          },
+        },
       },
     ],
   },
@@ -1157,7 +1028,13 @@ export const toolsData: ToolData = {
             "time tracker",
           ],
         },
-        explanations: timerExplanation,
+        explanations: {
+          shortcuts: [
+            { key: "Enter", action: "Add new timer" },
+            { key: "Space", action: "Start/Pause first timer" },
+            { key: "Escape", action: "Stop all timers" },
+          ],
+        },
       },
       {
         name: "Stopwatch",
@@ -1202,7 +1079,37 @@ export const toolsData: ToolData = {
             "date calculator",
           ],
         },
-        explanations: datetimeDiffExplanation,
+        explanations: {
+          sections: [
+            {
+              title: "Project Planning",
+              items: [
+                "• Calculate project durations",
+                "• Track milestone intervals",
+                "• Estimate delivery dates",
+                "• Plan sprint cycles",
+              ],
+            },
+            {
+              title: "Personal Events",
+              items: [
+                "• Count days until vacation",
+                "• Track age in various units",
+                "• Calculate anniversary dates",
+                "• Plan event timelines",
+              ],
+            },
+            {
+              title: "Business Uses",
+              items: [
+                "• Calculate contract periods",
+                "• Track subscription lengths",
+                "• Measure SLA compliance",
+                "• Plan budget cycles",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "Metronome",
@@ -1219,7 +1126,12 @@ export const toolsData: ToolData = {
             "music metronome",
           ],
         },
-        explanations: metronomeExplanation,
+        explanations: {
+          shortcuts: [
+            { key: "Space", action: "Start/Stop first metronome" },
+            { key: "Escape", action: "Stop all metronomes" },
+          ],
+        },
       },
     ],
   },
@@ -1298,7 +1210,18 @@ export const toolsData: ToolData = {
             "Test your webcam and camera devices. Check video quality and device functionality in your browser.",
           keywords: ["webcam test", "camera test", "test camera", "video test"],
         },
-        explanations: webcamTestExplanation,
+        explanations: {
+          notice: {
+            type: "privacy",
+            title: "Privacy Notice:",
+            items: [
+              "• All camera processing happens locally in your browser",
+              "• No video or image data is transmitted to any server",
+              "• Captured photos are saved directly to your device",
+              "• Camera access requires explicit permission from your browser",
+            ],
+          },
+        },
       },
       {
         name: "Microphone Test",
@@ -1315,7 +1238,18 @@ export const toolsData: ToolData = {
             "test microphone",
           ],
         },
-        explanations: microphoneTestExplanation,
+        explanations: {
+          notice: {
+            type: "privacy",
+            title: "Privacy Notice:",
+            items: [
+              "• All audio processing happens locally in your browser",
+              "• No audio data is transmitted to any server",
+              "• Microphone access requires explicit permission",
+              "• Close this tab to stop microphone access",
+            ],
+          },
+        },
       },
       {
         name: "Keyboard Test",
@@ -1332,7 +1266,18 @@ export const toolsData: ToolData = {
             "test keys",
           ],
         },
-        explanations: keyboardTestExplanation,
+        explanations: {
+          notice: {
+            type: "info",
+            title: "Keyboard Testing:",
+            items: [
+              "• Press any key to test detection",
+              "• Modifier keys are tracked separately",
+              "• Dead keys and special keys are supported",
+              "• Browser security may block some key combinations",
+            ],
+          },
+        },
       },
     ],
   },
