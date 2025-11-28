@@ -840,33 +840,72 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
+          notice: {
+            type: "info",
+            title: "GraphQL Origins",
+            items: [
+              { label: "Created:", text: "Facebook, 2012 (internal), open-sourced 2015" },
+              { label: "Why:", text: "Mobile app needed to fetch exactly what it needed—no more, no less" },
+              { label: "Name:", text: "Graph Query Language—models data as a graph of connected nodes" },
+            ],
+          },
           sections: [
             {
-              title: "Supported Elements",
+              title: "GraphQL vs REST: Key Differences",
               items: [
-                "Type definitions and interfaces",
-                "Queries, mutations, and subscriptions",
-                "Input types and enums",
-                "Schema definitions",
-                "Directive declarations",
+                { label: "Endpoints:", text: "REST has many (/users, /posts), GraphQL has ONE (/graphql)" },
+                { label: "Over-fetching:", text: "REST returns everything; GraphQL returns exactly what you ask for" },
+                { label: "Under-fetching:", text: "REST needs multiple calls; GraphQL gets related data in one query" },
+                { label: "Versioning:", text: "REST uses /v1, /v2; GraphQL evolves schema without versions" },
+                { label: "Caching:", text: "REST uses HTTP caching; GraphQL needs custom solutions (Apollo, Relay)" },
               ],
             },
             {
-              title: "Formatting Benefits",
+              title: "Query, Mutation, Subscription",
               items: [
-                "Consistent field alignment",
-                "Proper indentation for nested types",
-                "Clean argument formatting",
-                "Readable schema structure",
-                "Industry-standard formatting",
+                { label: "Query:", text: "Read data—like GET in REST. Can fetch nested related data in one call" },
+                { label: "Mutation:", text: "Write data—like POST/PUT/DELETE. Returns updated data immediately" },
+                { label: "Subscription:", text: "Real-time updates via WebSocket. Great for chat, notifications, live feeds" },
               ],
             },
             {
-              title: "Use cases",
+              title: "Schema Design Best Practices",
               items: [
-                "Clean schema files for readability",
-                "Prepare query docs",
-                "Improve review experience",
+                "Use descriptive type names: User, not U or UserType",
+                "Nullable by default—add ! only when truly required (easier migrations)",
+                "Use interfaces for shared fields (Node, Timestamped, Auditable)",
+                "Prefer connections over arrays for pagination: users(first: 10, after: cursor)",
+                "Add descriptions: \"\"\"User account with profile and settings\"\"\" for documentation",
+              ],
+            },
+            {
+              title: "Who Uses GraphQL?",
+              items: [
+                "GitHub API v4: Entire public API is GraphQL (REST is v3, legacy)",
+                "Shopify: Powers their entire storefront and admin APIs",
+                "Airbnb: Migrated from REST to reduce mobile data usage by 30%",
+                "Twitter: Uses it for their web app data fetching",
+                "Netflix, PayPal, Pinterest, Starbucks, The New York Times...",
+              ],
+            },
+            {
+              title: "Common Gotchas",
+              items: [
+                "N+1 problem: Use DataLoader to batch database queries",
+                "Security: Limit query depth and complexity to prevent DoS",
+                "No file uploads in spec: Use multipart form data or presigned URLs",
+                "Error handling: Errors can be partial—check both data AND errors fields",
+                "Introspection: Disable in production to hide your schema from attackers",
+              ],
+            },
+            {
+              title: "Tooling Ecosystem",
+              items: [
+                { label: "Apollo:", text: "Most popular client and server libraries" },
+                { label: "Relay:", text: "Facebook's client, strict but powerful" },
+                { label: "Hasura:", text: "Instant GraphQL API from PostgreSQL" },
+                { label: "Prisma:", text: "Database toolkit that generates GraphQL resolvers" },
+                { label: "GraphiQL/Playground:", text: "Interactive IDE for exploring APIs" },
               ],
             },
           ],
