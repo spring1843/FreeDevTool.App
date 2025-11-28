@@ -84,10 +84,9 @@ app.use((req, res, next) => {
   }
 
   // ALWAYS serve the app on the port specified in the environment variable PORT
-  // Other ports are firewalled. Default to 9500 if not specified.
+  // Replit expects port 5000 for the preview to work.
   // this serves both the API and the client.
-  // It is the only port that is not firewalled.
-  const port = parseInt(process.env.PORT || "9500", 10);
+  const port = parseInt(process.env.PORT || "5000", 10);
   server.listen(
     {
       port,
