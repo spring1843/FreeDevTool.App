@@ -167,6 +167,7 @@ export default function Base64Encoder() {
               rows={20}
               autoFocus={true}
               minHeight="400px"
+              lang="html"
               fileExtension="html"
               theme={theme}
               data-default-input="true"
@@ -188,7 +189,9 @@ export default function Base64Encoder() {
               className="min-h-[400px] font-mono text-sm"
               rows={20}
               minHeight="400px"
+              lang="plaintext"
               fileExtension="txt"
+              lineWrapping={true}
               theme={theme}
             />
           </CardContent>
