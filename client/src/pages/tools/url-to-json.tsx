@@ -1376,7 +1376,7 @@ export default function URLToJSON() {
     // Single-part TLD - validate it's a known TLD
     const potentialTLD = parts[parts.length - 1];
     if (singlePartTLDs.includes(potentialTLD.toLowerCase())) {
-      tld = potentialTLD;
+      tld = potentialTLD.toLowerCase();
       domain = parts[parts.length - 2];
       subdomain = parts.slice(0, -2).join(".");
     } else {
