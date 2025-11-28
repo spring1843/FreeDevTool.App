@@ -305,47 +305,74 @@ export const toolsData: ToolData = {
         explanations: {
           notice: {
             type: "info",
-            title: "About URL to JSON Converter",
+            title: "URL Anatomy 101",
             items: [
-              {
-                label: "Extracted Components",
-                text: "Protocol, Hostname, TLD, Domain, Subdomain, Port, Path, Query Parameters",
-              },
+              { label: "Full structure:", text: "protocol://subdomain.domain.tld:port/path?query=params#fragment" },
+              { label: "Max length:", text: "2,083 chars (IE limit)—most browsers handle 64KB, but keep URLs under 2K for safety" },
+              { label: "Encoding:", text: "Spaces become %20 or +, special chars get percent-encoded (é → %C3%A9)" },
             ],
           },
-          examples: [
-            {
-              from: "https://api.github.com/repos/owner/repo?per_page=100&sort=updated#readme",
-              to: "Breaks into protocol=https, hostname=api.github.com, path=/repos/owner/repo, params={per_page:100, sort:updated}, hash=#readme",
-            },
-            {
-              from: "https://shop.example.co.uk:8080/products/electronics?category=laptops&brand=apple&sort=price",
-              to: "Parses multi-part TLD co.uk, port 8080, path segments, and query params",
-            },
-            {
-              from: "ftp://files.example.com/downloads/software/installer.exe",
-              to: "Shows protocol ftp, hostname files.example.com, and path",
-            },
-          ],
           sections: [
             {
-              title: "Features",
+              title: "URL Components Explained",
               items: [
-                "Parse full URL into protocol, host, path, hash, and query",
-                "Convert query parameters to JSON",
-                "Detect common and multi-part TLDs",
-                "Copy JSON output with one click",
+                { label: "Protocol:", text: "http, https, ftp, mailto, tel—tells browser HOW to fetch the resource" },
+                { label: "Subdomain:", text: "www, api, blog, mail—organizes services under one domain" },
+                { label: "Domain:", text: "The registered name you pay for (google, amazon, github)" },
+                { label: "TLD:", text: "Top-level domain (.com, .org, .io, .co.uk)—this tool handles multi-part TLDs!" },
+                { label: "Port:", text: "Optional—defaults are 80 (http) and 443 (https)" },
+                { label: "Path:", text: "/folder/page.html—the resource location on the server" },
+                { label: "Query:", text: "?key=value&key2=value2—parameters passed to the server" },
+                { label: "Fragment:", text: "#section—client-side only, jumps to page anchor (not sent to server!)" },
               ],
             },
             {
-              title: "Use cases",
+              title: "Query Parameter Secrets",
               items: [
-                "API development and testing",
-                "URL analysis and debugging",
-                "Web scraping and automation",
-                "SEO and analytics",
-                "Documentation and training",
-                "Link validation and parsing",
+                { label: "UTM params:", text: "utm_source, utm_medium, utm_campaign—tracking where traffic comes from" },
+                { label: "Pagination:", text: "?page=2&limit=20—standard for API results" },
+                { label: "Sorting:", text: "?sort=price&order=asc—common API pattern" },
+                { label: "Filtering:", text: "?category=electronics&brand=apple—narrow down results" },
+                { label: "Auth tokens:", text: "?token=abc123—sometimes in URL (not recommended for security!)" },
+              ],
+            },
+            {
+              title: "Developer Use Cases",
+              items: [
+                "Debug API calls: Paste a failing URL to see exactly what params are being sent",
+                "Build query strings: Understand structure before constructing URLs programmatically",
+                "Decode tracking links: See what UTM parameters are hiding in marketing URLs",
+                "Parse OAuth callbacks: Extract code, state, and error params from redirect URLs",
+                "Analyze affiliate links: See what tracking IDs are embedded",
+              ],
+            },
+            {
+              title: "Interesting URL Facts",
+              items: [
+                "First URL ever: http://info.cern.ch (still works! Try it)",
+                "Longest TLD: .cancerresearch (16 chars) and .travelersinsurance (19 chars)",
+                "Most expensive domain: Cars.com sold for $872 million (2014)",
+                "Punycode: International domains like 中国.com become xn--fiqs8s.com",
+                "Data URLs: data:text/html,<h1>Hello</h1> is a valid URL that renders HTML!",
+              ],
+            },
+            {
+              title: "URL Security Considerations",
+              items: [
+                "HTTPS everywhere: HTTP URLs expose all data including query params to network observers",
+                "Don't put secrets in URLs: Query params appear in browser history, server logs, and referer headers",
+                "Watch for open redirects: ?redirect=evil.com can be abused for phishing",
+                "Validate thoroughly: Malformed URLs can crash parsers or enable injection attacks",
+                "Shorten carefully: Shortened URLs hide the destination—preview before clicking unknown links",
+              ],
+            },
+            {
+              title: "Multi-Part TLDs This Tool Handles",
+              items: [
+                "Country-specific: .co.uk, .com.au, .co.jp, .com.br, .co.nz",
+                "Government: .gov.uk, .gov.au, .gc.ca",
+                "Academic: .ac.uk, .edu.au",
+                "Why it matters: shop.example.co.uk → subdomain=shop, domain=example, TLD=co.uk (not uk!)",
               ],
             },
           ],
