@@ -3,9 +3,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, Copy } from "lucide-react";
+import { Calendar, Copy } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import {
+  ResetButton,
+  ClearButton,
+  NowButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useToast } from "@/hooks/use-toast";
@@ -347,32 +354,38 @@ export default function DateConverter() {
             </p>
           </div>
 
-          <div className="flex gap-3">
-            <Button
-              onClick={convertDate}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-              data-testid="convert-button"
-            >
-              <Calendar className="w-4 h-4 mr-2" />
-              Convert Date
-            </Button>
-            <Button onClick={handleCurrentTime} variant="outline">
-              <Clock className="w-4 h-4 mr-2" />
-              Use Current Time
-            </Button>
-            <ResetButton
-              onClick={handleReset}
-              tooltip="Reset to default example"
-              hasModifiedData={hasModifiedData}
-              disabled={isAtDefault}
-            />
-            <ClearButton
-              onClick={handleClear}
-              tooltip="Clear date input"
-              hasModifiedData={hasModifiedData}
-              disabled={inputDate.trim() === ""}
-            />
-          </div>
+          <ToolButtonGroup>
+            <ActionButtonGroup>
+              <Button
+                onClick={convertDate}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+                data-testid="convert-button"
+              >
+                <Calendar className="w-4 h-4 mr-2" />
+                Convert Date
+              </Button>
+            </ActionButtonGroup>
+            <DataButtonGroup>
+              <NowButton
+                onClick={handleCurrentTime}
+                tooltip="Set to current time"
+                toastTitle="Time updated"
+                toastDescription="Set to current timestamp"
+              />
+              <ResetButton
+                onClick={handleReset}
+                tooltip="Reset to default example"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={handleClear}
+                tooltip="Clear date input"
+                hasModifiedData={hasModifiedData}
+                disabled={inputDate.trim() === ""}
+              />
+            </DataButtonGroup>
+          </ToolButtonGroup>
         </CardContent>
       </Card>
 

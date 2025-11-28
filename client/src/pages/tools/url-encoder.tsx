@@ -1,11 +1,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Link, Unlink } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_URL_ENCODER } from "@/data/defaults";
@@ -119,34 +125,42 @@ export default function URLEncoder() {
         </div>
       </div>
 
-      <div className="mb-6 flex gap-3">
-        <Button
-          onClick={handleEncodeClick}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
-        >
-          <Link className="w-4 h-4 mr-2" />
-          Encode URL
-        </Button>
-        <Button
-          onClick={decodeURL}
-          className="bg-green-600 hover:bg-green-700 text-white"
-        >
-          <Unlink className="w-4 h-4 mr-2" />
-          Decode URL
-        </Button>
-        <ResetButton
-          onClick={handleReset}
-          tooltip="Reset to default example"
-          hasModifiedData={hasModifiedData}
-          disabled={isAtDefault}
-        />
-        <ClearButton
-          onClick={handleClear}
-          tooltip="Clear all inputs"
-          hasModifiedData={hasModifiedData}
-          disabled={plainText.trim() === "" && encodedText.trim() === ""}
-        />
-      </div>
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={handleEncodeClick}
+            icon={<Link className="w-4 h-4 mr-2" />}
+            tooltip="Encode plain text to URL-safe format"
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Encode URL
+          </ToolButton>
+          <ToolButton
+            variant="custom"
+            onClick={decodeURL}
+            icon={<Unlink className="w-4 h-4 mr-2" />}
+            tooltip="Decode URL-encoded text back to plain text"
+            className="bg-green-600 hover:bg-green-700 text-white"
+          >
+            Decode URL
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={plainText.trim() === "" && encodedText.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>

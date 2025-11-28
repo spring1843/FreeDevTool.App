@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TextArea } from "@/components/ui/textarea";
@@ -8,7 +7,14 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Search } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import {
@@ -203,39 +209,45 @@ export default function SearchReplace() {
             </div>
           ) : null}
 
-          <div className="flex items-center justify-between">
-            <div className="flex gap-3">
-              <Button
+          <ToolButtonGroup>
+            <ActionButtonGroup>
+              <ToolButton
+                variant="custom"
                 onClick={performSearchReplace}
+                tooltip="Find and replace matching text"
+                icon={<Search className="w-4 h-4 mr-2" />}
                 className="bg-blue-600 hover:bg-blue-700 text-white"
               >
-                <Search className="w-4 h-4 mr-2" />
                 Search & Replace
-              </Button>
-              <ResetButton
-                onClick={handleReset}
-                tooltip="Reset all settings to defaults"
-                hasModifiedData={hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={handleClear}
-                tooltip="Clear all inputs"
-                hasModifiedData={hasModifiedData}
-                disabled={
-                  text.trim() === "" &&
-                  searchText.trim() === "" &&
-                  replaceText.trim() === ""
-                }
-              />
+              </ToolButton>
+            </ActionButtonGroup>
+            <div className="flex items-center gap-2">
+              <DataButtonGroup>
+                <ResetButton
+                  onClick={handleReset}
+                  tooltip="Reset all settings to defaults"
+                  hasModifiedData={hasModifiedData}
+                  disabled={isAtDefault}
+                />
+                <ClearButton
+                  onClick={handleClear}
+                  tooltip="Clear all inputs"
+                  hasModifiedData={hasModifiedData}
+                  disabled={
+                    text.trim() === "" &&
+                    searchText.trim() === "" &&
+                    replaceText.trim() === ""
+                  }
+                />
+              </DataButtonGroup>
+              <Badge
+                variant="outline"
+                className="bg-blue-50 text-blue-700 border-blue-200"
+              >
+                {matchCount} matches found
+              </Badge>
             </div>
-            <Badge
-              variant="outline"
-              className="bg-blue-50 text-blue-700 border-blue-200"
-            >
-              {matchCount} matches found
-            </Badge>
-          </div>
+          </ToolButtonGroup>
         </CardContent>
       </Card>
 

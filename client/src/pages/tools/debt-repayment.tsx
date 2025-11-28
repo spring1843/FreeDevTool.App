@@ -1,10 +1,16 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Calculator, CreditCard, BarChart3 } from "lucide-react";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { getToolByPath } from "@/data/tools";
@@ -206,29 +212,35 @@ export default function DebtRepaymentCalculator() {
               </div>
             </div>
 
-            <div className="flex gap-3 pt-4">
-              <Button
-                onClick={calculateDebtRepayment}
-                className="bg-red-600 hover:bg-red-700 text-white"
-              >
-                <Calculator className="w-4 h-4 mr-2" />
-                Calculate
-              </Button>
-              <ResetButton
-                onClick={handleReset}
-                tooltip="Reset to default values"
-                hasModifiedData={hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={handleClear}
-                tooltip="Clear all inputs"
-                hasModifiedData={hasModifiedData}
-                disabled={
-                  principal === 0 && annualRate === 0 && monthlyPayment === 0
-                }
-              />
-            </div>
+            <ToolButtonGroup className="pt-4">
+              <ActionButtonGroup>
+                <ToolButton
+                  variant="custom"
+                  onClick={calculateDebtRepayment}
+                  tooltip="Calculate debt repayment schedule"
+                  icon={<Calculator className="w-4 h-4 mr-2" />}
+                  className="bg-red-600 hover:bg-red-700 text-white"
+                >
+                  Calculate
+                </ToolButton>
+              </ActionButtonGroup>
+              <DataButtonGroup>
+                <ResetButton
+                  onClick={handleReset}
+                  tooltip="Reset to default values"
+                  hasModifiedData={hasModifiedData}
+                  disabled={isAtDefault}
+                />
+                <ClearButton
+                  onClick={handleClear}
+                  tooltip="Clear all inputs"
+                  hasModifiedData={hasModifiedData}
+                  disabled={
+                    principal === 0 && annualRate === 0 && monthlyPayment === 0
+                  }
+                />
+              </DataButtonGroup>
+            </ToolButtonGroup>
           </CardContent>
         </Card>
 
@@ -293,7 +305,7 @@ export default function DebtRepaymentCalculator() {
               {monthlyPayment <= minimumPayment && (
                 <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
                   <div className="text-sm text-yellow-800 dark:text-yellow-200">
-                    ⚠️ Warning: Your payment may not cover the minimum interest.
+                    Warning: Your payment may not cover the minimum interest.
                     Consider increasing your monthly payment.
                   </div>
                 </div>

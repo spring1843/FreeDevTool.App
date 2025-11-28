@@ -10,8 +10,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { FileSpreadsheet, Code2, Share, RefreshCw } from "lucide-react";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import { FileSpreadsheet, Code2, RefreshCw } from "lucide-react";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import {
   updateURL,
   copyShareableURL,
@@ -292,38 +299,43 @@ Jane Smith      jane@example.com        25      Marketing`,
                 </Select>
               </div>
 
-              <div className="flex gap-2">
-                <Button
-                  onClick={convertCSV}
-                  size="sm"
-                  data-testid="convert-button"
-                >
-                  <RefreshCw className="w-4 h-4 mr-1" />
-                  Convert
-                </Button>
-                <Button
-                  onClick={shareConverter}
-                  variant="outline"
-                  size="sm"
-                  data-testid="share-converter-button"
-                >
-                  <Share className="w-4 h-4" />
-                </Button>
-                <ResetButton
-                  onClick={handleReset}
-                  tooltip="Reset to default example"
-                  hasModifiedData={hasModifiedData}
-                  disabled={isAtDefault}
-                  iconOnly
-                />
-                <ClearButton
-                  onClick={clearAll}
-                  tooltip="Clear all inputs"
-                  hasModifiedData={hasModifiedData}
-                  disabled={csvInput.trim() === ""}
-                  iconOnly
-                />
-              </div>
+              <ToolButtonGroup>
+                <ActionButtonGroup>
+                  <ToolButton
+                    variant="custom"
+                    onClick={convertCSV}
+                    size="sm"
+                    icon={<RefreshCw className="w-4 h-4 mr-1" />}
+                    tooltip="Convert CSV to JSON"
+                    data-testid="convert-button"
+                  >
+                    Convert
+                  </ToolButton>
+                  <ToolButton
+                    variant="share"
+                    onClick={shareConverter}
+                    size="sm"
+                    tooltip="Copy shareable URL to clipboard"
+                    data-testid="share-converter-button"
+                  />
+                </ActionButtonGroup>
+                <DataButtonGroup>
+                  <ResetButton
+                    onClick={handleReset}
+                    tooltip="Reset to default example"
+                    hasModifiedData={hasModifiedData}
+                    disabled={isAtDefault}
+                    iconOnly
+                  />
+                  <ClearButton
+                    onClick={clearAll}
+                    tooltip="Clear all inputs"
+                    hasModifiedData={hasModifiedData}
+                    disabled={csvInput.trim() === ""}
+                    iconOnly
+                  />
+                </DataButtonGroup>
+              </ToolButtonGroup>
             </div>
 
             <TextArea

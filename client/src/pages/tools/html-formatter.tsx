@@ -1,12 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { formatHTML } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, Minimize2, AlertTriangle } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import { DEFAULT_HTML } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
@@ -140,34 +146,42 @@ export default function HTMLFormatter() {
         </Alert>
       )}
 
-      <div className="mb-6 flex gap-4">
-        <Button
-          onClick={() => formatCode(false)}
-          className="bg-green-600 hover:bg-green-700 text-white"
-        >
-          <Code className="w-4 h-4 mr-2" />
-          Beautify HTML
-        </Button>
-        <Button
-          onClick={() => formatCode(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
-        >
-          <Minimize2 className="w-4 h-4 mr-2" />
-          Minify HTML
-        </Button>
-        <ResetButton
-          onClick={handleReset}
-          tooltip="Reset to default example"
-          hasModifiedData={hasModifiedData}
-          disabled={isAtDefault}
-        />
-        <ClearButton
-          onClick={handleClear}
-          tooltip="Clear all inputs"
-          hasModifiedData={hasModifiedData}
-          disabled={input.trim() === "" && output.trim() === ""}
-        />
-      </div>
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={() => formatCode(false)}
+            icon={<Code className="w-4 h-4 mr-2" />}
+            tooltip="Format and beautify HTML code"
+            className="bg-green-600 hover:bg-green-700 text-white"
+          >
+            Beautify HTML
+          </ToolButton>
+          <ToolButton
+            variant="custom"
+            onClick={() => formatCode(true)}
+            icon={<Minimize2 className="w-4 h-4 mr-2" />}
+            tooltip="Minify HTML to reduce file size"
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Minify HTML
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={input.trim() === "" && output.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>

@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -9,12 +8,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { Mic, Play, Square, Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -22,6 +15,11 @@ import { SecurityBanner } from "@/components/ui/security-banner";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import {
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+} from "@/components/ui/tool-button";
 
 export default function MicrophoneTest() {
   const tool = getToolByPath("/tools/microphone-test");
@@ -427,69 +425,62 @@ export default function MicrophoneTest() {
             />
           </div>
 
-          <div className="space-y-2">
-            {!hasPermission ? (
-              <Button
-                onClick={requestPermission}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-                data-testid="request-microphone-permission"
-              >
-                <Mic className="w-4 h-4 mr-2" />
-                Request Microphone Permission
-              </Button>
-            ) : !isRecording ? (
-              <Button
-                onClick={startRecording}
-                className="w-full"
-                data-testid="start-recording"
-              >
-                <Mic className="w-4 h-4 mr-2" />
-                Start Recording
-              </Button>
-            ) : (
-              <Button
-                onClick={stopRecording}
-                variant="destructive"
-                className="w-full"
-                data-testid="stop-recording"
-              >
-                <Square className="w-4 h-4 mr-2" />
-                Stop Recording
-              </Button>
-            )}
-          </div>
+          <ToolButtonGroup>
+            <ActionButtonGroup>
+              {!hasPermission ? (
+                <ToolButton
+                  variant="custom"
+                  onClick={requestPermission}
+                  tooltip="Request microphone access permission"
+                  icon={<Mic className="w-4 h-4 mr-2" />}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  Request Microphone Permission
+                </ToolButton>
+              ) : !isRecording ? (
+                <ToolButton
+                  variant="custom"
+                  onClick={startRecording}
+                  tooltip="Start recording audio from microphone"
+                  icon={<Mic className="w-4 h-4 mr-2" />}
+                >
+                  Start Recording
+                </ToolButton>
+              ) : (
+                <ToolButton
+                  variant="custom"
+                  onClick={stopRecording}
+                  tooltip="Stop the current recording"
+                  icon={<Square className="w-4 h-4 mr-2" />}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                >
+                  Stop Recording
+                </ToolButton>
+              )}
+            </ActionButtonGroup>
+          </ToolButtonGroup>
 
           {recordedBlob ? (
-            <div className="space-y-2">
-              <div className="flex gap-2">
-                <Button
+            <ToolButtonGroup>
+              <ActionButtonGroup>
+                <ToolButton
+                  variant="custom"
                   onClick={playRecording}
-                  variant="outline"
+                  tooltip={isPlaying ? "Stop playback" : "Play the recorded audio"}
+                  icon={<Play className="w-4 h-4 mr-2" />}
                   className="flex-1"
-                  data-testid="play-recording"
                 >
-                  <Play className="w-4 h-4 mr-2" />
                   {isPlaying ? "Stop Playback" : "Play Recording"}
-                </Button>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        onClick={downloadRecording}
-                        variant="outline"
-                        data-testid="download-recording"
-                      >
-                        <Download className="w-4 h-4" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Download recording</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
+                </ToolButton>
+                <ToolButton
+                  variant="custom"
+                  onClick={downloadRecording}
+                  tooltip="Download the recorded audio file"
+                  icon={<Download className="w-4 h-4" />}
+                />
+              </ActionButtonGroup>
               <audio ref={audioRef} style={{ display: "none" }} />
-            </div>
+            </ToolButtonGroup>
           ) : null}
 
           {error ? (

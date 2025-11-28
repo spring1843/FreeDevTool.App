@@ -8,6 +8,9 @@ import {
   ToolButton,
   ResetButton,
   ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
 } from "@/components/ui/tool-button";
 import { useState, useEffect, useCallback } from "react";
 
@@ -109,44 +112,48 @@ export default function JSONYAMLConverter() {
         </Alert>
       ) : null}
 
-      <div className="mb-6 flex flex-wrap gap-3">
-        <ToolButton
-          variant="custom"
-          onClick={convertToYAML}
-          icon={<ArrowRight className="w-4 h-4 mr-2" />}
-          tooltip="Convert JSON to YAML"
-        >
-          JSON → YAML
-        </ToolButton>
-        <ToolButton
-          variant="custom"
-          onClick={convertToJSON}
-          icon={<ArrowLeft className="w-4 h-4 mr-2" />}
-          tooltip="Convert YAML to JSON"
-        >
-          YAML → JSON
-        </ToolButton>
-        <ToolButton
-          variant="custom"
-          onClick={swapContent}
-          icon={<ArrowRightLeft className="w-4 h-4 mr-2" />}
-          tooltip="Swap content between JSON and YAML"
-        >
-          Swap
-        </ToolButton>
-        <ResetButton
-          onClick={handleReset}
-          tooltip="Reset to default example"
-          hasModifiedData={hasModifiedData}
-          disabled={isAtDefault}
-        />
-        <ClearButton
-          onClick={handleClear}
-          tooltip="Clear all inputs"
-          hasModifiedData={hasModifiedData}
-          disabled={jsonText.trim() === "" && yamlText.trim() === ""}
-        />
-      </div>
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={convertToYAML}
+            icon={<ArrowRight className="w-4 h-4 mr-2" />}
+            tooltip="Convert JSON to YAML"
+          >
+            JSON → YAML
+          </ToolButton>
+          <ToolButton
+            variant="custom"
+            onClick={convertToJSON}
+            icon={<ArrowLeft className="w-4 h-4 mr-2" />}
+            tooltip="Convert YAML to JSON"
+          >
+            YAML → JSON
+          </ToolButton>
+          <ToolButton
+            variant="custom"
+            onClick={swapContent}
+            icon={<ArrowRightLeft className="w-4 h-4 mr-2" />}
+            tooltip="Swap content between JSON and YAML"
+          >
+            Swap
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={jsonText.trim() === "" && yamlText.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>

@@ -7,7 +7,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { Copy, Check, RefreshCw, Shield, Eye, EyeOff } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { useToolDefault } from "@/hooks/use-tool-default";
 import { usePersistentForm } from "@/hooks/use-persistent-state";
@@ -425,35 +432,39 @@ export default function PasswordGenerator() {
           </div>
 
           {/* Generate and Reset Buttons */}
-          <div className="pt-4 flex gap-3">
-            <Button
-              onClick={generatePasswords}
-              disabled={
-                !includeUppercase &&
-                !includeLowercase &&
-                !includeNumbers &&
-                !includeSymbols
-              }
-              className="flex-1"
-              data-testid="generate-button"
-            >
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Generate{" "}
-              {passwordCount === 1 ? "Password" : `${passwordCount} Passwords`}
-            </Button>
-            <ResetButton
-              onClick={handleReset}
-              tooltip="Reset all settings to defaults"
-              hasModifiedData={hasModifiedData}
-              disabled={isAtDefault}
-            />
-            <ClearButton
-              onClick={handleClear}
-              tooltip="Clear generated passwords"
-              hasModifiedData={hasModifiedData}
-              disabled={passwords.length === 0}
-            />
-          </div>
+          <ToolButtonGroup className="pt-4">
+            <ActionButtonGroup>
+              <ToolButton
+                variant="custom"
+                onClick={generatePasswords}
+                disabled={
+                  !includeUppercase &&
+                  !includeLowercase &&
+                  !includeNumbers &&
+                  !includeSymbols
+                }
+                tooltip="Generate new passwords"
+                icon={<RefreshCw className="w-4 h-4 mr-2" />}
+              >
+                Generate{" "}
+                {passwordCount === 1 ? "Password" : `${passwordCount} Passwords`}
+              </ToolButton>
+            </ActionButtonGroup>
+            <DataButtonGroup>
+              <ResetButton
+                onClick={handleReset}
+                tooltip="Reset all settings to defaults"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={handleClear}
+                tooltip="Clear generated passwords"
+                hasModifiedData={hasModifiedData}
+                disabled={passwords.length === 0}
+              />
+            </DataButtonGroup>
+          </ToolButtonGroup>
         </CardContent>
       </Card>
 

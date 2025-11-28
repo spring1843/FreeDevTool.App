@@ -1,12 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { formatYAML } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_YAML } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
@@ -86,27 +92,33 @@ export default function YAMLFormatter() {
         </Alert>
       ) : null}
 
-      <div className="mb-6 flex gap-4">
-        <Button
-          onClick={formatCode}
-          className="bg-green-600 hover:bg-green-700 text-white"
-        >
-          <Code className="w-4 h-4 mr-2" />
-          Format YAML
-        </Button>
-        <ResetButton
-          onClick={handleReset}
-          tooltip="Reset to default example"
-          hasModifiedData={hasModifiedData}
-          disabled={isAtDefault}
-        />
-        <ClearButton
-          onClick={handleClear}
-          tooltip="Clear all inputs"
-          hasModifiedData={hasModifiedData}
-          disabled={input.trim() === "" && output.trim() === ""}
-        />
-      </div>
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={formatCode}
+            icon={<Code className="w-4 h-4 mr-2" />}
+            tooltip="Format and beautify YAML code"
+            className="bg-green-600 hover:bg-green-700 text-white"
+          >
+            Format YAML
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={input.trim() === "" && output.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>

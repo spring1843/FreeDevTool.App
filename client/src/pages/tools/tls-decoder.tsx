@@ -1,11 +1,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Shield, CheckCircle, XCircle } from "lucide-react";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
@@ -196,27 +202,32 @@ export default function TLSDecoder() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="mb-4 flex gap-3">
-            <Button
-              onClick={decodeCertificate}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              <Shield className="w-4 h-4 mr-2" />
-              Decode Certificate
-            </Button>
-            <ResetButton
-              onClick={handleReset}
-              tooltip="Reset to default example"
-              hasModifiedData={hasModifiedData}
-              disabled={isAtDefault}
-            />
-            <ClearButton
-              onClick={handleClear}
-              tooltip="Clear certificate input"
-              hasModifiedData={hasModifiedData}
-              disabled={certificate.trim() === ""}
-            />
-          </div>
+          <ToolButtonGroup className="mb-4">
+            <ActionButtonGroup>
+              <ToolButton
+                variant="custom"
+                onClick={decodeCertificate}
+                icon={<Shield className="w-4 h-4 mr-2" />}
+                tooltip="Decode TLS certificate"
+              >
+                Decode Certificate
+              </ToolButton>
+            </ActionButtonGroup>
+            <DataButtonGroup>
+              <ResetButton
+                onClick={handleReset}
+                tooltip="Reset to default example"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={handleClear}
+                tooltip="Clear certificate input"
+                hasModifiedData={hasModifiedData}
+                disabled={certificate.trim() === ""}
+              />
+            </DataButtonGroup>
+          </ToolButtonGroup>
           <TextArea
             key={editorEpoch}
             id="input"

@@ -10,8 +10,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowLeftRight, Copy, Check, Calculator, Share } from "lucide-react";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import { ArrowLeftRight, Copy, Check, Calculator } from "lucide-react";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import {
   updateURL,
   copyShareableURL,
@@ -399,21 +406,22 @@ export default function UnitConverter() {
               ))}
             </SelectContent>
           </Select>
-          <div className="flex gap-2">
-            <ResetButton
-              onClick={handleReset}
-              tooltip="Reset to default settings"
-              // Force hasModifiedData false when at default so dialog not shown & disabled applies
-              hasModifiedData={isAtDefault ? false : hasModifiedData}
-              disabled={isAtDefault}
-            />
-            <ClearButton
-              onClick={handleClear}
-              tooltip="Clear input value"
-              hasModifiedData={hasModifiedData}
-              disabled={inputValue.trim() === ""}
-            />
-          </div>
+          <ToolButtonGroup>
+            <DataButtonGroup>
+              <ResetButton
+                onClick={handleReset}
+                tooltip="Reset to default settings"
+                hasModifiedData={isAtDefault ? false : hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={handleClear}
+                tooltip="Clear input value"
+                hasModifiedData={hasModifiedData}
+                disabled={inputValue.trim() === ""}
+              />
+            </DataButtonGroup>
+          </ToolButtonGroup>
         </CardContent>
       </Card>
 
@@ -511,16 +519,16 @@ export default function UnitConverter() {
               </div>
 
               <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700">
-                <Button
+                <ToolButton
+                  variant="share"
                   onClick={shareConversion}
-                  variant="outline"
                   size="sm"
                   className="w-full flex items-center justify-center space-x-2"
+                  tooltip="Copy shareable URL to clipboard"
                   data-testid="share-conversion-button"
                 >
-                  <Share className="w-4 h-4" />
-                  <span>Share Conversion</span>
-                </Button>
+                  Share Conversion
+                </ToolButton>
               </div>
             </div>
           ) : null}

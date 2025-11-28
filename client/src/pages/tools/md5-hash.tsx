@@ -6,7 +6,14 @@ import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Hash, Copy, CheckCircle, XCircle, Eye, EyeOff } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -288,28 +295,39 @@ export default function MD5Hash() {
 
       <Card className="mb-6">
         <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            Hash Details
-            <div className="flex gap-2">
-              <ResetButton
-                onClick={handleReset}
-                tooltip="Reset to default example"
-                hasModifiedData={hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={handleClear}
-                tooltip="Clear all inputs"
-                hasModifiedData={hasModifiedData}
-                disabled={
-                  inputText.trim() === "" &&
-                  compareHash.trim() === "" &&
-                  hashResult.trim() === ""
-                }
-              />
-            </div>
-          </CardTitle>
+          <CardTitle>Hash Details</CardTitle>
         </CardHeader>
+        <ToolButtonGroup className="px-6 pb-4">
+          <ActionButtonGroup>
+            <ToolButton
+              variant="custom"
+              onClick={generateHash}
+              disabled={isLoading || !inputText.trim()}
+              icon={<Hash className="w-4 h-4 mr-2" />}
+              tooltip="Generate MD5 hash from input"
+            >
+              {isLoading ? "Generating..." : "Generate Hash"}
+            </ToolButton>
+          </ActionButtonGroup>
+          <DataButtonGroup>
+            <ResetButton
+              onClick={handleReset}
+              tooltip="Reset to default example"
+              hasModifiedData={hasModifiedData}
+              disabled={isAtDefault}
+            />
+            <ClearButton
+              onClick={handleClear}
+              tooltip="Clear all inputs"
+              hasModifiedData={hasModifiedData}
+              disabled={
+                inputText.trim() === "" &&
+                compareHash.trim() === "" &&
+                hashResult.trim() === ""
+              }
+            />
+          </DataButtonGroup>
+        </ToolButtonGroup>
         <CardContent>
           <TextArea
             id="output"

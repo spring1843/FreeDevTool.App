@@ -15,7 +15,12 @@ import {
   getUserTimezone,
 } from "@/lib/time-tools";
 import { Clock, Globe, Plus, X } from "lucide-react";
-import { ClearButton } from "@/components/ui/tool-button";
+import {
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import { useToast } from "@/hooks/use-toast";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
@@ -171,23 +176,27 @@ export default function WorldClock() {
             you're interested in to your custom clocks
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button
-            onClick={() => setShowAddClock(!showAddClock)}
-            data-testid="add-clock-toggle"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Clock
-          </Button>
+        <ToolButtonGroup>
+          <ActionButtonGroup>
+            <Button
+              onClick={() => setShowAddClock(!showAddClock)}
+              data-testid="add-clock-toggle"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Clock
+            </Button>
+          </ActionButtonGroup>
           {displayedCities.length > 0 && (
-            <ClearButton
-              onClick={resetToDefault}
-              tooltip="Clear all custom clocks"
-              hasModifiedData={displayedCities.length > 0}
-              disabled={displayedCities.length === 0}
-            />
+            <DataButtonGroup>
+              <ClearButton
+                onClick={resetToDefault}
+                tooltip="Clear all custom clocks"
+                hasModifiedData={displayedCities.length > 0}
+                disabled={displayedCities.length === 0}
+              />
+            </DataButtonGroup>
           )}
-        </div>
+        </ToolButtonGroup>
       </div>
 
       {/* Add Clock Dropdown */}

@@ -11,8 +11,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CopyButton } from "@/components/ui/copy-button";
-import { Hash, Calculator, Share, RefreshCw, ArrowRight } from "lucide-react";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import { Hash, Calculator, RefreshCw, ArrowRight } from "lucide-react";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import {
   updateURL,
   copyShareableURL,
@@ -382,25 +389,26 @@ export default function NumberBaseConverter() {
                 </div>
               ) : null}
 
-              <div className="flex gap-2">
-                <Button
-                  onClick={convertNumber}
-                  className="flex-1"
-                  data-testid="convert-button"
-                >
-                  <RefreshCw className="w-4 h-4 mr-2" />
-                  Convert
-                </Button>
-
-                <Button
-                  onClick={shareConverter}
-                  variant="outline"
-                  data-testid="share-converter-button"
-                >
-                  <Share className="w-4 h-4 mr-2" />
-                  Share
-                </Button>
-              </div>
+              <ToolButtonGroup>
+                <ActionButtonGroup>
+                  <ToolButton
+                    variant="custom"
+                    onClick={convertNumber}
+                    className="flex-1"
+                    icon={<RefreshCw className="w-4 h-4 mr-2" />}
+                    tooltip="Convert number to selected bases"
+                    data-testid="convert-button"
+                  >
+                    Convert
+                  </ToolButton>
+                  <ToolButton
+                    variant="share"
+                    onClick={shareConverter}
+                    tooltip="Copy shareable URL to clipboard"
+                    data-testid="share-converter-button"
+                  />
+                </ActionButtonGroup>
+              </ToolButtonGroup>
 
               <div className="grid grid-cols-3 gap-2">
                 <Button
@@ -429,20 +437,22 @@ export default function NumberBaseConverter() {
                 </Button>
               </div>
 
-              <div className="flex gap-2">
-                <ResetButton
-                  onClick={handleReset}
-                  tooltip="Reset to default example"
-                  hasModifiedData={hasModifiedData}
-                  disabled={isAtDefault}
-                />
-                <ClearButton
-                  onClick={clearAll}
-                  tooltip="Clear all inputs"
-                  hasModifiedData={hasModifiedData}
-                  disabled={inputNumber.trim() === ""}
-                />
-              </div>
+              <ToolButtonGroup>
+                <DataButtonGroup>
+                  <ResetButton
+                    onClick={handleReset}
+                    tooltip="Reset to default example"
+                    hasModifiedData={hasModifiedData}
+                    disabled={isAtDefault}
+                  />
+                  <ClearButton
+                    onClick={clearAll}
+                    tooltip="Clear all inputs"
+                    hasModifiedData={hasModifiedData}
+                    disabled={inputNumber.trim() === ""}
+                  />
+                </DataButtonGroup>
+              </ToolButtonGroup>
             </CardContent>
           </Card>
 

@@ -1,11 +1,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Badge } from "@/components/ui/badge";
 import { GitCompare } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_TEXT_DIFF_1, DEFAULT_TEXT_DIFF_2 } from "@/data/defaults";
@@ -217,27 +223,33 @@ export default function TextDiff() {
         </Card>
       ) : null}
 
-      <div className="mb-6 flex gap-3">
-        <Button
-          onClick={calculateDiff}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
-        >
-          <GitCompare className="w-4 h-4 mr-2" />
-          Compare Text
-        </Button>
-        <ResetButton
-          onClick={handleReset}
-          tooltip="Reset to default examples"
-          hasModifiedData={hasModifiedData}
-          disabled={isAtDefault}
-        />
-        <ClearButton
-          onClick={handleClear}
-          tooltip="Clear all text"
-          hasModifiedData={hasModifiedData}
-          disabled={text1.trim() === "" && text2.trim() === ""}
-        />
-      </div>
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={calculateDiff}
+            tooltip="Compare both text inputs"
+            icon={<GitCompare className="w-4 h-4 mr-2" />}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Compare Text
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default examples"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all text"
+            hasModifiedData={hasModifiedData}
+            disabled={text1.trim() === "" && text2.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <Card>

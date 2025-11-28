@@ -14,7 +14,14 @@ import { Badge } from "@/components/ui/badge";
 import { BarChart3, Download } from "lucide-react";
 import { useState, useRef, useEffect, useCallback } from "react";
 import JsBarcode from "jsbarcode";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_BARCODE_GENERATOR } from "@/data/defaults";
@@ -308,40 +315,40 @@ export default function BarcodeGenerator() {
               <Label htmlFor="display-value">Display text below barcode</Label>
             </div>
 
-            <div className="flex gap-3">
-              <Button
-                onClick={generateBarcode}
-                disabled={!text.trim() || !!inputError}
-                className="bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
-                title="Generate the barcode with the current settings"
-                id="generate"
-              >
-                <BarChart3 className="w-4 h-4 mr-2" />
-                Generate Barcode
-              </Button>
-              <Button
-                onClick={downloadBarcode}
-                variant="outline"
-                disabled={!!error || !!inputError}
-                title="Download barcode as a PNG file."
-                id="download"
-              >
-                <Download className="w-4 h-4  mr-2" />
-                Download
-              </Button>
-              <ResetButton
-                onClick={handleReset}
-                tooltip="Reset all settings to defaults"
-                hasModifiedData={hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={handleClear}
-                tooltip="Clear text input"
-                hasModifiedData={hasModifiedData}
-                disabled={text.trim() === ""}
-              />
-            </div>
+            <ToolButtonGroup>
+              <ActionButtonGroup>
+                <ToolButton
+                  variant="custom"
+                  onClick={generateBarcode}
+                  disabled={!text.trim() || !!inputError}
+                  tooltip="Generate barcode with current settings"
+                  className="bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
+                  icon={<BarChart3 className="w-4 h-4 mr-2" />}
+                >
+                  Generate Barcode
+                </ToolButton>
+                <ToolButton
+                  variant="download"
+                  onClick={downloadBarcode}
+                  disabled={!!error || !!inputError}
+                  tooltip="Download barcode as PNG"
+                />
+              </ActionButtonGroup>
+              <DataButtonGroup>
+                <ResetButton
+                  onClick={handleReset}
+                  tooltip="Reset all settings to defaults"
+                  hasModifiedData={hasModifiedData}
+                  disabled={isAtDefault}
+                />
+                <ClearButton
+                  onClick={handleClear}
+                  tooltip="Clear text input"
+                  hasModifiedData={hasModifiedData}
+                  disabled={text.trim() === ""}
+                />
+              </DataButtonGroup>
+            </ToolButtonGroup>
           </CardContent>
         </Card>
 

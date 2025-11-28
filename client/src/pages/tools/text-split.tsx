@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TextArea } from "@/components/ui/textarea";
@@ -8,7 +7,14 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Split } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_TEXT_SPLIT } from "@/data/defaults";
@@ -148,35 +154,41 @@ export default function TextSplit() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between">
-            <div className="flex gap-3">
-              <Button
+          <ToolButtonGroup>
+            <ActionButtonGroup>
+              <ToolButton
+                variant="custom"
                 onClick={splitText}
+                tooltip="Split the text using the delimiter"
+                icon={<Split className="w-4 h-4 mr-2" />}
                 className="bg-orange-600 hover:bg-orange-700 text-white"
               >
-                <Split className="w-4 h-4 mr-2" />
                 Split Text
-              </Button>
-              <ResetButton
-                onClick={handleReset}
-                tooltip="Reset all settings to defaults"
-                hasModifiedData={hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={handleClear}
-                tooltip="Clear text input"
-                hasModifiedData={hasModifiedData}
-                disabled={text.trim() === ""}
-              />
+              </ToolButton>
+            </ActionButtonGroup>
+            <div className="flex items-center gap-2">
+              <DataButtonGroup>
+                <ResetButton
+                  onClick={handleReset}
+                  tooltip="Reset all settings to defaults"
+                  hasModifiedData={hasModifiedData}
+                  disabled={isAtDefault}
+                />
+                <ClearButton
+                  onClick={handleClear}
+                  tooltip="Clear text input"
+                  hasModifiedData={hasModifiedData}
+                  disabled={text.trim() === ""}
+                />
+              </DataButtonGroup>
+              <Badge
+                variant="outline"
+                className="bg-orange-50 text-orange-700 border-orange-200"
+              >
+                Delimiter: {getDelimiterDisplay(delimiter)}
+              </Badge>
             </div>
-            <Badge
-              variant="outline"
-              className="bg-orange-50 text-orange-700 border-orange-200"
-            >
-              Delimiter: {getDelimiterDisplay(delimiter)}
-            </Badge>
-          </div>
+          </ToolButtonGroup>
         </CardContent>
       </Card>
 

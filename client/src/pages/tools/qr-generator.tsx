@@ -21,7 +21,14 @@ import {
   Wifi,
   CreditCard,
 } from "lucide-react";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import { useToast } from "@/hooks/use-toast";
 
 import QRCodeLib from "qrcode-generator";
@@ -391,46 +398,50 @@ export default function QRGenerator() {
                 </Alert>
               ) : null}
 
-              <div className="flex gap-2">
-                <Button
-                  onClick={generateQR}
-                  className="flex-1"
-                  disabled={!inputText.trim()}
-                  data-testid="generate-qr"
-                >
-                  Generate QR Code
-                </Button>
-                {qrUrl ? (
-                  <>
-                    <Button
-                      onClick={downloadQR}
-                      variant="outline"
-                      data-testid="download-qr"
-                    >
-                      <Download className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      onClick={copyQRUrl}
-                      variant="outline"
-                      data-testid="copy-qr-url"
-                    >
-                      <Copy className="w-4 h-4" />
-                    </Button>
-                  </>
-                ) : null}
-                <ResetButton
-                  onClick={handleReset}
-                  tooltip="Reset to default example"
-                  hasModifiedData={hasModifiedData}
-                  disabled={isAtDefault}
-                />
-                <ClearButton
-                  onClick={handleClear}
-                  tooltip="Clear all inputs"
-                  hasModifiedData={hasModifiedData}
-                  disabled={inputText.trim() === ""}
-                />
-              </div>
+              <ToolButtonGroup>
+                <ActionButtonGroup>
+                  <ToolButton
+                    variant="custom"
+                    onClick={generateQR}
+                    disabled={!inputText.trim()}
+                    tooltip="Generate QR Code from input"
+                  >
+                    Generate QR Code
+                  </ToolButton>
+                  {qrUrl ? (
+                    <>
+                      <ToolButton
+                        variant="download"
+                        onClick={downloadQR}
+                        tooltip="Download QR code as SVG"
+                      >
+                        Download
+                      </ToolButton>
+                      <ToolButton
+                        variant="copy"
+                        onClick={copyQRUrl}
+                        tooltip="Copy QR code URL to clipboard"
+                      >
+                        Copy
+                      </ToolButton>
+                    </>
+                  ) : null}
+                </ActionButtonGroup>
+                <DataButtonGroup>
+                  <ResetButton
+                    onClick={handleReset}
+                    tooltip="Reset to default example"
+                    hasModifiedData={hasModifiedData}
+                    disabled={isAtDefault}
+                  />
+                  <ClearButton
+                    onClick={handleClear}
+                    tooltip="Clear all inputs"
+                    hasModifiedData={hasModifiedData}
+                    disabled={inputText.trim() === ""}
+                  />
+                </DataButtonGroup>
+              </ToolButtonGroup>
             </CardContent>
           </Card>
 

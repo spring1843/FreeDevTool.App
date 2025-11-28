@@ -8,6 +8,9 @@ import {
   ToolButton,
   ResetButton,
   ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
 } from "@/components/ui/tool-button";
 import { DEFAULT_JWT } from "@/data/defaults";
 import { useTheme } from "@/providers/theme-provider";
@@ -158,33 +161,37 @@ export default function JWTDecoder() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="mb-4 flex gap-3">
-            <ToolButton
-              variant="custom"
-              onClick={decodeToken}
-              icon={<Key className="w-4 h-4 mr-2" />}
-              tooltip="Decode JWT token"
-            >
-              Decode
-            </ToolButton>
-            <ResetButton
-              onClick={handleReset}
-              tooltip="Reset to default token"
-              hasModifiedData={hasModifiedData}
-              disabled={isAtDefault}
-            />
-            <ClearButton
-              onClick={handleClear}
-              tooltip="Clear all inputs"
-              hasModifiedData={hasModifiedData}
-              disabled={
-                token.trim() === "" &&
-                header.trim() === "" &&
-                payload.trim() === "" &&
-                signature.trim() === ""
-              }
-            />
-          </div>
+          <ToolButtonGroup className="mb-4">
+            <ActionButtonGroup>
+              <ToolButton
+                variant="custom"
+                onClick={decodeToken}
+                icon={<Key className="w-4 h-4 mr-2" />}
+                tooltip="Decode JWT token"
+              >
+                Decode
+              </ToolButton>
+            </ActionButtonGroup>
+            <DataButtonGroup>
+              <ResetButton
+                onClick={handleReset}
+                tooltip="Reset to default token"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={handleClear}
+                tooltip="Clear all inputs"
+                hasModifiedData={hasModifiedData}
+                disabled={
+                  token.trim() === "" &&
+                  header.trim() === "" &&
+                  payload.trim() === "" &&
+                  signature.trim() === ""
+                }
+              />
+            </DataButtonGroup>
+          </ToolButtonGroup>
           <TextArea
             id="input"
             value={token}

@@ -1,11 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Label } from "@/components/ui/label";
-import { Link, Globe, Hash, Share } from "lucide-react";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import { Link, Globe, Hash } from "lucide-react";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import {
   updateURL,
   copyShareableURL,
@@ -151,49 +157,44 @@ export default function URLToJSON() {
                 </div>
               ) : null}
 
-              <div className="flex gap-2">
-                <Button
-                  onClick={handleParseURL}
-                  className="flex-1"
-                  data-testid="parse-button"
-                >
-                  <Globe className="w-4 h-4 mr-2" />
-                  Parse URL
-                </Button>
-
-                <Button
-                  onClick={shareConverter}
-                  variant="outline"
-                  data-testid="share-converter-button"
-                >
-                  <Share className="w-4 h-4 mr-2" />
-                  Share
-                </Button>
-              </div>
-
-              <div className="flex gap-2">
-                <Button
-                  onClick={loadExample}
-                  variant="outline"
-                  size="sm"
-                  className="flex-1"
-                  data-testid="load-example-button"
-                >
-                  Load Example
-                </Button>
-                <ResetButton
-                  onClick={handleReset}
-                  tooltip="Reset to default URL"
-                  hasModifiedData={hasModifiedData}
-                  disabled={isAtDefault}
-                />
-                <ClearButton
-                  onClick={clearInput}
-                  tooltip="Clear URL input"
-                  hasModifiedData={hasModifiedData}
-                  disabled={inputUrl.trim() === ""}
-                />
-              </div>
+              <ToolButtonGroup>
+                <ActionButtonGroup>
+                  <ToolButton
+                    variant="custom"
+                    onClick={handleParseURL}
+                    tooltip="Parse URL into JSON components"
+                    icon={<Globe className="w-4 h-4 mr-2" />}
+                  >
+                    Parse URL
+                  </ToolButton>
+                  <ToolButton
+                    variant="share"
+                    onClick={shareConverter}
+                    tooltip="Copy shareable URL to clipboard"
+                  />
+                  <ToolButton
+                    variant="custom"
+                    onClick={loadExample}
+                    tooltip="Load a complex example URL"
+                  >
+                    Load Example
+                  </ToolButton>
+                </ActionButtonGroup>
+                <DataButtonGroup>
+                  <ResetButton
+                    onClick={handleReset}
+                    tooltip="Reset to default URL"
+                    hasModifiedData={hasModifiedData}
+                    disabled={isAtDefault}
+                  />
+                  <ClearButton
+                    onClick={clearInput}
+                    tooltip="Clear URL input"
+                    hasModifiedData={hasModifiedData}
+                    disabled={inputUrl.trim() === ""}
+                  />
+                </DataButtonGroup>
+              </ToolButtonGroup>
             </CardContent>
           </Card>
         </div>

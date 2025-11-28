@@ -5,7 +5,12 @@ import { Badge } from "@/components/ui/badge";
 import { countTextStats } from "@/lib/text-tools";
 import { FileText, Hash, Type, List, FileIcon, BarChart3 } from "lucide-react";
 import { usePersistentForm } from "@/hooks/use-persistent-state";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import { DEFAULT_TEXT_COUNTER } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
@@ -112,20 +117,22 @@ export default function TextCounter() {
               fileExtension="txt"
               theme={theme}
             />
-            <div className="mt-4 flex justify-end gap-2">
-              <ResetButton
-                onClick={resetFields}
-                tooltip="Reset to default example"
-                hasModifiedData={hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={handleClear}
-                tooltip="Clear text input"
-                hasModifiedData={hasModifiedData}
-                disabled={fields.text.trim() === ""}
-              />
-            </div>
+            <ToolButtonGroup className="mt-4 justify-end">
+              <DataButtonGroup>
+                <ResetButton
+                  onClick={resetFields}
+                  tooltip="Reset to default example"
+                  hasModifiedData={hasModifiedData}
+                  disabled={isAtDefault}
+                />
+                <ClearButton
+                  onClick={handleClear}
+                  tooltip="Clear text input"
+                  hasModifiedData={hasModifiedData}
+                  disabled={fields.text.trim() === ""}
+                />
+              </DataButtonGroup>
+            </ToolButtonGroup>
           </CardContent>
         </Card>
 

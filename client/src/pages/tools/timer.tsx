@@ -22,7 +22,6 @@ import {
   X,
   Timer as TimerIcon,
   VolumeX,
-  Share,
 } from "lucide-react";
 import {
   formatTimerTime,
@@ -31,6 +30,12 @@ import {
 } from "@/lib/time-tools";
 import { getParam, updateURL, copyShareableURL } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
+import {
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 interface TimerInstance {
   id: string;
@@ -418,33 +423,34 @@ export default function Timer() {
             and Escape for quick control.
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button
-            onClick={() => setShowAddTimer(!showAddTimer)}
-            data-testid="add-timer-toggle"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Timer
-          </Button>
-          {timers.length > 0 && (
+        <ToolButtonGroup>
+          <ActionButtonGroup>
             <Button
-              onClick={stopAllTimers}
-              variant="outline"
-              data-testid="stop-all-timers"
+              onClick={() => setShowAddTimer(!showAddTimer)}
+              data-testid="add-timer-toggle"
             >
-              <Square className="w-4 h-4 mr-2" />
-              Stop All
+              <Plus className="w-4 h-4 mr-2" />
+              Add Timer
             </Button>
-          )}
-          <Button
-            onClick={copyShareURL}
-            variant="outline"
-            size="icon"
-            data-testid="share-timer"
-          >
-            <Share className="w-4 h-4" />
-          </Button>
-        </div>
+            {timers.length > 0 && (
+              <Button
+                onClick={stopAllTimers}
+                variant="outline"
+                data-testid="stop-all-timers"
+              >
+                <Square className="w-4 h-4 mr-2" />
+                Stop All
+              </Button>
+            )}
+          </ActionButtonGroup>
+          <DataButtonGroup>
+            <ToolButton
+              variant="share"
+              onClick={copyShareURL}
+              tooltip="Copy shareable timer URL"
+            />
+          </DataButtonGroup>
+        </ToolButtonGroup>
       </div>
 
       {/* Add Timer Form */}

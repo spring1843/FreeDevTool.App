@@ -1,12 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { formatJSONC } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -112,23 +118,33 @@ export default function JSONCFormatter() {
               theme={theme}
               data-default-input="true"
             />
-            <div className="flex gap-2 flex-wrap">
-              <Button onClick={formatCode} className="flex-1 sm:flex-none">
-                Format JSONC
-              </Button>
-              <ResetButton
-                onClick={handleReset}
-                tooltip="Reset to default example"
-                hasModifiedData={hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={handleClear}
-                tooltip="Clear all inputs"
-                hasModifiedData={hasModifiedData}
-                disabled={input.trim() === "" && output.trim() === ""}
-              />
-            </div>
+            <ToolButtonGroup>
+              <ActionButtonGroup>
+                <ToolButton
+                  variant="custom"
+                  onClick={formatCode}
+                  icon={<Code className="w-4 h-4 mr-2" />}
+                  tooltip="Format and beautify JSONC code"
+                  className="flex-1 sm:flex-none"
+                >
+                  Format JSONC
+                </ToolButton>
+              </ActionButtonGroup>
+              <DataButtonGroup>
+                <ResetButton
+                  onClick={handleReset}
+                  tooltip="Reset to default example"
+                  hasModifiedData={hasModifiedData}
+                  disabled={isAtDefault}
+                />
+                <ClearButton
+                  onClick={handleClear}
+                  tooltip="Clear all inputs"
+                  hasModifiedData={hasModifiedData}
+                  disabled={input.trim() === "" && output.trim() === ""}
+                />
+              </DataButtonGroup>
+            </ToolButtonGroup>
           </CardContent>
         </Card>
 

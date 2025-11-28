@@ -14,7 +14,14 @@ import { useTheme } from "@/providers/theme-provider";
 import { Badge } from "@/components/ui/badge";
 import { RefreshCw, Copy } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { getToolByPath } from "@/data/tools";
@@ -206,15 +213,23 @@ export default function UUIDGenerator() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between">
-            <div className="flex gap-3">
-              <Button
+          <ToolButtonGroup>
+            <ActionButtonGroup>
+              <ToolButton
+                variant="custom"
                 onClick={generateUUID}
+                tooltip="Generate new UUIDs"
                 className="bg-purple-600 hover:bg-purple-700 text-white"
+                icon={<RefreshCw className="w-4 h-4 mr-2" />}
               >
-                <RefreshCw className="w-4 h-4 mr-2" />
                 Generate UUIDs
-              </Button>
+              </ToolButton>
+              <div className="flex items-center gap-2">
+                <Badge variant="outline">Version {version}</Badge>
+                <Badge variant="outline">{getFormatDescription(format)}</Badge>
+              </div>
+            </ActionButtonGroup>
+            <DataButtonGroup>
               <ResetButton
                 onClick={handleReset}
                 tooltip="Reset all settings to defaults"
@@ -227,12 +242,8 @@ export default function UUIDGenerator() {
                 hasModifiedData={hasModifiedData}
                 disabled={uuids.length === 0}
               />
-            </div>
-            <div className="flex items-center gap-2">
-              <Badge variant="outline">Version {version}</Badge>
-              <Badge variant="outline">{getFormatDescription(format)}</Badge>
-            </div>
-          </div>
+            </DataButtonGroup>
+          </ToolButtonGroup>
         </CardContent>
       </Card>
 

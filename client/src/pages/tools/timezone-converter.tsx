@@ -3,16 +3,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Globe, Clock, ArrowRight, Copy, Check, RefreshCw, Share } from "lucide-react";
 import {
-  Globe,
-  Clock,
-  ArrowRight,
-  Copy,
-  Check,
-  RefreshCw,
-  Share,
-} from "lucide-react";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+  ResetButton,
+  ClearButton,
+  NowButton,
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { TimezoneSelector } from "@/components/ui/timezone-selector";
 import { getUserTimezone } from "@/lib/time-tools";
@@ -378,49 +378,46 @@ export default function TimezoneConverter() {
               />
             </div>
             <div className="flex items-end">
-              <Button
+              <NowButton
                 onClick={setCurrentDateTime}
-                variant="outline"
-                className="w-full"
-                data-testid="set-current-time-button"
-              >
-                <Clock className="w-4 h-4 mr-2" />
-                Now
-              </Button>
+                tooltip="Set to current date and time"
+                toastTitle="Time updated"
+                toastDescription="Set to current date and time"
+                iconOnly
+              />
             </div>
           </div>
 
-          <div className="flex gap-2 pt-4">
-            <Button
-              onClick={convertTimezones}
-              className="flex-1"
-              data-testid="convert-timezones-button"
-            >
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Convert Timezones
-            </Button>
-
-            <Button
-              onClick={shareConverter}
-              variant="outline"
-              data-testid="share-converter-button"
-            >
-              <Share className="w-4 h-4 mr-2" />
-              Share
-            </Button>
-            <ResetButton
-              onClick={handleReset}
-              tooltip="Reset to current time and defaults"
-              hasModifiedData={hasModifiedData}
-              disabled={isAtDefault}
-            />
-            <ClearButton
-              onClick={handleClear}
-              tooltip="Clear all inputs"
-              hasModifiedData={hasModifiedData}
-              disabled={sourceDate.trim() === "" && sourceTime.trim() === ""}
-            />
-          </div>
+          <ToolButtonGroup className="pt-4">
+            <ActionButtonGroup>
+              <Button
+                onClick={convertTimezones}
+                data-testid="convert-timezones-button"
+              >
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Convert Timezones
+              </Button>
+              <ToolButton
+                variant="share"
+                onClick={shareConverter}
+                tooltip="Copy shareable URL with current settings"
+              />
+            </ActionButtonGroup>
+            <DataButtonGroup>
+              <ResetButton
+                onClick={handleReset}
+                tooltip="Reset to current time and defaults"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={handleClear}
+                tooltip="Clear all inputs"
+                hasModifiedData={hasModifiedData}
+                disabled={sourceDate.trim() === "" && sourceTime.trim() === ""}
+              />
+            </DataButtonGroup>
+          </ToolButtonGroup>
         </CardContent>
       </Card>
 

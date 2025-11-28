@@ -10,6 +10,9 @@ import {
   ToolButton,
   ResetButton,
   ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
 } from "@/components/ui/tool-button";
 import { DEFAULT_BASE64 } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
@@ -116,44 +119,48 @@ export default function Base64Encoder() {
       ) : null}
 
       {/* Controls */}
-      <div className="mb-6 flex flex-wrap gap-3">
-        <ToolButton
-          variant="custom"
-          onClick={encode}
-          icon={<Lock className="w-4 h-4 mr-2" />}
-          tooltip="Encode plain text to Base64"
-        >
-          Encode
-        </ToolButton>
-        <ToolButton
-          variant="custom"
-          onClick={decode}
-          icon={<Unlock className="w-4 h-4 mr-2" />}
-          tooltip="Decode Base64 to plain text"
-        >
-          Decode
-        </ToolButton>
-        <ToolButton
-          variant="custom"
-          onClick={swapContent}
-          icon={<ArrowRightLeft className="w-4 h-4 mr-2" />}
-          tooltip="Swap content between input and output"
-        >
-          Swap
-        </ToolButton>
-        <ResetButton
-          onClick={handleReset}
-          tooltip="Reset to default text example"
-          hasModifiedData={hasModifiedData}
-          disabled={isAtDefault}
-        />
-        <ClearButton
-          onClick={handleClear}
-          tooltip="Clear all inputs"
-          hasModifiedData={hasModifiedData}
-          disabled={plainText.trim() === "" && encodedText.trim() === ""}
-        />
-      </div>
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={encode}
+            icon={<Lock className="w-4 h-4 mr-2" />}
+            tooltip="Encode plain text to Base64"
+          >
+            Encode
+          </ToolButton>
+          <ToolButton
+            variant="custom"
+            onClick={decode}
+            icon={<Unlock className="w-4 h-4 mr-2" />}
+            tooltip="Decode Base64 to plain text"
+          >
+            Decode
+          </ToolButton>
+          <ToolButton
+            variant="custom"
+            onClick={swapContent}
+            icon={<ArrowRightLeft className="w-4 h-4 mr-2" />}
+            tooltip="Swap content between input and output"
+          >
+            Swap
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default text example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={plainText.trim() === "" && encodedText.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       {/* Editor Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

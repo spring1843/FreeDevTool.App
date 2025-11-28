@@ -3,13 +3,18 @@ import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TimezoneSelector } from "@/components/ui/timezone-selector";
 import { getUserTimezone } from "@/lib/time-tools";
-import { Clock, Copy, Check, RefreshCw } from "lucide-react";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import { Clock, Copy, Check } from "lucide-react";
+import {
+  ResetButton,
+  ClearButton,
+  NowButton,
+  ToolButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 interface TimeFormat {
   name: string;
@@ -339,27 +344,29 @@ export default function TimeFormatter() {
                 data-testid="input-timezone-select"
               />
             </div>
-            <div className="flex items-end gap-2">
-              <Button
-                onClick={setCurrentDateTime}
-                variant="outline"
-                data-testid="set-current-button"
-              >
-                <RefreshCw className="w-4 h-4 mr-2" />
-                Now
-              </Button>
-              <ResetButton
-                onClick={setCurrentDateTime}
-                tooltip="Reset to current time"
-                hasModifiedData={hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={handleClear}
-                tooltip="Clear all inputs"
-                hasModifiedData={hasModifiedData}
-                disabled={inputDate.trim() === "" && inputTime.trim() === ""}
-              />
+            <div className="flex items-end">
+              <ToolButtonGroup>
+                <DataButtonGroup>
+                  <NowButton
+                    onClick={setCurrentDateTime}
+                    tooltip="Set to current date and time"
+                    toastTitle="Time updated"
+                    toastDescription="Set to current date and time"
+                  />
+                  <ResetButton
+                    onClick={setCurrentDateTime}
+                    tooltip="Reset to current time"
+                    hasModifiedData={hasModifiedData}
+                    disabled={isAtDefault}
+                  />
+                  <ClearButton
+                    onClick={handleClear}
+                    tooltip="Clear all inputs"
+                    hasModifiedData={hasModifiedData}
+                    disabled={inputDate.trim() === "" && inputTime.trim() === ""}
+                  />
+                </DataButtonGroup>
+              </ToolButtonGroup>
             </div>
           </div>
         </CardContent>

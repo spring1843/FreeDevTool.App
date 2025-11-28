@@ -15,7 +15,14 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Hash, CheckCircle, XCircle, Eye, EyeOff } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -341,29 +348,49 @@ export default function BcryptHash() {
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             Generated Hash
-            <div className="flex gap-2">
-              <Badge variant="outline">{rounds} rounds</Badge>
-              <div className="flex gap-2">
-                <ResetButton
-                  onClick={handleReset}
-                  tooltip="Reset to default example"
-                  hasModifiedData={hasModifiedData}
-                  disabled={isAtDefault}
-                />
-                <ClearButton
-                  onClick={handleClear}
-                  tooltip="Clear all inputs"
-                  hasModifiedData={hasModifiedData}
-                  disabled={
-                    plaintext.trim() === "" &&
-                    hash.trim() === "" &&
-                    verifyText.trim() === ""
-                  }
-                />
-              </div>
-            </div>
+            <Badge variant="outline">{rounds} rounds</Badge>
           </CardTitle>
         </CardHeader>
+        <ToolButtonGroup className="px-6 pb-4">
+          <ActionButtonGroup>
+            <ToolButton
+              variant="custom"
+              onClick={generateHash}
+              disabled={isHashing || !plaintext.trim()}
+              icon={<Hash className="w-4 h-4 mr-2" />}
+              tooltip="Generate bcrypt hash from password"
+            >
+              {isHashing ? "Generating..." : "Generate Hash"}
+            </ToolButton>
+            <ToolButton
+              variant="custom"
+              onClick={verifyHash}
+              disabled={isVerifying || !verifyText.trim() || !hash.trim()}
+              icon={<CheckCircle className="w-4 h-4 mr-2" />}
+              tooltip="Verify password against hash"
+            >
+              {isVerifying ? "Verifying..." : "Verify"}
+            </ToolButton>
+          </ActionButtonGroup>
+          <DataButtonGroup>
+            <ResetButton
+              onClick={handleReset}
+              tooltip="Reset to default example"
+              hasModifiedData={hasModifiedData}
+              disabled={isAtDefault}
+            />
+            <ClearButton
+              onClick={handleClear}
+              tooltip="Clear all inputs"
+              hasModifiedData={hasModifiedData}
+              disabled={
+                plaintext.trim() === "" &&
+                hash.trim() === "" &&
+                verifyText.trim() === ""
+              }
+            />
+          </DataButtonGroup>
+        </ToolButtonGroup>
         <CardContent>
           <TextArea
             id="output"

@@ -13,7 +13,13 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Play, Pause, Square, Clock } from "lucide-react";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { getToolByPath } from "@/data/tools";
@@ -421,50 +427,53 @@ export default function Countdown() {
             </div>
           </div>
 
-          <div className="flex gap-3">
-            {!isActive ? (
-              <Button
-                onClick={startCountdown}
-                disabled={!targetDate || !targetTime}
-                className="bg-green-600 hover:bg-green-700 text-white disabled:opacity-50"
-                data-testid="button-start"
-              >
-                <Play className="w-4 h-4 mr-2" />
-                Start (Enter)
-              </Button>
-            ) : (
-              <Button
-                onClick={pauseCountdown}
-                className="bg-yellow-600 hover:bg-yellow-700 text-white"
-                data-testid="button-pause"
-              >
-                <Pause className="w-4 h-4 mr-2" />
-                Pause (Space)
-              </Button>
-            )}
+          <ToolButtonGroup>
+            <ActionButtonGroup>
+              {!isActive ? (
+                <Button
+                  onClick={startCountdown}
+                  disabled={!targetDate || !targetTime}
+                  className="bg-green-600 hover:bg-green-700 text-white disabled:opacity-50"
+                  data-testid="button-start"
+                >
+                  <Play className="w-4 h-4 mr-2" />
+                  Start (Enter)
+                </Button>
+              ) : (
+                <Button
+                  onClick={pauseCountdown}
+                  className="bg-yellow-600 hover:bg-yellow-700 text-white"
+                  data-testid="button-pause"
+                >
+                  <Pause className="w-4 h-4 mr-2" />
+                  Pause (Space)
+                </Button>
+              )}
 
-            <Button
-              onClick={stopCountdown}
-              variant="outline"
-              data-testid="button-stop"
-            >
-              <Square className="w-4 h-4 mr-2" />
-              Stop (Esc)
-            </Button>
-
-            <ResetButton
-              onClick={handleReset}
-              tooltip="Reset to New Year countdown"
-              hasModifiedData={hasModifiedData}
-              disabled={isAtDefault}
-            />
-            <ClearButton
-              onClick={handleClear}
-              tooltip="Clear date and time"
-              hasModifiedData={hasModifiedData}
-              disabled={targetDate === "" && targetTime === ""}
-            />
-          </div>
+              <Button
+                onClick={stopCountdown}
+                variant="outline"
+                data-testid="button-stop"
+              >
+                <Square className="w-4 h-4 mr-2" />
+                Stop (Esc)
+              </Button>
+            </ActionButtonGroup>
+            <DataButtonGroup>
+              <ResetButton
+                onClick={handleReset}
+                tooltip="Reset to New Year countdown"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={handleClear}
+                tooltip="Clear date and time"
+                hasModifiedData={hasModifiedData}
+                disabled={targetDate === "" && targetTime === ""}
+              />
+            </DataButtonGroup>
+          </ToolButtonGroup>
         </CardContent>
       </Card>
 

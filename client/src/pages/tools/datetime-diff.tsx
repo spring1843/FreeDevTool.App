@@ -3,11 +3,17 @@ import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CalendarDays, Clock, Calculator, Copy, Check } from "lucide-react";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import { CalendarDays, Calculator, Copy, Check } from "lucide-react";
+import {
+  ResetButton,
+  ClearButton,
+  NowButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import { useToast } from "@/hooks/use-toast";
 import { usePersistentForm } from "@/hooks/use-persistent-state";
 import { getUserTimezone } from "@/lib/time-tools";
@@ -378,15 +384,13 @@ export default function DateTimeDiff() {
                   <CalendarDays className="w-5 h-5 mr-2" />
                   Start Date & Time
                 </div>
-                <Button
-                  size="sm"
-                  variant="outline"
+                <NowButton
                   onClick={() => setCurrentDateTime("start")}
-                  data-testid="set-current-start"
-                >
-                  <Clock className="w-3 h-3 mr-1" />
-                  Now
-                </Button>
+                  tooltip="Set start to current time"
+                  toastTitle="Start time updated"
+                  toastDescription="Set to current date and time"
+                  iconOnly
+                />
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -426,15 +430,13 @@ export default function DateTimeDiff() {
                   <CalendarDays className="w-5 h-5 mr-2" />
                   End Date & Time
                 </div>
-                <Button
-                  size="sm"
-                  variant="outline"
+                <NowButton
                   onClick={() => setCurrentDateTime("end")}
-                  data-testid="set-current-end"
-                >
-                  <Clock className="w-3 h-3 mr-1" />
-                  Now
-                </Button>
+                  tooltip="Set end to current time"
+                  toastTitle="End time updated"
+                  toastDescription="Set to current date and time"
+                  iconOnly
+                />
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -554,20 +556,22 @@ export default function DateTimeDiff() {
           </Card>
 
           {/* Controls */}
-          <div className="flex gap-2">
-            <ResetButton
-              onClick={clearAll}
-              tooltip="Reset to default values"
-              hasModifiedData={hasModifiedData}
-              disabled={isAtDefault}
-            />
-            <ClearButton
-              onClick={clearAll}
-              tooltip="Clear all date inputs"
-              hasModifiedData={hasModifiedData}
-              disabled={!hasModifiedData}
-            />
-          </div>
+          <ToolButtonGroup>
+            <DataButtonGroup>
+              <ResetButton
+                onClick={clearAll}
+                tooltip="Reset to default values"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={clearAll}
+                tooltip="Clear all date inputs"
+                hasModifiedData={hasModifiedData}
+                disabled={!hasModifiedData}
+              />
+            </DataButtonGroup>
+          </ToolButtonGroup>
         </div>
 
         {/* Results Section */}

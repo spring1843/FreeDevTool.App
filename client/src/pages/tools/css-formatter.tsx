@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { formatCSS, formatLESS, formatSCSS } from "@/lib/formatters";
@@ -14,7 +13,14 @@ import {
 import { Code, Minimize2 } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { useLocation } from "wouter";
-import { ResetButton, ClearButton } from "@/components/ui/tool-button";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_CSS, DEFAULT_SCSS, DEFAULT_LESS } from "@/data/defaults";
@@ -192,22 +198,30 @@ export default function CSSFormatter() {
             </SelectContent>
           </Select>
         </div>
+      </div>
 
-        <div className="flex gap-4">
-          <Button
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
             onClick={() => formatCode(false)}
+            icon={<Code className="w-4 h-4 mr-2" />}
+            tooltip="Format and beautify CSS code"
             className="bg-green-600 hover:bg-green-700 text-white"
           >
-            <Code className="w-4 h-4 mr-2" />
             Beautify Code
-          </Button>
-          <Button
+          </ToolButton>
+          <ToolButton
+            variant="custom"
             onClick={() => formatCode(true)}
+            icon={<Minimize2 className="w-4 h-4 mr-2" />}
+            tooltip="Minify CSS to reduce file size"
             className="bg-blue-600 hover:bg-blue-700 text-white"
           >
-            <Minimize2 className="w-4 h-4 mr-2" />
             Minify Code
-          </Button>
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
           <ResetButton
             onClick={handleReset}
             tooltip="Reset to default example"
@@ -220,8 +234,8 @@ export default function CSSFormatter() {
             hasModifiedData={hasModifiedData}
             disabled={input.trim() === "" && output.trim() === ""}
           />
-        </div>
-      </div>
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>

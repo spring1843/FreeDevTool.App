@@ -3,10 +3,16 @@ import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Keyboard, RotateCcw, Info } from "lucide-react";
+import { Keyboard, Info, Play, Square } from "lucide-react";
+import {
+  ToolButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 interface KeyPress {
   key: string;
@@ -139,6 +145,8 @@ export default function KeyboardTest() {
     return colors[category as keyof typeof colors] || colors.other;
   };
 
+  const hasHistory = keyHistory.length > 0;
+
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
@@ -161,25 +169,30 @@ export default function KeyboardTest() {
               <Keyboard className="w-5 h-5 mr-2" />
               Keyboard Testing
             </div>
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={clearHistory}
-                data-testid="clear-history"
-              >
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Clear History
-              </Button>
-              <Button
-                variant={isActive ? "destructive" : "default"}
-                size="sm"
-                onClick={toggleTesting}
-                data-testid="toggle-testing"
-              >
-                {isActive ? "Stop Testing" : "Start Testing"}
-              </Button>
-            </div>
+            <ToolButtonGroup>
+              <ActionButtonGroup>
+                <ToolButton
+                  variant="custom"
+                  onClick={toggleTesting}
+                  tooltip={isActive ? "Stop keyboard testing" : "Start keyboard testing"}
+                  icon={isActive ? <Square className="w-4 h-4 mr-2" /> : <Play className="w-4 h-4 mr-2" />}
+                  className={isActive ? "bg-destructive text-destructive-foreground hover:bg-destructive/90" : ""}
+                  size="sm"
+                >
+                  {isActive ? "Stop Testing" : "Start Testing"}
+                </ToolButton>
+              </ActionButtonGroup>
+              <DataButtonGroup>
+                <ClearButton
+                  onClick={clearHistory}
+                  tooltip="Clear key press history"
+                  hasModifiedData={hasHistory}
+                  disabled={!hasHistory}
+                  toastTitle="History cleared"
+                  toastDescription="Key press history has been cleared"
+                />
+              </DataButtonGroup>
+            </ToolButtonGroup>
           </CardTitle>
         </CardHeader>
         <CardContent>

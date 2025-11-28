@@ -24,6 +24,11 @@ import {
   SkipForward,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import {
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+} from "@/components/ui/tool-button";
 
 interface UnicodeBlock {
   name: string;
@@ -538,50 +543,52 @@ export default function UnicodeCharacters() {
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <div className="flex gap-1">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => setCurrentPage(0)}
-                        disabled={currentPage === 0}
-                        data-testid="first-page-button"
-                      >
-                        <SkipBack className="w-3 h-3" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() =>
-                          setCurrentPage(Math.max(0, currentPage - 1))
-                        }
-                        disabled={currentPage === 0}
-                        data-testid="prev-page-button"
-                      >
-                        <ChevronLeft className="w-3 h-3" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() =>
-                          setCurrentPage(
-                            Math.min(getTotalPages() - 1, currentPage + 1)
-                          )
-                        }
-                        disabled={currentPage >= getTotalPages() - 1}
-                        data-testid="next-page-button"
-                      >
-                        <ChevronRight className="w-3 h-3" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => setCurrentPage(getTotalPages() - 1)}
-                        disabled={currentPage >= getTotalPages() - 1}
-                        data-testid="last-page-button"
-                      >
-                        <SkipForward className="w-3 h-3" />
-                      </Button>
-                    </div>
+                    <ToolButtonGroup>
+                      <ActionButtonGroup>
+                        <ToolButton
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setCurrentPage(0)}
+                          disabled={currentPage === 0}
+                          tooltip="Go to first page"
+                          icon={<SkipBack className="w-3 h-3" />}
+                          data-testid="first-page-button"
+                        />
+                        <ToolButton
+                          size="sm"
+                          variant="outline"
+                          onClick={() =>
+                            setCurrentPage(Math.max(0, currentPage - 1))
+                          }
+                          disabled={currentPage === 0}
+                          tooltip="Go to previous page"
+                          icon={<ChevronLeft className="w-3 h-3" />}
+                          data-testid="prev-page-button"
+                        />
+                        <ToolButton
+                          size="sm"
+                          variant="outline"
+                          onClick={() =>
+                            setCurrentPage(
+                              Math.min(getTotalPages() - 1, currentPage + 1)
+                            )
+                          }
+                          disabled={currentPage >= getTotalPages() - 1}
+                          tooltip="Go to next page"
+                          icon={<ChevronRight className="w-3 h-3" />}
+                          data-testid="next-page-button"
+                        />
+                        <ToolButton
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setCurrentPage(getTotalPages() - 1)}
+                          disabled={currentPage >= getTotalPages() - 1}
+                          tooltip="Go to last page"
+                          icon={<SkipForward className="w-3 h-3" />}
+                          data-testid="last-page-button"
+                        />
+                      </ActionButtonGroup>
+                    </ToolButtonGroup>
 
                     <div className="flex gap-1">
                       <Input
@@ -662,79 +669,81 @@ export default function UnicodeCharacters() {
                       </div>
 
                       <div className="flex flex-col gap-2">
-                        <div className="flex gap-1">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => setCustomRangePage(0)}
-                            disabled={customRangePage === 0}
-                            data-testid="custom-first-page-button"
-                          >
-                            <SkipBack className="w-3 h-3" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() =>
-                              setCustomRangePage(
-                                Math.max(0, customRangePage - 1)
-                              )
-                            }
-                            disabled={customRangePage === 0}
-                            data-testid="custom-prev-page-button"
-                          >
-                            <ChevronLeft className="w-3 h-3" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() =>
-                              setCustomRangePage(
-                                Math.min(
-                                  getCustomRangeTotalPages(
-                                    customRange.start,
-                                    customRange.end
-                                  ) - 1,
-                                  customRangePage + 1
+                        <ToolButtonGroup>
+                          <ActionButtonGroup>
+                            <ToolButton
+                              size="sm"
+                              variant="outline"
+                              onClick={() => setCustomRangePage(0)}
+                              disabled={customRangePage === 0}
+                              tooltip="Go to first page"
+                              icon={<SkipBack className="w-3 h-3" />}
+                              data-testid="custom-first-page-button"
+                            />
+                            <ToolButton
+                              size="sm"
+                              variant="outline"
+                              onClick={() =>
+                                setCustomRangePage(
+                                  Math.max(0, customRangePage - 1)
                                 )
-                              )
-                            }
-                            disabled={
-                              customRangePage >=
-                              getCustomRangeTotalPages(
-                                customRange.start,
-                                customRange.end
-                              ) -
-                                1
-                            }
-                            data-testid="custom-next-page-button"
-                          >
-                            <ChevronRight className="w-3 h-3" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() =>
-                              setCustomRangePage(
+                              }
+                              disabled={customRangePage === 0}
+                              tooltip="Go to previous page"
+                              icon={<ChevronLeft className="w-3 h-3" />}
+                              data-testid="custom-prev-page-button"
+                            />
+                            <ToolButton
+                              size="sm"
+                              variant="outline"
+                              onClick={() =>
+                                setCustomRangePage(
+                                  Math.min(
+                                    getCustomRangeTotalPages(
+                                      customRange.start,
+                                      customRange.end
+                                    ) - 1,
+                                    customRangePage + 1
+                                  )
+                                )
+                              }
+                              disabled={
+                                customRangePage >=
                                 getCustomRangeTotalPages(
                                   customRange.start,
                                   customRange.end
-                                ) - 1
-                              )
-                            }
-                            disabled={
-                              customRangePage >=
-                              getCustomRangeTotalPages(
-                                customRange.start,
-                                customRange.end
-                              ) -
-                                1
-                            }
-                            data-testid="custom-last-page-button"
-                          >
-                            <SkipForward className="w-3 h-3" />
-                          </Button>
-                        </div>
+                                ) -
+                                  1
+                              }
+                              tooltip="Go to next page"
+                              icon={<ChevronRight className="w-3 h-3" />}
+                              data-testid="custom-next-page-button"
+                            />
+                            <ToolButton
+                              size="sm"
+                              variant="outline"
+                              onClick={() =>
+                                setCustomRangePage(
+                                  getCustomRangeTotalPages(
+                                    customRange.start,
+                                    customRange.end
+                                  ) - 1
+                                )
+                              }
+                              disabled={
+                                customRangePage >=
+                                getCustomRangeTotalPages(
+                                  customRange.start,
+                                  customRange.end
+                                ) -
+                                  1
+                              }
+                              tooltip="Go to last page"
+                              icon={<SkipForward className="w-3 h-3" />}
+                              data-testid="custom-last-page-button"
+                            />
+                          </ActionButtonGroup>
+                        </ToolButtonGroup>
 
                         <div className="text-xs text-slate-500">
                           {CUSTOM_CHARS_PER_PAGE} characters per page
