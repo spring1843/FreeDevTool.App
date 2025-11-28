@@ -25,6 +25,8 @@ We strive to:
 - Provide immediate feedback for user actions with a toast notification. This confirms that the action was registered. Toasts can be disabled globally.
 - Do not request elevated permissions (e.g., camera access) on launch. Prompt for permissions only when the user explicitly tries to use the feature.
 - Updating tools causes changes in the URL of the application, this allows users to share URLs with others and be able to see the same things.
+- Tools should have a Reset button that resets the input values to default values, this button should be disabled if values are already equal to default values.
+- Tools should have a clear button which will clear all inputs so that the user can start fresh. If user has modified the data then he should be warned with an are you sure prompt, so that they don't mistakenly lose the data they entered.
 
 ### Buttons
 
