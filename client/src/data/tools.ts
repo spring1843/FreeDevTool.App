@@ -1318,21 +1318,42 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
+          notice: {
+            type: "tips",
+            title: "Character Limits You Should Know",
+            items: [
+              "Twitter/X: 280 chars (was 140 until 2017—doubled engagement)",
+              "Meta description (SEO): 155-160 chars before Google truncates",
+              "LinkedIn post: 3,000 chars, but only ~140 show before 'see more'",
+              "SMS: 160 chars per segment (longer = multiple messages = higher cost)",
+            ],
+          },
           sections: [
             {
-              title: "Features",
+              title: "For Writers & Students",
               items: [
-                "Counts characters, words, lines, and paragraphs",
-                "Reading time estimation",
-                "Monospace editor for clarity",
+                "Essay word counts: 500 (short), 1000-1500 (standard), 2500+ (research paper)",
+                "Blog posts: 1500-2500 words rank best in Google (Backlinko study)",
+                "Average reading speed: 200-250 words/minute (used for time estimates)",
+                "Academic tip: 'Characters no spaces' often required for abstracts",
               ],
             },
             {
-              title: "Use cases",
+              title: "For Developers & SEO",
               items: [
-                "Meet content length requirements",
-                "Estimate reading time",
-                "Analyze text density",
+                "Title tags: 50-60 chars for full display in search results",
+                "Alt text: Keep under 125 chars for screen reader compatibility",
+                "Commit messages: 50 chars subject line, 72 chars body (Git convention)",
+                "URL slugs: Shorter is better—under 60 chars ideal for sharing",
+              ],
+            },
+            {
+              title: "Fun Text Facts",
+              items: [
+                "Average English word: 4.5 characters",
+                "Longest English word: 45 letters (pneumonoultramicroscopicsilicovolcanoconiosis)",
+                "Hemingway's 6-word story: 'For sale: baby shoes, never worn.' = 33 chars",
+                "This tool counts UTF-8 bytes—emojis are 4 bytes each! 😀",
               ],
             },
           ],
