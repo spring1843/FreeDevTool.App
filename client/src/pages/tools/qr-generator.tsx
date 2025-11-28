@@ -464,17 +464,9 @@ export default function QRGenerator() {
 
       <div className="flex justify-center my-8" />
 
-      {/* Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle>QR Code Types & Usage</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {renderToolExplanations(
-            getToolByPath("/tools/qr-generator")?.explanations
-          )}
-        </CardContent>
-      </Card>
+      {renderToolExplanations(
+        getToolByPath("/tools/qr-generator")?.explanations
+      )}
 
       <div className="flex justify-center mt-8" />
     </div>

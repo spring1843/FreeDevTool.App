@@ -142,16 +142,9 @@ export default function JSONCFormatter() {
         </Card>
       </div>
 
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>About JSONC Format</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {renderToolExplanations(
-            getToolByPath("/tools/jsonc-formatter")?.explanations
-          )}
-        </CardContent>
-      </Card>
+      {renderToolExplanations(
+        getToolByPath("/tools/jsonc-formatter")?.explanations
+      )}
     </div>
   );
 }

@@ -385,17 +385,9 @@ export default function URLToJSON() {
 
       <div className="flex justify-center my-8" />
 
-      {/* Information */}
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>About URL to JSON Converter</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {renderToolExplanations(
-            getToolByPath("/tools/url-to-json")?.explanations
-          )}
-        </CardContent>
-      </Card>
+      {renderToolExplanations(
+        getToolByPath("/tools/url-to-json")?.explanations
+      )}
 
       <div className="flex justify-center mt-8" />
     </div>

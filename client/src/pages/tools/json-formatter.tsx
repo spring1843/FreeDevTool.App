@@ -172,12 +172,9 @@ export default function JsonFormatter() {
         </Card>
       </div>
 
-      {/* Pro Tips */}
-      <div className="mt-8">
-        {renderToolExplanations(
-          getToolByPath("/tools/json-formatter")?.explanations
-        )}
-      </div>
+      {renderToolExplanations(
+        getToolByPath("/tools/json-formatter")?.explanations
+      )}
     </div>
   );
 }

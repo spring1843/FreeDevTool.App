@@ -484,17 +484,9 @@ export default function TimezoneConverter() {
         </Card>
       )}
 
-      {/* Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle>About Timezone Converter</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {renderToolExplanations(
-            getToolByPath("/tools/timezone-converter")?.explanations
-          )}
-        </CardContent>
-      </Card>
+      {renderToolExplanations(
+        getToolByPath("/tools/timezone-converter")?.explanations
+      )}
 
       <div className="flex justify-center mt-8" />
     </div>

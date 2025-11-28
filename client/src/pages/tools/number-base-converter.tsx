@@ -560,19 +560,10 @@ export default function NumberBaseConverter() {
       </div>
 
       <div className="flex justify-center my-8" />
-
-      {/* Information */}
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>About Number Base Converter</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {renderToolExplanations(
+  
             getToolByPath("/tools/number-base-converter")?.explanations
           )}
-        </CardContent>
-      </Card>
-
+   
       <div className="flex justify-center mt-8" />
     </div>
   );
