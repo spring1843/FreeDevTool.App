@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -26,8 +26,10 @@ import {
   Square,
   RotateCcw,
   Trash2,
+  Clock,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 interface ToolButtonProps {
   variant?:
@@ -167,22 +169,40 @@ export function ResetButton({
   tooltip = "Reset to default values",
   hasModifiedData = false,
   iconOnly = false,
+  showToast = true,
+  toastTitle = "Reset complete",
+  toastDescription = "All inputs have been reset to defaults",
 }: {
   onClick: () => void;
   disabled?: boolean;
   tooltip?: string;
   hasModifiedData?: boolean;
   iconOnly?: boolean;
+  showToast?: boolean;
+  toastTitle?: string;
+  toastDescription?: string;
 }) {
   const [showDialog, setShowDialog] = useState(false);
+  const { toast } = useToast();
 
   const handleClick = () => {
     if (hasModifiedData) {
       setShowDialog(true);
     } else {
       onClick();
+      if (showToast) {
+        toast({ title: toastTitle, description: toastDescription });
+      }
     }
   };
+
+  const handleConfirm = useCallback(() => {
+    onClick();
+    setShowDialog(false);
+    if (showToast) {
+      toast({ title: toastTitle, description: toastDescription });
+    }
+  }, [onClick, showToast, toast, toastTitle, toastDescription]);
 
   return (
     <>
@@ -196,6 +216,7 @@ export function ResetButton({
               data-testid="reset-button"
               variant="outline"
               size={iconOnly ? "icon" : "default"}
+              className="border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 hover:text-amber-800 dark:hover:text-amber-300"
             >
               <RefreshCw className={iconOnly ? "w-4 h-4" : "w-4 h-4 mr-2"} />
               {!iconOnly && "Reset"}
@@ -221,10 +242,7 @@ export function ResetButton({
               Cancel
             </AlertDialogCancel>
             <Button
-              onClick={() => {
-                onClick();
-                setShowDialog(false);
-              }}
+              onClick={handleConfirm}
               data-testid="button-reset-confirm"
               type="button"
             >
@@ -243,22 +261,40 @@ export function ClearButton({
   tooltip = "Clear all inputs to start fresh",
   hasModifiedData = false,
   iconOnly = false,
+  showToast = true,
+  toastTitle = "Cleared",
+  toastDescription = "All inputs have been cleared",
 }: {
   onClick: () => void;
   disabled?: boolean;
   tooltip?: string;
   hasModifiedData?: boolean;
   iconOnly?: boolean;
+  showToast?: boolean;
+  toastTitle?: string;
+  toastDescription?: string;
 }) {
   const [showDialog, setShowDialog] = useState(false);
+  const { toast } = useToast();
 
   const handleClick = () => {
     if (hasModifiedData) {
       setShowDialog(true);
     } else {
       onClick();
+      if (showToast) {
+        toast({ title: toastTitle, description: toastDescription });
+      }
     }
   };
+
+  const handleConfirm = useCallback(() => {
+    onClick();
+    setShowDialog(false);
+    if (showToast) {
+      toast({ title: toastTitle, description: toastDescription });
+    }
+  }, [onClick, showToast, toast, toastTitle, toastDescription]);
 
   return (
     <>
@@ -272,6 +308,7 @@ export function ClearButton({
               data-testid="clear-button"
               variant="outline"
               size={iconOnly ? "icon" : "default"}
+              className="border-rose-300 dark:border-rose-700 text-rose-700 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 hover:text-rose-800 dark:hover:text-rose-300"
             >
               <Trash2 className={iconOnly ? "w-4 h-4" : "w-4 h-4 mr-2"} />
               {!iconOnly && "Clear"}
@@ -297,10 +334,7 @@ export function ClearButton({
               Cancel
             </AlertDialogCancel>
             <Button
-              onClick={() => {
-                onClick();
-                setShowDialog(false);
-              }}
+              onClick={handleConfirm}
               data-testid="button-clear-confirm"
               type="button"
             >
@@ -329,5 +363,102 @@ export function ShareButton({
       disabled={disabled}
       tooltip={tooltip}
     />
+  );
+}
+
+export function NowButton({
+  onClick,
+  disabled,
+  tooltip = "Set to current time",
+  iconOnly = false,
+  showToast = true,
+  toastTitle = "Time updated",
+  toastDescription = "Set to current time",
+}: {
+  onClick: () => void;
+  disabled?: boolean;
+  tooltip?: string;
+  iconOnly?: boolean;
+  showToast?: boolean;
+  toastTitle?: string;
+  toastDescription?: string;
+}) {
+  const { toast } = useToast();
+
+  const handleClick = () => {
+    onClick();
+    if (showToast) {
+      toast({ title: toastTitle, description: toastDescription });
+    }
+  };
+
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            onClick={handleClick}
+            disabled={disabled}
+            data-testid="now-button"
+            variant="outline"
+            size={iconOnly ? "icon" : "default"}
+            className="border-sky-300 dark:border-sky-700 text-sky-700 dark:text-sky-400 hover:bg-sky-50 dark:hover:bg-sky-900/20 hover:text-sky-800 dark:hover:text-sky-300"
+          >
+            <Clock className={iconOnly ? "w-4 h-4" : "w-4 h-4 mr-2"} />
+            {!iconOnly && "Now"}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{tooltip}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
+
+export function ToolButtonGroup({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "flex flex-wrap items-center justify-between gap-2",
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+
+export function ActionButtonGroup({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={cn("flex flex-wrap items-center gap-2", className)}>
+      {children}
+    </div>
+  );
+}
+
+export function DataButtonGroup({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={cn("flex flex-wrap items-center gap-2", className)}>
+      {children}
+    </div>
   );
 }
