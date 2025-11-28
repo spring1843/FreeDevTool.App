@@ -41,7 +41,7 @@ The application is designed as a fully static site that can be deployed to any s
 **Key Deployment Decisions:**
 
 - **Static Site Generation**: Custom build script (`scripts/generate-static-routes.ts`) generates SEO-optimized HTML files for all 47 routes (homepage + 46 tools).
-- **Production Build**: `npm run build:static` creates a complete static site in `dist/public/` with proper directory structure for each tool.
+- **Production Build**: `make build` creates a complete static site in `dist/public/` with proper directory structure for each tool.
 - **Development Server**: Express.js with Vite integration for HMR during development only.
 - **No Backend Required**: All application logic runs client-side, enabling deployment to simple object storage or CDN.
 
