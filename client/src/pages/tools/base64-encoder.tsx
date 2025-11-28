@@ -167,7 +167,7 @@ export default function Base64Encoder() {
               rows={20}
               autoFocus={true}
               minHeight="400px"
-              fileExtension="txt"
+              fileExtension="html"
               theme={theme}
               data-default-input="true"
             />
