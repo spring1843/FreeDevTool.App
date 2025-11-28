@@ -12,15 +12,13 @@ import {
   ActionButtonGroup,
   DataButtonGroup,
 } from "@/components/ui/tool-button";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_JSON } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
-
-const DEFAULT_YAML_OUTPUT = convertJSONToYAML(DEFAULT_JSON).converted;
 
 export default function JSONYAMLConverter() {
   const tool = getToolByPath("/tools/json-yaml-converter");
@@ -50,16 +48,12 @@ export default function JSONYAMLConverter() {
 
   const handleJsonChange = (value: string) => {
     setJsonText(value);
-    if (yamlText) {
-      setYamlText("");
-    }
+    setError(null);
   };
 
   const handleYamlChange = (value: string) => {
     setYamlText(value);
-    if (jsonText !== DEFAULT_JSON) {
-      setJsonText("");
-    }
+    setError(null);
   };
 
   const handleReset = () => {
@@ -76,14 +70,8 @@ export default function JSONYAMLConverter() {
 
   const hasModifiedData =
     (jsonText !== DEFAULT_JSON && jsonText.trim() !== "") ||
-    (yamlText !== DEFAULT_YAML_OUTPUT && yamlText.trim() !== "");
-  const isAtDefault =
-    jsonText === DEFAULT_JSON &&
-    (yamlText === "" || yamlText === DEFAULT_YAML_OUTPUT);
-
-  useEffect(() => {
-    convertToYAML();
-  }, [convertToYAML]);
+    yamlText.trim() !== "";
+  const isAtDefault = jsonText === DEFAULT_JSON && yamlText === "";
 
   return (
     <div className="max-w-6xl mx-auto">

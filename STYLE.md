@@ -27,6 +27,7 @@ We strive to:
 - Updating tools causes changes in the URL of the application, this allows users to share URLs with others and be able to see the same things.
 - Tools should have a Reset button that resets the input values to default values, this button should be disabled if values are already equal to default values.
 - Tools should have a clear button which will clear all inputs so that the user can start fresh. If user has modified the data then he should be warned with an are you sure prompt, so that they don't mistakenly lose the data they entered.
+- In all tools, there are action buttons that do something and data buttons that manipulate input such as reset, clear and now in time related tools that set time to now. The action buttons should appear on left, and data buttons on right. Action buttons should have different colors (more vibrant) than data buttons (more dull) to visually indicate the difference.
 
 ### Buttons
 
