@@ -1129,32 +1129,54 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
+          notice: {
+            type: "tips",
+            title: "Why BCrypt is Special",
+            items: [
+              "Created in 1999 specifically for passwords—MD5/SHA were designed for speed, bcrypt for slowness",
+              "Intentionally slow: each round doubles the time, so 10→11 rounds = 2x slower to crack",
+              "Built-in salt means identical passwords produce different hashes every time",
+              "Future-proof: as hardware gets faster, just increase rounds (LinkedIn used 6 in 2012—now we use 10-12)",
+            ],
+          },
           sections: [
             {
-              title: "Features",
+              title: "Understanding Rounds (Cost Factor)",
               items: [
-                "Adaptive hashing function for passwords",
-                "Built-in salt generation",
-                "Configurable work factor (rounds)",
-                "Resistant to rainbow table attacks",
-                "Generate hashes and verify against plaintext",
+                {
+                  label: "8 rounds:",
+                  text: "~40ms — Too fast, only for development/testing",
+                },
+                {
+                  label: "10 rounds:",
+                  text: "~100ms — Minimum for production (default)",
+                },
+                {
+                  label: "12 rounds:",
+                  text: "~300ms — Good balance for most applications",
+                },
+                {
+                  label: "14+ rounds:",
+                  text: "~1s+ — High security, but may frustrate users on login",
+                },
               ],
             },
             {
-              title: "Security Notes",
+              title: "Real-World Security",
               items: [
-                "Use 10+ rounds for production",
-                "Higher rounds increase security but slow hashing",
-                "Each hash includes a unique salt",
-                "Same password produces different hashes",
+                "LinkedIn breach (2012): Used unsalted SHA-1—117M passwords cracked in days",
+                "Ashley Madison (2015): Used bcrypt—years later, only 4k of 36M passwords cracked",
+                "Rule of thumb: Increase rounds by 1 every 18 months as hardware improves",
+                "bcrypt truncates passwords at 72 bytes—longer passwords don't add security",
               ],
             },
             {
-              title: "Use cases",
+              title: "The $2b$ Format Explained",
               items: [
-                "Prototype auth logic",
-                "Validate password hashing",
-                "Compare implementations",
+                "$2b$ = bcrypt version (2a, 2b, 2y exist—2b is current standard)",
+                "Next 2 digits = cost factor (10 = 2¹⁰ = 1024 iterations)",
+                "Next 22 chars = salt (128-bit, base64 encoded)",
+                "Remaining 31 chars = actual hash (184-bit, base64 encoded)",
               ],
             },
           ],
