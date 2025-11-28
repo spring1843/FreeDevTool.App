@@ -150,14 +150,47 @@ export function renderExplanationsHtml(
 
   if (blocks.length === 0) return "";
 
+  const mobileLimit = 1;
+  const desktopLimit = 3;
+  const totalBlocks = blocks.length;
+
   const blocksHtml = blocks
     .map((block, i) => {
       const colSpanClass = i === 0 && !shortcuts ? "md:col-span-2" : "";
-      return `<div class="${colSpanClass}">${block}</div>`;
+      const hiddenOnMobile = i >= mobileLimit ? "ssr-hidden-mobile" : "";
+      const hiddenOnDesktop = i >= desktopLimit ? "ssr-hidden-desktop" : "";
+      return `<div class="${colSpanClass} ${hiddenOnMobile} ${hiddenOnDesktop}" data-block-index="${i}">${block}</div>`;
     })
     .join("");
 
-  return `<div id="ssr-explanations" data-tool-path="${escapeHtml(toolPath)}" class="mt-8 space-y-4">
+  const mobileHiddenCount = Math.max(0, totalBlocks - mobileLimit);
+  const desktopHiddenCount = Math.max(0, totalBlocks - desktopLimit);
+
+  const showMoreButton = totalBlocks > mobileLimit
+    ? `<button id="ssr-show-more" class="w-full py-2 px-4 text-sm text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg flex items-center justify-center gap-2 transition-colors" data-mobile-count="${mobileHiddenCount}" data-desktop-count="${desktopHiddenCount}">
+        <span class="ssr-show-more-text"></span>
+        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+      </button>`
+    : "";
+
+  return `<div id="ssr-explanations" data-tool-path="${escapeHtml(toolPath)}" data-total-blocks="${totalBlocks}" class="mt-8 space-y-4">
+    <style>
+      .ssr-hidden-mobile { display: none; }
+      .ssr-hidden-desktop { display: none; }
+      @media (min-width: 768px) {
+        .ssr-hidden-mobile { display: block; }
+      }
+      #ssr-show-more .ssr-show-more-text::before {
+        content: "Show ${mobileHiddenCount} more explanation${mobileHiddenCount !== 1 ? "s" : ""}";
+      }
+      @media (min-width: 768px) {
+        #ssr-show-more .ssr-show-more-text::before {
+          content: "Show ${desktopHiddenCount} more explanation${desktopHiddenCount !== 1 ? "s" : ""}";
+        }
+        ${desktopHiddenCount === 0 ? "#ssr-show-more { display: none; }" : ""}
+      }
+    </style>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">${blocksHtml}</div>
+    ${showMoreButton}
   </div>`;
 }
