@@ -49,77 +49,83 @@ export const toolsData: ToolData = {
         explanations: {
           notice: {
             type: "info",
-            title: "Format Categories & Detection",
+            title: "Why Date Formats Are a Mess",
             items: [
-              {
-                label: "Auto-detection",
-                text: "Paste Unix (seconds/milliseconds), ISO 8601, RFC strings, or human-readable dates – format is detected automatically",
-              },
-              {
-                label: "Categories",
-                text: "Timestamp, ISO Standards, RFC Standards, Regional, Database, Human Readable, Web/API",
-              },
-              {
-                label: "Pre-epoch",
-                text: "Negative Unix timestamps supported for dates before 1970",
-              },
+              { label: "01/02/03:", text: "Is this Jan 2, 2003? Feb 1, 2003? Feb 3, 2001? Depends on country!" },
+              { label: "ISO 8601:", text: "Created 1988 to end the chaos: YYYY-MM-DD is unambiguous worldwide" },
+              { label: "Unix epoch:", text: "Jan 1, 1970 was chosen arbitrarily—it was 'recent enough' in 1971" },
             ],
           },
-          examples: [
-            {
-              from: "1699123456",
-              to: "Parsed as Unix seconds → converted to all 20+ formats",
-            },
-            {
-              from: "2024-01-15T14:30:45Z",
-              to: "ISO 8601 detected (UTC) → grouped outputs by category",
-            },
-            {
-              from: "Jan 15, 2024",
-              to: "Human-readable date auto-detected → standardized outputs",
-            },
+          shortcuts: [
+            { key: "Ctrl+Shift+1", action: "Open Date Converter" },
           ],
           sections: [
             {
-              title: "Supported Formats",
+              title: "Date Format Standards Explained",
               items: [
-                "Unix seconds & milliseconds",
-                "ISO 8601 (full, date-only, time-only)",
-                "RFC 2822 & RFC 3339",
-                "Regional (US, EU, ISO numeric)",
-                "Database (SQL datetime/date, synthetic MongoDB ObjectId timestamp)",
-                "Human Readable (full, short, 12h, 24h)",
-                "Web/API (HTTP Date, JSON, Cookie Expires)",
+                { label: "ISO 8601:", text: "2024-01-15T14:30:00Z — International standard. The 'T' separates date/time, 'Z' = UTC" },
+                { label: "Unix timestamp:", text: "Seconds since 1970-01-01 00:00:00 UTC. Simple integer, no timezone confusion" },
+                { label: "RFC 2822:", text: "Mon, 15 Jan 2024 14:30:00 +0000 — Email format (Date: header)" },
+                { label: "RFC 3339:", text: "Like ISO 8601 but stricter—required for internet protocols" },
               ],
             },
             {
-              title: "Features",
+              title: "The MM/DD vs DD/MM War",
               items: [
-                "Convert input into 20+ practical formats",
-                "Automatic input parsing & validation",
-                "Grouped outputs by category for quick scanning",
-                "Copy any individual format value (toast feedback)",
-                "Reset to example timestamp",
-                "Use Current Time (Now) button",
-                "Error feedback for invalid inputs (shows supported types)",
+                { label: "MM/DD/YYYY:", text: "USA, Philippines, Palau, Micronesia, Canada (sometimes)" },
+                { label: "DD/MM/YYYY:", text: "Most of the world: Europe, South America, Africa, Asia, Australia" },
+                { label: "YYYY-MM-DD:", text: "ISO standard, China, Japan, Korea, Sweden, Hungary, Lithuania" },
+                { label: "Pro tip:", text: "Always use ISO 8601 (YYYY-MM-DD) in code—it's unambiguous AND sorts correctly!" },
               ],
             },
             {
-              title: "Edge Cases",
+              title: "Unix Timestamp Facts",
               items: [
-                "Negative Unix timestamps",
-                "Millisecond vs second length differentiation",
-                "Human-readable month/day ambiguity handled by native Date parsing",
-                "Synthetic ObjectId: only leading 8 hex chars are timestamp (rest static demo)",
+                "Negative timestamps work: -1 = Dec 31, 1969 23:59:59 UTC",
+                "JavaScript uses milliseconds (13 digits), Unix uses seconds (10 digits)",
+                "Y2K38 bug: 32-bit timestamps overflow on Jan 19, 2038 03:14:07 UTC",
+                "Fun: timestamp 1234567890 was Feb 13, 2009 23:31:30—developers celebrated!",
+                "MongoDB ObjectId: First 4 bytes are Unix timestamp (8 hex chars)",
               ],
             },
             {
-              title: "Use Cases",
+              title: "Common Date Bugs",
               items: [
-                "Debug API payload timestamps",
-                "Prepare database seed values",
-                "Compare regional date display",
-                "Generate multiple representations for docs/logs",
+                "JS months are 0-indexed: new Date(2024, 0, 15) = January 15 (not month 0!)",
+                "Timezone confusion: 'new Date(\"2024-01-15\")' parses as UTC, but '2024/01/15' parses as local",
+                "Daylight Saving: March 10, 2024 2:30 AM didn't exist in US (clocks skipped to 3:00)",
+                "Leap seconds: 2016-12-31 had 23:59:60—most systems just ignore this",
+                "Year 2000: COBOL programmers used 2-digit years, causing the Y2K panic",
+              ],
+            },
+            {
+              title: "Database Date Formats",
+              items: [
+                { label: "SQL DATETIME:", text: "'2024-01-15 14:30:00' — No timezone info (dangerous!)" },
+                { label: "SQL TIMESTAMP:", text: "Usually stored as UTC, converted on retrieval" },
+                { label: "PostgreSQL:", text: "TIMESTAMPTZ stores timezone offset (recommended)" },
+                { label: "MongoDB:", text: "ISODate() wrapper around JavaScript Date objects" },
+                { label: "Best practice:", text: "Store UTC always, convert to local only for display" },
+              ],
+            },
+            {
+              title: "Interesting Calendar Facts",
+              items: [
+                "October 1582 lost 10 days: Oct 4 was followed by Oct 15 (Gregorian calendar adoption)",
+                "Russia didn't switch until 1918—their 'October Revolution' was actually in November",
+                "Excel thinks 1900 was a leap year (it wasn't)—intentional Lotus 1-2-3 compatibility bug",
+                "GPS time doesn't have leap seconds—it's now 18 seconds ahead of UTC",
+                "Japan uses year 1 = 660 BC (mythical Emperor Jimmu) for some purposes",
+              ],
+            },
+            {
+              title: "Developer Use Cases",
+              items: [
+                "Debug API timestamps: Paste Unix → see human-readable instantly",
+                "Generate SQL seeds: Convert readable dates to database format",
+                "Parse log files: Identify which timestamp format a system uses",
+                "Compare timezones: Same instant, different representations",
+                "JWT debugging: 'exp' and 'iat' claims are Unix timestamps",
               ],
             },
           ],
