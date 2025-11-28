@@ -104,7 +104,9 @@ export default function SearchReplace() {
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Search & Replace
-              {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Find and replace text with regex support

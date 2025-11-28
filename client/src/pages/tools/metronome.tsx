@@ -359,7 +359,9 @@ export default function Metronome() {
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Multi-Tone Metronome
-              {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Create custom rhythm patterns with multiple musical notes at

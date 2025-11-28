@@ -232,7 +232,8 @@ export function ToolExplanations({
         ))}
       </div>
 
-      {hasMore && !expanded ? <button
+      {hasMore && !expanded ? (
+        <button
           onClick={() => setExpanded(true)}
           className="w-full py-2 px-4 text-sm text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg flex items-center justify-center gap-2 transition-colors"
         >
@@ -240,7 +241,8 @@ export function ToolExplanations({
             Show {hiddenCount} more explanation{hiddenCount > 1 ? "s" : ""}
           </span>
           <ChevronDown className="w-4 h-4" />
-        </button> : null}
+        </button>
+      ) : null}
     </div>
   );
 }

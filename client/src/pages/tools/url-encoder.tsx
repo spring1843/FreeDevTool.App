@@ -96,7 +96,9 @@ export default function URLEncoder() {
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               URL Encoder/Decoder
-              {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               URL encode and decode strings for safe URL transmission
