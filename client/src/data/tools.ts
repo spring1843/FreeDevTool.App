@@ -1763,21 +1763,52 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
+          notice: {
+            type: "examples",
+            title: "Regex Power Moves",
+            items: [
+              { label: "\\d+", text: "Match any number (123, 4567, etc.)" },
+              { label: "(\\w+)@(\\w+)", text: "Capture groups → use $1, $2 in replace" },
+              { label: "^|$", text: "Start/end of line (add prefix/suffix to every line)" },
+              { label: "\\s+", text: "Any whitespace (spaces, tabs, newlines)" },
+            ],
+          },
           sections: [
             {
-              title: "Features",
+              title: "Common Transformations",
               items: [
-                "Find and replace with regex",
-                "Case sensitivity toggle",
-                "Global or scoped replacement",
+                "snake_case → camelCase: Search '_([a-z])' → Replace with captured uppercase",
+                "Remove HTML tags: Search '<[^>]+>' → Replace with empty string",
+                "Format phone numbers: Search '(\\d{3})(\\d{3})(\\d{4})' → '($1) $2-$3'",
+                "Trim trailing whitespace: Search '\\s+$' → Replace with nothing",
+                "Double-space to single: Search '  +' → Replace with single space",
               ],
             },
             {
-              title: "Use cases",
+              title: "Bulk Editing Saves Hours",
               items: [
-                "Refactor text blocks",
-                "Fix formatting patterns",
-                "Clean imported content",
+                "Rename variables across a codebase (with case sensitivity ON)",
+                "Convert CSV columns: 'John,Doe' → 'Doe, John' using capture groups",
+                "Add quotes around values: Search '(\\w+)' → Replace '\"$1\"'",
+                "Fix date formats: '12/25/2024' → '2024-12-25' with regex groups",
+                "Remove duplicate blank lines: Search '\\n\\n+' → Replace '\\n\\n'",
+              ],
+            },
+            {
+              title: "Options Explained",
+              items: [
+                {
+                  label: "Regex mode:",
+                  text: "Enables pattern matching (off = literal text search)",
+                },
+                {
+                  label: "Case sensitive:",
+                  text: "OFF: 'hello' matches 'Hello', 'HELLO'. ON: exact match only",
+                },
+                {
+                  label: "Global:",
+                  text: "ON: Replace ALL matches. OFF: Replace only the first match",
+                },
               ],
             },
           ],
