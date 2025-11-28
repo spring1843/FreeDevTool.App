@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback, useRef } from "react";
 import { getToolByPath } from "@/data/tools";
-import { renderToolExplanations } from "@/components/tool-explanations";
+import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -432,7 +432,7 @@ export default function UnicodeCharacters() {
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
           Unicode Character Map
-          {tool?.shortcut && <ShortcutBadge shortcut={tool.shortcut} />}
+          {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
         </h2>
         <p className="text-slate-600 dark:text-slate-400">
           Browse and copy Unicode characters from various scripts and symbol
@@ -881,7 +881,7 @@ export default function UnicodeCharacters() {
 
       <div className="flex justify-center my-8" />
 
-      {renderToolExplanations(tool?.explanations)}
+      <ToolExplanations explanations={tool?.explanations} />
 
       <div className="flex justify-center mt-8" />
     </div>

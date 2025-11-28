@@ -34,7 +34,7 @@ import { getParam, updateURL, generateShareableURL } from "@/lib/url-sharing";
 
 import { DEFAULT_COLOR_PALETTE_GENERATOR } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
-import { renderToolExplanations } from "@/components/tool-explanations";
+import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function ColorPaletteGenerator() {
@@ -289,7 +289,7 @@ export default function ColorPaletteGenerator() {
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
           Color Palette Generator
-          {tool?.shortcut && <ShortcutBadge shortcut={tool.shortcut} />}
+          {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
         </h2>
         <p className="text-slate-600 dark:text-slate-400">
           Generate beautiful color palettes from any base color using color
@@ -459,7 +459,7 @@ export default function ColorPaletteGenerator() {
       )}
 
       <div className="flex justify-center mt-8" />
-      {renderToolExplanations(tool?.explanations)}
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

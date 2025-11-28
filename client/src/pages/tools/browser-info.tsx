@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Copy, Monitor, Globe, HardDrive, Cpu, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getToolByPath } from "@/data/tools";
-import { renderToolExplanations } from "@/components/tool-explanations";
+import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 interface BrowserInfo {
@@ -340,7 +340,7 @@ export default function BrowserInfo() {
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
           Browser Information
-          {tool?.shortcut && <ShortcutBadge shortcut={tool.shortcut} />}
+          {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
           <span className="text-sm bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 px-2 py-1 rounded font-medium">
             EXPERIMENTAL
           </span>
@@ -728,7 +728,7 @@ export default function BrowserInfo() {
         </Card>
       ) : null}
 
-      {renderToolExplanations(tool?.explanations)}
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

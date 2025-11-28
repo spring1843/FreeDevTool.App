@@ -22,7 +22,7 @@ import {
 } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
 import { getToolByPath } from "@/data/tools";
-import { renderToolExplanations } from "@/components/tool-explanations";
+import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 interface TimezoneConversion {
@@ -299,7 +299,7 @@ export default function TimezoneConverter() {
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
           Timezone Converter
-          {tool?.shortcut && <ShortcutBadge shortcut={tool.shortcut} />}
+          {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
         </h2>
         <p className="text-slate-600 dark:text-slate-400">
           Convert time across multiple timezones with second-level precision
@@ -487,7 +487,7 @@ export default function TimezoneConverter() {
         </Card>
       )}
 
-      {renderToolExplanations(tool?.explanations)}
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

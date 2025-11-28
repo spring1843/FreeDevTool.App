@@ -156,7 +156,11 @@ function renderNoticeOrExamples(
   return null;
 }
 
-function ToolExplanationsComponent({ explanations }: { explanations: ToolExplanation }) {
+export function ToolExplanations({
+  explanations,
+}: {
+  explanations?: ToolExplanation;
+}) {
   const [expanded, setExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -167,16 +171,18 @@ function ToolExplanationsComponent({ explanations }: { explanations: ToolExplana
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  if (!explanations) return null;
+
   const { notice, shortcuts, examples, sections } = explanations;
 
   const blocks: ReactNode[] = [];
-  
+
   const noticeBlock = renderNoticeOrExamples(notice, examples);
   if (noticeBlock) blocks.push(noticeBlock);
-  
+
   const shortcutsBlock = shortcuts ? renderShortcuts(shortcuts) : null;
   if (shortcutsBlock) blocks.push(shortcutsBlock);
-  
+
   if (sections) {
     sections.forEach((section, i) => {
       const colors = sectionColors[i % sectionColors.length];
@@ -190,7 +196,9 @@ function ToolExplanationsComponent({ explanations }: { explanations: ToolExplana
               {section.title}
             </h4>
           ) : null}
-          <ul className={`space-y-1 ${colors.text} text-sm list-disc list-inside`}>
+          <ul
+            className={`space-y-1 ${colors.text} text-sm list-disc list-inside`}
+          >
             {section.items.map((item, j) => (
               <li key={j}>
                 {typeof item === "string" ? (
@@ -223,23 +231,16 @@ function ToolExplanationsComponent({ explanations }: { explanations: ToolExplana
           </div>
         ))}
       </div>
-      
-      {hasMore && !expanded && (
-        <button
+
+      {hasMore && !expanded ? <button
           onClick={() => setExpanded(true)}
           className="w-full py-2 px-4 text-sm text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg flex items-center justify-center gap-2 transition-colors"
         >
-          <span>Show {hiddenCount} more explanation{hiddenCount > 1 ? "s" : ""}</span>
+          <span>
+            Show {hiddenCount} more explanation{hiddenCount > 1 ? "s" : ""}
+          </span>
           <ChevronDown className="w-4 h-4" />
-        </button>
-      )}
+        </button> : null}
     </div>
   );
-}
-
-export function renderToolExplanations(
-  explanations: ToolExplanation | undefined
-): ReactNode {
-  if (!explanations) return null;
-  return <ToolExplanationsComponent explanations={explanations} />;
 }

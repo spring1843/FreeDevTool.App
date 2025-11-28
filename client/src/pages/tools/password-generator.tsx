@@ -19,7 +19,7 @@ import { Switch } from "@/components/ui/switch";
 import { useToolDefault } from "@/hooks/use-tool-default";
 import { usePersistentForm } from "@/hooks/use-persistent-state";
 import { getToolByPath } from "@/data/tools";
-import { renderToolExplanations } from "@/components/tool-explanations";
+import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 interface PasswordStrength {
@@ -249,7 +249,7 @@ export default function PasswordGenerator() {
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
           Password Generator
-          {tool?.shortcut && <ShortcutBadge shortcut={tool.shortcut} />}
+          {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
         </h2>
         <p className="text-slate-600 dark:text-slate-400">
           Generate secure passwords with customizable options and strength
@@ -547,7 +547,7 @@ export default function PasswordGenerator() {
           </CardContent>
         </Card>
       )}
-      {renderToolExplanations(tool?.explanations)}
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

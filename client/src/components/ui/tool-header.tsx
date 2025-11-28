@@ -22,7 +22,7 @@ export function ToolHeader({
         <div>
           <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
             {title}
-            {shortcut && <ShortcutBadge shortcut={shortcut} />}
+            {shortcut ? <ShortcutBadge shortcut={shortcut} /> : null}
             {experimental ? (
               <span className="text-sm bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 px-2 py-1 rounded font-medium">
                 EXPERIMENTAL

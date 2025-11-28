@@ -12,7 +12,7 @@ import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_REGEX_PATTERN, DEFAULT_REGEX_TEXT } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
-import { renderToolExplanations } from "@/components/tool-explanations";
+import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 interface RegexMatch {
@@ -128,7 +128,7 @@ export default function RegexTester() {
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Regex Tester
-              {tool?.shortcut && <ShortcutBadge shortcut={tool.shortcut} />}
+              {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Test regular expressions with live matches and validation
@@ -300,7 +300,7 @@ export default function RegexTester() {
           </CardContent>
         </Card>
       )}
-      {renderToolExplanations(tool?.explanations)}
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }
