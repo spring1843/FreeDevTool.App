@@ -51,31 +51,62 @@ export const toolsData: ToolData = {
             type: "info",
             title: "Why Date Formats Are a Mess",
             items: [
-              { label: "01/02/03:", text: "Is this Jan 2, 2003? Feb 1, 2003? Feb 3, 2001? Depends on country!" },
-              { label: "ISO 8601:", text: "Created 1988 to end the chaos: YYYY-MM-DD is unambiguous worldwide" },
-              { label: "Unix epoch:", text: "Jan 1, 1970 was chosen arbitrarily—it was 'recent enough' in 1971" },
+              {
+                label: "01/02/03:",
+                text: "Is this Jan 2, 2003? Feb 1, 2003? Feb 3, 2001? Depends on country!",
+              },
+              {
+                label: "ISO 8601:",
+                text: "Created 1988 to end the chaos: YYYY-MM-DD is unambiguous worldwide",
+              },
+              {
+                label: "Unix epoch:",
+                text: "Jan 1, 1970 was chosen arbitrarily—it was 'recent enough' in 1971",
+              },
             ],
           },
-          shortcuts: [
-            { key: "Ctrl+Shift+1", action: "Open Date Converter" },
-          ],
+          shortcuts: [{ key: "Ctrl+Shift+1", action: "Open Date Converter" }],
           sections: [
             {
               title: "Date Format Standards Explained",
               items: [
-                { label: "ISO 8601:", text: "2024-01-15T14:30:00Z — International standard. The 'T' separates date/time, 'Z' = UTC" },
-                { label: "Unix timestamp:", text: "Seconds since 1970-01-01 00:00:00 UTC. Simple integer, no timezone confusion" },
-                { label: "RFC 2822:", text: "Mon, 15 Jan 2024 14:30:00 +0000 — Email format (Date: header)" },
-                { label: "RFC 3339:", text: "Like ISO 8601 but stricter—required for internet protocols" },
+                {
+                  label: "ISO 8601:",
+                  text: "2024-01-15T14:30:00Z — International standard. The 'T' separates date/time, 'Z' = UTC",
+                },
+                {
+                  label: "Unix timestamp:",
+                  text: "Seconds since 1970-01-01 00:00:00 UTC. Simple integer, no timezone confusion",
+                },
+                {
+                  label: "RFC 2822:",
+                  text: "Mon, 15 Jan 2024 14:30:00 +0000 — Email format (Date: header)",
+                },
+                {
+                  label: "RFC 3339:",
+                  text: "Like ISO 8601 but stricter—required for internet protocols",
+                },
               ],
             },
             {
               title: "The MM/DD vs DD/MM War",
               items: [
-                { label: "MM/DD/YYYY:", text: "USA, Philippines, Palau, Micronesia, Canada (sometimes)" },
-                { label: "DD/MM/YYYY:", text: "Most of the world: Europe, South America, Africa, Asia, Australia" },
-                { label: "YYYY-MM-DD:", text: "ISO standard, China, Japan, Korea, Sweden, Hungary, Lithuania" },
-                { label: "Pro tip:", text: "Always use ISO 8601 (YYYY-MM-DD) in code—it's unambiguous AND sorts correctly!" },
+                {
+                  label: "MM/DD/YYYY:",
+                  text: "USA, Philippines, Palau, Micronesia, Canada (sometimes)",
+                },
+                {
+                  label: "DD/MM/YYYY:",
+                  text: "Most of the world: Europe, South America, Africa, Asia, Australia",
+                },
+                {
+                  label: "YYYY-MM-DD:",
+                  text: "ISO standard, China, Japan, Korea, Sweden, Hungary, Lithuania",
+                },
+                {
+                  label: "Pro tip:",
+                  text: "Always use ISO 8601 (YYYY-MM-DD) in code—it's unambiguous AND sorts correctly!",
+                },
               ],
             },
             {
@@ -101,11 +132,26 @@ export const toolsData: ToolData = {
             {
               title: "Database Date Formats",
               items: [
-                { label: "SQL DATETIME:", text: "'2024-01-15 14:30:00' — No timezone info (dangerous!)" },
-                { label: "SQL TIMESTAMP:", text: "Usually stored as UTC, converted on retrieval" },
-                { label: "PostgreSQL:", text: "TIMESTAMPTZ stores timezone offset (recommended)" },
-                { label: "MongoDB:", text: "ISODate() wrapper around JavaScript Date objects" },
-                { label: "Best practice:", text: "Store UTC always, convert to local only for display" },
+                {
+                  label: "SQL DATETIME:",
+                  text: "'2024-01-15 14:30:00' — No timezone info (dangerous!)",
+                },
+                {
+                  label: "SQL TIMESTAMP:",
+                  text: "Usually stored as UTC, converted on retrieval",
+                },
+                {
+                  label: "PostgreSQL:",
+                  text: "TIMESTAMPTZ stores timezone offset (recommended)",
+                },
+                {
+                  label: "MongoDB:",
+                  text: "ISODate() wrapper around JavaScript Date objects",
+                },
+                {
+                  label: "Best practice:",
+                  text: "Store UTC always, convert to local only for display",
+                },
               ],
             },
             {
@@ -151,9 +197,18 @@ export const toolsData: ToolData = {
             type: "info",
             title: "JSON vs YAML: The Format War",
             items: [
-              { label: "JSON (2001):", text: "Douglas Crockford—subset of JavaScript, strict syntax, APIs & data exchange" },
-              { label: "YAML (2001):", text: "'YAML Ain't Markup Language'—human-friendly, indentation-based, config files" },
-              { label: "Fun fact:", text: "YAML is a superset of JSON—every valid JSON file is also valid YAML!" },
+              {
+                label: "JSON (2001):",
+                text: "Douglas Crockford—subset of JavaScript, strict syntax, APIs & data exchange",
+              },
+              {
+                label: "YAML (2001):",
+                text: "'YAML Ain't Markup Language'—human-friendly, indentation-based, config files",
+              },
+              {
+                label: "Fun fact:",
+                text: "YAML is a superset of JSON—every valid JSON file is also valid YAML!",
+              },
             ],
           },
           shortcuts: [
@@ -163,30 +218,72 @@ export const toolsData: ToolData = {
             {
               title: "When to Use Which Format",
               items: [
-                { label: "JSON:", text: "APIs, package.json, tsconfig.json, browser storage, data interchange" },
-                { label: "YAML:", text: "Kubernetes, Docker Compose, GitHub Actions, Ansible, config files humans edit" },
-                { label: "Rule of thumb:", text: "Machines read JSON, humans read YAML" },
-                { label: "Comments:", text: "YAML supports # comments, JSON doesn't (use JSONC for comments)" },
+                {
+                  label: "JSON:",
+                  text: "APIs, package.json, tsconfig.json, browser storage, data interchange",
+                },
+                {
+                  label: "YAML:",
+                  text: "Kubernetes, Docker Compose, GitHub Actions, Ansible, config files humans edit",
+                },
+                {
+                  label: "Rule of thumb:",
+                  text: "Machines read JSON, humans read YAML",
+                },
+                {
+                  label: "Comments:",
+                  text: "YAML supports # comments, JSON doesn't (use JSONC for comments)",
+                },
               ],
             },
             {
               title: "YAML Gotchas That Break Deployments",
               items: [
-                { label: "Norway problem:", text: "'NO' (country code) becomes boolean false—use quotes: 'NO'" },
-                { label: "Version strings:", text: "version: 3.10 becomes 3.1 (float)—use quotes: '3.10'" },
-                { label: "Octal numbers:", text: "0777 is octal 511 in YAML 1.1, but string '0777' in 1.2" },
-                { label: "Timestamps:", text: "2024-01-01 auto-parses as date—quote if you want string" },
-                { label: "Colon in values:", text: "'key: value: more' breaks—use quotes or block scalar" },
+                {
+                  label: "Norway problem:",
+                  text: "'NO' (country code) becomes boolean false—use quotes: 'NO'",
+                },
+                {
+                  label: "Version strings:",
+                  text: "version: 3.10 becomes 3.1 (float)—use quotes: '3.10'",
+                },
+                {
+                  label: "Octal numbers:",
+                  text: "0777 is octal 511 in YAML 1.1, but string '0777' in 1.2",
+                },
+                {
+                  label: "Timestamps:",
+                  text: "2024-01-01 auto-parses as date—quote if you want string",
+                },
+                {
+                  label: "Colon in values:",
+                  text: "'key: value: more' breaks—use quotes or block scalar",
+                },
               ],
             },
             {
               title: "DevOps Config Examples",
               items: [
-                { label: "Kubernetes:", text: "Deployments, Services, ConfigMaps—almost always YAML" },
-                { label: "Docker Compose:", text: "docker-compose.yml defines multi-container apps" },
-                { label: "GitHub Actions:", text: ".github/workflows/*.yml for CI/CD pipelines" },
-                { label: "Helm Charts:", text: "values.yaml for Kubernetes package configuration" },
-                { label: "Ansible:", text: "Playbooks and inventories in YAML" },
+                {
+                  label: "Kubernetes:",
+                  text: "Deployments, Services, ConfigMaps—almost always YAML",
+                },
+                {
+                  label: "Docker Compose:",
+                  text: "docker-compose.yml defines multi-container apps",
+                },
+                {
+                  label: "GitHub Actions:",
+                  text: ".github/workflows/*.yml for CI/CD pipelines",
+                },
+                {
+                  label: "Helm Charts:",
+                  text: "values.yaml for Kubernetes package configuration",
+                },
+                {
+                  label: "Ansible:",
+                  text: "Playbooks and inventories in YAML",
+                },
               ],
             },
             {
@@ -203,7 +300,7 @@ export const toolsData: ToolData = {
             {
               title: "JSON Syntax Refresher",
               items: [
-                "Strings: Always double quotes \"text\" (never single quotes)",
+                'Strings: Always double quotes "text" (never single quotes)',
                 "Numbers: 42, 3.14, 1e10 (no leading zeros except 0.x)",
                 "Booleans: true, false (lowercase only)",
                 "Null: null (not None, nil, or undefined)",
@@ -224,10 +321,22 @@ export const toolsData: ToolData = {
             {
               title: "Tools That Accept Both Formats",
               items: [
-                { label: "kubectl:", text: "kubectl apply -f works with .json or .yaml" },
-                { label: "Terraform:", text: "Accepts .tf.json as alternative to HCL" },
-                { label: "AWS CloudFormation:", text: "Templates can be JSON or YAML" },
-                { label: "Swagger/OpenAPI:", text: "API specs work in either format" },
+                {
+                  label: "kubectl:",
+                  text: "kubectl apply -f works with .json or .yaml",
+                },
+                {
+                  label: "Terraform:",
+                  text: "Accepts .tf.json as alternative to HCL",
+                },
+                {
+                  label: "AWS CloudFormation:",
+                  text: "Templates can be JSON or YAML",
+                },
+                {
+                  label: "Swagger/OpenAPI:",
+                  text: "API specs work in either format",
+                },
                 { label: "ESLint:", text: ".eslintrc.json or .eslintrc.yml" },
               ],
             },
@@ -264,9 +373,18 @@ export const toolsData: ToolData = {
             type: "info",
             title: "Why Timezones Exist",
             items: [
-              { label: "Before 1883:", text: "Every city set clocks by local solar noon—chaos for train schedules!" },
-              { label: "The fix:", text: "Railroads created 4 US time zones. Within a year, 85% of cities adopted them" },
-              { label: "UTC:", text: "Coordinated Universal Time replaced GMT in 1972 as the world's reference point" },
+              {
+                label: "Before 1883:",
+                text: "Every city set clocks by local solar noon—chaos for train schedules!",
+              },
+              {
+                label: "The fix:",
+                text: "Railroads created 4 US time zones. Within a year, 85% of cities adopted them",
+              },
+              {
+                label: "UTC:",
+                text: "Coordinated Universal Time replaced GMT in 1972 as the world's reference point",
+              },
             ],
           },
           sections: [
@@ -284,20 +402,47 @@ export const toolsData: ToolData = {
             {
               title: "Daylight Saving Time Chaos",
               items: [
-                { label: "Start/end dates:", text: "Vary by country—US, EU, and Australia all differ" },
-                { label: "2023 example:", text: "US changed Mar 12, EU changed Mar 26—two weeks of extra confusion" },
-                { label: "Equator countries:", text: "Don't use DST (sun rises/sets at same time year-round)" },
-                { label: "The shift:", text: "Most countries shift 1 hour, but Lord Howe Island (Australia) shifts 30 minutes" },
-                { label: "Abolishing DST:", text: "EU voted to end it in 2019—still hasn't happened" },
+                {
+                  label: "Start/end dates:",
+                  text: "Vary by country—US, EU, and Australia all differ",
+                },
+                {
+                  label: "2023 example:",
+                  text: "US changed Mar 12, EU changed Mar 26—two weeks of extra confusion",
+                },
+                {
+                  label: "Equator countries:",
+                  text: "Don't use DST (sun rises/sets at same time year-round)",
+                },
+                {
+                  label: "The shift:",
+                  text: "Most countries shift 1 hour, but Lord Howe Island (Australia) shifts 30 minutes",
+                },
+                {
+                  label: "Abolishing DST:",
+                  text: "EU voted to end it in 2019—still hasn't happened",
+                },
               ],
             },
             {
               title: "Global Meeting Sweet Spots",
               items: [
-                { label: "US + Europe:", text: "2-5pm London = 9am-12pm New York = reasonable for both" },
-                { label: "US + Asia:", text: "Brutal—someone's always in the middle of the night. Try 7am Pacific = 11pm Tokyo" },
-                { label: "Europe + Asia:", text: "8am London = 4pm Singapore = 5pm Tokyo works well" },
-                { label: "All three:", text: "Nearly impossible. Best bet: 6am Pacific = 2pm London = 10pm Tokyo (sorry, Tokyo)" },
+                {
+                  label: "US + Europe:",
+                  text: "2-5pm London = 9am-12pm New York = reasonable for both",
+                },
+                {
+                  label: "US + Asia:",
+                  text: "Brutal—someone's always in the middle of the night. Try 7am Pacific = 11pm Tokyo",
+                },
+                {
+                  label: "Europe + Asia:",
+                  text: "8am London = 4pm Singapore = 5pm Tokyo works well",
+                },
+                {
+                  label: "All three:",
+                  text: "Nearly impossible. Best bet: 6am Pacific = 2pm London = 10pm Tokyo (sorry, Tokyo)",
+                },
               ],
             },
             {
@@ -313,12 +458,30 @@ export const toolsData: ToolData = {
             {
               title: "Common Timezone Abbreviations",
               items: [
-                { label: "UTC/GMT:", text: "The reference point (London in winter, but UK uses BST in summer)" },
-                { label: "EST/EDT:", text: "Eastern Standard/Daylight Time (New York) — UTC-5 or UTC-4" },
-                { label: "PST/PDT:", text: "Pacific Standard/Daylight Time (LA) — UTC-8 or UTC-7" },
-                { label: "CET/CEST:", text: "Central European Time (Paris, Berlin) — UTC+1 or UTC+2" },
-                { label: "JST:", text: "Japan Standard Time — UTC+9 (no DST, ever)" },
-                { label: "IST:", text: "India Standard Time — UTC+5:30 (also means Irish Standard Time!)" },
+                {
+                  label: "UTC/GMT:",
+                  text: "The reference point (London in winter, but UK uses BST in summer)",
+                },
+                {
+                  label: "EST/EDT:",
+                  text: "Eastern Standard/Daylight Time (New York) — UTC-5 or UTC-4",
+                },
+                {
+                  label: "PST/PDT:",
+                  text: "Pacific Standard/Daylight Time (LA) — UTC-8 or UTC-7",
+                },
+                {
+                  label: "CET/CEST:",
+                  text: "Central European Time (Paris, Berlin) — UTC+1 or UTC+2",
+                },
+                {
+                  label: "JST:",
+                  text: "Japan Standard Time — UTC+9 (no DST, ever)",
+                },
+                {
+                  label: "IST:",
+                  text: "India Standard Time — UTC+5:30 (also means Irish Standard Time!)",
+                },
               ],
             },
             {
@@ -354,43 +517,95 @@ export const toolsData: ToolData = {
             type: "info",
             title: "The Great Measurement Divide",
             items: [
-              { label: "Metric:", text: "Used by 95% of the world's population—base-10, logical, scientific standard" },
-              { label: "Imperial:", text: "USA, Liberia, Myanmar—feet, pounds, gallons (and $370M Mars probe crashes)" },
-              { label: "1999 disaster:", text: "NASA's Mars Climate Orbiter burned up because one team used metric, another used imperial" },
+              {
+                label: "Metric:",
+                text: "Used by 95% of the world's population—base-10, logical, scientific standard",
+              },
+              {
+                label: "Imperial:",
+                text: "USA, Liberia, Myanmar—feet, pounds, gallons (and $370M Mars probe crashes)",
+              },
+              {
+                label: "1999 disaster:",
+                text: "NASA's Mars Climate Orbiter burned up because one team used metric, another used imperial",
+              },
             ],
           },
-          shortcuts: [
-            { key: "Ctrl+Shift+U", action: "Open Unit Converter" },
-          ],
+          shortcuts: [{ key: "Ctrl+Shift+U", action: "Open Unit Converter" }],
           sections: [
             {
               title: "Why These Weird Units Exist",
               items: [
-                { label: "Foot:", text: "Literally a king's foot length—Henry I of England standardized it around 1100 AD" },
-                { label: "Inch:", text: "Width of a man's thumb, or 3 barleycorns laid end-to-end (seriously)" },
-                { label: "Mile:", text: "Roman 'mille passus' = 1,000 double paces of a Roman legion soldier" },
-                { label: "Pound:", text: "From Latin 'libra pondo' (hence 'lb')—a pound weight of silver" },
-                { label: "Gallon:", text: "UK and US gallons differ! US: 3.79L, UK: 4.55L (20% more!)" },
+                {
+                  label: "Foot:",
+                  text: "Literally a king's foot length—Henry I of England standardized it around 1100 AD",
+                },
+                {
+                  label: "Inch:",
+                  text: "Width of a man's thumb, or 3 barleycorns laid end-to-end (seriously)",
+                },
+                {
+                  label: "Mile:",
+                  text: "Roman 'mille passus' = 1,000 double paces of a Roman legion soldier",
+                },
+                {
+                  label: "Pound:",
+                  text: "From Latin 'libra pondo' (hence 'lb')—a pound weight of silver",
+                },
+                {
+                  label: "Gallon:",
+                  text: "UK and US gallons differ! US: 3.79L, UK: 4.55L (20% more!)",
+                },
               ],
             },
             {
               title: "Temperature: The Weirdest Scales",
               items: [
-                { label: "Fahrenheit (1724):", text: "0° = coldest brine solution, 96° = human body temp (he was slightly off)" },
-                { label: "Celsius (1742):", text: "Originally inverted! 0° was boiling, 100° freezing—fixed by Linnaeus" },
-                { label: "Kelvin:", text: "0K = absolute zero (-273.15°C)—atoms stop moving entirely" },
-                { label: "-40°:", text: "The only point where Fahrenheit and Celsius are equal!" },
-                { label: "Body temp:", text: "98.6°F (37°C) was from 1851—modern average is actually 97.9°F" },
+                {
+                  label: "Fahrenheit (1724):",
+                  text: "0° = coldest brine solution, 96° = human body temp (he was slightly off)",
+                },
+                {
+                  label: "Celsius (1742):",
+                  text: "Originally inverted! 0° was boiling, 100° freezing—fixed by Linnaeus",
+                },
+                {
+                  label: "Kelvin:",
+                  text: "0K = absolute zero (-273.15°C)—atoms stop moving entirely",
+                },
+                {
+                  label: "-40°:",
+                  text: "The only point where Fahrenheit and Celsius are equal!",
+                },
+                {
+                  label: "Body temp:",
+                  text: "98.6°F (37°C) was from 1851—modern average is actually 97.9°F",
+                },
               ],
             },
             {
               title: "Quick Mental Conversions",
               items: [
-                { label: "km → miles:", text: "Multiply by 0.6 (or use Fibonacci: 5km ≈ 3mi, 8km ≈ 5mi)" },
-                { label: "kg → lbs:", text: "Double it and add 10% (70kg → 140 + 14 = 154 lbs)" },
-                { label: "°C → °F:", text: "Double and add 30 (rough), or ×1.8+32 (exact)" },
-                { label: "liters → gallons:", text: "Divide by 4 (roughly—actually 3.785)" },
-                { label: "meters → feet:", text: "Multiply by 3.3 (1m = 3.28ft)" },
+                {
+                  label: "km → miles:",
+                  text: "Multiply by 0.6 (or use Fibonacci: 5km ≈ 3mi, 8km ≈ 5mi)",
+                },
+                {
+                  label: "kg → lbs:",
+                  text: "Double it and add 10% (70kg → 140 + 14 = 154 lbs)",
+                },
+                {
+                  label: "°C → °F:",
+                  text: "Double and add 30 (rough), or ×1.8+32 (exact)",
+                },
+                {
+                  label: "liters → gallons:",
+                  text: "Divide by 4 (roughly—actually 3.785)",
+                },
+                {
+                  label: "meters → feet:",
+                  text: "Multiply by 3.3 (1m = 3.28ft)",
+                },
               ],
             },
             {
@@ -406,20 +621,44 @@ export const toolsData: ToolData = {
             {
               title: "Pressure: When Units Get Serious",
               items: [
-                { label: "1 atm:", text: "Sea level air pressure = 101.325 kPa = 14.7 psi = 760 mmHg" },
-                { label: "Tire pressure:", text: "Car tires: 30-35 psi, bike tires: 80-130 psi" },
-                { label: "Scuba:", text: "Every 10m depth adds 1 atm—at 30m you're under 4 atmospheres!" },
-                { label: "Blood pressure:", text: "120/80 mmHg—millimeters of mercury, a holdover from old instruments" },
+                {
+                  label: "1 atm:",
+                  text: "Sea level air pressure = 101.325 kPa = 14.7 psi = 760 mmHg",
+                },
+                {
+                  label: "Tire pressure:",
+                  text: "Car tires: 30-35 psi, bike tires: 80-130 psi",
+                },
+                {
+                  label: "Scuba:",
+                  text: "Every 10m depth adds 1 atm—at 30m you're under 4 atmospheres!",
+                },
+                {
+                  label: "Blood pressure:",
+                  text: "120/80 mmHg—millimeters of mercury, a holdover from old instruments",
+                },
               ],
             },
             {
               title: "Speed: Putting It in Perspective",
               items: [
                 { label: "Walking:", text: "5 km/h (3.1 mph)—about 1.4 m/s" },
-                { label: "Usain Bolt:", text: "44.72 km/h (27.8 mph) peak—faster than city speed limits!" },
-                { label: "Sound:", text: "343 m/s (767 mph) at sea level, 20°C—Mach 1" },
-                { label: "Bullet:", text: "Handgun ~370 m/s, rifle ~1,200 m/s (Mach 3.5)" },
-                { label: "Light:", text: "299,792,458 m/s—1 light-year = 9.46 trillion km" },
+                {
+                  label: "Usain Bolt:",
+                  text: "44.72 km/h (27.8 mph) peak—faster than city speed limits!",
+                },
+                {
+                  label: "Sound:",
+                  text: "343 m/s (767 mph) at sea level, 20°C—Mach 1",
+                },
+                {
+                  label: "Bullet:",
+                  text: "Handgun ~370 m/s, rifle ~1,200 m/s (Mach 3.5)",
+                },
+                {
+                  label: "Light:",
+                  text: "299,792,458 m/s—1 light-year = 9.46 trillion km",
+                },
               ],
             },
             {
@@ -435,11 +674,23 @@ export const toolsData: ToolData = {
             {
               title: "Area & Volume: Real-World Sizes",
               items: [
-                { label: "Football field:", text: "1.32 acres = 0.53 hectares = 5,351 m²" },
-                { label: "Olympic pool:", text: "2,500 m³ = 660,000 US gallons" },
-                { label: "Shipping container:", text: "20ft standard = 33 m³, 40ft = 67 m³" },
+                {
+                  label: "Football field:",
+                  text: "1.32 acres = 0.53 hectares = 5,351 m²",
+                },
+                {
+                  label: "Olympic pool:",
+                  text: "2,500 m³ = 660,000 US gallons",
+                },
+                {
+                  label: "Shipping container:",
+                  text: "20ft standard = 33 m³, 40ft = 67 m³",
+                },
                 { label: "Studio apartment:", text: "~40 m² = 430 sq ft" },
-                { label: "Parking space:", text: "~15 m² = 160 sq ft (varies by country)" },
+                {
+                  label: "Parking space:",
+                  text: "~15 m² = 160 sq ft (varies by country)",
+                },
               ],
             },
             {
@@ -475,33 +726,81 @@ export const toolsData: ToolData = {
             type: "info",
             title: "URL Anatomy 101",
             items: [
-              { label: "Full structure:", text: "protocol://subdomain.domain.tld:port/path?query=params#fragment" },
-              { label: "Max length:", text: "2,083 chars (IE limit)—most browsers handle 64KB, but keep URLs under 2K for safety" },
-              { label: "Encoding:", text: "Spaces become %20 or +, special chars get percent-encoded (é → %C3%A9)" },
+              {
+                label: "Full structure:",
+                text: "protocol://subdomain.domain.tld:port/path?query=params#fragment",
+              },
+              {
+                label: "Max length:",
+                text: "2,083 chars (IE limit)—most browsers handle 64KB, but keep URLs under 2K for safety",
+              },
+              {
+                label: "Encoding:",
+                text: "Spaces become %20 or +, special chars get percent-encoded (é → %C3%A9)",
+              },
             ],
           },
           sections: [
             {
               title: "URL Components Explained",
               items: [
-                { label: "Protocol:", text: "http, https, ftp, mailto, tel—tells browser HOW to fetch the resource" },
-                { label: "Subdomain:", text: "www, api, blog, mail—organizes services under one domain" },
-                { label: "Domain:", text: "The registered name you pay for (google, amazon, github)" },
-                { label: "TLD:", text: "Top-level domain (.com, .org, .io, .co.uk)—this tool handles multi-part TLDs!" },
-                { label: "Port:", text: "Optional—defaults are 80 (http) and 443 (https)" },
-                { label: "Path:", text: "/folder/page.html—the resource location on the server" },
-                { label: "Query:", text: "?key=value&key2=value2—parameters passed to the server" },
-                { label: "Fragment:", text: "#section—client-side only, jumps to page anchor (not sent to server!)" },
+                {
+                  label: "Protocol:",
+                  text: "http, https, ftp, mailto, tel—tells browser HOW to fetch the resource",
+                },
+                {
+                  label: "Subdomain:",
+                  text: "www, api, blog, mail—organizes services under one domain",
+                },
+                {
+                  label: "Domain:",
+                  text: "The registered name you pay for (google, amazon, github)",
+                },
+                {
+                  label: "TLD:",
+                  text: "Top-level domain (.com, .org, .io, .co.uk)—this tool handles multi-part TLDs!",
+                },
+                {
+                  label: "Port:",
+                  text: "Optional—defaults are 80 (http) and 443 (https)",
+                },
+                {
+                  label: "Path:",
+                  text: "/folder/page.html—the resource location on the server",
+                },
+                {
+                  label: "Query:",
+                  text: "?key=value&key2=value2—parameters passed to the server",
+                },
+                {
+                  label: "Fragment:",
+                  text: "#section—client-side only, jumps to page anchor (not sent to server!)",
+                },
               ],
             },
             {
               title: "Query Parameter Secrets",
               items: [
-                { label: "UTM params:", text: "utm_source, utm_medium, utm_campaign—tracking where traffic comes from" },
-                { label: "Pagination:", text: "?page=2&limit=20—standard for API results" },
-                { label: "Sorting:", text: "?sort=price&order=asc—common API pattern" },
-                { label: "Filtering:", text: "?category=electronics&brand=apple—narrow down results" },
-                { label: "Auth tokens:", text: "?token=abc123—sometimes in URL (not recommended for security!)" },
+                {
+                  label: "UTM params:",
+                  text: "utm_source, utm_medium, utm_campaign—tracking where traffic comes from",
+                },
+                {
+                  label: "Pagination:",
+                  text: "?page=2&limit=20—standard for API results",
+                },
+                {
+                  label: "Sorting:",
+                  text: "?sort=price&order=asc—common API pattern",
+                },
+                {
+                  label: "Filtering:",
+                  text: "?category=electronics&brand=apple—narrow down results",
+                },
+                {
+                  label: "Auth tokens:",
+                  text: "?token=abc123—sometimes in URL (not recommended for security!)",
+                },
               ],
             },
             {
@@ -566,29 +865,48 @@ export const toolsData: ToolData = {
             type: "info",
             title: "CSV: The Simplest Data Format",
             items: [
-              { label: "Origin:", text: "CSV predates personal computers—used in 1972 on IBM mainframes!" },
-              { label: "No standard:", text: "RFC 4180 exists but is just a guideline—Excel, Google Sheets, and databases all do it slightly differently" },
-              { label: "Still dominant:", text: "In 2024, CSV remains the #1 data exchange format for non-developers" },
+              {
+                label: "Origin:",
+                text: "CSV predates personal computers—used in 1972 on IBM mainframes!",
+              },
+              {
+                label: "No standard:",
+                text: "RFC 4180 exists but is just a guideline—Excel, Google Sheets, and databases all do it slightly differently",
+              },
+              {
+                label: "Still dominant:",
+                text: "In 2024, CSV remains the #1 data exchange format for non-developers",
+              },
             ],
           },
-          shortcuts: [
-            { key: "Ctrl+Shift+4", action: "Open CSV to JSON tool" },
-          ],
+          shortcuts: [{ key: "Ctrl+Shift+4", action: "Open CSV to JSON tool" }],
           sections: [
             {
               title: "Delimiter Options Explained",
               items: [
-                { label: "Comma (,):", text: "Standard CSV—but breaks when data contains commas (addresses, numbers with thousand separators)" },
-                { label: "Semicolon (;):", text: "European standard—countries using comma as decimal separator (1.234,56) use semicolon for CSV" },
-                { label: "Tab (\\t):", text: "TSV format—safest choice, tabs rarely appear in data. Excel 'Export as Text' uses this" },
-                { label: "Pipe (|):", text: "Database dumps and legacy systems—visible separator that almost never appears in data" },
+                {
+                  label: "Comma (,):",
+                  text: "Standard CSV—but breaks when data contains commas (addresses, numbers with thousand separators)",
+                },
+                {
+                  label: "Semicolon (;):",
+                  text: "European standard—countries using comma as decimal separator (1.234,56) use semicolon for CSV",
+                },
+                {
+                  label: "Tab (\\t):",
+                  text: "TSV format—safest choice, tabs rarely appear in data. Excel 'Export as Text' uses this",
+                },
+                {
+                  label: "Pipe (|):",
+                  text: "Database dumps and legacy systems—visible separator that almost never appears in data",
+                },
               ],
             },
             {
               title: "CSV Gotchas This Tool Handles",
               items: [
-                "Quoted fields: \"New York, NY\" stays together despite the comma inside",
-                "Escaped quotes: \"She said \"\"Hello\"\"\" → She said \"Hello\"",
+                'Quoted fields: "New York, NY" stays together despite the comma inside',
+                'Escaped quotes: "She said ""Hello""" → She said "Hello"',
                 "Empty fields: a,,c → three fields, middle one is empty string",
                 "Trailing commas: Some exports add extra comma—we handle it gracefully",
                 "Mixed line endings: Windows (CRLF), Mac (CR), Unix (LF)—all supported",
@@ -597,11 +915,26 @@ export const toolsData: ToolData = {
             {
               title: "Why Convert CSV to JSON?",
               items: [
-                { label: "APIs:", text: "REST APIs expect JSON—not a single major API accepts CSV directly" },
-                { label: "JavaScript:", text: "JSON.parse() is native; CSV needs a library or custom parser" },
-                { label: "Type safety:", text: "JSON preserves numbers, booleans, nulls—CSV treats everything as strings" },
-                { label: "Nesting:", text: "JSON supports hierarchy; CSV is flat tables only" },
-                { label: "Databases:", text: "MongoDB, Elasticsearch, Firebase—all JSON-native" },
+                {
+                  label: "APIs:",
+                  text: "REST APIs expect JSON—not a single major API accepts CSV directly",
+                },
+                {
+                  label: "JavaScript:",
+                  text: "JSON.parse() is native; CSV needs a library or custom parser",
+                },
+                {
+                  label: "Type safety:",
+                  text: "JSON preserves numbers, booleans, nulls—CSV treats everything as strings",
+                },
+                {
+                  label: "Nesting:",
+                  text: "JSON supports hierarchy; CSV is flat tables only",
+                },
+                {
+                  label: "Databases:",
+                  text: "MongoDB, Elasticsearch, Firebase—all JSON-native",
+                },
               ],
             },
             {
@@ -618,9 +951,18 @@ export const toolsData: ToolData = {
             {
               title: "JSON Output Formats",
               items: [
-                { label: "Array of objects:", text: "[{name: 'Alice', age: 30}, ...] — most common, each row is an object" },
-                { label: "Pretty printed:", text: "Indented with newlines—human readable, larger file size" },
-                { label: "Minified:", text: "No whitespace—smaller file, harder to debug" },
+                {
+                  label: "Array of objects:",
+                  text: "[{name: 'Alice', age: 30}, ...] — most common, each row is an object",
+                },
+                {
+                  label: "Pretty printed:",
+                  text: "Indented with newlines—human readable, larger file size",
+                },
+                {
+                  label: "Minified:",
+                  text: "No whitespace—smaller file, harder to debug",
+                },
               ],
             },
             {
@@ -656,10 +998,22 @@ export const toolsData: ToolData = {
             type: "info",
             title: "Why Different Number Bases Exist",
             items: [
-              { label: "Binary (2):", text: "Computers use it—transistors are either ON (1) or OFF (0)" },
-              { label: "Octal (8):", text: "Unix file permissions (chmod 755), compact binary representation" },
-              { label: "Decimal (10):", text: "Humans have 10 fingers—that's literally why we use base 10" },
-              { label: "Hex (16):", text: "4 bits = 1 hex digit, perfect for representing bytes compactly" },
+              {
+                label: "Binary (2):",
+                text: "Computers use it—transistors are either ON (1) or OFF (0)",
+              },
+              {
+                label: "Octal (8):",
+                text: "Unix file permissions (chmod 755), compact binary representation",
+              },
+              {
+                label: "Decimal (10):",
+                text: "Humans have 10 fingers—that's literally why we use base 10",
+              },
+              {
+                label: "Hex (16):",
+                text: "4 bits = 1 hex digit, perfect for representing bytes compactly",
+              },
             ],
           },
           shortcuts: [
@@ -669,32 +1023,77 @@ export const toolsData: ToolData = {
             {
               title: "Hex Colors Decoded",
               items: [
-                { label: "#FF0000:", text: "Red=255, Green=0, Blue=0 → Pure red" },
-                { label: "#00FF00:", text: "Red=0, Green=255, Blue=0 → Pure green" },
-                { label: "#0000FF:", text: "Red=0, Green=0, Blue=255 → Pure blue" },
-                { label: "#FFFFFF:", text: "All channels maxed (255,255,255) → White" },
+                {
+                  label: "#FF0000:",
+                  text: "Red=255, Green=0, Blue=0 → Pure red",
+                },
+                {
+                  label: "#00FF00:",
+                  text: "Red=0, Green=255, Blue=0 → Pure green",
+                },
+                {
+                  label: "#0000FF:",
+                  text: "Red=0, Green=0, Blue=255 → Pure blue",
+                },
+                {
+                  label: "#FFFFFF:",
+                  text: "All channels maxed (255,255,255) → White",
+                },
                 { label: "#000000:", text: "All channels zero → Black" },
-                { label: "Why hex?:", text: "FF = 255 in decimal, fits in 2 chars instead of 3" },
+                {
+                  label: "Why hex?:",
+                  text: "FF = 255 in decimal, fits in 2 chars instead of 3",
+                },
               ],
             },
             {
               title: "Binary Tricks Programmers Use",
               items: [
-                { label: "Powers of 2:", text: "1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024..." },
-                { label: "Check if power of 2:", text: "n & (n-1) === 0 (bit manipulation magic)" },
-                { label: "Multiply by 2:", text: "Shift left: 5 << 1 = 10 (0101 → 1010)" },
-                { label: "Divide by 2:", text: "Shift right: 10 >> 1 = 5 (1010 → 0101)" },
-                { label: "Odd/even check:", text: "n & 1 — if 1, it's odd (last bit is 1)" },
+                {
+                  label: "Powers of 2:",
+                  text: "1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024...",
+                },
+                {
+                  label: "Check if power of 2:",
+                  text: "n & (n-1) === 0 (bit manipulation magic)",
+                },
+                {
+                  label: "Multiply by 2:",
+                  text: "Shift left: 5 << 1 = 10 (0101 → 1010)",
+                },
+                {
+                  label: "Divide by 2:",
+                  text: "Shift right: 10 >> 1 = 5 (1010 → 0101)",
+                },
+                {
+                  label: "Odd/even check:",
+                  text: "n & 1 — if 1, it's odd (last bit is 1)",
+                },
               ],
             },
             {
               title: "Unix Permissions Explained",
               items: [
-                { label: "chmod 755:", text: "7=rwx (owner), 5=r-x (group), 5=r-x (others)" },
-                { label: "7 in binary:", text: "111 = read(4) + write(2) + execute(1)" },
-                { label: "5 in binary:", text: "101 = read(4) + execute(1), no write" },
-                { label: "chmod 644:", text: "rw-r--r-- (owner can write, others read only)" },
-                { label: "Why octal?:", text: "3 permission bits map perfectly to 1 octal digit" },
+                {
+                  label: "chmod 755:",
+                  text: "7=rwx (owner), 5=r-x (group), 5=r-x (others)",
+                },
+                {
+                  label: "7 in binary:",
+                  text: "111 = read(4) + write(2) + execute(1)",
+                },
+                {
+                  label: "5 in binary:",
+                  text: "101 = read(4) + execute(1), no write",
+                },
+                {
+                  label: "chmod 644:",
+                  text: "rw-r--r-- (owner can write, others read only)",
+                },
+                {
+                  label: "Why octal?:",
+                  text: "3 permission bits map perfectly to 1 octal digit",
+                },
               ],
             },
             {
@@ -731,11 +1130,26 @@ export const toolsData: ToolData = {
             {
               title: "Quick Reference",
               items: [
-                { label: "0b1010:", text: "Binary literal in JS/Python/Rust = 10 decimal" },
-                { label: "0o755:", text: "Octal literal in JS/Python = 493 decimal" },
-                { label: "0xFF:", text: "Hex literal in most languages = 255 decimal" },
-                { label: "parseInt('FF', 16):", text: "JS: parse hex string → 255" },
-                { label: "(255).toString(16):", text: "JS: decimal to hex string → 'ff'" },
+                {
+                  label: "0b1010:",
+                  text: "Binary literal in JS/Python/Rust = 10 decimal",
+                },
+                {
+                  label: "0o755:",
+                  text: "Octal literal in JS/Python = 493 decimal",
+                },
+                {
+                  label: "0xFF:",
+                  text: "Hex literal in most languages = 255 decimal",
+                },
+                {
+                  label: "parseInt('FF', 16):",
+                  text: "JS: parse hex string → 255",
+                },
+                {
+                  label: "(255).toString(16):",
+                  text: "JS: decimal to hex string → 'ff'",
+                },
               ],
             },
           ],
@@ -767,37 +1181,73 @@ export const toolsData: ToolData = {
             type: "info",
             title: "JSON Fun Facts",
             items: [
-              { label: "Origin:", text: "Douglas Crockford discovered JSON in 2001—he says he 'didn't invent it, just found it'" },
-              { label: "Name:", text: "JavaScript Object Notation, but used by every language now (Python, Go, Rust, Java...)" },
-              { label: "File size:", text: "Minified JSON is ~30% smaller than formatted—matters for APIs serving millions of requests" },
+              {
+                label: "Origin:",
+                text: "Douglas Crockford discovered JSON in 2001—he says he 'didn't invent it, just found it'",
+              },
+              {
+                label: "Name:",
+                text: "JavaScript Object Notation, but used by every language now (Python, Go, Rust, Java...)",
+              },
+              {
+                label: "File size:",
+                text: "Minified JSON is ~30% smaller than formatted—matters for APIs serving millions of requests",
+              },
             ],
           },
           sections: [
             {
               title: "Top JSON Mistakes (And How to Spot Them)",
               items: [
-                { label: "Trailing comma:", text: "{\"a\": 1,} ← Remove that last comma! Valid in JS, invalid in JSON" },
-                { label: "Single quotes:", text: "{'name': 'John'} ← Must use double quotes for keys AND strings" },
-                { label: "Unquoted keys:", text: "{name: \"John\"} ← Every key needs double quotes" },
-                { label: "Comments:", text: "// not allowed ← JSON has no comments (use JSONC formatter for that)" },
-                { label: "Undefined:", text: "undefined isn't valid—use null instead" },
+                {
+                  label: "Trailing comma:",
+                  text: '{"a": 1,} ← Remove that last comma! Valid in JS, invalid in JSON',
+                },
+                {
+                  label: "Single quotes:",
+                  text: "{'name': 'John'} ← Must use double quotes for keys AND strings",
+                },
+                {
+                  label: "Unquoted keys:",
+                  text: '{name: "John"} ← Every key needs double quotes',
+                },
+                {
+                  label: "Comments:",
+                  text: "// not allowed ← JSON has no comments (use JSONC formatter for that)",
+                },
+                {
+                  label: "Undefined:",
+                  text: "undefined isn't valid—use null instead",
+                },
               ],
             },
             {
               title: "JSON vs Similar Formats",
               items: [
-                { label: "JSON5:", text: "Allows comments, trailing commas, unquoted keys—human-friendly JSON" },
-                { label: "JSONC:", text: "JSON with Comments—used by VS Code, TypeScript configs" },
-                { label: "YAML:", text: "Indentation-based, more readable for configs, but whitespace-sensitive" },
-                { label: "TOML:", text: "INI-like format, popular in Rust (Cargo.toml) and Python (pyproject.toml)" },
+                {
+                  label: "JSON5:",
+                  text: "Allows comments, trailing commas, unquoted keys—human-friendly JSON",
+                },
+                {
+                  label: "JSONC:",
+                  text: "JSON with Comments—used by VS Code, TypeScript configs",
+                },
+                {
+                  label: "YAML:",
+                  text: "Indentation-based, more readable for configs, but whitespace-sensitive",
+                },
+                {
+                  label: "TOML:",
+                  text: "INI-like format, popular in Rust (Cargo.toml) and Python (pyproject.toml)",
+                },
               ],
             },
             {
               title: "Real-World Debugging",
               items: [
                 "API returns HTML instead of JSON? Check if you're hitting an error page or wrong endpoint",
-                "\"Unexpected token < at position 0\" = Server returned HTML (probably a 404 or 500 page)",
-                "Nested escape hell? {\"data\": \"{\\\"nested\\\": true}\"} = JSON stringified twice",
+                '"Unexpected token < at position 0" = Server returned HTML (probably a 404 or 500 page)',
+                'Nested escape hell? {"data": "{\\"nested\\": true}"} = JSON stringified twice',
                 "Unicode issues? Ensure UTF-8 encoding and escape special chars (\\u0000 format)",
                 "Large files slow? Streaming parsers (like JSONStream) handle gigabyte files",
               ],
@@ -807,8 +1257,8 @@ export const toolsData: ToolData = {
               items: [
                 "Minify first: Removes whitespace (30% smaller, free)",
                 "GZIP: Standard HTTP compression (70-90% smaller)",
-                "Short keys: {\"n\": \"John\"} vs {\"firstName\": \"John\"} saves bytes at scale",
-                "Arrays over objects: [{\"id\":1},{\"id\":2}] → [1,2] when context is clear",
+                'Short keys: {"n": "John"} vs {"firstName": "John"} saves bytes at scale',
+                'Arrays over objects: [{"id":1},{"id":2}] → [1,2] when context is clear',
                 "Binary alternatives: Protocol Buffers, MessagePack for performance-critical apps",
               ],
             },
@@ -843,34 +1293,71 @@ export const toolsData: ToolData = {
             type: "info",
             title: "JSONC: JSON's Practical Cousin",
             items: [
-              { label: "The problem:", text: "Douglas Crockford intentionally excluded comments from JSON to prevent abuse" },
-              { label: "The reality:", text: "Config files desperately need comments—JSONC fills that gap" },
-              { label: "Not standard:", text: "JSONC isn't official JSON—most parsers will reject it" },
+              {
+                label: "The problem:",
+                text: "Douglas Crockford intentionally excluded comments from JSON to prevent abuse",
+              },
+              {
+                label: "The reality:",
+                text: "Config files desperately need comments—JSONC fills that gap",
+              },
+              {
+                label: "Not standard:",
+                text: "JSONC isn't official JSON—most parsers will reject it",
+              },
             ],
           },
-          shortcuts: [
-            { key: "Ctrl+Shift+C", action: "Open JSONC Formatter" },
-          ],
+          shortcuts: [{ key: "Ctrl+Shift+C", action: "Open JSONC Formatter" }],
           sections: [
             {
               title: "Files That Use JSONC",
               items: [
-                { label: "tsconfig.json:", text: "TypeScript config—despite the .json extension, it's actually JSONC!" },
-                { label: "settings.json:", text: "VS Code user and workspace settings" },
+                {
+                  label: "tsconfig.json:",
+                  text: "TypeScript config—despite the .json extension, it's actually JSONC!",
+                },
+                {
+                  label: "settings.json:",
+                  text: "VS Code user and workspace settings",
+                },
                 { label: "launch.json:", text: "VS Code debug configurations" },
-                { label: "tasks.json:", text: "VS Code task runner definitions" },
-                { label: "devcontainer.json:", text: "VS Code Dev Containers configuration" },
-                { label: ".vscode/*.json:", text: "Almost all VS Code config files support comments" },
-                { label: "azure-pipelines.yml:", text: "Uses JSON sections that allow comments" },
+                {
+                  label: "tasks.json:",
+                  text: "VS Code task runner definitions",
+                },
+                {
+                  label: "devcontainer.json:",
+                  text: "VS Code Dev Containers configuration",
+                },
+                {
+                  label: ".vscode/*.json:",
+                  text: "Almost all VS Code config files support comments",
+                },
+                {
+                  label: "azure-pipelines.yml:",
+                  text: "Uses JSON sections that allow comments",
+                },
               ],
             },
             {
               title: "Comment Syntax",
               items: [
-                { label: "// single line:", text: "Most common, works anywhere" },
-                { label: "/* block */:", text: "Multi-line comments, can span lines" },
-                { label: "Trailing commas:", text: "JSONC often allows them too: [1, 2, 3,] ← valid!" },
-                { label: "Inside strings:", text: "// in a string value is NOT a comment—it's literal text" },
+                {
+                  label: "// single line:",
+                  text: "Most common, works anywhere",
+                },
+                {
+                  label: "/* block */:",
+                  text: "Multi-line comments, can span lines",
+                },
+                {
+                  label: "Trailing commas:",
+                  text: "JSONC often allows them too: [1, 2, 3,] ← valid!",
+                },
+                {
+                  label: "Inside strings:",
+                  text: "// in a string value is NOT a comment—it's literal text",
+                },
               ],
             },
             {
@@ -885,18 +1372,39 @@ export const toolsData: ToolData = {
             {
               title: "JSONC vs JSON5 vs YAML",
               items: [
-                { label: "JSONC:", text: "JSON + comments + trailing commas. Nothing else changes" },
-                { label: "JSON5:", text: "JSONC + unquoted keys + single quotes + hex numbers + more" },
-                { label: "YAML:", text: "Completely different syntax, indentation-based, very flexible" },
-                { label: "TOML:", text: "INI-style sections, popular for Rust (Cargo.toml) and Python (pyproject.toml)" },
+                {
+                  label: "JSONC:",
+                  text: "JSON + comments + trailing commas. Nothing else changes",
+                },
+                {
+                  label: "JSON5:",
+                  text: "JSONC + unquoted keys + single quotes + hex numbers + more",
+                },
+                {
+                  label: "YAML:",
+                  text: "Completely different syntax, indentation-based, very flexible",
+                },
+                {
+                  label: "TOML:",
+                  text: "INI-style sections, popular for Rust (Cargo.toml) and Python (pyproject.toml)",
+                },
               ],
             },
             {
               title: "Parsing JSONC in Code",
               items: [
-                { label: "VS Code:", text: "jsonc-parser npm package (official, battle-tested)" },
-                { label: "Strip comments:", text: "npm install strip-json-comments, then JSON.parse()" },
-                { label: "TypeScript:", text: "Built-in ts.parseConfigFileTextToJson() handles tsconfig.json" },
+                {
+                  label: "VS Code:",
+                  text: "jsonc-parser npm package (official, battle-tested)",
+                },
+                {
+                  label: "Strip comments:",
+                  text: "npm install strip-json-comments, then JSON.parse()",
+                },
+                {
+                  label: "TypeScript:",
+                  text: "Built-in ts.parseConfigFileTextToJson() handles tsconfig.json",
+                },
                 { label: "Python:", text: "commentjson or json5 packages" },
                 { label: "Go:", text: "hujson package from Tailscale" },
               ],
@@ -943,20 +1451,44 @@ export const toolsData: ToolData = {
             type: "info",
             title: "HTML: The Web's Foundation",
             items: [
-              { label: "Created:", text: "1991 by Tim Berners-Lee at CERN—originally just 18 tags!" },
-              { label: "HTML5:", text: "Released 2014 after 15 years of development, added <video>, <canvas>, <article>" },
-              { label: "Today:", text: "~115 standard elements, but most pages use fewer than 30" },
+              {
+                label: "Created:",
+                text: "1991 by Tim Berners-Lee at CERN—originally just 18 tags!",
+              },
+              {
+                label: "HTML5:",
+                text: "Released 2014 after 15 years of development, added <video>, <canvas>, <article>",
+              },
+              {
+                label: "Today:",
+                text: "~115 standard elements, but most pages use fewer than 30",
+              },
             ],
           },
           sections: [
             {
               title: "Common HTML Mistakes This Catches",
               items: [
-                { label: "Unclosed tags:", text: "<div><p>Text</div> ← Missing </p> breaks layout unpredictably" },
-                { label: "Missing alt:", text: "<img src='photo.jpg'> ← Screen readers can't describe this image" },
-                { label: "Empty href:", text: "<a href=''>Click</a> ← Reloads page instead of doing nothing" },
-                { label: "Inline styles:", text: "style='color:red' works but makes maintenance nightmare" },
-                { label: "Deprecated tags:", text: "<center>, <font>, <marquee>—use CSS instead (it's 2024!)" },
+                {
+                  label: "Unclosed tags:",
+                  text: "<div><p>Text</div> ← Missing </p> breaks layout unpredictably",
+                },
+                {
+                  label: "Missing alt:",
+                  text: "<img src='photo.jpg'> ← Screen readers can't describe this image",
+                },
+                {
+                  label: "Empty href:",
+                  text: "<a href=''>Click</a> ← Reloads page instead of doing nothing",
+                },
+                {
+                  label: "Inline styles:",
+                  text: "style='color:red' works but makes maintenance nightmare",
+                },
+                {
+                  label: "Deprecated tags:",
+                  text: "<center>, <font>, <marquee>—use CSS instead (it's 2024!)",
+                },
               ],
             },
             {
@@ -972,23 +1504,56 @@ export const toolsData: ToolData = {
             {
               title: "SEO HTML Essentials",
               items: [
-                { label: "<title>:", text: "50-60 chars, unique per page, keyword near front" },
-                { label: "<meta description>:", text: "150-160 chars, compelling summary for search results" },
-                { label: "Semantic tags:", text: "<header>, <nav>, <main>, <article>, <footer>—helps Google understand structure" },
-                { label: "Heading structure:", text: "One <h1> per page, logical hierarchy signals importance" },
-                { label: "Image alt text:", text: "Helps Google Images understand and rank your images" },
+                {
+                  label: "<title>:",
+                  text: "50-60 chars, unique per page, keyword near front",
+                },
+                {
+                  label: "<meta description>:",
+                  text: "150-160 chars, compelling summary for search results",
+                },
+                {
+                  label: "Semantic tags:",
+                  text: "<header>, <nav>, <main>, <article>, <footer>—helps Google understand structure",
+                },
+                {
+                  label: "Heading structure:",
+                  text: "One <h1> per page, logical hierarchy signals importance",
+                },
+                {
+                  label: "Image alt text:",
+                  text: "Helps Google Images understand and rank your images",
+                },
               ],
             },
             {
               title: "HTML5 Semantic Elements",
               items: [
-                { label: "<header>:", text: "Introductory content, typically contains logo and nav" },
-                { label: "<nav>:", text: "Navigation links (main menu, breadcrumbs)" },
+                {
+                  label: "<header>:",
+                  text: "Introductory content, typically contains logo and nav",
+                },
+                {
+                  label: "<nav>:",
+                  text: "Navigation links (main menu, breadcrumbs)",
+                },
                 { label: "<main>:", text: "Primary content—only ONE per page" },
-                { label: "<article>:", text: "Self-contained content (blog post, news story, comment)" },
-                { label: "<section>:", text: "Thematic grouping of content, usually with heading" },
-                { label: "<aside>:", text: "Tangentially related content (sidebars, pull quotes)" },
-                { label: "<footer>:", text: "Footer info—copyright, links, contact" },
+                {
+                  label: "<article>:",
+                  text: "Self-contained content (blog post, news story, comment)",
+                },
+                {
+                  label: "<section>:",
+                  text: "Thematic grouping of content, usually with heading",
+                },
+                {
+                  label: "<aside>:",
+                  text: "Tangentially related content (sidebars, pull quotes)",
+                },
+                {
+                  label: "<footer>:",
+                  text: "Footer info—copyright, links, contact",
+                },
               ],
             },
             {
@@ -1034,39 +1599,90 @@ export const toolsData: ToolData = {
             type: "info",
             title: "YAML: Yet Another Markup Language (or is it?)",
             items: [
-              { label: "Original name:", text: "'Yet Another Markup Language' (2001)" },
-              { label: "Renamed:", text: "'YAML Ain't Markup Language' — a recursive acronym emphasizing data over documents" },
-              { label: "Superset:", text: "All JSON is valid YAML (but not vice versa)" },
+              {
+                label: "Original name:",
+                text: "'Yet Another Markup Language' (2001)",
+              },
+              {
+                label: "Renamed:",
+                text: "'YAML Ain't Markup Language' — a recursive acronym emphasizing data over documents",
+              },
+              {
+                label: "Superset:",
+                text: "All JSON is valid YAML (but not vice versa)",
+              },
             ],
           },
           sections: [
             {
               title: "YAML's Infamous Gotchas",
               items: [
-                { label: "Norway problem:", text: "NO (country code) becomes boolean false. Quote it: 'NO'" },
-                { label: "Time trap:", text: "12:30 becomes 750 (minutes). Use quotes: '12:30'" },
-                { label: "Version floats:", text: "3.10 becomes 3.1. Quote versions: '3.10'" },
-                { label: "Octal surprise:", text: "0777 is parsed as octal (511 decimal) in YAML 1.1" },
-                { label: "On/Off:", text: "on, off, yes, no all become booleans—quote them!" },
+                {
+                  label: "Norway problem:",
+                  text: "NO (country code) becomes boolean false. Quote it: 'NO'",
+                },
+                {
+                  label: "Time trap:",
+                  text: "12:30 becomes 750 (minutes). Use quotes: '12:30'",
+                },
+                {
+                  label: "Version floats:",
+                  text: "3.10 becomes 3.1. Quote versions: '3.10'",
+                },
+                {
+                  label: "Octal surprise:",
+                  text: "0777 is parsed as octal (511 decimal) in YAML 1.1",
+                },
+                {
+                  label: "On/Off:",
+                  text: "on, off, yes, no all become booleans—quote them!",
+                },
               ],
             },
             {
               title: "Where YAML Dominates",
               items: [
-                { label: "Kubernetes:", text: "All manifests (pods, deployments, services) are YAML" },
-                { label: "GitHub Actions:", text: ".github/workflows/*.yml for CI/CD pipelines" },
-                { label: "Docker Compose:", text: "docker-compose.yml for multi-container apps" },
-                { label: "Ansible:", text: "Playbooks and roles for infrastructure automation" },
-                { label: "OpenAPI/Swagger:", text: "API specifications (though JSON works too)" },
-                { label: "Home Assistant:", text: "Smart home automation config" },
+                {
+                  label: "Kubernetes:",
+                  text: "All manifests (pods, deployments, services) are YAML",
+                },
+                {
+                  label: "GitHub Actions:",
+                  text: ".github/workflows/*.yml for CI/CD pipelines",
+                },
+                {
+                  label: "Docker Compose:",
+                  text: "docker-compose.yml for multi-container apps",
+                },
+                {
+                  label: "Ansible:",
+                  text: "Playbooks and roles for infrastructure automation",
+                },
+                {
+                  label: "OpenAPI/Swagger:",
+                  text: "API specifications (though JSON works too)",
+                },
+                {
+                  label: "Home Assistant:",
+                  text: "Smart home automation config",
+                },
               ],
             },
             {
               title: "YAML vs JSON vs TOML",
               items: [
-                { label: "YAML:", text: "Most readable, but whitespace-sensitive. Great for configs humans edit" },
-                { label: "JSON:", text: "More verbose, no comments, but zero ambiguity. Best for APIs/data exchange" },
-                { label: "TOML:", text: "INI-style, explicit sections. Used by Rust (Cargo.toml), Python (pyproject.toml)" },
+                {
+                  label: "YAML:",
+                  text: "Most readable, but whitespace-sensitive. Great for configs humans edit",
+                },
+                {
+                  label: "JSON:",
+                  text: "More verbose, no comments, but zero ambiguity. Best for APIs/data exchange",
+                },
+                {
+                  label: "TOML:",
+                  text: "INI-style, explicit sections. Used by Rust (Cargo.toml), Python (pyproject.toml)",
+                },
               ],
             },
             {
@@ -1128,7 +1744,10 @@ export const toolsData: ToolData = {
               { label: "**bold** / *italic*", text: "or __bold__ / _italic_" },
               { label: "[text](url)", text: "hyperlink" },
               { label: "![alt](image.png)", text: "image (! prefix)" },
-              { label: "```language", text: "fenced code block with syntax highlighting" },
+              {
+                label: "```language",
+                text: "fenced code block with syntax highlighting",
+              },
             ],
           },
           sections: [
@@ -1195,22 +1814,41 @@ export const toolsData: ToolData = {
             type: "info",
             title: "CSS: Styling the Web Since 1996",
             items: [
-              { label: "Created:", text: "Håkon Wium Lie proposed CSS in 1994, released December 1996" },
-              { label: "The problem:", text: "Before CSS, styling was inline <font color='red'>—nightmare to maintain" },
-              { label: "Today:", text: "CSS3 has 500+ properties, but most sites use fewer than 50" },
+              {
+                label: "Created:",
+                text: "Håkon Wium Lie proposed CSS in 1994, released December 1996",
+              },
+              {
+                label: "The problem:",
+                text: "Before CSS, styling was inline <font color='red'>—nightmare to maintain",
+              },
+              {
+                label: "Today:",
+                text: "CSS3 has 500+ properties, but most sites use fewer than 50",
+              },
             ],
           },
-          shortcuts: [
-            { key: "Ctrl+Shift+7", action: "Open CSS Formatter" },
-          ],
+          shortcuts: [{ key: "Ctrl+Shift+7", action: "Open CSS Formatter" }],
           sections: [
             {
               title: "CSS vs SCSS vs LESS",
               items: [
-                { label: "CSS:", text: "Standard browser styling—what actually runs in the browser" },
-                { label: "SCSS (Sass):", text: "Variables ($color), nesting, mixins, @import. Compiles to CSS" },
-                { label: "LESS:", text: "Similar to SCSS but uses @color syntax. Bootstrap 3 used it" },
-                { label: "Winner?:", text: "SCSS dominates (Bootstrap 4+, Tailwind source, most frameworks)" },
+                {
+                  label: "CSS:",
+                  text: "Standard browser styling—what actually runs in the browser",
+                },
+                {
+                  label: "SCSS (Sass):",
+                  text: "Variables ($color), nesting, mixins, @import. Compiles to CSS",
+                },
+                {
+                  label: "LESS:",
+                  text: "Similar to SCSS but uses @color syntax. Bootstrap 3 used it",
+                },
+                {
+                  label: "Winner?:",
+                  text: "SCSS dominates (Bootstrap 4+, Tailwind source, most frameworks)",
+                },
               ],
             },
             {
@@ -1226,11 +1864,26 @@ export const toolsData: ToolData = {
             {
               title: "Modern CSS Features (No Preprocessor Needed!)",
               items: [
-                { label: "CSS Variables:", text: "--primary: #007bff; color: var(--primary);" },
-                { label: "Nesting (2023):", text: ".card { & .title { } } — Native CSS nesting is here!" },
-                { label: "calc():", text: "width: calc(100% - 20px); — Math in plain CSS" },
-                { label: "@layer:", text: "Control specificity cascade order (CSS Cascade Layers)" },
-                { label: ":has():", text: "Parent selector! .card:has(img) { } — long-awaited feature" },
+                {
+                  label: "CSS Variables:",
+                  text: "--primary: #007bff; color: var(--primary);",
+                },
+                {
+                  label: "Nesting (2023):",
+                  text: ".card { & .title { } } — Native CSS nesting is here!",
+                },
+                {
+                  label: "calc():",
+                  text: "width: calc(100% - 20px); — Math in plain CSS",
+                },
+                {
+                  label: "@layer:",
+                  text: "Control specificity cascade order (CSS Cascade Layers)",
+                },
+                {
+                  label: ":has():",
+                  text: "Parent selector! .card:has(img) { } — long-awaited feature",
+                },
               ],
             },
             {
@@ -1247,10 +1900,16 @@ export const toolsData: ToolData = {
               title: "CSS Specificity Cheat Sheet",
               items: [
                 { label: "0,0,0,1:", text: "Element (p, div, span)" },
-                { label: "0,0,1,0:", text: "Class (.btn), attribute [type='text'], pseudo-class (:hover)" },
+                {
+                  label: "0,0,1,0:",
+                  text: "Class (.btn), attribute [type='text'], pseudo-class (:hover)",
+                },
                 { label: "0,1,0,0:", text: "ID (#header)" },
                 { label: "1,0,0,0:", text: "Inline style (style='...')" },
-                { label: "∞:", text: "!important — nuclear option, avoid if possible" },
+                {
+                  label: "∞:",
+                  text: "!important — nuclear option, avoid if possible",
+                },
               ],
             },
             {
@@ -1266,11 +1925,26 @@ export const toolsData: ToolData = {
             {
               title: "CSS Architecture Patterns",
               items: [
-                { label: "BEM:", text: ".block__element--modifier — Most popular naming convention" },
-                { label: "OOCSS:", text: "Separate structure and skin (reusable objects)" },
-                { label: "SMACSS:", text: "Categories: Base, Layout, Module, State, Theme" },
-                { label: "Atomic/Utility:", text: "Tailwind approach: .flex .items-center .p-4" },
-                { label: "CSS Modules:", text: "Scoped class names, no global conflicts" },
+                {
+                  label: "BEM:",
+                  text: ".block__element--modifier — Most popular naming convention",
+                },
+                {
+                  label: "OOCSS:",
+                  text: "Separate structure and skin (reusable objects)",
+                },
+                {
+                  label: "SMACSS:",
+                  text: "Categories: Base, Layout, Module, State, Theme",
+                },
+                {
+                  label: "Atomic/Utility:",
+                  text: "Tailwind approach: .flex .items-center .p-4",
+                },
+                {
+                  label: "CSS Modules:",
+                  text: "Scoped class names, no global conflicts",
+                },
               ],
             },
             {
@@ -1365,28 +2039,61 @@ export const toolsData: ToolData = {
             type: "info",
             title: "GraphQL Origins",
             items: [
-              { label: "Created:", text: "Facebook, 2012 (internal), open-sourced 2015" },
-              { label: "Why:", text: "Mobile app needed to fetch exactly what it needed—no more, no less" },
-              { label: "Name:", text: "Graph Query Language—models data as a graph of connected nodes" },
+              {
+                label: "Created:",
+                text: "Facebook, 2012 (internal), open-sourced 2015",
+              },
+              {
+                label: "Why:",
+                text: "Mobile app needed to fetch exactly what it needed—no more, no less",
+              },
+              {
+                label: "Name:",
+                text: "Graph Query Language—models data as a graph of connected nodes",
+              },
             ],
           },
           sections: [
             {
               title: "GraphQL vs REST: Key Differences",
               items: [
-                { label: "Endpoints:", text: "REST has many (/users, /posts), GraphQL has ONE (/graphql)" },
-                { label: "Over-fetching:", text: "REST returns everything; GraphQL returns exactly what you ask for" },
-                { label: "Under-fetching:", text: "REST needs multiple calls; GraphQL gets related data in one query" },
-                { label: "Versioning:", text: "REST uses /v1, /v2; GraphQL evolves schema without versions" },
-                { label: "Caching:", text: "REST uses HTTP caching; GraphQL needs custom solutions (Apollo, Relay)" },
+                {
+                  label: "Endpoints:",
+                  text: "REST has many (/users, /posts), GraphQL has ONE (/graphql)",
+                },
+                {
+                  label: "Over-fetching:",
+                  text: "REST returns everything; GraphQL returns exactly what you ask for",
+                },
+                {
+                  label: "Under-fetching:",
+                  text: "REST needs multiple calls; GraphQL gets related data in one query",
+                },
+                {
+                  label: "Versioning:",
+                  text: "REST uses /v1, /v2; GraphQL evolves schema without versions",
+                },
+                {
+                  label: "Caching:",
+                  text: "REST uses HTTP caching; GraphQL needs custom solutions (Apollo, Relay)",
+                },
               ],
             },
             {
               title: "Query, Mutation, Subscription",
               items: [
-                { label: "Query:", text: "Read data—like GET in REST. Can fetch nested related data in one call" },
-                { label: "Mutation:", text: "Write data—like POST/PUT/DELETE. Returns updated data immediately" },
-                { label: "Subscription:", text: "Real-time updates via WebSocket. Great for chat, notifications, live feeds" },
+                {
+                  label: "Query:",
+                  text: "Read data—like GET in REST. Can fetch nested related data in one call",
+                },
+                {
+                  label: "Mutation:",
+                  text: "Write data—like POST/PUT/DELETE. Returns updated data immediately",
+                },
+                {
+                  label: "Subscription:",
+                  text: "Real-time updates via WebSocket. Great for chat, notifications, live feeds",
+                },
               ],
             },
             {
@@ -1396,7 +2103,7 @@ export const toolsData: ToolData = {
                 "Nullable by default—add ! only when truly required (easier migrations)",
                 "Use interfaces for shared fields (Node, Timestamped, Auditable)",
                 "Prefer connections over arrays for pagination: users(first: 10, after: cursor)",
-                "Add descriptions: \"\"\"User account with profile and settings\"\"\" for documentation",
+                'Add descriptions: """User account with profile and settings""" for documentation',
               ],
             },
             {
@@ -1422,11 +2129,26 @@ export const toolsData: ToolData = {
             {
               title: "Tooling Ecosystem",
               items: [
-                { label: "Apollo:", text: "Most popular client and server libraries" },
-                { label: "Relay:", text: "Facebook's client, strict but powerful" },
-                { label: "Hasura:", text: "Instant GraphQL API from PostgreSQL" },
-                { label: "Prisma:", text: "Database toolkit that generates GraphQL resolvers" },
-                { label: "GraphiQL/Playground:", text: "Interactive IDE for exploring APIs" },
+                {
+                  label: "Apollo:",
+                  text: "Most popular client and server libraries",
+                },
+                {
+                  label: "Relay:",
+                  text: "Facebook's client, strict but powerful",
+                },
+                {
+                  label: "Hasura:",
+                  text: "Instant GraphQL API from PostgreSQL",
+                },
+                {
+                  label: "Prisma:",
+                  text: "Database toolkit that generates GraphQL resolvers",
+                },
+                {
+                  label: "GraphiQL/Playground:",
+                  text: "Interactive IDE for exploring APIs",
+                },
               ],
             },
           ],
@@ -1451,51 +2173,112 @@ export const toolsData: ToolData = {
             type: "info",
             title: "12-Hour vs 24-Hour Time",
             items: [
-              { label: "12-hour (AM/PM):", text: "US, Canada, Australia, Philippines—'3:00 PM'" },
-              { label: "24-hour (military):", text: "Most of Europe, Asia, Latin America—'15:00'" },
-              { label: "Fun fact:", text: "Japan uses both! 24-hour for trains, 12-hour in casual speech" },
+              {
+                label: "12-hour (AM/PM):",
+                text: "US, Canada, Australia, Philippines—'3:00 PM'",
+              },
+              {
+                label: "24-hour (military):",
+                text: "Most of Europe, Asia, Latin America—'15:00'",
+              },
+              {
+                label: "Fun fact:",
+                text: "Japan uses both! 24-hour for trains, 12-hour in casual speech",
+              },
             ],
           },
-          shortcuts: [
-            { key: "Ctrl+Shift+T", action: "Open Time Formatter" },
-          ],
+          shortcuts: [{ key: "Ctrl+Shift+T", action: "Open Time Formatter" }],
           sections: [
             {
               title: "Time Format Standards Explained",
               items: [
-                { label: "ISO 8601:", text: "2024-01-15T14:30:00Z — International standard, the 'T' separates date and time" },
-                { label: "RFC 3339:", text: "Internet's date-time format, based on ISO 8601 but stricter" },
-                { label: "Unix timestamp:", text: "Seconds since Jan 1, 1970 — 1705330200 = Jan 15, 2024 14:30 UTC" },
-                { label: "UTC:", text: "Coordinated Universal Time — the 'base' timezone (no DST changes)" },
+                {
+                  label: "ISO 8601:",
+                  text: "2024-01-15T14:30:00Z — International standard, the 'T' separates date and time",
+                },
+                {
+                  label: "RFC 3339:",
+                  text: "Internet's date-time format, based on ISO 8601 but stricter",
+                },
+                {
+                  label: "Unix timestamp:",
+                  text: "Seconds since Jan 1, 1970 — 1705330200 = Jan 15, 2024 14:30 UTC",
+                },
+                {
+                  label: "UTC:",
+                  text: "Coordinated Universal Time — the 'base' timezone (no DST changes)",
+                },
               ],
             },
             {
               title: "Midnight & Noon Confusion",
               items: [
-                { label: "12:00 AM:", text: "Midnight — start of day (00:00 in 24-hour)" },
-                { label: "12:00 PM:", text: "Noon — middle of day (12:00 in 24-hour)" },
-                { label: "12:01 AM:", text: "One minute after midnight (00:01)" },
-                { label: "Pro tip:", text: "Use 00:00 and 12:00 to avoid confusion in formal contexts" },
-                { label: "Airlines:", text: "Use 23:59 or 00:01 to avoid midnight ambiguity" },
+                {
+                  label: "12:00 AM:",
+                  text: "Midnight — start of day (00:00 in 24-hour)",
+                },
+                {
+                  label: "12:00 PM:",
+                  text: "Noon — middle of day (12:00 in 24-hour)",
+                },
+                {
+                  label: "12:01 AM:",
+                  text: "One minute after midnight (00:01)",
+                },
+                {
+                  label: "Pro tip:",
+                  text: "Use 00:00 and 12:00 to avoid confusion in formal contexts",
+                },
+                {
+                  label: "Airlines:",
+                  text: "Use 23:59 or 00:01 to avoid midnight ambiguity",
+                },
               ],
             },
             {
               title: "Exotic Time Systems (Yes, These Are Real)",
               items: [
-                { label: "Swatch .beats:", text: "1000 beats/day, no timezones—@500 means noon in Switzerland" },
-                { label: "Decimal time:", text: "French Revolution tried 10-hour days (1793-1805), failed spectacularly" },
-                { label: "Julian Day:", text: "Astronomers count days since 4713 BC—today is around JD 2460000" },
-                { label: "Stardate:", text: "Star Trek made it up, but fans created real calculation systems" },
+                {
+                  label: "Swatch .beats:",
+                  text: "1000 beats/day, no timezones—@500 means noon in Switzerland",
+                },
+                {
+                  label: "Decimal time:",
+                  text: "French Revolution tried 10-hour days (1793-1805), failed spectacularly",
+                },
+                {
+                  label: "Julian Day:",
+                  text: "Astronomers count days since 4713 BC—today is around JD 2460000",
+                },
+                {
+                  label: "Stardate:",
+                  text: "Star Trek made it up, but fans created real calculation systems",
+                },
               ],
             },
             {
               title: "Unix Timestamp Milestones",
               items: [
-                { label: "0:", text: "Jan 1, 1970 00:00:00 UTC — 'The Epoch', Unix's birthday" },
-                { label: "1000000000:", text: "Sep 9, 2001 01:46:40 UTC — '1 billion seconds' party" },
-                { label: "1234567890:", text: "Feb 13, 2009 23:31:30 UTC — developers celebrated" },
-                { label: "2147483647:", text: "Jan 19, 2038 03:14:07 UTC — Y2K38 bug (32-bit overflow!)" },
-                { label: "Negative:", text: "Timestamps before 1970 are negative (-1 = Dec 31, 1969 23:59:59)" },
+                {
+                  label: "0:",
+                  text: "Jan 1, 1970 00:00:00 UTC — 'The Epoch', Unix's birthday",
+                },
+                {
+                  label: "1000000000:",
+                  text: "Sep 9, 2001 01:46:40 UTC — '1 billion seconds' party",
+                },
+                {
+                  label: "1234567890:",
+                  text: "Feb 13, 2009 23:31:30 UTC — developers celebrated",
+                },
+                {
+                  label: "2147483647:",
+                  text: "Jan 19, 2038 03:14:07 UTC — Y2K38 bug (32-bit overflow!)",
+                },
+                {
+                  label: "Negative:",
+                  text: "Timestamps before 1970 are negative (-1 = Dec 31, 1969 23:59:59)",
+                },
               ],
             },
             {
@@ -1524,8 +2307,14 @@ export const toolsData: ToolData = {
                 { label: "1 hour:", text: "3600 seconds" },
                 { label: "1 day:", text: "86400 seconds" },
                 { label: "1 week:", text: "604800 seconds" },
-                { label: "1 year:", text: "~31536000 seconds (31557600 with leap year avg)" },
-                { label: "100 years:", text: "~3.15 billion seconds (fits in 32-bit signed int... barely)" },
+                {
+                  label: "1 year:",
+                  text: "~31536000 seconds (31557600 with leap year avg)",
+                },
+                {
+                  label: "100 years:",
+                  text: "~3.15 billion seconds (fits in 32-bit signed int... barely)",
+                },
               ],
             },
           ],
@@ -1606,35 +2395,78 @@ export const toolsData: ToolData = {
             type: "info",
             title: "Why URL Encoding Exists",
             items: [
-              { label: "The problem:", text: "URLs can only contain ASCII letters, numbers, and a few special chars" },
-              { label: "The solution:", text: "Percent-encoding: unsafe chars become %XX (hex code)" },
-              { label: "Example:", text: "'Hello World!' → 'Hello%20World%21' (%20=space, %21=!)" },
+              {
+                label: "The problem:",
+                text: "URLs can only contain ASCII letters, numbers, and a few special chars",
+              },
+              {
+                label: "The solution:",
+                text: "Percent-encoding: unsafe chars become %XX (hex code)",
+              },
+              {
+                label: "Example:",
+                text: "'Hello World!' → 'Hello%20World%21' (%20=space, %21=!)",
+              },
             ],
           },
-          shortcuts: [
-            { key: "Ctrl+Shift+~", action: "Open URL Encoder tool" },
-          ],
+          shortcuts: [{ key: "Ctrl+Shift+~", action: "Open URL Encoder tool" }],
           sections: [
             {
               title: "Common Encodings Cheat Sheet",
               items: [
-                { label: "Space:", text: "%20 (or + in query strings—both are valid)" },
-                { label: "&:", text: "%26 — separates query params, must encode if it's data" },
-                { label: "=:", text: "%3D — separates key=value, encode if it's in the value" },
-                { label: "?:", text: "%3F — starts query string, encode if it's data" },
-                { label: "#:", text: "%23 — starts fragment, encode to include in data" },
-                { label: "/:", text: "%2F — path separator, encode to use in filenames" },
-                { label: "@:", text: "%40 — used in emails, encode for query params" },
-                { label: "+:", text: "%2B — represents space in forms, encode for literal +" },
+                {
+                  label: "Space:",
+                  text: "%20 (or + in query strings—both are valid)",
+                },
+                {
+                  label: "&:",
+                  text: "%26 — separates query params, must encode if it's data",
+                },
+                {
+                  label: "=:",
+                  text: "%3D — separates key=value, encode if it's in the value",
+                },
+                {
+                  label: "?:",
+                  text: "%3F — starts query string, encode if it's data",
+                },
+                {
+                  label: "#:",
+                  text: "%23 — starts fragment, encode to include in data",
+                },
+                {
+                  label: "/:",
+                  text: "%2F — path separator, encode to use in filenames",
+                },
+                {
+                  label: "@:",
+                  text: "%40 — used in emails, encode for query params",
+                },
+                {
+                  label: "+:",
+                  text: "%2B — represents space in forms, encode for literal +",
+                },
               ],
             },
             {
               title: "encodeURI vs encodeURIComponent",
               items: [
-                { label: "encodeURI():", text: "Encodes a FULL URL—preserves ://?#& so URL structure stays intact" },
-                { label: "encodeURIComponent():", text: "Encodes a PART of URL—encodes everything except A-Z a-z 0-9 - _ . ~" },
-                { label: "This tool uses:", text: "encodeURIComponent() — safest for query parameter values" },
-                { label: "Common mistake:", text: "Using encodeURI() on query values leaves & and = unencoded, breaking URLs" },
+                {
+                  label: "encodeURI():",
+                  text: "Encodes a FULL URL—preserves ://?#& so URL structure stays intact",
+                },
+                {
+                  label: "encodeURIComponent():",
+                  text: "Encodes a PART of URL—encodes everything except A-Z a-z 0-9 - _ . ~",
+                },
+                {
+                  label: "This tool uses:",
+                  text: "encodeURIComponent() — safest for query parameter values",
+                },
+                {
+                  label: "Common mistake:",
+                  text: "Using encodeURI() on query values leaves & and = unencoded, breaking URLs",
+                },
               ],
             },
             {
@@ -1742,31 +2574,73 @@ export const toolsData: ToolData = {
             type: "info",
             title: "TLS vs SSL: What's the Difference?",
             items: [
-              { label: "SSL:", text: "Secure Sockets Layer (1995)—deprecated, has known vulnerabilities" },
-              { label: "TLS:", text: "Transport Layer Security (1999)—SSL's successor, what we actually use today" },
-              { label: "HTTPS:", text: "HTTP + TLS = encrypted web traffic. The padlock means TLS is active" },
-              { label: "Fun fact:", text: "Everyone says 'SSL certificate' but they mean TLS. SSL 3.0 was disabled in 2015" },
+              {
+                label: "SSL:",
+                text: "Secure Sockets Layer (1995)—deprecated, has known vulnerabilities",
+              },
+              {
+                label: "TLS:",
+                text: "Transport Layer Security (1999)—SSL's successor, what we actually use today",
+              },
+              {
+                label: "HTTPS:",
+                text: "HTTP + TLS = encrypted web traffic. The padlock means TLS is active",
+              },
+              {
+                label: "Fun fact:",
+                text: "Everyone says 'SSL certificate' but they mean TLS. SSL 3.0 was disabled in 2015",
+              },
             ],
           },
           sections: [
             {
               title: "Certificate Fields Explained",
               items: [
-                { label: "Subject (CN):", text: "Who the cert is issued TO—usually the domain name (example.com)" },
-                { label: "Issuer:", text: "Who SIGNED the cert—the Certificate Authority (Let's Encrypt, DigiCert, etc.)" },
-                { label: "SANs:", text: "Subject Alternative Names—additional domains covered (www, api, mail subdomains)" },
-                { label: "Valid From/To:", text: "The cert's lifespan. Max is now 398 days (browsers enforce this)" },
-                { label: "Serial Number:", text: "Unique ID from the CA—used for revocation tracking" },
+                {
+                  label: "Subject (CN):",
+                  text: "Who the cert is issued TO—usually the domain name (example.com)",
+                },
+                {
+                  label: "Issuer:",
+                  text: "Who SIGNED the cert—the Certificate Authority (Let's Encrypt, DigiCert, etc.)",
+                },
+                {
+                  label: "SANs:",
+                  text: "Subject Alternative Names—additional domains covered (www, api, mail subdomains)",
+                },
+                {
+                  label: "Valid From/To:",
+                  text: "The cert's lifespan. Max is now 398 days (browsers enforce this)",
+                },
+                {
+                  label: "Serial Number:",
+                  text: "Unique ID from the CA—used for revocation tracking",
+                },
               ],
             },
             {
               title: "Certificate Types",
               items: [
-                { label: "DV (Domain):", text: "Proves you control the domain. Cheapest, fastest (Let's Encrypt = free!)" },
-                { label: "OV (Organization):", text: "Verifies the company exists. Shows org name in cert details" },
-                { label: "EV (Extended):", text: "Rigorous vetting process. Used to show green bar (browsers removed this)" },
-                { label: "Wildcard:", text: "*.example.com covers all subdomains (but not sub-subdomains)" },
-                { label: "Multi-domain:", text: "One cert for multiple unrelated domains via SANs" },
+                {
+                  label: "DV (Domain):",
+                  text: "Proves you control the domain. Cheapest, fastest (Let's Encrypt = free!)",
+                },
+                {
+                  label: "OV (Organization):",
+                  text: "Verifies the company exists. Shows org name in cert details",
+                },
+                {
+                  label: "EV (Extended):",
+                  text: "Rigorous vetting process. Used to show green bar (browsers removed this)",
+                },
+                {
+                  label: "Wildcard:",
+                  text: "*.example.com covers all subdomains (but not sub-subdomains)",
+                },
+                {
+                  label: "Multi-domain:",
+                  text: "One cert for multiple unrelated domains via SANs",
+                },
               ],
             },
             {
@@ -1791,10 +2665,22 @@ export const toolsData: ToolData = {
             {
               title: "Key Algorithms in 2024",
               items: [
-                { label: "RSA 2048:", text: "Still common, minimum acceptable size, being phased out" },
-                { label: "RSA 4096:", text: "More secure but slower handshakes—overkill for most sites" },
-                { label: "ECDSA P-256:", text: "Smaller keys, faster than RSA, now the default choice" },
-                { label: "Ed25519:", text: "Even faster, gaining support, not yet universal" },
+                {
+                  label: "RSA 2048:",
+                  text: "Still common, minimum acceptable size, being phased out",
+                },
+                {
+                  label: "RSA 4096:",
+                  text: "More secure but slower handshakes—overkill for most sites",
+                },
+                {
+                  label: "ECDSA P-256:",
+                  text: "Smaller keys, faster than RSA, now the default choice",
+                },
+                {
+                  label: "Ed25519:",
+                  text: "Even faster, gaining support, not yet universal",
+                },
               ],
             },
             {
@@ -2044,7 +2930,10 @@ export const toolsData: ToolData = {
               { label: ".", text: "Any character except newline" },
               { label: "\\d \\w \\s", text: "Digit, word char, whitespace" },
               { label: "* + ?", text: "0+, 1+, 0 or 1 occurrences" },
-              { label: "[abc] [^abc]", text: "Character class / negated class" },
+              {
+                label: "[abc] [^abc]",
+                text: "Character class / negated class",
+              },
               { label: "( ) \\1", text: "Capture group / backreference" },
             ],
           },
@@ -2119,10 +3008,22 @@ export const toolsData: ToolData = {
             type: "info",
             title: "Sort Modes Explained",
             items: [
-              { label: "Alphabetical", text: "A-Z using locale-aware comparison (handles accents correctly)" },
-              { label: "Numerical", text: "Treats lines as numbers (1, 2, 10 not 1, 10, 2)" },
-              { label: "By Length", text: "Shortest to longest lines (great for finding outliers)" },
-              { label: "Random", text: "Fisher-Yates shuffle for true randomness" },
+              {
+                label: "Alphabetical",
+                text: "A-Z using locale-aware comparison (handles accents correctly)",
+              },
+              {
+                label: "Numerical",
+                text: "Treats lines as numbers (1, 2, 10 not 1, 10, 2)",
+              },
+              {
+                label: "By Length",
+                text: "Shortest to longest lines (great for finding outliers)",
+              },
+              {
+                label: "Random",
+                text: "Fisher-Yates shuffle for true randomness",
+              },
             ],
           },
           sections: [
@@ -2235,30 +3136,66 @@ export const toolsData: ToolData = {
             type: "info",
             title: "QR Code Origins",
             items: [
-              { label: "Invented:", text: "1994 by Denso Wave (Toyota subsidiary) to track car parts in manufacturing" },
-              { label: "Name:", text: "'Quick Response'—designed to be scanned 10x faster than barcodes" },
-              { label: "Patent:", text: "Denso Wave owns it but chose NOT to enforce it, enabling global adoption" },
+              {
+                label: "Invented:",
+                text: "1994 by Denso Wave (Toyota subsidiary) to track car parts in manufacturing",
+              },
+              {
+                label: "Name:",
+                text: "'Quick Response'—designed to be scanned 10x faster than barcodes",
+              },
+              {
+                label: "Patent:",
+                text: "Denso Wave owns it but chose NOT to enforce it, enabling global adoption",
+              },
             ],
           },
           sections: [
             {
               title: "QR Code Types This Tool Supports",
               items: [
-                { label: "URL:", text: "Auto-opens website (most common use—menus, links, payments)" },
-                { label: "WiFi:", text: "Scan to connect—perfect for guest networks, cafes, Airbnbs" },
-                { label: "vCard:", text: "Scan to save contact—put on business cards, email signatures" },
-                { label: "Email:", text: "Opens compose with pre-filled address (mailto: protocol)" },
+                {
+                  label: "URL:",
+                  text: "Auto-opens website (most common use—menus, links, payments)",
+                },
+                {
+                  label: "WiFi:",
+                  text: "Scan to connect—perfect for guest networks, cafes, Airbnbs",
+                },
+                {
+                  label: "vCard:",
+                  text: "Scan to save contact—put on business cards, email signatures",
+                },
+                {
+                  label: "Email:",
+                  text: "Opens compose with pre-filled address (mailto: protocol)",
+                },
                 { label: "Phone:", text: "Tap to call (tel: protocol)" },
-                { label: "SMS:", text: "Opens text message with pre-filled number and message" },
+                {
+                  label: "SMS:",
+                  text: "Opens text message with pre-filled number and message",
+                },
               ],
             },
             {
               title: "Error Correction Levels",
               items: [
-                { label: "L (7%):", text: "Smallest QR, but easily damaged—use for perfect conditions" },
-                { label: "M (15%):", text: "Default balance—handles minor scratches or dirt" },
-                { label: "Q (25%):", text: "Good for printed materials that may get worn" },
-                { label: "H (30%):", text: "Maximum recovery—allows logos in center (up to 30% can be obscured!)" },
+                {
+                  label: "L (7%):",
+                  text: "Smallest QR, but easily damaged—use for perfect conditions",
+                },
+                {
+                  label: "M (15%):",
+                  text: "Default balance—handles minor scratches or dirt",
+                },
+                {
+                  label: "Q (25%):",
+                  text: "Good for printed materials that may get worn",
+                },
+                {
+                  label: "H (30%):",
+                  text: "Maximum recovery—allows logos in center (up to 30% can be obscured!)",
+                },
               ],
             },
             {
@@ -2296,10 +3233,22 @@ export const toolsData: ToolData = {
             {
               title: "QR vs Other Codes",
               items: [
-                { label: "Barcode:", text: "1D, holds ~20 chars, requires laser scanner" },
-                { label: "QR Code:", text: "2D, holds ~4,000 chars, any camera works" },
-                { label: "Data Matrix:", text: "2D, smaller than QR for same data, used in electronics/pharma" },
-                { label: "Aztec Code:", text: "2D, no quiet zone needed, used in airline boarding passes" },
+                {
+                  label: "Barcode:",
+                  text: "1D, holds ~20 chars, requires laser scanner",
+                },
+                {
+                  label: "QR Code:",
+                  text: "2D, holds ~4,000 chars, any camera works",
+                },
+                {
+                  label: "Data Matrix:",
+                  text: "2D, smaller than QR for same data, used in electronics/pharma",
+                },
+                {
+                  label: "Aztec Code:",
+                  text: "2D, no quiet zone needed, used in airline boarding passes",
+                },
               ],
             },
           ],
@@ -2453,9 +3402,18 @@ export const toolsData: ToolData = {
             type: "info",
             title: "Unicode: One Standard to Rule Them All",
             items: [
-              { label: "Before Unicode:", text: "Chaos—ASCII (128 chars), Latin-1 (256), Shift-JIS (Japanese), Big5 (Chinese)... files were garbled between systems" },
-              { label: "The fix:", text: "Unicode Consortium (1991) created one encoding for every character in every language" },
-              { label: "Today:", text: "149,813 characters covering 161 scripts, from English to Emoji to Egyptian Hieroglyphs" },
+              {
+                label: "Before Unicode:",
+                text: "Chaos—ASCII (128 chars), Latin-1 (256), Shift-JIS (Japanese), Big5 (Chinese)... files were garbled between systems",
+              },
+              {
+                label: "The fix:",
+                text: "Unicode Consortium (1991) created one encoding for every character in every language",
+              },
+              {
+                label: "Today:",
+                text: "149,813 characters covering 161 scripts, from English to Emoji to Egyptian Hieroglyphs",
+              },
             ],
           },
           sections: [
@@ -2473,11 +3431,26 @@ export const toolsData: ToolData = {
             {
               title: "Famous Unicode Characters",
               items: [
-                { label: "U+0000:", text: "NULL—the very first code point (inherited from ASCII)" },
-                { label: "U+FFFD:", text: "�—the 'replacement character' shown when decoding fails" },
-                { label: "U+200B:", text: "Zero-width space—invisible but exists (copy this: '​' ← it's there!)" },
-                { label: "U+1F4A9:", text: "💩—the pile of poo emoji, hotly debated before approval" },
-                { label: "U+2603:", text: "☃—the snowman, used to test Unicode support" },
+                {
+                  label: "U+0000:",
+                  text: "NULL—the very first code point (inherited from ASCII)",
+                },
+                {
+                  label: "U+FFFD:",
+                  text: "�—the 'replacement character' shown when decoding fails",
+                },
+                {
+                  label: "U+200B:",
+                  text: "Zero-width space—invisible but exists (copy this: '​' ← it's there!)",
+                },
+                {
+                  label: "U+1F4A9:",
+                  text: "💩—the pile of poo emoji, hotly debated before approval",
+                },
+                {
+                  label: "U+2603:",
+                  text: "☃—the snowman, used to test Unicode support",
+                },
               ],
             },
             {
@@ -2494,10 +3467,22 @@ export const toolsData: ToolData = {
             {
               title: "Unicode Security Gotchas",
               items: [
-                { label: "Homoglyphs:", text: "раypal.com ← That 'a' is Cyrillic! Used in phishing attacks" },
-                { label: "Invisible chars:", text: "U+200B (zero-width space) can hide in filenames and URLs" },
-                { label: "Right-to-left:", text: "U+202E reverses text direction—filename 'photo[RLO]gnp.exe' appears as 'photoexe.png'" },
-                { label: "Normalization:", text: "é can be 1 char or 2 (e + combining accent)—causes string comparison bugs" },
+                {
+                  label: "Homoglyphs:",
+                  text: "раypal.com ← That 'a' is Cyrillic! Used in phishing attacks",
+                },
+                {
+                  label: "Invisible chars:",
+                  text: "U+200B (zero-width space) can hide in filenames and URLs",
+                },
+                {
+                  label: "Right-to-left:",
+                  text: "U+202E reverses text direction—filename 'photo[RLO]gnp.exe' appears as 'photoexe.png'",
+                },
+                {
+                  label: "Normalization:",
+                  text: "é can be 1 char or 2 (e + combining accent)—causes string comparison bugs",
+                },
               ],
             },
             {
@@ -2514,11 +3499,26 @@ export const toolsData: ToolData = {
             {
               title: "How to Type Unicode",
               items: [
-                { label: "Windows:", text: "Alt + numpad code (Alt+0169 = ©) or Win+. for emoji picker" },
-                { label: "Mac:", text: "Ctrl+Cmd+Space for emoji picker, or enable Unicode Hex Input keyboard" },
-                { label: "Linux:", text: "Ctrl+Shift+U then hex code (Ctrl+Shift+U 00A9 = ©)" },
-                { label: "HTML:", text: "&copy; or &#169; or &#x00A9; (all render as ©)" },
-                { label: "JavaScript:", text: "'\\u00A9' or '\\u{1F600}' for emoji (ES6+ required for latter)" },
+                {
+                  label: "Windows:",
+                  text: "Alt + numpad code (Alt+0169 = ©) or Win+. for emoji picker",
+                },
+                {
+                  label: "Mac:",
+                  text: "Ctrl+Cmd+Space for emoji picker, or enable Unicode Hex Input keyboard",
+                },
+                {
+                  label: "Linux:",
+                  text: "Ctrl+Shift+U then hex code (Ctrl+Shift+U 00A9 = ©)",
+                },
+                {
+                  label: "HTML:",
+                  text: "&copy; or &#169; or &#x00A9; (all render as ©)",
+                },
+                {
+                  label: "JavaScript:",
+                  text: "'\\u00A9' or '\\u{1F600}' for emoji (ES6+ required for latter)",
+                },
               ],
             },
             {
@@ -2620,10 +3620,22 @@ export const toolsData: ToolData = {
             type: "info",
             title: "UUID Versions Explained",
             items: [
-              { label: "v1 (Timestamp)", text: "Based on time + MAC address — sortable but reveals creation time" },
-              { label: "v4 (Random)", text: "122 random bits — most popular, no information leakage" },
-              { label: "v5 (Namespace)", text: "SHA-1 hash of namespace + name — deterministic, same input = same UUID" },
-              { label: "v7 (New!)", text: "Timestamp + random — sortable like v1 but no MAC address exposure" },
+              {
+                label: "v1 (Timestamp)",
+                text: "Based on time + MAC address — sortable but reveals creation time",
+              },
+              {
+                label: "v4 (Random)",
+                text: "122 random bits — most popular, no information leakage",
+              },
+              {
+                label: "v5 (Namespace)",
+                text: "SHA-1 hash of namespace + name — deterministic, same input = same UUID",
+              },
+              {
+                label: "v7 (New!)",
+                text: "Timestamp + random — sortable like v1 but no MAC address exposure",
+              },
             ],
           },
           sections: [
@@ -2691,9 +3703,18 @@ export const toolsData: ToolData = {
             title: "Regex Power Moves",
             items: [
               { label: "\\d+", text: "Match any number (123, 4567, etc.)" },
-              { label: "(\\w+)@(\\w+)", text: "Capture groups → use $1, $2 in replace" },
-              { label: "^|$", text: "Start/end of line (add prefix/suffix to every line)" },
-              { label: "\\s+", text: "Any whitespace (spaces, tabs, newlines)" },
+              {
+                label: "(\\w+)@(\\w+)",
+                text: "Capture groups → use $1, $2 in replace",
+              },
+              {
+                label: "^|$",
+                text: "Start/end of line (add prefix/suffix to every line)",
+              },
+              {
+                label: "\\s+",
+                text: "Any whitespace (spaces, tabs, newlines)",
+              },
             ],
           },
           sections: [
@@ -2757,25 +3778,53 @@ export const toolsData: ToolData = {
             type: "info",
             title: "The .split() Method—Made Visual",
             items: [
-              { label: "JavaScript:", text: "'a,b,c'.split(',') → ['a', 'b', 'c']" },
-              { label: "Python:", text: "'a,b,c'.split(',') → ['a', 'b', 'c']" },
-              { label: "This tool:", text: "Does the same thing, but you can see and copy each part instantly" },
+              {
+                label: "JavaScript:",
+                text: "'a,b,c'.split(',') → ['a', 'b', 'c']",
+              },
+              {
+                label: "Python:",
+                text: "'a,b,c'.split(',') → ['a', 'b', 'c']",
+              },
+              {
+                label: "This tool:",
+                text: "Does the same thing, but you can see and copy each part instantly",
+              },
             ],
           },
-          shortcuts: [
-            { key: "Ctrl+Shift+X", action: "Open Text Split tool" },
-          ],
+          shortcuts: [{ key: "Ctrl+Shift+X", action: "Open Text Split tool" }],
           sections: [
             {
               title: "Delimiter Cheat Sheet",
               items: [
-                { label: ", (comma):", text: "CSV data, lists, function arguments" },
-                { label: "; (semicolon):", text: "European CSVs, SQL statements, PATH variable on Windows" },
-                { label: "| (pipe):", text: "Database exports, Unix command chains, markdown tables" },
-                { label: ": (colon):", text: "Key-value pairs, time formats, PATH on Linux/Mac" },
-                { label: "\\n (newline):", text: "Log files, multiline inputs, one-item-per-line lists" },
-                { label: "\\t (tab):", text: "TSV files, spreadsheet pastes, formatted output" },
-                { label: "Space:", text: "Words in a sentence, command arguments, natural text" },
+                {
+                  label: ", (comma):",
+                  text: "CSV data, lists, function arguments",
+                },
+                {
+                  label: "; (semicolon):",
+                  text: "European CSVs, SQL statements, PATH variable on Windows",
+                },
+                {
+                  label: "| (pipe):",
+                  text: "Database exports, Unix command chains, markdown tables",
+                },
+                {
+                  label: ": (colon):",
+                  text: "Key-value pairs, time formats, PATH on Linux/Mac",
+                },
+                {
+                  label: "\\n (newline):",
+                  text: "Log files, multiline inputs, one-item-per-line lists",
+                },
+                {
+                  label: "\\t (tab):",
+                  text: "TSV files, spreadsheet pastes, formatted output",
+                },
+                {
+                  label: "Space:",
+                  text: "Words in a sentence, command arguments, natural text",
+                },
               ],
             },
             {
@@ -2801,8 +3850,14 @@ export const toolsData: ToolData = {
             {
               title: "Options Explained",
               items: [
-                { label: "Trim whitespace:", text: "' hello ' → 'hello' — removes leading/trailing spaces from each part" },
-                { label: "Remove empty:", text: "'a,,b' → ['a', 'b'] not ['a', '', 'b'] — skip blank entries" },
+                {
+                  label: "Trim whitespace:",
+                  text: "' hello ' → 'hello' — removes leading/trailing spaces from each part",
+                },
+                {
+                  label: "Remove empty:",
+                  text: "'a,,b' → ['a', 'b'] not ['a', '', 'b'] — skip blank entries",
+                },
               ],
             },
             {
@@ -2854,23 +3909,45 @@ export const toolsData: ToolData = {
             type: "info",
             title: "Timezone Chaos: A Brief History",
             items: [
-              { label: "Before 1883:", text: "Every city set its own time by the sun—there were 300+ local times in the US alone!" },
-              { label: "Railways fixed it:", text: "Trains needed schedules, so in 1883 the US adopted 4 standard time zones" },
-              { label: "Today:", text: "38 different UTC offsets, but ~200 named timezones (due to DST and political changes)" },
+              {
+                label: "Before 1883:",
+                text: "Every city set its own time by the sun—there were 300+ local times in the US alone!",
+              },
+              {
+                label: "Railways fixed it:",
+                text: "Trains needed schedules, so in 1883 the US adopted 4 standard time zones",
+              },
+              {
+                label: "Today:",
+                text: "38 different UTC offsets, but ~200 named timezones (due to DST and political changes)",
+              },
             ],
           },
-          shortcuts: [
-            { key: "Ctrl+Shift+0", action: "Open World Clock" },
-          ],
+          shortcuts: [{ key: "Ctrl+Shift+0", action: "Open World Clock" }],
           sections: [
             {
               title: "Weird Timezone Facts",
               items: [
-                { label: "China:", text: "One timezone for a country spanning 5 geographical zones—9 AM sunrise in the east, noon in the west!" },
-                { label: "India:", text: "UTC+5:30 (yes, half hour)—because they split the difference between UTC+5 and UTC+6" },
-                { label: "Nepal:", text: "UTC+5:45—just to be 15 minutes ahead of India (seriously)" },
-                { label: "North Korea:", text: "Created UTC+8:30 in 2015, then abolished it in 2018 to match South Korea" },
-                { label: "Australia:", text: "UTC+8:45 exists for one small region (Eucla), population ~200" },
+                {
+                  label: "China:",
+                  text: "One timezone for a country spanning 5 geographical zones—9 AM sunrise in the east, noon in the west!",
+                },
+                {
+                  label: "India:",
+                  text: "UTC+5:30 (yes, half hour)—because they split the difference between UTC+5 and UTC+6",
+                },
+                {
+                  label: "Nepal:",
+                  text: "UTC+5:45—just to be 15 minutes ahead of India (seriously)",
+                },
+                {
+                  label: "North Korea:",
+                  text: "Created UTC+8:30 in 2015, then abolished it in 2018 to match South Korea",
+                },
+                {
+                  label: "Australia:",
+                  text: "UTC+8:45 exists for one small region (Eucla), population ~200",
+                },
               ],
             },
             {
@@ -2896,10 +3973,22 @@ export const toolsData: ToolData = {
             {
               title: "UTC vs GMT: What's the Difference?",
               items: [
-                { label: "GMT:", text: "Greenwich Mean Time—based on solar noon at Royal Observatory, Greenwich, England" },
-                { label: "UTC:", text: "Coordinated Universal Time—based on atomic clocks, includes leap seconds" },
-                { label: "Difference:", text: "Practically none for most purposes (<1 second), but UTC is the official standard" },
-                { label: "Zulu time:", text: "Military/aviation term for UTC (Z = Zulu in NATO phonetic alphabet)" },
+                {
+                  label: "GMT:",
+                  text: "Greenwich Mean Time—based on solar noon at Royal Observatory, Greenwich, England",
+                },
+                {
+                  label: "UTC:",
+                  text: "Coordinated Universal Time—based on atomic clocks, includes leap seconds",
+                },
+                {
+                  label: "Difference:",
+                  text: "Practically none for most purposes (<1 second), but UTC is the official standard",
+                },
+                {
+                  label: "Zulu time:",
+                  text: "Military/aviation term for UTC (Z = Zulu in NATO phonetic alphabet)",
+                },
               ],
             },
             {
@@ -2915,12 +4004,30 @@ export const toolsData: ToolData = {
             {
               title: "Timezone Abbreviations Decoded",
               items: [
-                { label: "PST/PDT:", text: "Pacific Standard/Daylight Time (UTC-8/-7) — California, Seattle" },
-                { label: "EST/EDT:", text: "Eastern Standard/Daylight Time (UTC-5/-4) — New York, Miami" },
-                { label: "GMT/BST:", text: "Greenwich Mean/British Summer Time (UTC+0/+1) — London" },
-                { label: "CET/CEST:", text: "Central European Time/Summer (UTC+1/+2) — Berlin, Paris" },
-                { label: "JST:", text: "Japan Standard Time (UTC+9) — No DST, stays +9 year-round" },
-                { label: "IST:", text: "Ambiguous! India (UTC+5:30), Israel (UTC+2/+3), or Ireland (UTC+0/+1)" },
+                {
+                  label: "PST/PDT:",
+                  text: "Pacific Standard/Daylight Time (UTC-8/-7) — California, Seattle",
+                },
+                {
+                  label: "EST/EDT:",
+                  text: "Eastern Standard/Daylight Time (UTC-5/-4) — New York, Miami",
+                },
+                {
+                  label: "GMT/BST:",
+                  text: "Greenwich Mean/British Summer Time (UTC+0/+1) — London",
+                },
+                {
+                  label: "CET/CEST:",
+                  text: "Central European Time/Summer (UTC+1/+2) — Berlin, Paris",
+                },
+                {
+                  label: "JST:",
+                  text: "Japan Standard Time (UTC+9) — No DST, stays +9 year-round",
+                },
+                {
+                  label: "IST:",
+                  text: "Ambiguous! India (UTC+5:30), Israel (UTC+2/+3), or Ireland (UTC+0/+1)",
+                },
               ],
             },
             {
@@ -2961,10 +4068,22 @@ export const toolsData: ToolData = {
             {
               title: "Productivity Timer Presets",
               items: [
-                { label: "Pomodoro:", text: "25 min work + 5 min break (repeat 4x, then 15-30 min long break)" },
-                { label: "52-17 Method:", text: "52 min focused work + 17 min break (studied as optimal by DeskTime)" },
-                { label: "Time Boxing:", text: "Set fixed time for a task—when it rings, stop and evaluate" },
-                { label: "Ultradian Rhythm:", text: "90 min work cycles matching your body's natural focus waves" },
+                {
+                  label: "Pomodoro:",
+                  text: "25 min work + 5 min break (repeat 4x, then 15-30 min long break)",
+                },
+                {
+                  label: "52-17 Method:",
+                  text: "52 min focused work + 17 min break (studied as optimal by DeskTime)",
+                },
+                {
+                  label: "Time Boxing:",
+                  text: "Set fixed time for a task—when it rings, stop and evaluate",
+                },
+                {
+                  label: "Ultradian Rhythm:",
+                  text: "90 min work cycles matching your body's natural focus waves",
+                },
               ],
             },
             {
@@ -3066,9 +4185,18 @@ export const toolsData: ToolData = {
             type: "info",
             title: "The Psychology of Countdowns",
             items: [
-              { label: "Anticipation:", text: "Studies show countdowns increase excitement and engagement by 40%" },
-              { label: "Urgency effect:", text: "Visible time limits trigger action—that's why sales use countdown timers" },
-              { label: "Goal proximity:", text: "The closer the deadline, the harder we work (Parkinson's Law meets motivation)" },
+              {
+                label: "Anticipation:",
+                text: "Studies show countdowns increase excitement and engagement by 40%",
+              },
+              {
+                label: "Urgency effect:",
+                text: "Visible time limits trigger action—that's why sales use countdown timers",
+              },
+              {
+                label: "Goal proximity:",
+                text: "The closer the deadline, the harder we work (Parkinson's Law meets motivation)",
+              },
             ],
           },
           shortcuts: [
@@ -3080,11 +4208,26 @@ export const toolsData: ToolData = {
             {
               title: "Famous Countdowns in History",
               items: [
-                { label: "Apollo 11:", text: "'T-minus 10, 9, 8...' — NASA's countdown became iconic (T = Time)" },
-                { label: "New Year's Eve:", text: "Times Square ball drop countdown started in 1907" },
-                { label: "Y2K:", text: "The world watched the millennium countdown, fearing computer meltdowns" },
-                { label: "iPhone launches:", text: "Apple Store countdowns create lines around the block" },
-                { label: "SpaceX:", text: "Live countdown streams get millions of viewers" },
+                {
+                  label: "Apollo 11:",
+                  text: "'T-minus 10, 9, 8...' — NASA's countdown became iconic (T = Time)",
+                },
+                {
+                  label: "New Year's Eve:",
+                  text: "Times Square ball drop countdown started in 1907",
+                },
+                {
+                  label: "Y2K:",
+                  text: "The world watched the millennium countdown, fearing computer meltdowns",
+                },
+                {
+                  label: "iPhone launches:",
+                  text: "Apple Store countdowns create lines around the block",
+                },
+                {
+                  label: "SpaceX:",
+                  text: "Live countdown streams get millions of viewers",
+                },
               ],
             },
             {
@@ -3100,10 +4243,22 @@ export const toolsData: ToolData = {
             {
               title: "Deadline Psychology",
               items: [
-                { label: "Parkinson's Law:", text: "Work expands to fill the time available—countdowns fight this" },
-                { label: "Student syndrome:", text: "We delay until the last moment; countdowns make 'last moment' visible" },
-                { label: "Planning fallacy:", text: "We underestimate time needed; countdowns reveal the truth" },
-                { label: "Time blindness:", text: "ADHD brains struggle with time perception—visual countdowns help" },
+                {
+                  label: "Parkinson's Law:",
+                  text: "Work expands to fill the time available—countdowns fight this",
+                },
+                {
+                  label: "Student syndrome:",
+                  text: "We delay until the last moment; countdowns make 'last moment' visible",
+                },
+                {
+                  label: "Planning fallacy:",
+                  text: "We underestimate time needed; countdowns reveal the truth",
+                },
+                {
+                  label: "Time blindness:",
+                  text: "ADHD brains struggle with time perception—visual countdowns help",
+                },
               ],
             },
             {
@@ -3140,10 +4295,22 @@ export const toolsData: ToolData = {
             {
               title: "Time Perspective",
               items: [
-                { label: "1 year:", text: "365 days, 8,760 hours, 525,600 minutes (like the song says)" },
-                { label: "1 month:", text: "~30 days, 720 hours, 43,200 minutes" },
-                { label: "1 week:", text: "168 hours, 10,080 minutes, 604,800 seconds" },
-                { label: "Average life:", text: "~28,000 days. What are you counting down to?" },
+                {
+                  label: "1 year:",
+                  text: "365 days, 8,760 hours, 525,600 minutes (like the song says)",
+                },
+                {
+                  label: "1 month:",
+                  text: "~30 days, 720 hours, 43,200 minutes",
+                },
+                {
+                  label: "1 week:",
+                  text: "168 hours, 10,080 minutes, 604,800 seconds",
+                },
+                {
+                  label: "Average life:",
+                  text: "~28,000 days. What are you counting down to?",
+                },
               ],
             },
           ],
@@ -3171,8 +4338,14 @@ export const toolsData: ToolData = {
             title: "Time Perspective",
             items: [
               { label: "1 million seconds:", text: "About 11.5 days" },
-              { label: "1 billion seconds:", text: "About 31.7 years (you've probably lived through one!)" },
-              { label: "Average lifespan:", text: "~2.5 billion seconds or ~28,000 days" },
+              {
+                label: "1 billion seconds:",
+                text: "About 31.7 years (you've probably lived through one!)",
+              },
+              {
+                label: "Average lifespan:",
+                text: "~2.5 billion seconds or ~28,000 days",
+              },
             ],
           },
           sections: [
@@ -3190,11 +4363,26 @@ export const toolsData: ToolData = {
             {
               title: "Business & Legal Uses",
               items: [
-                { label: "Invoice aging:", text: "Invoice date → today = days outstanding (Net 30, 60, 90)" },
-                { label: "Contract terms:", text: "Start → end = exact contract duration for billing" },
-                { label: "Warranty check:", text: "Purchase date → now = is it still under warranty?" },
-                { label: "Employee tenure:", text: "Hire date → today for anniversary bonuses, vesting" },
-                { label: "Statute of limitations:", text: "Event date → filing deadline calculations" },
+                {
+                  label: "Invoice aging:",
+                  text: "Invoice date → today = days outstanding (Net 30, 60, 90)",
+                },
+                {
+                  label: "Contract terms:",
+                  text: "Start → end = exact contract duration for billing",
+                },
+                {
+                  label: "Warranty check:",
+                  text: "Purchase date → now = is it still under warranty?",
+                },
+                {
+                  label: "Employee tenure:",
+                  text: "Hire date → today for anniversary bonuses, vesting",
+                },
+                {
+                  label: "Statute of limitations:",
+                  text: "Event date → filing deadline calculations",
+                },
               ],
             },
             {
@@ -3265,12 +4453,30 @@ export const toolsData: ToolData = {
             {
               title: "Tempo Guide (BPM)",
               items: [
-                { label: "40-60 (Largo):", text: "Slow ballads, funeral marches, meditation music" },
-                { label: "60-80 (Adagio):", text: "Slow songs, blues, worship music" },
-                { label: "80-100 (Andante):", text: "Walking pace, easy listening, country" },
-                { label: "100-120 (Moderato):", text: "Pop, rock, most mainstream music" },
-                { label: "120-140 (Allegro):", text: "Dance, disco, upbeat pop, punk rock" },
-                { label: "140-180 (Vivace):", text: "Fast metal, drum & bass, hardcore punk" },
+                {
+                  label: "40-60 (Largo):",
+                  text: "Slow ballads, funeral marches, meditation music",
+                },
+                {
+                  label: "60-80 (Adagio):",
+                  text: "Slow songs, blues, worship music",
+                },
+                {
+                  label: "80-100 (Andante):",
+                  text: "Walking pace, easy listening, country",
+                },
+                {
+                  label: "100-120 (Moderato):",
+                  text: "Pop, rock, most mainstream music",
+                },
+                {
+                  label: "120-140 (Allegro):",
+                  text: "Dance, disco, upbeat pop, punk rock",
+                },
+                {
+                  label: "140-180 (Vivace):",
+                  text: "Fast metal, drum & bass, hardcore punk",
+                },
               ],
             },
             {
@@ -3330,22 +4536,46 @@ export const toolsData: ToolData = {
             type: "info",
             title: "The Eighth Wonder of the World",
             items: [
-              { label: "Einstein (maybe):", text: "'Compound interest is the eighth wonder of the world. He who understands it, earns it; he who doesn't, pays it.'" },
-              { label: "The magic:", text: "You earn interest on your interest—money making money making money" },
-              { label: "Time > Amount:", text: "$100/month from age 25 beats $200/month from age 35 (same contributions!)" },
+              {
+                label: "Einstein (maybe):",
+                text: "'Compound interest is the eighth wonder of the world. He who understands it, earns it; he who doesn't, pays it.'",
+              },
+              {
+                label: "The magic:",
+                text: "You earn interest on your interest—money making money making money",
+              },
+              {
+                label: "Time > Amount:",
+                text: "$100/month from age 25 beats $200/month from age 35 (same contributions!)",
+              },
             ],
           },
           shortcuts: [
-            { key: "Ctrl+Shift+;", action: "Open Compound Interest Calculator" },
+            {
+              key: "Ctrl+Shift+;",
+              action: "Open Compound Interest Calculator",
+            },
           ],
           sections: [
             {
               title: "The Power of Starting Early",
               items: [
-                { label: "Age 25:", text: "$200/month at 7% for 40 years = $525,000" },
-                { label: "Age 35:", text: "$200/month at 7% for 30 years = $244,000 (half the money!)" },
-                { label: "Age 45:", text: "$200/month at 7% for 20 years = $104,000" },
-                { label: "Lesson:", text: "10 years of delay costs you $281,000. Start now." },
+                {
+                  label: "Age 25:",
+                  text: "$200/month at 7% for 40 years = $525,000",
+                },
+                {
+                  label: "Age 35:",
+                  text: "$200/month at 7% for 30 years = $244,000 (half the money!)",
+                },
+                {
+                  label: "Age 45:",
+                  text: "$200/month at 7% for 20 years = $104,000",
+                },
+                {
+                  label: "Lesson:",
+                  text: "10 years of delay costs you $281,000. Start now.",
+                },
               ],
             },
             {
@@ -3361,20 +4591,47 @@ export const toolsData: ToolData = {
             {
               title: "Compounding Frequency Matters",
               items: [
-                { label: "Annual:", text: "$10,000 at 10% = $11,000 after 1 year" },
-                { label: "Monthly:", text: "$10,000 at 10% = $11,047 after 1 year" },
-                { label: "Daily:", text: "$10,000 at 10% = $11,052 after 1 year" },
-                { label: "Continuous:", text: "$10,000 at 10% = $11,052 (theoretical max)" },
-                { label: "Over 30 years:", text: "Daily vs annual compounding adds ~$50,000 on $100,000 at 10%" },
+                {
+                  label: "Annual:",
+                  text: "$10,000 at 10% = $11,000 after 1 year",
+                },
+                {
+                  label: "Monthly:",
+                  text: "$10,000 at 10% = $11,047 after 1 year",
+                },
+                {
+                  label: "Daily:",
+                  text: "$10,000 at 10% = $11,052 after 1 year",
+                },
+                {
+                  label: "Continuous:",
+                  text: "$10,000 at 10% = $11,052 (theoretical max)",
+                },
+                {
+                  label: "Over 30 years:",
+                  text: "Daily vs annual compounding adds ~$50,000 on $100,000 at 10%",
+                },
               ],
             },
             {
               title: "Real-World Return Rates",
               items: [
-                { label: "S&P 500:", text: "~10% historical average (7% after inflation)" },
-                { label: "Bonds:", text: "3-5% typical (lower risk, lower reward)" },
-                { label: "Savings account:", text: "0.5-5% (varies wildly by bank and era)" },
-                { label: "Real estate:", text: "8-12% including appreciation and rent" },
+                {
+                  label: "S&P 500:",
+                  text: "~10% historical average (7% after inflation)",
+                },
+                {
+                  label: "Bonds:",
+                  text: "3-5% typical (lower risk, lower reward)",
+                },
+                {
+                  label: "Savings account:",
+                  text: "0.5-5% (varies wildly by bank and era)",
+                },
+                {
+                  label: "Real estate:",
+                  text: "8-12% including appreciation and rent",
+                },
                 { label: "Crypto:", text: "Who knows? Could be +500% or -90%" },
               ],
             },
@@ -3401,10 +4658,22 @@ export const toolsData: ToolData = {
             {
               title: "Inflation: The Silent Wealth Killer",
               items: [
-                { label: "Average inflation:", text: "3% per year historically (2022-2023 was 7-9%)" },
-                { label: "Real return:", text: "Nominal return minus inflation (10% - 3% = 7% real)" },
-                { label: "$100 today:", text: "Worth $74 in 10 years at 3% inflation" },
-                { label: "Savings accounts:", text: "At 0.5% interest and 3% inflation, you're LOSING 2.5%/year" },
+                {
+                  label: "Average inflation:",
+                  text: "3% per year historically (2022-2023 was 7-9%)",
+                },
+                {
+                  label: "Real return:",
+                  text: "Nominal return minus inflation (10% - 3% = 7% real)",
+                },
+                {
+                  label: "$100 today:",
+                  text: "Worth $74 in 10 years at 3% inflation",
+                },
+                {
+                  label: "Savings accounts:",
+                  text: "At 0.5% interest and 3% inflation, you're LOSING 2.5%/year",
+                },
               ],
             },
             {
@@ -3450,18 +4719,36 @@ export const toolsData: ToolData = {
             type: "info",
             title: "The Math That Banks Don't Highlight",
             items: [
-              { label: "Credit card trap:", text: "$5,000 at 22% APR with minimum payments = 22 years to pay off + $7,723 interest" },
-              { label: "The $50 difference:", text: "Adding just $50/month to that card cuts payoff to 5 years, saves $5,500+" },
+              {
+                label: "Credit card trap:",
+                text: "$5,000 at 22% APR with minimum payments = 22 years to pay off + $7,723 interest",
+              },
+              {
+                label: "The $50 difference:",
+                text: "Adding just $50/month to that card cuts payoff to 5 years, saves $5,500+",
+              },
             ],
           },
           sections: [
             {
               title: "Debt Payoff Strategies",
               items: [
-                { label: "Avalanche Method:", text: "Pay highest interest first—mathematically optimal, saves most money" },
-                { label: "Snowball Method:", text: "Pay smallest balance first—quick wins build momentum (Dave Ramsey's favorite)" },
-                { label: "Hybrid Approach:", text: "Start with one small win, then switch to avalanche for savings" },
-                { label: "Balance Transfer:", text: "Move high-interest debt to 0% APR card (watch the 3-5% transfer fee)" },
+                {
+                  label: "Avalanche Method:",
+                  text: "Pay highest interest first—mathematically optimal, saves most money",
+                },
+                {
+                  label: "Snowball Method:",
+                  text: "Pay smallest balance first—quick wins build momentum (Dave Ramsey's favorite)",
+                },
+                {
+                  label: "Hybrid Approach:",
+                  text: "Start with one small win, then switch to avalanche for savings",
+                },
+                {
+                  label: "Balance Transfer:",
+                  text: "Move high-interest debt to 0% APR card (watch the 3-5% transfer fee)",
+                },
               ],
             },
             {
@@ -3533,9 +4820,18 @@ export const toolsData: ToolData = {
             type: "info",
             title: "Color Theory in 30 Seconds",
             items: [
-              { label: "Primary:", text: "Red, Blue, Yellow—can't be made by mixing other colors" },
-              { label: "Secondary:", text: "Orange, Green, Purple—mix two primaries" },
-              { label: "The wheel:", text: "Invented by Isaac Newton in 1666 (yes, the gravity guy)" },
+              {
+                label: "Primary:",
+                text: "Red, Blue, Yellow—can't be made by mixing other colors",
+              },
+              {
+                label: "Secondary:",
+                text: "Orange, Green, Purple—mix two primaries",
+              },
+              {
+                label: "The wheel:",
+                text: "Invented by Isaac Newton in 1666 (yes, the gravity guy)",
+              },
             ],
           },
           shortcuts: [
@@ -3545,23 +4841,59 @@ export const toolsData: ToolData = {
             {
               title: "Palette Types Explained",
               items: [
-                { label: "Complementary:", text: "Opposite on the wheel (red/green)—high contrast, eye-catching" },
-                { label: "Analogous:", text: "Neighbors on the wheel—harmonious, found in nature (sunset colors)" },
-                { label: "Triadic:", text: "Three colors equally spaced—vibrant but balanced (primary colors)" },
-                { label: "Split-Complementary:", text: "Base + two adjacent to its complement—less tension than complementary" },
-                { label: "Tetradic:", text: "Four colors in rectangle—rich but hard to balance" },
-                { label: "Monochromatic:", text: "One hue, different shades/tints—elegant, impossible to mess up" },
+                {
+                  label: "Complementary:",
+                  text: "Opposite on the wheel (red/green)—high contrast, eye-catching",
+                },
+                {
+                  label: "Analogous:",
+                  text: "Neighbors on the wheel—harmonious, found in nature (sunset colors)",
+                },
+                {
+                  label: "Triadic:",
+                  text: "Three colors equally spaced—vibrant but balanced (primary colors)",
+                },
+                {
+                  label: "Split-Complementary:",
+                  text: "Base + two adjacent to its complement—less tension than complementary",
+                },
+                {
+                  label: "Tetradic:",
+                  text: "Four colors in rectangle—rich but hard to balance",
+                },
+                {
+                  label: "Monochromatic:",
+                  text: "One hue, different shades/tints—elegant, impossible to mess up",
+                },
               ],
             },
             {
               title: "Famous Brand Colors (Hex Codes)",
               items: [
-                { label: "Coca-Cola Red:", text: "#F40009 — The most recognized color in the world" },
-                { label: "Tiffany Blue:", text: "#0ABAB5 — Trademarked! Pantone 1837 (the year founded)" },
-                { label: "Facebook Blue:", text: "#1877F2 — Chosen because Zuckerberg is red-green colorblind" },
-                { label: "Spotify Green:", text: "#1DB954 — Stands out against every album cover" },
-                { label: "Netflix Red:", text: "#E50914 — Designed to pop on TV screens" },
-                { label: "Slack Purple:", text: "#4A154B — Aubergine, to feel 'business but fun'" },
+                {
+                  label: "Coca-Cola Red:",
+                  text: "#F40009 — The most recognized color in the world",
+                },
+                {
+                  label: "Tiffany Blue:",
+                  text: "#0ABAB5 — Trademarked! Pantone 1837 (the year founded)",
+                },
+                {
+                  label: "Facebook Blue:",
+                  text: "#1877F2 — Chosen because Zuckerberg is red-green colorblind",
+                },
+                {
+                  label: "Spotify Green:",
+                  text: "#1DB954 — Stands out against every album cover",
+                },
+                {
+                  label: "Netflix Red:",
+                  text: "#E50914 — Designed to pop on TV screens",
+                },
+                {
+                  label: "Slack Purple:",
+                  text: "#4A154B — Aubergine, to feel 'business but fun'",
+                },
               ],
             },
             {
@@ -3577,13 +4909,34 @@ export const toolsData: ToolData = {
             {
               title: "Color Psychology in Marketing",
               items: [
-                { label: "Red:", text: "Urgency, excitement, hunger (fast food, sale signs)" },
-                { label: "Blue:", text: "Trust, security, calm (banks, tech companies, healthcare)" },
-                { label: "Green:", text: "Nature, health, money (organic brands, finance)" },
-                { label: "Yellow:", text: "Optimism, attention (warning signs, discount stickers)" },
-                { label: "Purple:", text: "Luxury, creativity, royalty (beauty brands, Twitch)" },
-                { label: "Orange:", text: "Fun, confidence, affordable (Amazon, Nickelodeon)" },
-                { label: "Black:", text: "Elegance, power, exclusivity (luxury brands, Apple)" },
+                {
+                  label: "Red:",
+                  text: "Urgency, excitement, hunger (fast food, sale signs)",
+                },
+                {
+                  label: "Blue:",
+                  text: "Trust, security, calm (banks, tech companies, healthcare)",
+                },
+                {
+                  label: "Green:",
+                  text: "Nature, health, money (organic brands, finance)",
+                },
+                {
+                  label: "Yellow:",
+                  text: "Optimism, attention (warning signs, discount stickers)",
+                },
+                {
+                  label: "Purple:",
+                  text: "Luxury, creativity, royalty (beauty brands, Twitch)",
+                },
+                {
+                  label: "Orange:",
+                  text: "Fun, confidence, affordable (Amazon, Nickelodeon)",
+                },
+                {
+                  label: "Black:",
+                  text: "Elegance, power, exclusivity (luxury brands, Apple)",
+                },
               ],
             },
             {
@@ -3661,14 +5014,21 @@ export const toolsData: ToolData = {
             type: "info",
             title: "Privacy First",
             items: [
-              { label: "100% local:", text: "Video never leaves your device—no uploads, no cloud, no servers" },
-              { label: "Permission required:", text: "Browser asks once; revoke anytime in site settings" },
-              { label: "Photos stay local:", text: "Captured images download directly to your device" },
+              {
+                label: "100% local:",
+                text: "Video never leaves your device—no uploads, no cloud, no servers",
+              },
+              {
+                label: "Permission required:",
+                text: "Browser asks once; revoke anytime in site settings",
+              },
+              {
+                label: "Photos stay local:",
+                text: "Captured images download directly to your device",
+              },
             ],
           },
-          shortcuts: [
-            { key: "Ctrl+Shift+.", action: "Open Camera Test tool" },
-          ],
+          shortcuts: [{ key: "Ctrl+Shift+.", action: "Open Camera Test tool" }],
           sections: [
             {
               title: "When to Test Your Camera",
@@ -3683,10 +5043,22 @@ export const toolsData: ToolData = {
             {
               title: "Common Webcam Resolutions",
               items: [
-                { label: "480p (SD):", text: "640×480 — Built-in laptop cameras from 2010s, barely acceptable" },
-                { label: "720p (HD):", text: "1280×720 — Most common laptop webcam, fine for calls" },
-                { label: "1080p (Full HD):", text: "1920×1080 — External webcams (Logitech C920/C922), looks professional" },
-                { label: "4K:", text: "3840×2160 — High-end streaming cameras, often overkill for video calls" },
+                {
+                  label: "480p (SD):",
+                  text: "640×480 — Built-in laptop cameras from 2010s, barely acceptable",
+                },
+                {
+                  label: "720p (HD):",
+                  text: "1280×720 — Most common laptop webcam, fine for calls",
+                },
+                {
+                  label: "1080p (Full HD):",
+                  text: "1920×1080 — External webcams (Logitech C920/C922), looks professional",
+                },
+                {
+                  label: "4K:",
+                  text: "3840×2160 — High-end streaming cameras, often overkill for video calls",
+                },
               ],
             },
             {
@@ -3703,11 +5075,26 @@ export const toolsData: ToolData = {
             {
               title: "Virtual Cameras Explained",
               items: [
-                { label: "OBS Virtual Camera:", text: "Stream your desktop, overlays, or scenes as a 'webcam'" },
-                { label: "Snap Camera:", text: "Add filters and effects to any video call (RIP 2024)" },
-                { label: "ManyCam:", text: "Multiple sources, picture-in-picture, screen sharing" },
-                { label: "Camo:", text: "Use your iPhone as a high-quality webcam (Apple Continuity)" },
-                { label: "DroidCam:", text: "Turn Android phone into wireless webcam" },
+                {
+                  label: "OBS Virtual Camera:",
+                  text: "Stream your desktop, overlays, or scenes as a 'webcam'",
+                },
+                {
+                  label: "Snap Camera:",
+                  text: "Add filters and effects to any video call (RIP 2024)",
+                },
+                {
+                  label: "ManyCam:",
+                  text: "Multiple sources, picture-in-picture, screen sharing",
+                },
+                {
+                  label: "Camo:",
+                  text: "Use your iPhone as a high-quality webcam (Apple Continuity)",
+                },
+                {
+                  label: "DroidCam:",
+                  text: "Turn Android phone into wireless webcam",
+                },
               ],
             },
             {
