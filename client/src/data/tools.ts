@@ -915,21 +915,34 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
+          notice: {
+            type: "tips",
+            title: "How Base64 Works",
+            items: [
+              "Uses 64 characters (A-Z, a-z, 0-9, +, /) to represent binary data as text",
+              "Every 3 bytes become 4 characters—that's why encoded data is ~33% larger",
+              "The '=' padding at the end fills incomplete 3-byte groups",
+              "NOT encryption—anyone can decode it instantly (it's just encoding)",
+            ],
+          },
           sections: [
             {
-              title: "Features",
+              title: "Common Uses",
               items: [
-                "Encode and decode Base64",
-                "Works with text and binary data",
-                "Input validation and error messages",
+                "Data URIs: Embed small images directly in HTML/CSS without extra HTTP requests",
+                "Email attachments: MIME uses Base64 to send binary files through text-only protocols",
+                "API payloads: Safely transmit binary data in JSON (which only supports text)",
+                "Basic Auth headers: 'Authorization: Basic dXNlcjpwYXNz' (that's 'user:pass' encoded)",
+                "JWT tokens: The middle section of a JWT is Base64-encoded JSON",
               ],
             },
             {
-              title: "Use cases",
+              title: "Watch Out For",
               items: [
-                "Embed assets in HTML/CSS",
-                "Convert small files to text form",
-                "Decode API responses",
+                "Base64 is NOT secure—don't use it to hide passwords or secrets",
+                "URL-safe Base64 uses '-' and '_' instead of '+' and '/' (different variant)",
+                "Large files become 33% bigger—don't Base64 encode megabyte-sized images",
+                "Line breaks in Base64 can break decoding—remove them first",
               ],
             },
           ],
