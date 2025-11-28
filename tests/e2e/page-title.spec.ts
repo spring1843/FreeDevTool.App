@@ -58,7 +58,10 @@ test.describe("Dynamic Page Title", () => {
   test("should update title for various tools", async ({ page }) => {
     const toolsToTest = [
       { path: "/tools/base64-encoder", expectedTitle: "Base64 Encoder" },
-      { path: "/tools/password-generator", expectedTitle: "Password Generator" },
+      {
+        path: "/tools/password-generator",
+        expectedTitle: "Password Generator",
+      },
       { path: "/tools/uuid-generator", expectedTitle: "UUID Generator" },
       { path: "/tools/url-encoder", expectedTitle: "URL Encoder" },
       { path: "/tools/md5-hash", expectedTitle: "MD5 Hash" },
