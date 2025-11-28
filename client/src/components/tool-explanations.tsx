@@ -170,8 +170,10 @@ function hydrateSsrExplanations(): void {
   if (!ssrElement || !showMoreBtn) return;
 
   showMoreBtn.addEventListener("click", () => {
-    const hiddenBlocks = ssrElement.querySelectorAll(".ssr-hidden-mobile, .ssr-hidden-desktop");
-    hiddenBlocks.forEach((block) => {
+    const hiddenBlocks = ssrElement.querySelectorAll(
+      ".ssr-hidden-mobile, .ssr-hidden-desktop"
+    );
+    hiddenBlocks.forEach(block => {
       block.classList.remove("ssr-hidden-mobile", "ssr-hidden-desktop");
     });
     showMoreBtn.style.display = "none";

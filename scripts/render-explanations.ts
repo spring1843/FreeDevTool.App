@@ -1,4 +1,7 @@
-import type { ToolExplanation, ToolExplanationSection } from "../client/src/components/tool-explanations";
+import type {
+  ToolExplanation,
+  ToolExplanationSection,
+} from "../client/src/components/tool-explanations";
 
 interface RenderOptions {
   collapsedBlocks?: number;
@@ -44,11 +47,13 @@ function renderNoticeHtml(notice: ToolExplanation["notice"]): string {
   if (!notice) return "";
 
   const itemsHtml = notice.items
-    .map((item) => {
+    .map(item => {
       if (typeof item === "string") {
         return `<li>${escapeHtml(item)}</li>`;
       }
-      const label = item.label ? `<strong>${escapeHtml(item.label)}</strong> ` : "";
+      const label = item.label
+        ? `<strong>${escapeHtml(item.label)}</strong> `
+        : "";
       return `<li>${label}${escapeHtml(item.text)}</li>`;
     })
     .join("");
@@ -64,7 +69,7 @@ function renderShortcutsHtml(shortcuts: ToolExplanation["shortcuts"]): string {
 
   const shortcutsHtml = shortcuts
     .map(
-      (shortcut) =>
+      shortcut =>
         `<div class="flex items-center gap-2">
           <kbd class="px-2 py-1 bg-purple-100 dark:bg-purple-800/50 border border-purple-300 dark:border-purple-700 rounded text-xs font-mono text-purple-800 dark:text-purple-200">${escapeHtml(shortcut.key)}</kbd>
           <span class="text-purple-700 dark:text-purple-300">${escapeHtml(shortcut.action)}</span>
@@ -83,7 +88,7 @@ function renderExamplesHtml(examples: ToolExplanation["examples"]): string {
 
   return examples
     .map(
-      (example) =>
+      example =>
         `<div><span class="font-mono bg-white dark:bg-gray-800 px-1 rounded">${escapeHtml(example.from)}</span> → <span class="font-mono bg-white dark:bg-gray-800 px-1 rounded">${escapeHtml(example.to)}</span></div>`
     )
     .join("");
@@ -99,15 +104,20 @@ function renderExamplesNoticeHtml(
   </div>`;
 }
 
-function renderSectionHtml(section: ToolExplanationSection, index: number): string {
+function renderSectionHtml(
+  section: ToolExplanationSection,
+  index: number
+): string {
   const colors = sectionColors[index % sectionColors.length];
 
   const itemsHtml = section.items
-    .map((item) => {
+    .map(item => {
       if (typeof item === "string") {
         return `<li>${escapeHtml(item)}</li>`;
       }
-      const label = item.label ? `<strong>${escapeHtml(item.label)}</strong> ` : "";
+      const label = item.label
+        ? `<strong>${escapeHtml(item.label)}</strong> `
+        : "";
       return `<li>${label}${escapeHtml(item.text)}</li>`;
     })
     .join("");
@@ -166,12 +176,13 @@ export function renderExplanationsHtml(
   const mobileHiddenCount = Math.max(0, totalBlocks - mobileLimit);
   const desktopHiddenCount = Math.max(0, totalBlocks - desktopLimit);
 
-  const showMoreButton = totalBlocks > mobileLimit
-    ? `<button id="ssr-show-more" class="w-full py-2 px-4 text-sm text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg flex items-center justify-center gap-2 transition-colors" data-mobile-count="${mobileHiddenCount}" data-desktop-count="${desktopHiddenCount}">
+  const showMoreButton =
+    totalBlocks > mobileLimit
+      ? `<button id="ssr-show-more" class="w-full py-2 px-4 text-sm text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg flex items-center justify-center gap-2 transition-colors" data-mobile-count="${mobileHiddenCount}" data-desktop-count="${desktopHiddenCount}">
         <span class="ssr-show-more-text"></span>
         <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
       </button>`
-    : "";
+      : "";
 
   return `<div id="ssr-explanations" data-tool-path="${escapeHtml(toolPath)}" data-total-blocks="${totalBlocks}" class="mt-8 space-y-4">
     <style>
