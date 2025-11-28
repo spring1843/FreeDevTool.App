@@ -46,6 +46,84 @@ export const toolsData: ToolData = {
             "RFC 2822",
           ],
         },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "Format Categories & Detection",
+            items: [
+              {
+                label: "Auto-detection",
+                text: "Paste Unix (seconds/milliseconds), ISO 8601, RFC strings, or human-readable dates – format is detected automatically",
+              },
+              {
+                label: "Categories",
+                text: "Timestamp, ISO Standards, RFC Standards, Regional, Database, Human Readable, Web/API",
+              },
+              {
+                label: "Pre-epoch",
+                text: "Negative Unix timestamps supported for dates before 1970",
+              },
+            ],
+          },
+          examples: [
+            {
+              from: "1699123456",
+              to: "Parsed as Unix seconds → converted to all 20+ formats",
+            },
+            {
+              from: "2024-01-15T14:30:45Z",
+              to: "ISO 8601 detected (UTC) → grouped outputs by category",
+            },
+            {
+              from: "Jan 15, 2024",
+              to: "Human-readable date auto-detected → standardized outputs",
+            },
+          ],
+          sections: [
+            {
+              title: "Supported Formats",
+              items: [
+                "Unix seconds & milliseconds",
+                "ISO 8601 (full, date-only, time-only)",
+                "RFC 2822 & RFC 3339",
+                "Regional (US, EU, ISO numeric)",
+                "Database (SQL datetime/date, synthetic MongoDB ObjectId timestamp)",
+                "Human Readable (full, short, 12h, 24h)",
+                "Web/API (HTTP Date, JSON, Cookie Expires)",
+              ],
+            },
+            {
+              title: "Features",
+              items: [
+                "Convert input into 20+ practical formats",
+                "Automatic input parsing & validation",
+                "Grouped outputs by category for quick scanning",
+                "Copy any individual format value (toast feedback)",
+                "Reset to example timestamp",
+                "Use Current Time (Now) button",
+                "Error feedback for invalid inputs (shows supported types)",
+              ],
+            },
+            {
+              title: "Edge Cases",
+              items: [
+                "Negative Unix timestamps",
+                "Millisecond vs second length differentiation",
+                "Human-readable month/day ambiguity handled by native Date parsing",
+                "Synthetic ObjectId: only leading 8 hex chars are timestamp (rest static demo)",
+              ],
+            },
+            {
+              title: "Use Cases",
+              items: [
+                "Debug API payload timestamps",
+                "Prepare database seed values",
+                "Compare regional date display",
+                "Generate multiple representations for docs/logs",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "JSON ↔ YAML",
