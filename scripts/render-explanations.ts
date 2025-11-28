@@ -3,10 +3,6 @@ import type {
   ToolExplanationSection,
 } from "../client/src/components/tool-explanations";
 
-interface RenderOptions {
-  collapsedBlocks?: number;
-}
-
 const sectionColors = [
   {
     bg: "bg-emerald-50 dark:bg-emerald-900/20",
