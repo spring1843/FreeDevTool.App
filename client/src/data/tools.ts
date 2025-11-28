@@ -2688,32 +2688,87 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
+          notice: {
+            type: "info",
+            title: "Timezone Chaos: A Brief History",
+            items: [
+              { label: "Before 1883:", text: "Every city set its own time by the sun—there were 300+ local times in the US alone!" },
+              { label: "Railways fixed it:", text: "Trains needed schedules, so in 1883 the US adopted 4 standard time zones" },
+              { label: "Today:", text: "38 different UTC offsets, but ~200 named timezones (due to DST and political changes)" },
+            ],
+          },
+          shortcuts: [
+            { key: "Ctrl+Shift+0", action: "Open World Clock" },
+          ],
           sections: [
             {
-              title: "Features",
+              title: "Weird Timezone Facts",
               items: [
-                "Live-updating clocks with second-precision",
-                "Auto-detected local timezone display",
-                "Custom clocks collection you can build",
-                "Continental view organized by region",
-                "UTC offset shown for each city",
+                { label: "China:", text: "One timezone for a country spanning 5 geographical zones—9 AM sunrise in the east, noon in the west!" },
+                { label: "India:", text: "UTC+5:30 (yes, half hour)—because they split the difference between UTC+5 and UTC+6" },
+                { label: "Nepal:", text: "UTC+5:45—just to be 15 minutes ahead of India (seriously)" },
+                { label: "North Korea:", text: "Created UTC+8:30 in 2015, then abolished it in 2018 to match South Korea" },
+                { label: "Australia:", text: "UTC+8:45 exists for one small region (Eucla), population ~200" },
               ],
             },
             {
-              title: "Continental Coverage",
+              title: "The International Date Line",
               items: [
-                "Africa, Americas, Asia, Europe, Oceania",
-                "Major cities sorted by timezone offset",
-                "One-click add from any continental city",
+                "Runs through the Pacific Ocean, roughly along 180° longitude",
+                "Cross westward: Skip a day (Monday → Wednesday)",
+                "Cross eastward: Repeat a day (Wednesday → Wednesday again)",
+                "Samoa switched sides in 2011: Skipped December 30 entirely to align with Australia/NZ",
+                "Fun: You can stand in Tonga (Mon) and see Samoa (Sun) across the water—same moment, different days",
               ],
             },
             {
-              title: "Use Cases",
+              title: "Daylight Saving Madness",
               items: [
-                "Coordinate meetings across timezones",
-                "Track business hours in different regions",
-                "Plan international calls or travel",
-                "Monitor team availability globally",
+                "Invented by New Zealand entomologist George Hudson in 1895 (he wanted more evening bug-hunting time)",
+                "Not everyone uses it: Arizona, Hawaii, most of Asia, Africa, and South America skip DST",
+                "Australia: Some states observe DST, neighboring states don't—chaos for business",
+                "2023: EU voted to abolish DST, but it's stuck in limbo (countries can't agree on permanent winter or summer)",
+                "The 2:00 AM change: Chosen because few trains run then and bars are closed",
+              ],
+            },
+            {
+              title: "UTC vs GMT: What's the Difference?",
+              items: [
+                { label: "GMT:", text: "Greenwich Mean Time—based on solar noon at Royal Observatory, Greenwich, England" },
+                { label: "UTC:", text: "Coordinated Universal Time—based on atomic clocks, includes leap seconds" },
+                { label: "Difference:", text: "Practically none for most purposes (<1 second), but UTC is the official standard" },
+                { label: "Zulu time:", text: "Military/aviation term for UTC (Z = Zulu in NATO phonetic alphabet)" },
+              ],
+            },
+            {
+              title: "Remote Team Scheduling Tips",
+              items: [
+                "Golden hours: 9 AM - 11 AM Pacific overlaps with EU afternoon and Asia evening",
+                "Rotate meeting times: Don't always make the same timezone wake up early",
+                "Use 'floating time': 'EOD Friday' means different things in different zones—specify a timezone!",
+                "The '8-hour rule': If team spans 8+ hours, async communication beats meetings",
+                "Calendar apps: Always send invites with timezone—never just 'Let's meet at 3 PM'",
+              ],
+            },
+            {
+              title: "Timezone Abbreviations Decoded",
+              items: [
+                { label: "PST/PDT:", text: "Pacific Standard/Daylight Time (UTC-8/-7) — California, Seattle" },
+                { label: "EST/EDT:", text: "Eastern Standard/Daylight Time (UTC-5/-4) — New York, Miami" },
+                { label: "GMT/BST:", text: "Greenwich Mean/British Summer Time (UTC+0/+1) — London" },
+                { label: "CET/CEST:", text: "Central European Time/Summer (UTC+1/+2) — Berlin, Paris" },
+                { label: "JST:", text: "Japan Standard Time (UTC+9) — No DST, stays +9 year-round" },
+                { label: "IST:", text: "Ambiguous! India (UTC+5:30), Israel (UTC+2/+3), or Ireland (UTC+0/+1)" },
+              ],
+            },
+            {
+              title: "Developer Timezone Tips",
+              items: [
+                "Store everything in UTC: Convert to local only for display",
+                "Use IANA names: 'America/New_York' not 'EST' (EST ignores DST)",
+                "JavaScript quirk: new Date() uses local time, but .toISOString() outputs UTC",
+                "Database: PostgreSQL TIMESTAMPTZ is your friend, MySQL TIMESTAMP... less so",
+                "Cron jobs: Specify timezone explicitly—server might not be in your zone",
               ],
             },
           ],
