@@ -107,9 +107,9 @@ jobs:
 
           1. Download source code file \`${CURRENT_TAG}.tar.gz\` or \`${CURRENT_TAG}.zip\` from release assets.
           2. Extract the archive
-          3. Run \`make deps\`
-          4. Run \`make dev\`
-          5. Open http://localhost:9500 in your browser
+          3. Run \`make deps\` to install all dependencies
+          4. Run \`make dev\` to start dev server
+          5. When the webserver is ready, click on the localhost URL to browse the project
 
           ## 🔗 Links
 
