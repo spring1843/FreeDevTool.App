@@ -2095,6 +2095,11 @@ export function getAllTools(): Tool[] {
   return Object.values(toolsData).flatMap(category => category.tools);
 }
 
+// Utility function to get a tool by its path
+export function getToolByPath(path: string): Tool | undefined {
+  return getAllTools().find(tool => tool.path === path);
+}
+
 // Cached tool count - calculated once and reused
 const TOOLS_COUNT = Object.values(toolsData).reduce(
   (count, category) => count + category.tools.length,
