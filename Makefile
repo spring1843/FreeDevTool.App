@@ -72,7 +72,7 @@ start: clean build ## Build and serve static files locally (for preview)
 	npx serve dist/public
 
 stop: ## Stop the development server (if running in background)
-	@pkill -f "tsx server/index.ts" || true
+	@pkill -f "tsx dev-server/index.ts" || true
 	@pkill -f "vite" || true
 
 restart: stop start ## Restart the development server

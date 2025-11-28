@@ -69,6 +69,18 @@ jobs:
             echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
           fi
 
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Images
+        run: |
+          make build-and-push-image IMAGE_TAG="ghcr.io/spring1843/freedevtool.app/app:${{ steps.version.outputs.version }}"
+          make build-and-push-e2e-image E2E_IMAGE_TAG="ghcr.io/spring1843/freedevtool.app/e2e:${{ steps.version.outputs.version }}"
+
       - name: Generate changelog
         id: changelog
         run: |
@@ -93,7 +105,7 @@ jobs:
 
           ## 📦 Run Dev Environment Locally
 
-          1. Download \`freedevtool-app.tar.gz\` or \`freedevtool-app.zip\`
+          1. Download source code file \`${CURRENT_TAG}.tar.gz\` or \`${CURRENT_TAG}.zip\` from release assets.
           2. Extract the archive
           3. Run \`make deps\`
           4. Run \`make dev\`
@@ -113,6 +125,7 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
+          append_body: true
           tag_name: ${{ steps.version.outputs.version }}
           name: "FreeDev Tool App ${{ steps.version.outputs.version }}"
           body_path: ${{ steps.changelog.outputs.changelog_file }}
@@ -125,18 +138,6 @@ jobs:
           generate_release_notes: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Log in to the Container registry
-        uses: docker/login-action@v3.6.0
-        with:
-          registry: https://ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and Push Images
-        run: |
-          make build-and-push-image IMAGE_TAG="ghcr.io/spring1843/freedevtool.app/app:${{ steps.version.outputs.version }}"
-          make build-and-push-e2e-image E2E_IMAGE_TAG="ghcr.io/spring1843/freedevtool.app/e2e:${{ steps.version.outputs.version }}"
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v5.1.0

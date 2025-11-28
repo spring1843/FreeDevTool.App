@@ -4,8 +4,7 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "dev": "NODE_ENV=development tsx server/index.ts",
-    "start": "NODE_ENV=production node dist/index.js",
+    "dev": "NODE_ENV=development tsx dev-server/index.ts",
     "check": "tsc",
     "build": "vite build && tsx scripts/generate-static-routes.ts"
   },
