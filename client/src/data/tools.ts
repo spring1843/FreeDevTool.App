@@ -98,7 +98,7 @@ export const toolsData: ToolData = {
               items: [
                 "Use 24-hour format for precise conversion",
                 "Add/remove target timezones as needed",
-                '• Click "Now" to use current date/time',
+                'Click "Now" to use current date/time',
                 "Copy button includes both date and time",
                 "UTC offsets adjust for DST automatically",
                 "Perfect for scheduling global meetings",
@@ -142,21 +142,35 @@ export const toolsData: ToolData = {
         explanations: {
           sections: [
             {
-              title: "Supported Formats:",
+              title: "Extracted Components:",
               items: [
-                "Simple key=value pairs",
-                "Nested objects using dot notation",
-                "Arrays using bracket notation",
-                "URL-encoded special characters",
+                { label: "Protocol:", text: "HTTP, HTTPS, FTP, etc." },
+                { label: "Hostname:", text: "Full domain name" },
+                { label: "TLD:", text: "Top-level domain (.com, .org, etc.)" },
+                { label: "Domain:", text: "Main domain name" },
+                { label: "Subdomain:", text: "www, api, etc." },
+                { label: "Port:", text: "Custom port numbers" },
+                { label: "Path:", text: "URL path segments" },
+                { label: "Query Parameters:", text: "Individual URL parameters" },
               ],
             },
             {
-              title: "Features:",
+              title: "Use Cases:",
               items: [
-                "Automatic type detection (numbers, booleans)",
-                "Deep nesting support",
-                "Array index handling",
-                "Special character decoding",
+                "API development and testing",
+                "URL analysis and debugging",
+                "Web scraping and automation",
+                "SEO and analytics tools",
+                "Documentation and training",
+                "Link validation and parsing",
+              ],
+            },
+            {
+              title: "Example URLs to try:",
+              items: [
+                "https://api.github.com/repos/owner/repo?per_page=100&sort=updated#readme",
+                "https://shop.example.co.uk:8080/products/electronics?category=laptops&brand=apple&sort=price",
+                "ftp://files.example.com/downloads/software/installer.exe",
               ],
             },
           ],
@@ -201,7 +215,10 @@ export const toolsData: ToolData = {
                 { label: "Binary (2):", text: "Computer memory, flags" },
                 { label: "Octal (8):", text: "Unix permissions" },
                 { label: "Decimal (10):", text: "Human-readable numbers" },
-                { label: "Hexadecimal (16):", text: "Colors, memory addresses" },
+                {
+                  label: "Hexadecimal (16):",
+                  text: "Colors, memory addresses",
+                },
               ],
             },
             {
@@ -267,18 +284,24 @@ export const toolsData: ToolData = {
         explanations: {
           sections: [
             {
-              title: "",
+              title: "JSONC (JSON with Comments)",
               items: [
-                { label: "JSONC (JSON with Comments)", text: "is an extension of JSON that allows comments:" },
-              ],
-            },
-            {
-              title: "",
-              items: [
-                { label: "Single-line comments:", text: "// This is a comment" },
-                { label: "Multi-line comments:", text: "/* This is a multi-line comment */" },
-                { label: "Use cases:", text: "Configuration files, VS Code settings, TypeScript configs" },
-                { label: "Popular tools:", text: "VS Code, TypeScript, Azure DevOps, and more" },
+                {
+                  label: "Single-line comments:",
+                  text: "// This is a comment",
+                },
+                {
+                  label: "Multi-line comments:",
+                  text: "/* This is a multi-line comment */",
+                },
+                {
+                  label: "Use cases:",
+                  text: "Configuration files, VS Code settings, TypeScript configs",
+                },
+                {
+                  label: "Popular tools:",
+                  text: "VS Code, TypeScript, Azure DevOps, and more",
+                },
               ],
             },
           ],
@@ -792,8 +815,14 @@ export const toolsData: ToolData = {
                 { label: "Email:", text: "Email addresses with mailto links" },
                 { label: "Phone Number:", text: "Clickable phone numbers" },
                 { label: "SMS Message:", text: "Pre-filled text messages" },
-                { label: "WiFi Network:", text: "Network credentials for easy connection" },
-                { label: "Contact Card:", text: "vCard format contact information" },
+                {
+                  label: "WiFi Network:",
+                  text: "Network credentials for easy connection",
+                },
+                {
+                  label: "Contact Card:",
+                  text: "vCard format contact information",
+                },
               ],
             },
             {
@@ -938,10 +967,22 @@ export const toolsData: ToolData = {
             type: "info",
             title: "UUID Information:",
             items: [
-              { label: "Version 1:", text: "Timestamp-based, includes MAC address (or random node)" },
-              { label: "Version 4:", text: "Randomly generated, most commonly used" },
-              { label: "Format:", text: "8-4-4-4-12 hexadecimal digits (32 total)" },
-              { label: "Use cases:", text: "Database keys, session IDs, file names, API tokens" },
+              {
+                label: "Version 1:",
+                text: "Timestamp-based, includes MAC address (or random node)",
+              },
+              {
+                label: "Version 4:",
+                text: "Randomly generated, most commonly used",
+              },
+              {
+                label: "Format:",
+                text: "8-4-4-4-12 hexadecimal digits (32 total)",
+              },
+              {
+                label: "Use cases:",
+                text: "Database keys, session IDs, file names, API tokens",
+              },
             ],
           },
         },
