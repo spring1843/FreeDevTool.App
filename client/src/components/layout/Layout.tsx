@@ -108,11 +108,11 @@ export function Layout({ children }: LayoutProps) {
   // Update document title based on current location
   useEffect(() => {
     if (location === "/") {
-      document.title = "FreeDevTool.app - Free Developer Tools";
+      document.title = "FreeDevTool.app | Free Developer Tools";
     } else if (location.startsWith("/tools/")) {
       const tool = getToolByPath(location);
       if (tool) {
-        document.title = `${tool.name} - FreeDevTool.app`;
+        document.title = `${tool.name} | FreeDevTool.app`;
       }
     }
   }, [location]);
