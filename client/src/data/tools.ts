@@ -1710,36 +1710,73 @@ export const toolsData: ToolData = {
         explanations: {
           notice: {
             type: "info",
-            title: "QR Code Types & Usage",
+            title: "QR Code Origins",
             items: [
-              {
-                label: "Supported Types",
-                text: "Plain Text, Website URL, Email (mailto), Phone (tel), SMS (pre-filled), WiFi (WIFI:T;S;P), Contact Card (vCard)",
-              },
-              {
-                label: "Auto-generate",
-                text: "QR codes update as you type; use size selector for readability",
-              },
+              { label: "Invented:", text: "1994 by Denso Wave (Toyota subsidiary) to track car parts in manufacturing" },
+              { label: "Name:", text: "'Quick Response'—designed to be scanned 10x faster than barcodes" },
+              { label: "Patent:", text: "Denso Wave owns it but chose NOT to enforce it, enabling global adoption" },
             ],
           },
           sections: [
             {
-              title: "Features",
+              title: "QR Code Types This Tool Supports",
               items: [
-                "Generate QR codes for text, URLs, email, phone, SMS, WiFi, and vCard",
-                "Adjust output size (150–500px)",
-                "Auto-generate on input change",
-                "Download as SVG and copy data URL",
+                { label: "URL:", text: "Auto-opens website (most common use—menus, links, payments)" },
+                { label: "WiFi:", text: "Scan to connect—perfect for guest networks, cafes, Airbnbs" },
+                { label: "vCard:", text: "Scan to save contact—put on business cards, email signatures" },
+                { label: "Email:", text: "Opens compose with pre-filled address (mailto: protocol)" },
+                { label: "Phone:", text: "Tap to call (tel: protocol)" },
+                { label: "SMS:", text: "Opens text message with pre-filled number and message" },
               ],
             },
             {
-              title: "Usage Tips",
+              title: "Error Correction Levels",
               items: [
-                "Larger sizes work better for complex content",
-                "WiFi format: NetworkName:Password:Security",
-                "SMS format: PhoneNumber:Message",
-                "Contact format: Name:Phone:Email",
-                "Test codes with multiple apps/devices",
+                { label: "L (7%):", text: "Smallest QR, but easily damaged—use for perfect conditions" },
+                { label: "M (15%):", text: "Default balance—handles minor scratches or dirt" },
+                { label: "Q (25%):", text: "Good for printed materials that may get worn" },
+                { label: "H (30%):", text: "Maximum recovery—allows logos in center (up to 30% can be obscured!)" },
+              ],
+            },
+            {
+              title: "Creative QR Code Uses",
+              items: [
+                "Restaurant menus: COVID made these universal—no more sticky laminated menus",
+                "Gravestones: QR codes linking to memorial websites with photos and stories",
+                "Business cards: vCard QR saves your contact info with one scan",
+                "WiFi sharing: Print and frame near your router for guests",
+                "Scavenger hunts: Each QR reveals the next clue location",
+                "Art installations: QR codes as design elements linking to artist info",
+              ],
+            },
+            {
+              title: "Real-World QR Statistics",
+              items: [
+                "2022: 89 million US smartphone users scanned a QR code (up from 72M in 2019)",
+                "China: QR payments processed $1.8 TRILLION in 2020 (WeChat Pay, Alipay)",
+                "COVID impact: Restaurant QR menu usage jumped 750% in 2020",
+                "Maximum capacity: 4,296 alphanumeric characters (or 7,089 digits)",
+                "Smallest readable: About 1cm × 1cm for simple URLs (10 modules wide minimum)",
+              ],
+            },
+            {
+              title: "QR Code Best Practices",
+              items: [
+                "Test before printing: Scan with multiple phones and apps",
+                "Quiet zone: Leave white border around QR (at least 4 modules wide)",
+                "Contrast matters: Dark foreground on light background works best",
+                "Size rule: 10× the scanning distance in mm (10cm away = 1cm QR minimum)",
+                "Short URLs: Use URL shorteners for complex links—simpler QR = more reliable",
+                "Track scans: Use UTM parameters or QR analytics services",
+              ],
+            },
+            {
+              title: "QR vs Other Codes",
+              items: [
+                { label: "Barcode:", text: "1D, holds ~20 chars, requires laser scanner" },
+                { label: "QR Code:", text: "2D, holds ~4,000 chars, any camera works" },
+                { label: "Data Matrix:", text: "2D, smaller than QR for same data, used in electronics/pharma" },
+                { label: "Aztec Code:", text: "2D, no quiet zone needed, used in airline boarding passes" },
               ],
             },
           ],
