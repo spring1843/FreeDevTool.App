@@ -486,42 +486,88 @@ export const toolsData: ToolData = {
         explanations: {
           notice: {
             type: "info",
-            title: "About Number Base Converter",
+            title: "Why Different Number Bases Exist",
             items: [
-              {
-                label: "Supported Bases",
-                text: "Binary (2), Octal (8), Decimal (10), Hex (16), Base32, Base36, and custom bases from 2–64",
-              },
+              { label: "Binary (2):", text: "Computers use it—transistors are either ON (1) or OFF (0)" },
+              { label: "Octal (8):", text: "Unix file permissions (chmod 755), compact binary representation" },
+              { label: "Decimal (10):", text: "Humans have 10 fingers—that's literally why we use base 10" },
+              { label: "Hex (16):", text: "4 bits = 1 hex digit, perfect for representing bytes compactly" },
             ],
           },
+          shortcuts: [
+            { key: "Ctrl+Shift+5", action: "Open Number Base Converter" },
+          ],
           sections: [
             {
-              title: "Features",
+              title: "Hex Colors Decoded",
               items: [
-                "Convert from any base to any other base (2–64)",
-                "Multiple output bases simultaneously",
-                "Input validation for each base",
-                "Character set display for each base",
-                "URL sharing with current settings",
-                "Example data for quick testing",
-                "Copy individual results to clipboard",
+                { label: "#FF0000:", text: "Red=255, Green=0, Blue=0 → Pure red" },
+                { label: "#00FF00:", text: "Red=0, Green=255, Blue=0 → Pure green" },
+                { label: "#0000FF:", text: "Red=0, Green=0, Blue=255 → Pure blue" },
+                { label: "#FFFFFF:", text: "All channels maxed (255,255,255) → White" },
+                { label: "#000000:", text: "All channels zero → Black" },
+                { label: "Why hex?:", text: "FF = 255 in decimal, fits in 2 chars instead of 3" },
               ],
             },
             {
-              title: "Common Use Cases",
+              title: "Binary Tricks Programmers Use",
               items: [
-                {
-                  label: "Programming",
-                  text: "Binary operations, hexadecimal colors, memory addresses",
-                },
-                {
-                  label: "Networking",
-                  text: "IP address conversion, subnet calculations, Base64 encoding",
-                },
-                {
-                  label: "Mathematics",
-                  text: "Number theory, computer science, algorithm design",
-                },
+                { label: "Powers of 2:", text: "1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024..." },
+                { label: "Check if power of 2:", text: "n & (n-1) === 0 (bit manipulation magic)" },
+                { label: "Multiply by 2:", text: "Shift left: 5 << 1 = 10 (0101 → 1010)" },
+                { label: "Divide by 2:", text: "Shift right: 10 >> 1 = 5 (1010 → 0101)" },
+                { label: "Odd/even check:", text: "n & 1 — if 1, it's odd (last bit is 1)" },
+              ],
+            },
+            {
+              title: "Unix Permissions Explained",
+              items: [
+                { label: "chmod 755:", text: "7=rwx (owner), 5=r-x (group), 5=r-x (others)" },
+                { label: "7 in binary:", text: "111 = read(4) + write(2) + execute(1)" },
+                { label: "5 in binary:", text: "101 = read(4) + execute(1), no write" },
+                { label: "chmod 644:", text: "rw-r--r-- (owner can write, others read only)" },
+                { label: "Why octal?:", text: "3 permission bits map perfectly to 1 octal digit" },
+              ],
+            },
+            {
+              title: "Memory & Addresses",
+              items: [
+                "Hex addresses: 0x7FFF5FBFF8AC is easier to read than 140734799804588",
+                "Byte values: 0x00-0xFF = 0-255 decimal = 8 bits = 1 byte",
+                "Word size: 32-bit = 0xFFFFFFFF max, 64-bit = 0xFFFFFFFFFFFFFFFF",
+                "NULL pointer: 0x0000000000000000 (all zeros)",
+                "Debug patterns: 0xDEADBEEF, 0xCAFEBABE, 0xBAADF00D mark uninitialized memory",
+              ],
+            },
+            {
+              title: "Base36 & URL Shorteners",
+              items: [
+                "Base36 uses 0-9 and A-Z (case insensitive)",
+                "YouTube IDs: 11 chars in base64-like encoding = billions of unique videos",
+                "bit.ly/xyz: Short codes are base62 (0-9, a-z, A-Z)",
+                "Why not base64?: Confusion between l/1, O/0, and + / in URLs",
+                "Reddit post IDs: Base36 encoding of incrementing numbers",
+              ],
+            },
+            {
+              title: "Fun Number Facts",
+              items: [
+                "0xDEADBEEF: Classic hex 'magic number' = 3735928559 in decimal",
+                "0xCAFEBABE: Java class file magic number (appears at start of .class files)",
+                "255: Max value of a byte (0xFF), why RGB colors go 0-255",
+                "65535: Max value of 16-bit unsigned int (0xFFFF)",
+                "2147483647: Max 32-bit signed int (0x7FFFFFFF), often seen in games as max gold",
+                "Babylonians used base 60: That's why we have 60 seconds and 360 degrees!",
+              ],
+            },
+            {
+              title: "Quick Reference",
+              items: [
+                { label: "0b1010:", text: "Binary literal in JS/Python/Rust = 10 decimal" },
+                { label: "0o755:", text: "Octal literal in JS/Python = 493 decimal" },
+                { label: "0xFF:", text: "Hex literal in most languages = 255 decimal" },
+                { label: "parseInt('FF', 16):", text: "JS: parse hex string → 255" },
+                { label: "(255).toString(16):", text: "JS: decimal to hex string → 'ff'" },
               ],
             },
           ],
