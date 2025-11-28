@@ -9,6 +9,7 @@ import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_MARKDOWN } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
 
 export default function MarkdownFormatter() {
   const [input, setInput] = useState(DEFAULT_MARKDOWN);
@@ -126,57 +127,7 @@ export default function MarkdownFormatter() {
         </Card>
       </div>
 
-      <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-          Markdown Syntax:
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-blue-700 dark:text-blue-300">
-          <div>
-            <div>
-              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-                # Header 1
-              </span>
-            </div>
-            <div>
-              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-                ## Header 2
-              </span>
-            </div>
-            <div>
-              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-                **bold**
-              </span>
-            </div>
-            <div>
-              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-                *italic*
-              </span>
-            </div>
-          </div>
-          <div>
-            <div>
-              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-                - List item
-              </span>
-            </div>
-            <div>
-              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-                1. Numbered
-              </span>
-            </div>
-            <div>
-              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-                [Link](url)
-              </span>
-            </div>
-            <div>
-              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-                `code`
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+      {getToolByPath("/tools/markdown-formatter")?.getExplanations?.()}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { getToolByPath } from "@/data/tools";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -343,53 +344,7 @@ export default function KeyboardTest() {
         </CardContent>
       </Card>
 
-      {/* Information */}
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>How to Use</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-            <div>
-              <h4 className="font-semibold mb-2">Testing Your Keyboard:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• Make sure this browser tab has focus</li>
-                <li>• Press any key to see it light up</li>
-                <li>• Hold multiple keys to test combinations</li>
-                <li>• Check if all keys register properly</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-2">Key Categories:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>
-                  • <span className="inline-block w-3 h-3 bg-blue-500 mr-2" />
-                  Letters (A-Z)
-                </li>
-                <li>
-                  • <span className="inline-block w-3 h-3 bg-green-500 mr-2" />
-                  Numbers (0-9)
-                </li>
-                <li>
-                  • <span className="inline-block w-3 h-3 bg-purple-500 mr-2" />
-                  Arrow keys
-                </li>
-                <li>
-                  • <span className="inline-block w-3 h-3 bg-orange-500 mr-2" />
-                  Modifiers (Ctrl, Alt, etc.)
-                </li>
-              </ul>
-            </div>
-          </div>
-          <Alert>
-            <AlertDescription className="text-sm">
-              <strong>Note:</strong> This tool works entirely in your browser
-              and doesn't send any data to servers. Some special keys may not be
-              captured due to browser security restrictions.
-            </AlertDescription>
-          </Alert>
-        </CardContent>
-      </Card>
+      {getToolByPath("/tools/keyboard-test")?.getExplanations?.()}
     </div>
   );
 }

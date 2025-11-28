@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback, useRef } from "react";
+import { getToolByPath } from "@/data/tools";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,11 +12,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Type,
   Grid3X3,
-  Hash,
   Star,
   ChevronLeft,
   ChevronRight,
@@ -878,56 +877,7 @@ export default function UnicodeCharacters() {
 
       <div className="flex justify-center my-8" />
 
-      {/* Character Info & Usage */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center">
-            <Hash className="w-5 h-5 mr-2" />
-            How to Use Unicode Characters
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-            <div>
-              <h4 className="font-semibold mb-2">Usage Instructions:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• Click any character to copy it to clipboard</li>
-                <li>• Paste the character anywhere you need it</li>
-                <li>• Use HTML entities in web development</li>
-                <li>• Unicode names help identify characters</li>
-                <li>• Some characters may not display on all devices</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-2">Character Formats:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>
-                  • <strong>Unicode:</strong> U+0041 (standard notation)
-                </li>
-                <li>
-                  • <strong>HTML Decimal:</strong> &amp;#65; (for web)
-                </li>
-                <li>
-                  • <strong>HTML Hex:</strong> &amp;#x41; (for web)
-                </li>
-                <li>
-                  • <strong>CSS:</strong> content: "\\0041" (in CSS)
-                </li>
-                <li>
-                  • <strong>JavaScript:</strong> String.fromCodePoint(0x41)
-                </li>
-              </ul>
-            </div>
-          </div>
-          <Alert>
-            <AlertDescription className="text-sm">
-              <strong>Tip:</strong> Not all Unicode characters will display
-              correctly on every device or font. Test important characters
-              across different browsers and operating systems.
-            </AlertDescription>
-          </Alert>
-        </CardContent>
-      </Card>
+      {getToolByPath("/tools/unicode-characters")?.getExplanations?.()}
 
       <div className="flex justify-center mt-8" />
     </div>

@@ -11,6 +11,7 @@ import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_TEXT_SPLIT } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
 import { CopyButton } from "@/components/ui/copy-button";
 
 export default function TextSplit() {
@@ -221,61 +222,7 @@ export default function TextSplit() {
         </Card>
       </div>
 
-      <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-          Common Delimiters:
-        </h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm text-blue-700 dark:text-blue-300">
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              ,
-            </span>{" "}
-            Comma
-          </div>
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              ;
-            </span>{" "}
-            Semicolon
-          </div>
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              |
-            </span>{" "}
-            Pipe
-          </div>
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              \\n
-            </span>{" "}
-            New Line
-          </div>
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              \\t
-            </span>{" "}
-            Tab
-          </div>
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              {" "}
-            </span>{" "}
-            Space
-          </div>
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              :
-            </span>{" "}
-            Colon
-          </div>
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              -
-            </span>{" "}
-            Dash
-          </div>
-        </div>
-      </div>
+      {getToolByPath("/tools/text-split")?.getExplanations?.()}
     </div>
   );
 }

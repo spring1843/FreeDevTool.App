@@ -7,6 +7,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, Minimize2, RotateCcw, AlertTriangle } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { DEFAULT_HTML } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -196,39 +197,7 @@ export default function HTMLFormatter() {
         </Card>
       </div>
 
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-          <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-            HTML Formatting Options:
-          </h3>
-          <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-            <div>
-              • <strong>Beautify:</strong> Adds proper indentation and line
-              breaks for readability
-            </div>
-            <div>
-              • <strong>Minify:</strong> Removes whitespace and comments to
-              reduce file size
-            </div>
-            <div>
-              • <strong>Validation:</strong> Checks for common HTML issues and
-              best practices
-            </div>
-          </div>
-        </div>
-
-        <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-          <h3 className="font-semibold text-green-800 dark:text-green-200 mb-2">
-            Validation Features:
-          </h3>
-          <div className="text-sm text-green-700 dark:text-green-300 space-y-1">
-            <div>• Checks for unclosed or mismatched tags</div>
-            <div>• Validates required attributes (alt, src, etc.)</div>
-            <div>• Detects accessibility and SEO issues</div>
-            <div>• Suggests best practice improvements</div>
-          </div>
-        </div>
-      </div>
+      {getToolByPath("/tools/html-formatter")?.getExplanations?.()}
     </div>
   );
 }

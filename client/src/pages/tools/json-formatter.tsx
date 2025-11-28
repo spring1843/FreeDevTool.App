@@ -10,6 +10,7 @@ import { useState, useEffect, useCallback } from "react";
 import { ToolButton, ResetButton } from "@/components/ui/tool-button";
 
 import { DEFAULT_JSON } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
 
 export default function JsonFormatter() {
   const [input, setInput] = useState(DEFAULT_JSON);
@@ -172,26 +173,7 @@ export default function JsonFormatter() {
 
       {/* Pro Tips */}
       <div className="mt-8">
-        <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
-          <CardContent className="p-6">
-            <div className="flex items-start space-x-3">
-              <Lightbulb className="text-blue-600 dark:text-blue-400 mt-1 h-5 w-5" />
-              <div>
-                <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">
-                  Pro Tips
-                </h4>
-                <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-                  <li>• Use Ctrl+A to select all text quickly</li>
-                  <li>
-                    • The formatter will auto-detect and fix common JSON issues
-                  </li>
-                  <li>• Validation shows specific error locations</li>
-                  <li>• Minified JSON is optimized for data transmission</li>
-                </ul>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        {getToolByPath("/tools/json-formatter")?.getExplanations?.()}
       </div>
     </div>
   );

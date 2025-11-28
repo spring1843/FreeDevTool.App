@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_URL_ENCODER } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
 
 export default function URLEncoder() {
   const [plainText, setPlainText] = useState(DEFAULT_URL_ENCODER);
@@ -170,49 +171,7 @@ export default function URLEncoder() {
         </Card>
       </div>
 
-      <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-          URL Encoding Examples:
-        </h3>
-        <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              Space
-            </span>{" "}
-            →{" "}
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              %20
-            </span>
-          </div>
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              @
-            </span>{" "}
-            →{" "}
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              %40
-            </span>
-          </div>
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              &
-            </span>{" "}
-            →{" "}
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              %26
-            </span>
-          </div>
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              =
-            </span>{" "}
-            →{" "}
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              %3D
-            </span>
-          </div>
-        </div>
-      </div>
+      {getToolByPath("/tools/url-encoder")?.getExplanations?.()}
     </div>
   );
 }

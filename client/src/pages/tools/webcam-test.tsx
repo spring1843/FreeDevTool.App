@@ -14,6 +14,7 @@ import { Camera, Square, RotateCcw, Download } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
+import { getToolByPath } from "@/data/tools";
 
 export default function WebcamTest() {
   const [isActive, setIsActive] = useState(false);
@@ -358,19 +359,7 @@ export default function WebcamTest() {
         </CardContent>
       </Card>
 
-      <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-          Privacy Notice:
-        </h3>
-        <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-          <div>• All camera processing happens locally in your browser</div>
-          <div>• No video or image data is transmitted to any server</div>
-          <div>• Captured photos are saved directly to your device</div>
-          <div>
-            • Camera access requires explicit permission from your browser
-          </div>
-        </div>
-      </div>
+      {getToolByPath("/tools/webcam-test")?.getExplanations?.()}
     </div>
   );
 }

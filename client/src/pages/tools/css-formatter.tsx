@@ -17,6 +17,7 @@ import { useLocation } from "wouter";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_CSS, DEFAULT_SCSS, DEFAULT_LESS } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
 
 type FormatType = "css" | "scss" | "less";
 
@@ -231,29 +232,7 @@ export default function CSSFormatter() {
         </Card>
       </div>
 
-      <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-          CSS/LESS/SCSS Formatting Options:
-        </h3>
-        <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-          <div>
-            • <strong>Format Selector:</strong> Choose CSS, SCSS, or LESS to use
-            the appropriate parser and formatting rules
-          </div>
-          <div>
-            • <strong>Beautify:</strong> Adds proper indentation, line breaks,
-            and spacing for readability
-          </div>
-          <div>
-            • <strong>Minify:</strong> Removes all unnecessary whitespace and
-            comments to reduce file size
-          </div>
-          <div>
-            • <strong>Benefits:</strong> Beautified CSS is easier to maintain,
-            minified CSS loads faster
-          </div>
-        </div>
-      </div>
+      {getToolByPath("/tools/css-formatter")?.getExplanations?.()}
     </div>
   );
 }

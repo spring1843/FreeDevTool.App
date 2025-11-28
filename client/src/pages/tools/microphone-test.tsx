@@ -19,6 +19,7 @@ import { Mic, Play, Square, Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
+import { getToolByPath } from "@/data/tools";
 
 export default function MicrophoneTest() {
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
@@ -510,37 +511,7 @@ export default function MicrophoneTest() {
 
       <div className="flex justify-center my-8" />
 
-      {/* Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle>How to Use</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="text-sm">
-            <h4 className="font-semibold mb-2">Testing Your Microphone:</h4>
-            <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-              <li>• Click "Request Microphone Permission" to allow access</li>
-              <li>
-                • Select your microphone from the dropdown (if multiple
-                available)
-              </li>
-              <li>• Click "Start Recording" to begin recording</li>
-              <li>• Watch the waveform visualizer respond to your voice</li>
-              <li>• Speak into your microphone</li>
-              <li>• Click "Stop Recording" when finished</li>
-              <li>• Play back your recording to verify quality</li>
-              <li>• Download the recording if needed</li>
-            </ul>
-          </div>
-          <Alert>
-            <AlertDescription className="text-sm">
-              <strong>Privacy Note:</strong> This tool runs entirely in your
-              browser. No audio data is sent to any server. Your browser will
-              request microphone permission when you first start recording.
-            </AlertDescription>
-          </Alert>
-        </CardContent>
-      </Card>
+      {getToolByPath("/tools/microphone-test")?.getExplanations?.()}
 
       <div className="flex justify-center mt-8" />
     </div>
