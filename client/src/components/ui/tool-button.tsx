@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/tooltip";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -191,7 +190,9 @@ export function ResetButton({
             <Button
               onClick={handleClick}
               disabled={disabled}
-              data-testid="button-reset"
+              aria-disabled={disabled ? "true" : undefined}
+              // Align test id with Playwright specs expecting 'reset-button'
+              data-testid="reset-button"
             >
               <RefreshCw className="w-4 h-4 mr-2" />
               Reset
@@ -216,12 +217,16 @@ export function ResetButton({
             <AlertDialogCancel data-testid="button-reset-cancel">
               Cancel
             </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={onClick}
+            <Button
+              onClick={() => {
+                onClick();
+                setShowDialog(false);
+              }}
               data-testid="button-reset-confirm"
+              type="button"
             >
-              Reset
-            </AlertDialogAction>
+              Confirm
+            </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -258,7 +263,9 @@ export function ClearButton({
             <Button
               onClick={handleClick}
               disabled={disabled}
-              data-testid="button-clear"
+              aria-disabled={disabled ? "true" : undefined}
+              // Align test id with Playwright specs expecting 'clear-button'
+              data-testid="clear-button"
             >
               <Trash2 className="w-4 h-4 mr-2" />
               Clear
@@ -283,12 +290,16 @@ export function ClearButton({
             <AlertDialogCancel data-testid="button-clear-cancel">
               Cancel
             </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={onClick}
+            <Button
+              onClick={() => {
+                onClick();
+                setShowDialog(false);
+              }}
               data-testid="button-clear-confirm"
+              type="button"
             >
-              Clear
-            </AlertDialogAction>
+              Confirm
+            </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

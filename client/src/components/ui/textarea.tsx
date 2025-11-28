@@ -511,6 +511,12 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         onDrop={handleDrop}
         data-testid="textarea-drop-area"
         ref={wrapperRef}
+        // Forward common data-* test hook attributes (e.g. data-default-input) to outer wrapper for e2e selectors
+        data-default-input={
+          (props as Record<string, string | number | boolean | undefined>)[
+            "data-default-input"
+          ] as string | undefined
+        }
       >
         {/* Toolbar / Navbar above the editor */}
         <div className="flex justify-end">

@@ -32,6 +32,8 @@ interface CertificateInfo {
 export default function TLSDecoder() {
   const tool = getToolByPath("/tools/tls-decoder");
   const [certificate, setCertificate] = useState(DEFAULT_TLS_DECODER);
+  // Incrementing key to force CodeMirror remount on reset/clear preventing residual merged content
+  const [editorEpoch, setEditorEpoch] = useState(0);
   const [certificateInfo, setCertificateInfo] =
     useState<CertificateInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -93,19 +95,23 @@ export default function TLSDecoder() {
   };
 
   const handleReset = () => {
+    // Reset explicitly to the original default example (no residual decoded modifications)
     setCertificate(DEFAULT_TLS_DECODER);
     setCertificateInfo(null);
     setError(null);
+    setEditorEpoch(e => e + 1);
   };
 
   const handleClear = () => {
     setCertificate("");
     setCertificateInfo(null);
     setError(null);
+    setEditorEpoch(e => e + 1);
   };
 
   const hasModifiedData =
-    certificate !== DEFAULT_TLS_DECODER && certificate.trim() !== "";
+    certificate.trim() !== DEFAULT_TLS_DECODER.trim() &&
+    certificate.trim() !== "";
   const isAtDefault = certificate === DEFAULT_TLS_DECODER;
 
   useEffect(() => {
@@ -212,6 +218,7 @@ export default function TLSDecoder() {
             />
           </div>
           <TextArea
+            key={editorEpoch}
             id="input"
             value={certificate}
             onChange={e => handleCertificateChange(e.target.value)}

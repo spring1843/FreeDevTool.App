@@ -62,7 +62,7 @@ export default function DateTimeDiff() {
     };
   };
 
-  const { fields, updateField, updateFields, resetFields } = usePersistentForm(
+  const { fields, updateField, updateFields } = usePersistentForm(
     "datetime-diff",
     getDefaultValues()
   );
@@ -299,14 +299,28 @@ export default function DateTimeDiff() {
     }
   };
 
-  // Clear all inputs
+  // Clear all inputs – for this tool "Clear" means make date inputs empty so users start fresh
   const clearAll = () => {
-    resetFields();
+    updateFields({
+      startDate: "",
+      startTime: "",
+      endDate: "",
+      endTime: "",
+    });
   };
 
+  // Modified if any date field has content; clear sets them empty which should disable Clear button per tests
   const hasModifiedData =
-    fields.startDate.trim() !== "" || fields.endDate.trim() !== "";
-  const isAtDefault = false; // Time-based tools always allow reset
+    fields.startDate.trim() !== "" ||
+    fields.endDate.trim() !== "" ||
+    fields.startTime.trim() !== "" ||
+    fields.endTime.trim() !== "";
+  // Reset should be disabled when we're already at initial defaults (all fields equal their mount-time defaults)
+  const isAtDefault =
+    fields.startDate === getDefaultValues().startDate &&
+    fields.startTime === getDefaultValues().startTime &&
+    fields.endDate === getDefaultValues().endDate &&
+    fields.endTime === getDefaultValues().endTime;
 
   // Format large numbers with commas
   const formatNumber = (num: number): string =>

@@ -2,8 +2,6 @@ import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { TextArea } from "@/components/ui/textarea";
-import { useTheme } from "@/providers/theme-provider";
 import {
   Select,
   SelectContent,
@@ -153,7 +151,7 @@ export default function QRGenerator() {
   const [error, setError] = useState("");
 
   const { toast } = useToast();
-  const { theme } = useTheme();
+  // Theme no longer needed after switching to native textarea
 
   const currentPreset = qrPresets.find(p => p.type === qrType) || qrPresets[0];
 
@@ -368,18 +366,20 @@ export default function QRGenerator() {
               </div>
 
               <div>
-                <Label htmlFor="input">{currentPreset.name} Content</Label>
-                <TextArea
-                  id="input"
+                <Label htmlFor="qr-text-input">
+                  {currentPreset.name} Content
+                </Label>
+                {/* Use a native textarea for simpler e2e interaction (Playwright .fill & .toHaveValue) */}
+                <textarea
+                  id="qr-text-input"
                   placeholder={currentPreset.placeholder}
                   value={inputText}
                   onChange={e => setInputText(e.target.value)}
                   rows={4}
                   data-testid="qr-input"
                   autoFocus={true}
-                  fileExtension="txt"
-                  theme={theme}
                   data-default-input="true"
+                  className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 />
               </div>
 
