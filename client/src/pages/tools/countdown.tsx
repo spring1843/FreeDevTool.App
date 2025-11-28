@@ -39,6 +39,7 @@ export default function Countdown() {
   );
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const hasInitialized = useRef(false);
 
   const calculateTimeRemaining = useCallback(() => {
     if (!targetDate || !targetTime) return 0;
@@ -134,8 +135,11 @@ export default function Countdown() {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isActive, isComplete, pauseCountdown, startCountdown, stopCountdown]);
 
-  // Auto-start on component mount
+  // Auto-start on component mount (only once)
   useEffect(() => {
+    if (hasInitialized.current) return;
+    hasInitialized.current = true;
+
     const timer = setTimeout(() => {
       if (targetDate && targetTime) {
         startCountdown();
@@ -143,7 +147,8 @@ export default function Countdown() {
     }, 500); // Small delay to ensure UI is ready
 
     return () => clearTimeout(timer);
-  }, [targetDate, targetTime, startCountdown]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const formatTime = (milliseconds: number) => {
     if (milliseconds <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
@@ -200,19 +205,49 @@ export default function Countdown() {
   ];
 
   const applyPreset = (preset: (typeof presets)[0]) => {
+    // Stop any existing countdown first
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+
     const { date } = preset;
     const dateStr = date.toISOString().split("T")[0];
     const timeStr = preset.time || date.toTimeString().slice(0, 5);
 
     setTargetDate(dateStr);
     setTargetTime(timeStr);
-    setIsActive(false);
     setIsComplete(false);
 
-    // Auto-start after setting
-    setTimeout(() => {
-      setIsActive(true);
-    }, 100);
+    // Calculate and set the initial time remaining
+    const targetDateTime = new Date(`${dateStr}T${timeStr}`);
+    const now = new Date();
+    const remaining = Math.max(0, targetDateTime.getTime() - now.getTime());
+    setTimeRemaining(remaining);
+
+    // Start fresh countdown
+    setIsActive(true);
+    intervalRef.current = setInterval(() => {
+      const newRemaining = Math.max(
+        0,
+        targetDateTime.getTime() - new Date().getTime()
+      );
+      setTimeRemaining(newRemaining);
+
+      if (newRemaining <= 0) {
+        setIsActive(false);
+        setIsComplete(true);
+
+        if (soundEnabled && audioRef.current) {
+          audioRef.current.play().catch(console.error);
+        }
+
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
+      }
+    }, 1000);
   };
 
   useEffect(() => {
