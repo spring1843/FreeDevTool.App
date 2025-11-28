@@ -170,11 +170,11 @@ function hydrateSsrExplanations(): void {
   if (!ssrElement || !showMoreBtn) return;
 
   showMoreBtn.addEventListener("click", () => {
-    const hiddenBlocks = ssrElement.querySelectorAll(
-      ".ssr-hidden-mobile, .ssr-hidden-desktop"
+    const revealBlocks = ssrElement.querySelectorAll(
+      ".exp-reveal-mobile, .exp-reveal-desktop"
     );
-    hiddenBlocks.forEach(block => {
-      block.classList.remove("ssr-hidden-mobile", "ssr-hidden-desktop");
+    revealBlocks.forEach(block => {
+      block.classList.remove("exp-reveal-mobile", "exp-reveal-desktop");
     });
     showMoreBtn.style.display = "none";
   });

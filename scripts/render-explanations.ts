@@ -3,31 +3,11 @@ import type {
   ToolExplanationSection,
 } from "../client/src/components/tool-explanations";
 
-const sectionColors = [
-  {
-    bg: "bg-emerald-50 dark:bg-emerald-900/20",
-    border: "border-emerald-200 dark:border-emerald-800",
-    title: "text-emerald-800 dark:text-emerald-200",
-    text: "text-emerald-700 dark:text-emerald-300",
-  },
-  {
-    bg: "bg-amber-50 dark:bg-amber-900/20",
-    border: "border-amber-200 dark:border-amber-800",
-    title: "text-amber-800 dark:text-amber-200",
-    text: "text-amber-700 dark:text-amber-300",
-  },
-  {
-    bg: "bg-cyan-50 dark:bg-cyan-900/20",
-    border: "border-cyan-200 dark:border-cyan-800",
-    title: "text-cyan-800 dark:text-cyan-200",
-    text: "text-cyan-700 dark:text-cyan-300",
-  },
-  {
-    bg: "bg-rose-50 dark:bg-rose-900/20",
-    border: "border-rose-200 dark:border-rose-800",
-    title: "text-rose-800 dark:text-rose-200",
-    text: "text-rose-700 dark:text-rose-300",
-  },
+const sectionColorClasses = [
+  "exp-emerald",
+  "exp-amber",
+  "exp-cyan",
+  "exp-rose",
 ];
 
 function escapeHtml(text: string): string {
@@ -54,9 +34,9 @@ function renderNoticeHtml(notice: ToolExplanation["notice"]): string {
     })
     .join("");
 
-  return `<div class="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-    <h3 class="font-semibold text-blue-800 dark:text-blue-200 mb-2">${escapeHtml(notice.title)}</h3>
-    <ul class="text-sm text-blue-700 dark:text-blue-300 space-y-1 list-disc list-inside">${itemsHtml}</ul>
+  return `<div class="exp-block exp-blue">
+    <h3>${escapeHtml(notice.title)}</h3>
+    <ul>${itemsHtml}</ul>
   </div>`;
 }
 
@@ -67,15 +47,15 @@ function renderShortcutsHtml(shortcuts: ToolExplanation["shortcuts"]): string {
     .map(
       shortcut =>
         `<div class="flex items-center gap-2">
-          <kbd class="px-2 py-1 bg-purple-100 dark:bg-purple-800/50 border border-purple-300 dark:border-purple-700 rounded text-xs font-mono text-purple-800 dark:text-purple-200">${escapeHtml(shortcut.key)}</kbd>
-          <span class="text-purple-700 dark:text-purple-300">${escapeHtml(shortcut.action)}</span>
+          <kbd>${escapeHtml(shortcut.key)}</kbd>
+          <span>${escapeHtml(shortcut.action)}</span>
         </div>`
     )
     .join("");
 
-  return `<div class="p-4 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg">
-    <h3 class="font-semibold text-purple-800 dark:text-purple-200 mb-3">Keyboard Shortcuts</h3>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">${shortcutsHtml}</div>
+  return `<div class="exp-block exp-purple">
+    <h3>Keyboard Shortcuts</h3>
+    <div class="exp-shortcuts-grid">${shortcutsHtml}</div>
   </div>`;
 }
 
@@ -85,7 +65,7 @@ function renderExamplesHtml(examples: ToolExplanation["examples"]): string {
   return examples
     .map(
       example =>
-        `<div><span class="font-mono bg-white dark:bg-gray-800 px-1 rounded">${escapeHtml(example.from)}</span> → <span class="font-mono bg-white dark:bg-gray-800 px-1 rounded">${escapeHtml(example.to)}</span></div>`
+        `<div><code>${escapeHtml(example.from)}</code> → <code>${escapeHtml(example.to)}</code></div>`
     )
     .join("");
 }
@@ -94,9 +74,9 @@ function renderExamplesNoticeHtml(
   title: string,
   examples: ToolExplanation["examples"]
 ): string {
-  return `<div class="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-    <h3 class="font-semibold text-blue-800 dark:text-blue-200 mb-2">${escapeHtml(title)}</h3>
-    <div class="text-sm text-blue-700 dark:text-blue-300 space-y-1">${renderExamplesHtml(examples)}</div>
+  return `<div class="exp-block exp-blue">
+    <h3>${escapeHtml(title)}</h3>
+    <div class="exp-examples">${renderExamplesHtml(examples)}</div>
   </div>`;
 }
 
@@ -104,7 +84,7 @@ function renderSectionHtml(
   section: ToolExplanationSection,
   index: number
 ): string {
-  const colors = sectionColors[index % sectionColors.length];
+  const colorClass = sectionColorClasses[index % sectionColorClasses.length];
 
   const itemsHtml = section.items
     .map(item => {
@@ -119,12 +99,12 @@ function renderSectionHtml(
     .join("");
 
   const titleHtml = section.title
-    ? `<h4 class="font-semibold ${colors.title} mb-2">${escapeHtml(section.title)}</h4>`
+    ? `<h4>${escapeHtml(section.title)}</h4>`
     : "";
 
-  return `<div class="p-4 ${colors.bg} border ${colors.border} rounded-lg">
+  return `<div class="exp-block ${colorClass}">
     ${titleHtml}
-    <ul class="space-y-1 ${colors.text} text-sm list-disc list-inside">${itemsHtml}</ul>
+    <ul>${itemsHtml}</ul>
   </div>`;
 }
 
@@ -163,9 +143,9 @@ export function renderExplanationsHtml(
   const blocksHtml = blocks
     .map((block, i) => {
       const colSpanClass = i === 0 && !shortcuts ? "md:col-span-2" : "";
-      const hiddenOnMobile = i >= mobileLimit ? "ssr-hidden-mobile" : "";
-      const hiddenOnDesktop = i >= desktopLimit ? "ssr-hidden-desktop" : "";
-      return `<div class="${colSpanClass} ${hiddenOnMobile} ${hiddenOnDesktop}" data-block-index="${i}">${block}</div>`;
+      const revealMobile = i >= mobileLimit ? "exp-reveal-mobile" : "";
+      const revealDesktop = i >= desktopLimit ? "exp-reveal-desktop" : "";
+      return `<div class="${colSpanClass} ${revealMobile} ${revealDesktop}" data-block-index="${i}">${block}</div>`;
     })
     .join("");
 
@@ -174,29 +154,22 @@ export function renderExplanationsHtml(
 
   const showMoreButton =
     totalBlocks > mobileLimit
-      ? `<button id="ssr-show-more" class="w-full py-2 px-4 text-sm text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg flex items-center justify-center gap-2 transition-colors" data-mobile-count="${mobileHiddenCount}" data-desktop-count="${desktopHiddenCount}">
+      ? `<button id="ssr-show-more" data-mobile-count="${mobileHiddenCount}" data-desktop-count="${desktopHiddenCount}">
         <span class="ssr-show-more-text"></span>
-        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
       </button>`
       : "";
 
+  const dynamicStyles = `<style>
+    #ssr-show-more .ssr-show-more-text::before { content: "Show ${mobileHiddenCount} more explanation${mobileHiddenCount !== 1 ? "s" : ""}"; }
+    @media (min-width: 768px) {
+      #ssr-show-more .ssr-show-more-text::before { content: "Show ${desktopHiddenCount} more explanation${desktopHiddenCount !== 1 ? "s" : ""}"; }
+      ${desktopHiddenCount === 0 ? "#ssr-show-more { display: none; }" : ""}
+    }
+  </style>`;
+
   return `<div id="ssr-explanations" data-tool-path="${escapeHtml(toolPath)}" data-total-blocks="${totalBlocks}" class="mt-8 space-y-4">
-    <style>
-      .ssr-hidden-mobile { display: none; }
-      .ssr-hidden-desktop { display: none; }
-      @media (min-width: 768px) {
-        .ssr-hidden-mobile { display: block; }
-      }
-      #ssr-show-more .ssr-show-more-text::before {
-        content: "Show ${mobileHiddenCount} more explanation${mobileHiddenCount !== 1 ? "s" : ""}";
-      }
-      @media (min-width: 768px) {
-        #ssr-show-more .ssr-show-more-text::before {
-          content: "Show ${desktopHiddenCount} more explanation${desktopHiddenCount !== 1 ? "s" : ""}";
-        }
-        ${desktopHiddenCount === 0 ? "#ssr-show-more { display: none; }" : ""}
-      }
-    </style>
+    ${dynamicStyles}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">${blocksHtml}</div>
     ${showMoreButton}
   </div>`;
