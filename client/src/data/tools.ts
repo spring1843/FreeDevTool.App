@@ -273,21 +273,106 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
+          notice: {
+            type: "info",
+            title: "The Great Measurement Divide",
+            items: [
+              { label: "Metric:", text: "Used by 95% of the world's population—base-10, logical, scientific standard" },
+              { label: "Imperial:", text: "USA, Liberia, Myanmar—feet, pounds, gallons (and $370M Mars probe crashes)" },
+              { label: "1999 disaster:", text: "NASA's Mars Climate Orbiter burned up because one team used metric, another used imperial" },
+            ],
+          },
+          shortcuts: [
+            { key: "Ctrl+Shift+U", action: "Open Unit Converter" },
+          ],
           sections: [
             {
-              title: "Features",
+              title: "Why These Weird Units Exist",
               items: [
-                "Length, weight, temperature, volume, and more",
-                "Accurate conversions with common units",
-                "Friendly UI for quick comparisons",
+                { label: "Foot:", text: "Literally a king's foot length—Henry I of England standardized it around 1100 AD" },
+                { label: "Inch:", text: "Width of a man's thumb, or 3 barleycorns laid end-to-end (seriously)" },
+                { label: "Mile:", text: "Roman 'mille passus' = 1,000 double paces of a Roman legion soldier" },
+                { label: "Pound:", text: "From Latin 'libra pondo' (hence 'lb')—a pound weight of silver" },
+                { label: "Gallon:", text: "UK and US gallons differ! US: 3.79L, UK: 4.55L (20% more!)" },
               ],
             },
             {
-              title: "Use cases",
+              title: "Temperature: The Weirdest Scales",
               items: [
-                "Engineering and science tasks",
-                "Cooking and DIY measurements",
-                "Normalize data across unit systems",
+                { label: "Fahrenheit (1724):", text: "0° = coldest brine solution, 96° = human body temp (he was slightly off)" },
+                { label: "Celsius (1742):", text: "Originally inverted! 0° was boiling, 100° freezing—fixed by Linnaeus" },
+                { label: "Kelvin:", text: "0K = absolute zero (-273.15°C)—atoms stop moving entirely" },
+                { label: "-40°:", text: "The only point where Fahrenheit and Celsius are equal!" },
+                { label: "Body temp:", text: "98.6°F (37°C) was from 1851—modern average is actually 97.9°F" },
+              ],
+            },
+            {
+              title: "Quick Mental Conversions",
+              items: [
+                { label: "km → miles:", text: "Multiply by 0.6 (or use Fibonacci: 5km ≈ 3mi, 8km ≈ 5mi)" },
+                { label: "kg → lbs:", text: "Double it and add 10% (70kg → 140 + 14 = 154 lbs)" },
+                { label: "°C → °F:", text: "Double and add 30 (rough), or ×1.8+32 (exact)" },
+                { label: "liters → gallons:", text: "Divide by 4 (roughly—actually 3.785)" },
+                { label: "meters → feet:", text: "Multiply by 3.3 (1m = 3.28ft)" },
+              ],
+            },
+            {
+              title: "Cooking Conversions (US)",
+              items: [
+                "1 cup = 8 fl oz = 16 tablespoons = 48 teaspoons = 237ml",
+                "1 tablespoon = 3 teaspoons = 15ml",
+                "1 stick of butter = 8 tablespoons = 113g = 1/2 cup",
+                "1 pound of flour ≈ 3.5 cups (varies by type!)",
+                "UK tablespoon = 15ml, Australian tablespoon = 20ml (watch recipes!)",
+              ],
+            },
+            {
+              title: "Pressure: When Units Get Serious",
+              items: [
+                { label: "1 atm:", text: "Sea level air pressure = 101.325 kPa = 14.7 psi = 760 mmHg" },
+                { label: "Tire pressure:", text: "Car tires: 30-35 psi, bike tires: 80-130 psi" },
+                { label: "Scuba:", text: "Every 10m depth adds 1 atm—at 30m you're under 4 atmospheres!" },
+                { label: "Blood pressure:", text: "120/80 mmHg—millimeters of mercury, a holdover from old instruments" },
+              ],
+            },
+            {
+              title: "Speed: Putting It in Perspective",
+              items: [
+                { label: "Walking:", text: "5 km/h (3.1 mph)—about 1.4 m/s" },
+                { label: "Usain Bolt:", text: "44.72 km/h (27.8 mph) peak—faster than city speed limits!" },
+                { label: "Sound:", text: "343 m/s (767 mph) at sea level, 20°C—Mach 1" },
+                { label: "Bullet:", text: "Handgun ~370 m/s, rifle ~1,200 m/s (Mach 3.5)" },
+                { label: "Light:", text: "299,792,458 m/s—1 light-year = 9.46 trillion km" },
+              ],
+            },
+            {
+              title: "Energy: Calories vs Joules",
+              items: [
+                "1 food Calorie (kcal) = 1,000 calories = 4,184 Joules",
+                "A Big Mac has 563 kcal = 2.36 million Joules (enough to power a 60W bulb for 11 hours)",
+                "1 kWh = 3.6 million Joules (what your electricity meter measures)",
+                "Human body at rest burns ~80W continuously (like a light bulb!)",
+                "TNT equivalent: 1 ton TNT = 4.184 billion Joules (used for explosions & asteroids)",
+              ],
+            },
+            {
+              title: "Area & Volume: Real-World Sizes",
+              items: [
+                { label: "Football field:", text: "1.32 acres = 0.53 hectares = 5,351 m²" },
+                { label: "Olympic pool:", text: "2,500 m³ = 660,000 US gallons" },
+                { label: "Shipping container:", text: "20ft standard = 33 m³, 40ft = 67 m³" },
+                { label: "Studio apartment:", text: "~40 m² = 430 sq ft" },
+                { label: "Parking space:", text: "~15 m² = 160 sq ft (varies by country)" },
+              ],
+            },
+            {
+              title: "Pro Tips",
+              items: [
+                "Always specify US vs UK gallons, cups, and tablespoons in recipes",
+                "Scientific work uses SI units exclusively—convert early, avoid errors",
+                "When buying internationally: check if 'oz' means fluid oz or weight oz",
+                "GPS uses meters internally—even in USA (it's a global system)",
+                "Drug dosages use metric worldwide—never approximate, always convert exactly",
               ],
             },
           ],
