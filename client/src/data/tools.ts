@@ -2463,41 +2463,63 @@ export const toolsData: ToolData = {
         },
         explanations: {
           notice: {
-            type: "info",
-            title: "Privacy",
+            type: "privacy",
+            title: "100% Local Processing",
             items: [
-              "Runs entirely in your browser; no audio is uploaded",
-              "Browser will ask for microphone permission",
+              "Audio never leaves your device — no server uploads, no cloud storage",
+              "Recordings exist only in browser memory until you download or close the tab",
+              "Perfect for testing before sensitive calls or recording confidential content",
             ],
           },
           sections: [
             {
-              title: "Features",
+              title: "When to Test Your Mic",
               items: [
-                "Select microphone device",
-                "Record audio as WebM/Opus",
-                "Live waveform visualization",
-                "Play back recording",
-                "Download recording",
-                "Status and device count indicators",
+                "Before job interviews or important video calls (Zoom, Teams, Meet)",
+                "Setting up a new headset, USB mic, or audio interface",
+                "Troubleshooting 'they can't hear me' issues in calls",
+                "Checking if your mic works after OS updates or driver changes",
+                "Comparing audio quality between different microphones",
               ],
             },
             {
-              title: "Errors",
+              title: "What the Waveform Tells You",
               items: [
-                "NotAllowedError: permission denied",
-                "NotFoundError: no microphone detected",
-                "NotReadableError: device in use",
-                "OverconstrainedError: selected device unavailable",
-                "SecurityError: access blocked",
+                "Flat line while talking = mic isn't picking up sound (wrong device selected?)",
+                "Constantly maxed out = input gain too high, causing clipping/distortion",
+                "Very small waves = mic too far away or gain too low",
+                "Spiky noise when silent = background interference or bad cable",
+                "Healthy waveform = peaks at 50-80% when speaking normally",
               ],
             },
             {
-              title: "How to Use",
+              title: "Common Fixes",
               items: [
-                "Request permission, select device",
-                "Start recording and speak",
-                "Stop recording, play back, or download",
+                {
+                  label: "No microphone found:",
+                  text: "Check cable connections, try different USB port, restart browser",
+                },
+                {
+                  label: "Permission denied:",
+                  text: "Click lock icon in address bar → allow microphone access",
+                },
+                {
+                  label: "Wrong mic active:",
+                  text: "Use the device dropdown to select your preferred microphone",
+                },
+                {
+                  label: "Audio too quiet:",
+                  text: "Check system sound settings → input volume/gain slider",
+                },
+              ],
+            },
+            {
+              title: "Pro Audio Tips",
+              items: [
+                "Speak 6-12 inches from mic (closer = more bass, 'proximity effect')",
+                "USB mics are plug-and-play; XLR mics need an audio interface",
+                "Pop filter or foam windscreen reduces plosives (p, b, t sounds)",
+                "Record a test clip, play it back, and listen with headphones for true quality check",
               ],
             },
           ],
