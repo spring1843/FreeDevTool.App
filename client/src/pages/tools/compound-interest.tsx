@@ -29,7 +29,6 @@ import {
   AreaChart,
   Area,
 } from "recharts";
-import { getToolByPath } from "@/data/tools";
 
 interface CompoundInterestResult {
   finalAmount: number;
@@ -624,17 +623,6 @@ export default function CompoundInterestCalculator() {
           </CardContent>
         </Card>
       ) : null}
-
-      {getToolByPath("/tools/compound-interest")?.getExplanations?.() && (
-        <Card className="mt-6">
-          <CardHeader>
-            <CardTitle>About This Tool</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {getToolByPath("/tools/compound-interest")?.getExplanations?.()}
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 }

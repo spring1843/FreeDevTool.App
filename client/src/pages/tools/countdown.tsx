@@ -15,7 +15,6 @@ import { Play, Pause, Square, RotateCcw, Clock } from "lucide-react";
 import { useState, useEffect, useRef, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
-import { getToolByPath } from "@/data/tools";
 
 export default function Countdown() {
   // Set interesting default values (New Year countdown)
@@ -507,17 +506,6 @@ export default function Countdown() {
           </CardContent>
         </Card>
       ) : null}
-
-      {getToolByPath("/tools/countdown")?.getExplanations?.() && (
-        <Card className="mt-6">
-          <CardHeader>
-            <CardTitle>About This Tool</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {getToolByPath("/tools/countdown")?.getExplanations?.()}
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 }

@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Copy, Monitor, Globe, HardDrive, Cpu, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { getToolByPath } from "@/data/tools";
 
 interface BrowserInfo {
   // Navigator properties
@@ -723,17 +722,6 @@ export default function BrowserInfo() {
           </CardContent>
         </Card>
       ) : null}
-
-      {getToolByPath("/tools/browser-info")?.getExplanations?.() && (
-        <Card className="mt-6">
-          <CardHeader>
-            <CardTitle>About This Tool</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {getToolByPath("/tools/browser-info")?.getExplanations?.()}
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 }
