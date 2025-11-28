@@ -163,10 +163,14 @@ export default function Metronome() {
 
     // Capture ref values at effect time to avoid stale closures
     const currentTimeouts = toneTimeoutsRef.current;
+    const audioContext = audioContextRef.current;
 
     return () => {
-      if (audioContextRef.current) {
-        audioContextRef.current.close();
+      // Only close if not already closed
+      if (audioContext && audioContext.state !== "closed") {
+        audioContext.close().catch(() => {
+          // Ignore errors when closing - context may already be closed
+        });
       }
       // Clear all timeouts using captured value
       currentTimeouts.forEach((timeout: NodeJS.Timeout) =>
