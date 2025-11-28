@@ -12,7 +12,7 @@ import {
   getValidatedParam,
 } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
-import { COMMON_TLDS } from "@/lib/tlds";
+import { COMMON_TLDS } from "@/data/domain-tlds";
 
 interface URLComponents {
   protocol?: string;
@@ -69,14 +69,14 @@ export default function URLToJSON() {
     const commonTLDs = COMMON_TLDS;
 
     // Single-part TLDs for validation
-    const singlePartTLDs = commonTLDs.filter(t => !t.includes("."));
+    const singlePartTLDs = commonTLDs.filter((t: string) => !t.includes("."));
 
     let tld = "";
     let domain = "";
     let subdomain = "";
 
     // Check for multi-part TLDs first
-    for (const multiTLD of commonTLDs.filter(t => t.includes("."))) {
+    for (const multiTLD of commonTLDs.filter((t: string) => t.includes("."))) {
       if (hostname.endsWith(`.${multiTLD}`)) {
         tld = multiTLD;
         const remaining = hostname.slice(0, -(multiTLD.length + 1));
