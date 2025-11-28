@@ -59,15 +59,20 @@ function renderShortcuts(shortcuts: ToolExplanation["shortcuts"]): ReactNode {
   if (!shortcuts || shortcuts.length === 0) return null;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-      {shortcuts.map((shortcut, i) => (
-        <div key={i} className="flex items-center gap-2">
-          <kbd className="px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded text-xs">
-            {shortcut.key}
-          </kbd>
-          <span>{shortcut.action}</span>
-        </div>
-      ))}
+    <div className="p-4 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg">
+      <h3 className="font-semibold text-purple-800 dark:text-purple-200 mb-3">
+        Keyboard Shortcuts
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+        {shortcuts.map((shortcut, i) => (
+          <div key={i} className="flex items-center gap-2">
+            <kbd className="px-2 py-1 bg-purple-100 dark:bg-purple-800/50 border border-purple-300 dark:border-purple-700 rounded text-xs font-mono text-purple-800 dark:text-purple-200">
+              {shortcut.key}
+            </kbd>
+            <span className="text-purple-700 dark:text-purple-300">{shortcut.action}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -104,28 +109,30 @@ function renderSections(sections: ToolExplanation["sections"]): ReactNode {
   const gridCols = getGridCols(sections.length);
 
   return (
-    <div className={`grid grid-cols-1 ${gridCols} gap-6 text-sm`}>
-      {sections.map((section, i) => (
-        <div key={i}>
-          {section.title ? (
-            <h4 className="font-semibold mb-2">{section.title}</h4>
-          ) : null}
-          <ul className="space-y-1 text-slate-600 dark:text-slate-400 list-disc list-inside">
-            {section.items.map((item, j) => (
-              <li key={j}>
-                {typeof item === "string" ? (
-                  item
-                ) : (
-                  <>
-                    {item.label ? <strong>{item.label}</strong> : null}{" "}
-                    {item.text}
-                  </>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+    <div className="p-4 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg">
+      <div className={`grid grid-cols-1 ${gridCols} gap-6 text-sm`}>
+        {sections.map((section, i) => (
+          <div key={i}>
+            {section.title ? (
+              <h4 className="font-semibold text-emerald-800 dark:text-emerald-200 mb-2">{section.title}</h4>
+            ) : null}
+            <ul className="space-y-1 text-emerald-700 dark:text-emerald-300 list-disc list-inside">
+              {section.items.map((item, j) => (
+                <li key={j}>
+                  {typeof item === "string" ? (
+                    item
+                  ) : (
+                    <>
+                      {item.label ? <strong>{item.label}</strong> : null}{" "}
+                      {item.text}
+                    </>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -167,10 +174,10 @@ export function renderToolExplanations(
   const { notice, shortcuts, examples, sections } = explanations;
 
   return (
-    <>
+    <div className="mt-8 space-y-4">
       {renderNoticeOrExamples(notice, examples)}
       {shortcuts ? renderShortcuts(shortcuts) : null}
       {sections ? renderSections(sections) : null}
-    </>
+    </div>
   );
 }
