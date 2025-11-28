@@ -512,7 +512,9 @@ export default function MicrophoneTest() {
 
       <div className="flex justify-center my-8" />
 
-      {renderToolExplanations(getToolByPath("/tools/microphone-test")?.explanations)}
+      {renderToolExplanations(
+        getToolByPath("/tools/microphone-test")?.explanations
+      )}
 
       <div className="flex justify-center mt-8" />
     </div>

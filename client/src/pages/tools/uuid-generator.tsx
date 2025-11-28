@@ -277,7 +277,9 @@ export default function UUIDGenerator() {
         </Card>
       )}
 
-      {renderToolExplanations(getToolByPath("/tools/uuid-generator")?.explanations)}
+      {renderToolExplanations(
+        getToolByPath("/tools/uuid-generator")?.explanations
+      )}
     </div>
   );
 }

@@ -391,7 +391,9 @@ export default function URLToJSON() {
           <CardTitle>About URL to JSON Converter</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {renderToolExplanations(getToolByPath("/tools/url-to-json")?.explanations)}
+          {renderToolExplanations(
+            getToolByPath("/tools/url-to-json")?.explanations
+          )}
         </CardContent>
       </Card>
 

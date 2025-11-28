@@ -174,7 +174,9 @@ export default function JsonFormatter() {
 
       {/* Pro Tips */}
       <div className="mt-8">
-        {renderToolExplanations(getToolByPath("/tools/json-formatter")?.explanations)}
+        {renderToolExplanations(
+          getToolByPath("/tools/json-formatter")?.explanations
+        )}
       </div>
     </div>
   );

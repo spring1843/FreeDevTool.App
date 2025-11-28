@@ -198,7 +198,9 @@ export default function HTMLFormatter() {
         </Card>
       </div>
 
-      {renderToolExplanations(getToolByPath("/tools/html-formatter")?.explanations)}
+      {renderToolExplanations(
+        getToolByPath("/tools/html-formatter")?.explanations
+      )}
     </div>
   );
 }

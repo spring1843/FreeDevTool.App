@@ -470,7 +470,9 @@ export default function QRGenerator() {
           <CardTitle>QR Code Types & Usage</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {renderToolExplanations(getToolByPath("/tools/qr-generator")?.explanations)}
+          {renderToolExplanations(
+            getToolByPath("/tools/qr-generator")?.explanations
+          )}
         </CardContent>
       </Card>
 

@@ -567,7 +567,9 @@ export default function NumberBaseConverter() {
           <CardTitle>About Number Base Converter</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {renderToolExplanations(getToolByPath("/tools/number-base-converter")?.explanations)}
+          {renderToolExplanations(
+            getToolByPath("/tools/number-base-converter")?.explanations
+          )}
         </CardContent>
       </Card>
 

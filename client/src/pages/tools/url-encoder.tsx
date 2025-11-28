@@ -172,7 +172,9 @@ export default function URLEncoder() {
         </Card>
       </div>
 
-      {renderToolExplanations(getToolByPath("/tools/url-encoder")?.explanations)}
+      {renderToolExplanations(
+        getToolByPath("/tools/url-encoder")?.explanations
+      )}
     </div>
   );
 }

@@ -490,7 +490,9 @@ export default function TimezoneConverter() {
           <CardTitle>About Timezone Converter</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {renderToolExplanations(getToolByPath("/tools/timezone-converter")?.explanations)}
+          {renderToolExplanations(
+            getToolByPath("/tools/timezone-converter")?.explanations
+          )}
         </CardContent>
       </Card>
 

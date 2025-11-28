@@ -147,7 +147,9 @@ export default function JSONCFormatter() {
           <CardTitle>About JSONC Format</CardTitle>
         </CardHeader>
         <CardContent>
-          {renderToolExplanations(getToolByPath("/tools/jsonc-formatter")?.explanations)}
+          {renderToolExplanations(
+            getToolByPath("/tools/jsonc-formatter")?.explanations
+          )}
         </CardContent>
       </Card>
     </div>

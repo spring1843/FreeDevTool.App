@@ -341,7 +341,9 @@ export default function BarcodeGenerator() {
         </Card>
       </div>
 
-      {renderToolExplanations(getToolByPath("/tools/barcode-generator")?.explanations)}
+      {renderToolExplanations(
+        getToolByPath("/tools/barcode-generator")?.explanations
+      )}
     </div>
   );
 }

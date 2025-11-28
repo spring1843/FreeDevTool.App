@@ -233,7 +233,9 @@ export default function CSSFormatter() {
         </Card>
       </div>
 
-      {renderToolExplanations(getToolByPath("/tools/css-formatter")?.explanations)}
+      {renderToolExplanations(
+        getToolByPath("/tools/css-formatter")?.explanations
+      )}
     </div>
   );
 }

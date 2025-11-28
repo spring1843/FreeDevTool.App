@@ -128,7 +128,9 @@ export default function MarkdownFormatter() {
         </Card>
       </div>
 
-      {renderToolExplanations(getToolByPath("/tools/markdown-formatter")?.explanations)}
+      {renderToolExplanations(
+        getToolByPath("/tools/markdown-formatter")?.explanations
+      )}
     </div>
   );
 }

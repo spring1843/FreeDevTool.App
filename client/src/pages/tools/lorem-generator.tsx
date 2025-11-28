@@ -371,7 +371,9 @@ export default function LoremGenerator() {
         </Card>
       ) : null}
 
-      {renderToolExplanations(getToolByPath("/tools/lorem-generator")?.explanations)}
+      {renderToolExplanations(
+        getToolByPath("/tools/lorem-generator")?.explanations
+      )}
     </div>
   );
 }
