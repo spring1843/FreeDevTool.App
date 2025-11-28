@@ -5,7 +5,7 @@ test.describe("Dynamic Page Title", () => {
     await page.goto("/");
     await page.waitForLoadState("networkidle");
 
-    await expect(page).toHaveTitle("FreeDevTool.app - Free Developer Tools");
+    await expect(page).toHaveTitle("FreeDevTool.app | Free Developer Tools");
   });
 
   test("should update title when navigating to a tool page", async ({
@@ -17,7 +17,7 @@ test.describe("Dynamic Page Title", () => {
     await page.goto("/tools/json-formatter");
     await page.waitForLoadState("networkidle");
 
-    await expect(page).toHaveTitle("JSON Formatter - FreeDevTool.app");
+    await expect(page).toHaveTitle("JSON Formatter | FreeDevTool.app");
   });
 
   test("should update title on SPA navigation between tools", async ({
@@ -26,7 +26,7 @@ test.describe("Dynamic Page Title", () => {
     await page.goto("/tools/json-formatter");
     await page.waitForLoadState("networkidle");
 
-    await expect(page).toHaveTitle("JSON Formatter - FreeDevTool.app");
+    await expect(page).toHaveTitle("JSON Formatter | FreeDevTool.app");
 
     const menuButton = page.locator('[data-testid="menu-button"]');
     await menuButton.click();
@@ -37,7 +37,7 @@ test.describe("Dynamic Page Title", () => {
 
     await page.waitForURL("/tools/yaml-formatter");
 
-    await expect(page).toHaveTitle("YAML Formatter - FreeDevTool.app");
+    await expect(page).toHaveTitle("YAML Formatter | FreeDevTool.app");
   });
 
   test("should update title when navigating back to homepage", async ({
@@ -46,12 +46,12 @@ test.describe("Dynamic Page Title", () => {
     await page.goto("/tools/json-formatter");
     await page.waitForLoadState("networkidle");
 
-    await expect(page).toHaveTitle("JSON Formatter - FreeDevTool.app");
+    await expect(page).toHaveTitle("JSON Formatter | FreeDevTool.app");
 
     await page.goto("/");
     await page.waitForLoadState("networkidle");
 
-    await expect(page).toHaveTitle("FreeDevTool.app - Free Developer Tools");
+    await expect(page).toHaveTitle("FreeDevTool.app | Free Developer Tools");
   });
 
   test("should update title for various tools", async ({ page }) => {
@@ -70,7 +70,7 @@ test.describe("Dynamic Page Title", () => {
       await page.goto(tool.path);
       await page.waitForLoadState("networkidle");
 
-      await expect(page).toHaveTitle(`${tool.expectedTitle} - FreeDevTool.app`);
+      await expect(page).toHaveTitle(`${tool.expectedTitle} | FreeDevTool.app`);
     }
   });
 });
