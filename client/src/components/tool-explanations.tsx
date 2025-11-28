@@ -1,6 +1,5 @@
-import { type ReactNode, useState, useEffect, useRef } from "react";
+import { type ReactNode, useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
-import { useLocation } from "wouter";
 
 export interface ToolExplanationItem {
   label?: string;
@@ -157,6 +156,13 @@ function renderNoticeOrExamples(
   return null;
 }
 
+function checkSsrExists(): boolean {
+  if (typeof window === "undefined") return false;
+  const ssrElement = document.getElementById("ssr-explanations");
+  if (!ssrElement) return false;
+  return ssrElement.getAttribute("data-tool-path") === window.location.pathname;
+}
+
 export function ToolExplanations({
   explanations,
 }: {
@@ -164,21 +170,18 @@ export function ToolExplanations({
 }) {
   const [expanded, setExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [location] = useLocation();
-  const ssrRemovedRef = useRef(false);
+  const [ssrExists, setSsrExists] = useState(checkSsrExists);
 
   useEffect(() => {
     const ssrElement = document.getElementById("ssr-explanations");
-    if (ssrElement && !ssrRemovedRef.current) {
+    if (ssrElement) {
       const ssrPath = ssrElement.getAttribute("data-tool-path");
-      if (ssrPath === location) {
+      if (ssrPath !== window.location.pathname) {
         ssrElement.remove();
-        ssrRemovedRef.current = true;
-      } else if (ssrPath !== location) {
-        ssrElement.remove();
+        setSsrExists(false);
       }
     }
-  }, [location]);
+  }, []);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -188,6 +191,8 @@ export function ToolExplanations({
   }, []);
 
   if (!explanations) return null;
+
+  if (ssrExists) return null;
 
   const { notice, shortcuts, examples, sections } = explanations;
 
