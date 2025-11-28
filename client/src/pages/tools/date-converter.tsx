@@ -442,9 +442,7 @@ export default function DateConverter() {
         </Card>
       )}
 
-      {renderToolExplanations(
-        getToolByPath("/tools/date-converter")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

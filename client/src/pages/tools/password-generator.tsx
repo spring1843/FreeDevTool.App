@@ -547,9 +547,7 @@ export default function PasswordGenerator() {
           </CardContent>
         </Card>
       )}
-      {renderToolExplanations(
-        getToolByPath("/tools/password-generator")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

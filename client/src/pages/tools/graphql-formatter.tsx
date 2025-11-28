@@ -133,9 +133,7 @@ export default function GraphQLFormatter() {
         </Card>
       </div>
 
-      {renderToolExplanations(
-        getToolByPath("/tools/graphql-formatter")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

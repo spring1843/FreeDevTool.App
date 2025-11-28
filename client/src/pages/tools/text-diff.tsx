@@ -281,7 +281,7 @@ export default function TextDiff() {
           </CardContent>
         </Card>
       )}
-      {renderToolExplanations(getToolByPath("/tools/text-diff")?.explanations)}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

@@ -133,9 +133,7 @@ export default function YAMLFormatter() {
         </Card>
       </div>
 
-      {renderToolExplanations(
-        getToolByPath("/tools/yaml-formatter")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

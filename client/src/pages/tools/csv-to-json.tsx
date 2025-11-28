@@ -474,9 +474,7 @@ Jane Smith,jane@example.com,25"
           </CardContent>
         </Card>
       </div>
-      {renderToolExplanations(
-        getToolByPath("/tools/csv-to-json")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

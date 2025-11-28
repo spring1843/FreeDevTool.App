@@ -881,9 +881,7 @@ export default function UnicodeCharacters() {
 
       <div className="flex justify-center my-8" />
 
-      {renderToolExplanations(
-        getToolByPath("/tools/unicode-characters")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
 
       <div className="flex justify-center mt-8" />
     </div>

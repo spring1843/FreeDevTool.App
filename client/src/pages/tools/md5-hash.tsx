@@ -300,7 +300,7 @@ export default function MD5Hash() {
         </CardContent>
       </Card>
 
-      {renderToolExplanations(getToolByPath("/tools/md5-hash")?.explanations)}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

@@ -546,9 +546,7 @@ export default function UnitConverter() {
       </Card>
 
       <div className="flex justify-center mt-8" />
-      {renderToolExplanations(
-        getToolByPath("/tools/unit-converter")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

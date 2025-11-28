@@ -243,9 +243,7 @@ export default function SearchReplace() {
           </CardContent>
         </Card>
       </div>
-      {renderToolExplanations(
-        getToolByPath("/tools/search-replace")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

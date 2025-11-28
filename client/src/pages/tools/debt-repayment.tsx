@@ -427,9 +427,7 @@ export default function DebtRepaymentCalculator() {
           </Card>
         </>
       ) : null}
-      {renderToolExplanations(
-        getToolByPath("/tools/debt-repayment")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

@@ -721,9 +721,7 @@ export default function DateTimeDiff() {
         </div>
       </div>
 
-      {renderToolExplanations(
-        getToolByPath("/tools/datetime-diff")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

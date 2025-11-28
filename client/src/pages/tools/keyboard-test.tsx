@@ -348,9 +348,7 @@ export default function KeyboardTest() {
         </CardContent>
       </Card>
 
-      {renderToolExplanations(
-        getToolByPath("/tools/keyboard-test")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

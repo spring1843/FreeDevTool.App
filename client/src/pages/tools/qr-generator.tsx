@@ -465,9 +465,7 @@ export default function QRGenerator() {
         </Card>
       </div>
 
-      {renderToolExplanations(
-        getToolByPath("/tools/qr-generator")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

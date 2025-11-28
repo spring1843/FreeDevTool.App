@@ -696,7 +696,7 @@ export default function Timer() {
         </CardContent>
       </Card>
 
-      {renderToolExplanations(getToolByPath("/tools/timer")?.explanations)}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

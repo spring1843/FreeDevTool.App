@@ -363,9 +363,7 @@ export default function WebcamTest() {
         </CardContent>
       </Card>
 
-      {renderToolExplanations(
-        getToolByPath("/tools/webcam-test")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

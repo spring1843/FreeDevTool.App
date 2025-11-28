@@ -227,9 +227,7 @@ export default function JWTDecoder() {
           </CardContent>
         </Card>
       </div>
-      {renderToolExplanations(
-        getToolByPath("/tools/jwt-decoder")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

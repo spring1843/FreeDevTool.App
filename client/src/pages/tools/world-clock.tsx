@@ -455,9 +455,7 @@ export default function WorldClock() {
           ))}
       </div>
 
-      {renderToolExplanations(
-        getToolByPath("/tools/world-clock")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

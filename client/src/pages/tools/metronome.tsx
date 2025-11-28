@@ -629,7 +629,7 @@ export default function Metronome() {
         </CardContent>
       </Card>
 
-      {renderToolExplanations(getToolByPath("/tools/metronome")?.explanations)}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

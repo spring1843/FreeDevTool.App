@@ -316,9 +316,7 @@ export default function TLSDecoder() {
           </Card>
         </div>
       ) : null}
-      {renderToolExplanations(
-        getToolByPath("/tools/tls-decoder")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

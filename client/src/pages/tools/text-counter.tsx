@@ -237,9 +237,7 @@ export default function TextCounter() {
           </CardContent>
         </Card>
       </div>
-      {renderToolExplanations(
-        getToolByPath("/tools/text-counter")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

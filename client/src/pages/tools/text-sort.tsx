@@ -285,7 +285,7 @@ export default function TextSort() {
           </CardContent>
         </Card>
       </div>
-      {renderToolExplanations(getToolByPath("/tools/text-sort")?.explanations)}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

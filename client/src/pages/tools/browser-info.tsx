@@ -728,9 +728,7 @@ export default function BrowserInfo() {
         </Card>
       ) : null}
 
-      {renderToolExplanations(
-        getToolByPath("/tools/browser-info")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

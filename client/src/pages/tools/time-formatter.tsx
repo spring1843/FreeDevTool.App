@@ -390,9 +390,7 @@ export default function TimeFormatter() {
         </Card>
       )}
 
-      {renderToolExplanations(
-        getToolByPath("/tools/time-formatter")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

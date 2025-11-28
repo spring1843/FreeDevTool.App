@@ -487,9 +487,7 @@ export default function TimezoneConverter() {
         </Card>
       )}
 
-      {renderToolExplanations(
-        getToolByPath("/tools/timezone-converter")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

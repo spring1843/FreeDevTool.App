@@ -344,9 +344,7 @@ export default function URLToJSON() {
         </div>
       </div>
 
-      {renderToolExplanations(
-        getToolByPath("/tools/url-to-json")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

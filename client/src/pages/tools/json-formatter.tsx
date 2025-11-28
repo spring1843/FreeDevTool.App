@@ -175,9 +175,7 @@ export default function JsonFormatter() {
         </Card>
       </div>
 
-      {renderToolExplanations(
-        getToolByPath("/tools/json-formatter")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

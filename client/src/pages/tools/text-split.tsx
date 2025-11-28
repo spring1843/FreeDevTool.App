@@ -226,7 +226,7 @@ export default function TextSplit() {
         </Card>
       </div>
 
-      {renderToolExplanations(getToolByPath("/tools/text-split")?.explanations)}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

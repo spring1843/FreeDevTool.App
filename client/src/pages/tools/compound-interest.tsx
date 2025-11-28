@@ -628,9 +628,7 @@ export default function CompoundInterestCalculator() {
           </CardContent>
         </Card>
       ) : null}
-      {renderToolExplanations(
-        getToolByPath("/tools/compound-interest")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

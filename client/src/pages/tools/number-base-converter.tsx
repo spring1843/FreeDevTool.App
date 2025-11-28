@@ -562,9 +562,7 @@ export default function NumberBaseConverter() {
         </div>
       </div>
 
-      {renderToolExplanations(
-        getToolByPath("/tools/number-base-converter")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

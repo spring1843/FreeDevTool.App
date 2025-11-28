@@ -171,7 +171,7 @@ export default function Base64Encoder() {
           </CardContent>
         </Card>
       </div>
-      {renderToolExplanations(getToolByPath("/tools/base64")?.explanations)}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

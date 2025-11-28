@@ -206,9 +206,7 @@ export default function JSONYAMLConverter() {
           </Card>
         </div>
       </div>
-      {renderToolExplanations(
-        getToolByPath("/tools/json-yaml-converter")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

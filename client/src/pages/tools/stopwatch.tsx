@@ -345,7 +345,7 @@ export default function Stopwatch() {
         </div>
       )}
 
-      {renderToolExplanations(getToolByPath("/tools/stopwatch")?.explanations)}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

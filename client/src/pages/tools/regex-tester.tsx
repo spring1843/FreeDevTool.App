@@ -300,9 +300,7 @@ export default function RegexTester() {
           </CardContent>
         </Card>
       )}
-      {renderToolExplanations(
-        getToolByPath("/tools/regex-tester")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

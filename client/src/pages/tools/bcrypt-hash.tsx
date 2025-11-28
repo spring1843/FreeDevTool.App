@@ -349,9 +349,7 @@ export default function BcryptHash() {
         </CardContent>
       </Card>
 
-      {renderToolExplanations(
-        getToolByPath("/tools/bcrypt-hash")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }

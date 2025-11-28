@@ -459,9 +459,7 @@ export default function ColorPaletteGenerator() {
       )}
 
       <div className="flex justify-center mt-8" />
-      {renderToolExplanations(
-        getToolByPath("/tools/color-palette-generator")?.explanations
-      )}
+      {renderToolExplanations(tool?.explanations)}
     </div>
   );
 }
