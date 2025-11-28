@@ -12,8 +12,10 @@ import { ToolButton, ResetButton } from "@/components/ui/tool-button";
 import { DEFAULT_JSON } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { renderToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function JsonFormatter() {
+  const tool = getToolByPath("/tools/json-formatter");
   const [input, setInput] = useState(DEFAULT_JSON);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -77,8 +79,9 @@ export default function JsonFormatter() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               JSON Formatter
+              {tool?.shortcut && <ShortcutBadge shortcut={tool.shortcut} />}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Format, validate, and minify JSON with syntax highlighting for

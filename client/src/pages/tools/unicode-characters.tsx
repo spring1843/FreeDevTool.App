@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback, useRef } from "react";
 import { getToolByPath } from "@/data/tools";
 import { renderToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -178,6 +179,7 @@ const POPULAR_CATEGORIES = {
 };
 
 export default function UnicodeCharacters() {
+  const tool = getToolByPath("/tools/unicode-characters");
   const [selectedBlock, setSelectedBlock] = useState("Basic Latin");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
@@ -428,8 +430,9 @@ export default function UnicodeCharacters() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
           Unicode Character Map
+          {tool?.shortcut && <ShortcutBadge shortcut={tool.shortcut} />}
         </h2>
         <p className="text-slate-600 dark:text-slate-400">
           Browse and copy Unicode characters from various scripts and symbol

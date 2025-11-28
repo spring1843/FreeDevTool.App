@@ -11,8 +11,10 @@ import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_MARKDOWN } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { renderToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function MarkdownFormatter() {
+  const tool = getToolByPath("/tools/markdown-formatter");
   const [input, setInput] = useState(DEFAULT_MARKDOWN);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -52,8 +54,9 @@ export default function MarkdownFormatter() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Markdown Formatter
+              {tool?.shortcut && <ShortcutBadge shortcut={tool.shortcut} />}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Format and beautify Markdown documents

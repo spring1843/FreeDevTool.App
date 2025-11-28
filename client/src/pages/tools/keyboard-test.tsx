@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { getToolByPath } from "@/data/tools";
 import { renderToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +16,7 @@ interface KeyPress {
 }
 
 export default function KeyboardTest() {
+  const tool = getToolByPath("/tools/keyboard-test");
   const [pressedKeys, setPressedKeys] = useState<Set<string>>(new Set());
   const [keyHistory, setKeyHistory] = useState<KeyPress[]>([]);
   const [isActive, setIsActive] = useState(true);
@@ -141,8 +143,9 @@ export default function KeyboardTest() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
           Keyboard Test
+          {tool?.shortcut && <ShortcutBadge shortcut={tool.shortcut} />}
         </h2>
         <p className="text-slate-600 dark:text-slate-400">
           Test your keyboard keys and see which buttons you're pressing in

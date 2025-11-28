@@ -11,6 +11,7 @@ import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_TLS_DECODER } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { renderToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 interface CertificateInfo {
   subject: string;
@@ -28,6 +29,7 @@ interface CertificateInfo {
 }
 
 export default function TLSDecoder() {
+  const tool = getToolByPath("/tools/tls-decoder");
   const [certificate, setCertificate] = useState(DEFAULT_TLS_DECODER);
   const [certificateInfo, setCertificateInfo] =
     useState<CertificateInfo | null>(null);
@@ -140,8 +142,9 @@ export default function TLSDecoder() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               TLS Certificate Decoder
+              {tool?.shortcut && <ShortcutBadge shortcut={tool.shortcut} />}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Decode and analyze X.509 TLS/SSL certificates

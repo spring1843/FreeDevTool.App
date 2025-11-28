@@ -19,6 +19,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { getToolByPath } from "@/data/tools";
 import { renderToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 interface UnitGroup {
   name: string;
@@ -157,6 +158,7 @@ const unitGroups: { [key: string]: UnitGroup } = {
 };
 
 export default function UnitConverter() {
+  const tool = getToolByPath("/tools/unit-converter");
   const [selectedCategory, setSelectedCategory] = useState("weight");
   const [fromUnit, setFromUnit] = useState("");
   const [toUnit, setToUnit] = useState("");
@@ -343,8 +345,9 @@ export default function UnitConverter() {
     <div className="max-w-4xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
           Unit Converter
+          {tool?.shortcut && <ShortcutBadge shortcut={tool.shortcut} />}
         </h2>
         <p className="text-slate-600 dark:text-slate-400">
           Convert between various units of weight, distance, area, volume,

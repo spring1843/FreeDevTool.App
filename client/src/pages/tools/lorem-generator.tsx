@@ -18,6 +18,7 @@ import { SecurityBanner } from "@/components/ui/security-banner";
 import { useToast } from "@/hooks/use-toast";
 import { getToolByPath } from "@/data/tools";
 import { renderToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 const MAX_WORDS_LIMIT = 1000;
 
@@ -104,6 +105,7 @@ const loremWords = [
 ];
 
 export default function LoremGenerator() {
+  const tool = getToolByPath("/tools/lorem-generator");
   const [type, setType] = useState<"words" | "sentences" | "paragraphs">(
     "paragraphs"
   );
@@ -248,8 +250,9 @@ export default function LoremGenerator() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Lorem Ipsum Generator
+              {tool?.shortcut && <ShortcutBadge shortcut={tool.shortcut} />}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Generate placeholder text for design and development

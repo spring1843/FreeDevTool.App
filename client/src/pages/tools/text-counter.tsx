@@ -17,12 +17,14 @@ import { usePersistentForm } from "@/hooks/use-persistent-state";
 import { DEFAULT_TEXT_COUNTER } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { renderToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 const defaultFields = {
   text: DEFAULT_TEXT_COUNTER,
 };
 
 export default function TextCounter() {
+  const tool = getToolByPath("/tools/text-counter");
   const { fields, updateField, resetFields } = usePersistentForm(
     "text-counter",
     defaultFields
@@ -80,8 +82,9 @@ export default function TextCounter() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
           Text Counter
+          {tool?.shortcut && <ShortcutBadge shortcut={tool.shortcut} />}
         </h2>
         <p className="text-slate-600 dark:text-slate-400">
           Count words, characters, sentences, paragraphs and more

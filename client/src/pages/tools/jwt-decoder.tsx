@@ -9,8 +9,10 @@ import { DEFAULT_JWT } from "@/data/defaults";
 import { useTheme } from "@/providers/theme-provider";
 import { getToolByPath } from "@/data/tools";
 import { renderToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function JWTDecoder() {
+  const tool = getToolByPath("/tools/jwt-decoder");
   const [token, setToken] = useState(DEFAULT_JWT);
   const [header, setHeader] = useState("");
   const [payload, setPayload] = useState("");
@@ -90,8 +92,9 @@ export default function JWTDecoder() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               JWT Decoder
+              {tool?.shortcut && <ShortcutBadge shortcut={tool.shortcut} />}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Decode and validate JSON Web Tokens (JWT)

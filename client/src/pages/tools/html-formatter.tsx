@@ -9,6 +9,7 @@ import { useState, useEffect, useCallback } from "react";
 import { DEFAULT_HTML } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { renderToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -20,6 +21,7 @@ interface ValidationIssue {
 }
 
 export default function HTMLFormatter() {
+  const tool = getToolByPath("/tools/html-formatter");
   const [input, setInput] = useState(DEFAULT_HTML);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -72,8 +74,9 @@ export default function HTMLFormatter() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               HTML Formatter
+              {tool?.shortcut && <ShortcutBadge shortcut={tool.shortcut} />}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Format, beautify, or minify HTML code with validation

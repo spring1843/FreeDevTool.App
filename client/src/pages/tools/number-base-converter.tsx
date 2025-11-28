@@ -20,6 +20,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { getToolByPath } from "@/data/tools";
 import { renderToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 interface ConversionResult {
   base: number;
@@ -46,6 +47,7 @@ const commonBases = [
 ];
 
 export default function NumberBaseConverter() {
+  const tool = getToolByPath("/tools/number-base-converter");
   const [inputNumber, setInputNumber] = useState("42");
   const [inputBase, setInputBase] = useState(10);
   const [outputBases, setOutputBases] = useState<number[]>([2, 8, 16]);
@@ -297,8 +299,9 @@ export default function NumberBaseConverter() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
           Number Base Converter
+          {tool?.shortcut && <ShortcutBadge shortcut={tool.shortcut} />}
         </h2>
         <p className="text-slate-600 dark:text-slate-400">
           Convert numbers between different bases (binary, decimal, hexadecimal,

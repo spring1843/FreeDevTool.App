@@ -32,8 +32,10 @@ import { DEFAULT_URL_TO_JSON } from "@/data/defaults";
 import { Input } from "@/components/ui/input";
 import { getToolByPath } from "@/data/tools";
 import { renderToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function URLToJSON() {
+  const tool = getToolByPath("/tools/url-to-json");
   const [inputUrl, setInputUrl] = useState(DEFAULT_URL_TO_JSON);
   const [urlComponents, setUrlComponents] = useState<URLComponents>({});
   const [jsonOutput, setJsonOutput] = useState("");
@@ -193,8 +195,9 @@ export default function URLToJSON() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
           URL to JSON Converter
+          {tool?.shortcut && <ShortcutBadge shortcut={tool.shortcut} />}
         </h2>
         <p className="text-slate-600 dark:text-slate-400">
           Break down URLs into their components including protocol, hostname,
