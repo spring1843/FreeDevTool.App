@@ -1,4 +1,5 @@
-import { type ReactNode } from "react";
+import { type ReactNode, useState, useEffect } from "react";
+import { ChevronDown } from "lucide-react";
 
 export interface ToolExplanationItem {
   label?: string;
@@ -126,46 +127,6 @@ const sectionColors = [
   },
 ];
 
-function renderSections(sections: ToolExplanation["sections"]): ReactNode {
-  if (!sections || sections.length === 0) return null;
-
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {sections.map((section, i) => {
-        const colors = sectionColors[i % sectionColors.length];
-        return (
-          <div
-            key={i}
-            className={`p-4 ${colors.bg} border ${colors.border} rounded-lg`}
-          >
-            {section.title ? (
-              <h4 className={`font-semibold ${colors.title} mb-2`}>
-                {section.title}
-              </h4>
-            ) : null}
-            <ul
-              className={`space-y-1 ${colors.text} text-sm list-disc list-inside`}
-            >
-              {section.items.map((item, j) => (
-                <li key={j}>
-                  {typeof item === "string" ? (
-                    item
-                  ) : (
-                    <>
-                      {item.label ? <strong>{item.label}</strong> : null}{" "}
-                      {item.text}
-                    </>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
 function renderExamplesNotice(
   title: string,
   examples: ToolExplanation["examples"]
@@ -195,18 +156,90 @@ function renderNoticeOrExamples(
   return null;
 }
 
+function ToolExplanationsComponent({ explanations }: { explanations: ToolExplanation }) {
+  const [expanded, setExpanded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const { notice, shortcuts, examples, sections } = explanations;
+
+  const blocks: ReactNode[] = [];
+  
+  const noticeBlock = renderNoticeOrExamples(notice, examples);
+  if (noticeBlock) blocks.push(noticeBlock);
+  
+  const shortcutsBlock = shortcuts ? renderShortcuts(shortcuts) : null;
+  if (shortcutsBlock) blocks.push(shortcutsBlock);
+  
+  if (sections) {
+    sections.forEach((section, i) => {
+      const colors = sectionColors[i % sectionColors.length];
+      blocks.push(
+        <div
+          key={`section-${i}`}
+          className={`p-4 ${colors.bg} border ${colors.border} rounded-lg`}
+        >
+          {section.title ? (
+            <h4 className={`font-semibold ${colors.title} mb-2`}>
+              {section.title}
+            </h4>
+          ) : null}
+          <ul className={`space-y-1 ${colors.text} text-sm list-disc list-inside`}>
+            {section.items.map((item, j) => (
+              <li key={j}>
+                {typeof item === "string" ? (
+                  item
+                ) : (
+                  <>
+                    {item.label ? <strong>{item.label}</strong> : null}{" "}
+                    {item.text}
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    });
+  }
+
+  const limit = isMobile ? 1 : 3;
+  const hasMore = blocks.length > limit;
+  const visibleBlocks = expanded ? blocks : blocks.slice(0, limit);
+  const hiddenCount = blocks.length - limit;
+
+  return (
+    <div className="mt-8 space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {visibleBlocks.map((block, i) => (
+          <div key={i} className={i === 0 && !shortcuts ? "md:col-span-2" : ""}>
+            {block}
+          </div>
+        ))}
+      </div>
+      
+      {hasMore && !expanded && (
+        <button
+          onClick={() => setExpanded(true)}
+          className="w-full py-2 px-4 text-sm text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg flex items-center justify-center gap-2 transition-colors"
+        >
+          <span>Show {hiddenCount} more explanation{hiddenCount > 1 ? "s" : ""}</span>
+          <ChevronDown className="w-4 h-4" />
+        </button>
+      )}
+    </div>
+  );
+}
+
 export function renderToolExplanations(
   explanations: ToolExplanation | undefined
 ): ReactNode {
   if (!explanations) return null;
-
-  const { notice, shortcuts, examples, sections } = explanations;
-
-  return (
-    <div className="mt-8 space-y-4">
-      {renderNoticeOrExamples(notice, examples)}
-      {shortcuts ? renderShortcuts(shortcuts) : null}
-      {sections ? renderSections(sections) : null}
-    </div>
-  );
+  return <ToolExplanationsComponent explanations={explanations} />;
 }
