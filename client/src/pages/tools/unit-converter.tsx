@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ArrowLeftRight, Copy, Check, Calculator, Share } from "lucide-react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 import {
   updateURL,
   copyShareableURL,
@@ -310,6 +311,23 @@ export default function UnitConverter() {
     setToUnit(temp);
   };
 
+  const handleReset = () => {
+    setSelectedCategory("weight");
+    setInputValue("1");
+    const weightUnits = Object.keys(unitGroups["weight"].units);
+    setFromUnit(weightUnits[0]);
+    setToUnit(weightUnits[1] || weightUnits[0]);
+    setResult("");
+  };
+
+  const handleClear = () => {
+    setInputValue("");
+    setResult("");
+  };
+
+  const hasModifiedData = inputValue !== "1" && inputValue.trim() !== "";
+  const isAtDefault = inputValue === "1" && selectedCategory === "weight";
+
   const copyResult = async () => {
     if (result) {
       try {
@@ -363,7 +381,7 @@ export default function UnitConverter() {
             Select Category
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
             <SelectTrigger data-testid="category-select">
               <SelectValue />
@@ -376,6 +394,20 @@ export default function UnitConverter() {
               ))}
             </SelectContent>
           </Select>
+          <div className="flex gap-2">
+            <ResetButton
+              onClick={handleReset}
+              tooltip="Reset to default settings"
+              hasModifiedData={hasModifiedData}
+              disabled={isAtDefault}
+            />
+            <ClearButton
+              onClick={handleClear}
+              tooltip="Clear input value"
+              hasModifiedData={hasModifiedData}
+              disabled={inputValue.trim() === ""}
+            />
+          </div>
         </CardContent>
       </Card>
 

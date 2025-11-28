@@ -4,7 +4,8 @@ import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { Shield, RotateCcw, CheckCircle, XCircle } from "lucide-react";
+import { Shield, CheckCircle, XCircle } from "lucide-react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
@@ -97,6 +98,16 @@ export default function TLSDecoder() {
     setError(null);
   };
 
+  const handleClear = () => {
+    setCertificate("");
+    setCertificateInfo(null);
+    setError(null);
+  };
+
+  const hasModifiedData =
+    certificate !== DEFAULT_TLS_DECODER && certificate.trim() !== "";
+  const isAtDefault = certificate === DEFAULT_TLS_DECODER;
+
   useEffect(() => {
     decodeCertificate();
   }, [decodeCertificate]);
@@ -187,10 +198,18 @@ export default function TLSDecoder() {
               <Shield className="w-4 h-4 mr-2" />
               Decode Certificate
             </Button>
-            <Button onClick={handleReset} variant="outline">
-              <RotateCcw className="w-4 h-4 mr-2" />
-              Reset
-            </Button>
+            <ResetButton
+              onClick={handleReset}
+              tooltip="Reset to default example"
+              hasModifiedData={hasModifiedData}
+              disabled={isAtDefault}
+            />
+            <ClearButton
+              onClick={handleClear}
+              tooltip="Clear certificate input"
+              hasModifiedData={hasModifiedData}
+              disabled={certificate.trim() === ""}
+            />
           </div>
           <TextArea
             id="input"

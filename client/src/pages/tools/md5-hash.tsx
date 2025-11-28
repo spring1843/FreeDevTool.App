@@ -301,7 +301,11 @@ export default function MD5Hash() {
                 onClick={handleClear}
                 tooltip="Clear all inputs"
                 hasModifiedData={hasModifiedData}
-                disabled={inputText.trim() === "" && compareHash.trim() === "" && hashResult.trim() === ""}
+                disabled={
+                  inputText.trim() === "" &&
+                  compareHash.trim() === "" &&
+                  hashResult.trim() === ""
+                }
               />
             </div>
           </CardTitle>

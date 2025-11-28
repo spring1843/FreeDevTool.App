@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { TimezoneSelector } from "@/components/ui/timezone-selector";
 import { getUserTimezone } from "@/lib/time-tools";
 import { Clock, Copy, Check, RefreshCw } from "lucide-react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 
 interface TimeFormat {
   name: string;
@@ -274,6 +275,15 @@ export default function TimeFormatter() {
     setInputTime(timeStr);
   };
 
+  const handleClear = () => {
+    setInputDate("");
+    setInputTime("");
+    setFormats([]);
+  };
+
+  const hasModifiedData = inputDate.trim() !== "" && inputTime.trim() !== "";
+  const isAtDefault = false; // Time formatter always starts with current time
+
   return (
     <div className="max-w-4xl mx-auto">
       {/* Header */}
@@ -329,16 +339,27 @@ export default function TimeFormatter() {
                 data-testid="input-timezone-select"
               />
             </div>
-            <div className="flex items-end">
+            <div className="flex items-end gap-2">
               <Button
                 onClick={setCurrentDateTime}
                 variant="outline"
-                className="w-full"
                 data-testid="set-current-button"
               >
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Now
               </Button>
+              <ResetButton
+                onClick={setCurrentDateTime}
+                tooltip="Reset to current time"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={handleClear}
+                tooltip="Clear all inputs"
+                hasModifiedData={hasModifiedData}
+                disabled={inputDate.trim() === "" && inputTime.trim() === ""}
+              />
             </div>
           </div>
         </CardContent>

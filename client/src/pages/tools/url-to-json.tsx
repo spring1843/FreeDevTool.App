@@ -6,6 +6,7 @@ import { useTheme } from "@/providers/theme-provider";
 import { Label } from "@/components/ui/label";
 import { CopyButton } from "@/components/ui/copy-button";
 import { Link, Globe, Hash, Share } from "lucide-react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 import {
   updateURL,
   copyShareableURL,
@@ -143,11 +144,22 @@ export default function URLToJSON() {
     setError("");
   };
 
+  const handleReset = () => {
+    setInputUrl(DEFAULT_URL_TO_JSON);
+    setUrlComponents({});
+    setJsonOutput("");
+    setError("");
+  };
+
   const loadExample = () => {
     setInputUrl(
       "https://api.example.com:8080/v1/users/123?include=profile,settings&format=json&sort=name#results"
     );
   };
+
+  const hasModifiedData =
+    inputUrl !== DEFAULT_URL_TO_JSON && inputUrl.trim() !== "";
+  const isAtDefault = inputUrl === DEFAULT_URL_TO_JSON;
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -227,16 +239,18 @@ export default function URLToJSON() {
                 >
                   Load Example
                 </Button>
-
-                <Button
+                <ResetButton
+                  onClick={handleReset}
+                  tooltip="Reset to default URL"
+                  hasModifiedData={hasModifiedData}
+                  disabled={isAtDefault}
+                />
+                <ClearButton
                   onClick={clearInput}
-                  variant="outline"
-                  size="sm"
-                  className="flex-1"
-                  data-testid="clear-button"
-                >
-                  Clear
-                </Button>
+                  tooltip="Clear URL input"
+                  hasModifiedData={hasModifiedData}
+                  disabled={inputUrl.trim() === ""}
+                />
               </div>
             </CardContent>
           </Card>

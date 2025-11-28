@@ -114,8 +114,7 @@ export default function TextSort() {
     setSortedOutput("");
   };
 
-  const hasModifiedData =
-    input !== DEFAULT_TEXT_SORT && input.trim() !== "";
+  const hasModifiedData = input !== DEFAULT_TEXT_SORT && input.trim() !== "";
   const isAtDefault =
     input === DEFAULT_TEXT_SORT &&
     sortType === "alphabetical" &&

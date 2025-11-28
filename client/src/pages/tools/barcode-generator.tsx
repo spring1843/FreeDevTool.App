@@ -137,7 +137,8 @@ export default function BarcodeGenerator() {
     setError(null);
   };
 
-  const hasModifiedData = text !== DEFAULT_BARCODE_GENERATOR && text.trim() !== "";
+  const hasModifiedData =
+    text !== DEFAULT_BARCODE_GENERATOR && text.trim() !== "";
   const isAtDefault =
     text === DEFAULT_BARCODE_GENERATOR &&
     format === "CODE128" &&

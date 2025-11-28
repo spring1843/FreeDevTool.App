@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { CopyButton } from "@/components/ui/copy-button";
 import { Hash, Calculator, Share, RefreshCw, ArrowRight } from "lucide-react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 import {
   updateURL,
   copyShareableURL,
@@ -295,6 +296,18 @@ export default function NumberBaseConverter() {
     setError("");
   };
 
+  const handleReset = () => {
+    setInputNumber("42");
+    setInputBase(10);
+    setOutputBases([2, 8, 16]);
+    setCustomBase("");
+    setResults([]);
+    setError("");
+  };
+
+  const hasModifiedData = inputNumber !== "42" && inputNumber.trim() !== "";
+  const isAtDefault = inputNumber === "42" && inputBase === 10;
+
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
@@ -416,15 +429,20 @@ export default function NumberBaseConverter() {
                 </Button>
               </div>
 
-              <Button
-                onClick={clearAll}
-                variant="outline"
-                size="sm"
-                className="w-full"
-                data-testid="clear-button"
-              >
-                Clear All
-              </Button>
+              <div className="flex gap-2">
+                <ResetButton
+                  onClick={handleReset}
+                  tooltip="Reset to default example"
+                  hasModifiedData={hasModifiedData}
+                  disabled={isAtDefault}
+                />
+                <ClearButton
+                  onClick={clearAll}
+                  tooltip="Clear all inputs"
+                  hasModifiedData={hasModifiedData}
+                  disabled={inputNumber.trim() === ""}
+                />
+              </div>
             </CardContent>
           </Card>
 

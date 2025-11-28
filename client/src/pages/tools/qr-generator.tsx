@@ -23,6 +23,7 @@ import {
   Wifi,
   CreditCard,
 } from "lucide-react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 import { useToast } from "@/hooks/use-toast";
 
 import QRCodeLib from "qrcode-generator";
@@ -249,6 +250,27 @@ export default function QRGenerator() {
     setInputText(preset);
   };
 
+  const handleReset = () => {
+    setInputText(DEFAULT_QR_GENERATOR);
+    setQrType("url");
+    setQrSize(300);
+    setQrUrl("");
+    setSvgData("");
+    setError("");
+  };
+
+  const handleClear = () => {
+    setInputText("");
+    setQrUrl("");
+    setSvgData("");
+    setError("");
+  };
+
+  const hasModifiedData =
+    inputText !== DEFAULT_QR_GENERATOR && inputText.trim() !== "";
+  const isAtDefault =
+    inputText === DEFAULT_QR_GENERATOR && qrType === "url" && qrSize === 300;
+
   const getQuickPresets = () => {
     const presets = {
       text: ["Hello World!", "DevTools Suite", "Generated with QR Tool"],
@@ -396,6 +418,18 @@ export default function QRGenerator() {
                     </Button>
                   </>
                 ) : null}
+                <ResetButton
+                  onClick={handleReset}
+                  tooltip="Reset to default example"
+                  hasModifiedData={hasModifiedData}
+                  disabled={isAtDefault}
+                />
+                <ClearButton
+                  onClick={handleClear}
+                  tooltip="Clear all inputs"
+                  hasModifiedData={hasModifiedData}
+                  disabled={inputText.trim() === ""}
+                />
               </div>
             </CardContent>
           </Card>

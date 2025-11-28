@@ -105,8 +105,10 @@ export default function SearchReplace() {
 
   const hasModifiedData =
     (text !== DEFAULT_SEARCH_REPLACE_TEXT && text.trim() !== "") ||
-    (searchText !== DEFAULT_SEARCH_REPLACE_SEARCH && searchText.trim() !== "") ||
-    (replaceText !== DEFAULT_SEARCH_REPLACE_REPLACE && replaceText.trim() !== "");
+    (searchText !== DEFAULT_SEARCH_REPLACE_SEARCH &&
+      searchText.trim() !== "") ||
+    (replaceText !== DEFAULT_SEARCH_REPLACE_REPLACE &&
+      replaceText.trim() !== "");
   const isAtDefault =
     text === DEFAULT_SEARCH_REPLACE_TEXT &&
     searchText === DEFAULT_SEARCH_REPLACE_SEARCH &&
@@ -220,7 +222,11 @@ export default function SearchReplace() {
                 onClick={handleClear}
                 tooltip="Clear all inputs"
                 hasModifiedData={hasModifiedData}
-                disabled={text.trim() === "" && searchText.trim() === "" && replaceText.trim() === ""}
+                disabled={
+                  text.trim() === "" &&
+                  searchText.trim() === "" &&
+                  replaceText.trim() === ""
+                }
               />
             </div>
             <Badge

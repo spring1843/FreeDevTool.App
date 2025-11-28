@@ -11,7 +11,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CopyButton } from "@/components/ui/copy-button";
-import { FileSpreadsheet, Code2, Upload, Share, Download, RefreshCw } from "lucide-react";
+import {
+  FileSpreadsheet,
+  Code2,
+  Upload,
+  Share,
+  Download,
+  RefreshCw,
+} from "lucide-react";
 import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 import {
   updateURL,
@@ -244,8 +251,10 @@ Jane Smith      jane@example.com        25      Marketing`,
     setError("");
   };
 
-  const hasModifiedData = csvInput !== DEFAULT_CSV_TO_JSON && csvInput.trim() !== "";
-  const isAtDefault = csvInput === DEFAULT_CSV_TO_JSON && selectedDelimiter === ",";
+  const hasModifiedData =
+    csvInput !== DEFAULT_CSV_TO_JSON && csvInput.trim() !== "";
+  const isAtDefault =
+    csvInput === DEFAULT_CSV_TO_JSON && selectedDelimiter === ",";
 
   const downloadJSON = () => {
     if (!jsonOutput) return;

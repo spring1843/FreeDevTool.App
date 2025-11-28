@@ -19,7 +19,14 @@ import {
   type ColorInfo,
 } from "@/lib/color-tools";
 
-import { Palette, Copy, Download, RefreshCw, Shuffle, Share } from "lucide-react";
+import {
+  Palette,
+  Copy,
+  Download,
+  RefreshCw,
+  Shuffle,
+  Share,
+} from "lucide-react";
 import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 import { useToast } from "@/hooks/use-toast";
 
@@ -385,8 +392,14 @@ export default function ColorPaletteGenerator() {
                   updateUrl(DEFAULT_COLOR_PALETTE_GENERATOR, "complementary");
                 }}
                 tooltip="Reset all settings to defaults"
-                hasModifiedData={baseColor !== DEFAULT_COLOR_PALETTE_GENERATOR || selectedType !== "complementary"}
-                disabled={baseColor === DEFAULT_COLOR_PALETTE_GENERATOR && selectedType === "complementary"}
+                hasModifiedData={
+                  baseColor !== DEFAULT_COLOR_PALETTE_GENERATOR ||
+                  selectedType !== "complementary"
+                }
+                disabled={
+                  baseColor === DEFAULT_COLOR_PALETTE_GENERATOR &&
+                  selectedType === "complementary"
+                }
               />
               <ClearButton
                 onClick={() => {
@@ -394,7 +407,10 @@ export default function ColorPaletteGenerator() {
                   setGeneratedPalettes([]);
                 }}
                 tooltip="Clear color input"
-                hasModifiedData={baseColor !== DEFAULT_COLOR_PALETTE_GENERATOR && baseColor.trim() !== ""}
+                hasModifiedData={
+                  baseColor !== DEFAULT_COLOR_PALETTE_GENERATOR &&
+                  baseColor.trim() !== ""
+                }
                 disabled={baseColor.trim() === ""}
               />
             </div>

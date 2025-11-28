@@ -12,6 +12,7 @@ import {
   RefreshCw,
   Share,
 } from "lucide-react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 
 import { TimezoneSelector } from "@/components/ui/timezone-selector";
 import { getUserTimezone } from "@/lib/time-tools";
@@ -270,6 +271,34 @@ export default function TimezoneConverter() {
     setSourceTime(timeStr);
   };
 
+  const handleReset = () => {
+    const now = new Date();
+    const dateStr = now.toISOString().split("T")[0];
+    const timeStr = now.toTimeString().split(" ")[0];
+    setSourceDate(dateStr);
+    setSourceTime(timeStr);
+    setSourceTimezone(getUserTimezone());
+    setTargetTimezones([
+      "America/New_York",
+      "Europe/London",
+      "Asia/Tokyo",
+      "Australia/Sydney",
+    ]);
+    setConversions([]);
+  };
+
+  const handleClear = () => {
+    setSourceDate("");
+    setSourceTime("");
+    setConversions([]);
+  };
+
+  const hasModifiedData =
+    sourceDate.trim() !== "" &&
+    sourceTime.trim() !== "" &&
+    conversions.length > 0;
+  const isAtDefault = false; // Always allow reset to current time
+
   const shareConverter = async () => {
     const success = await copyShareableURL({
       date: sourceDate,
@@ -379,6 +408,18 @@ export default function TimezoneConverter() {
               <Share className="w-4 h-4 mr-2" />
               Share
             </Button>
+            <ResetButton
+              onClick={handleReset}
+              tooltip="Reset to current time and defaults"
+              hasModifiedData={hasModifiedData}
+              disabled={isAtDefault}
+            />
+            <ClearButton
+              onClick={handleClear}
+              tooltip="Clear all inputs"
+              hasModifiedData={hasModifiedData}
+              disabled={sourceDate.trim() === "" && sourceTime.trim() === ""}
+            />
           </div>
         </CardContent>
       </Card>

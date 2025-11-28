@@ -90,10 +90,7 @@ export default function UUIDGenerator() {
 
   const hasModifiedData = uuids.length > 0;
   const isAtDefault =
-    uuids.length === 0 &&
-    version === 4 &&
-    count === 1 &&
-    format === "standard";
+    uuids.length === 0 && version === 4 && count === 1 && format === "standard";
 
   const copyToClipboard = async (text: string) => {
     try {

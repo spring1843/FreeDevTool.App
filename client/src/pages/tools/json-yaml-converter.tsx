@@ -4,7 +4,8 @@ import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { convertJSONToYAML, convertYAMLToJSON } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { ArrowRight, ArrowLeft, RotateCcw } from "lucide-react";
+import { ArrowRight, ArrowLeft } from "lucide-react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
@@ -56,6 +57,19 @@ export default function JSONYAMLConverter() {
     setError(null);
   };
 
+  const handleClear = () => {
+    setJsonInput("");
+    setYamlOutput("");
+    setYamlInput("");
+    setJsonOutput("");
+    setError(null);
+  };
+
+  const hasModifiedData =
+    (jsonInput !== DEFAULT_JSON && jsonInput.trim() !== "") ||
+    (yamlInput !== DEFAULT_YAML && yamlInput.trim() !== "");
+  const isAtDefault = jsonInput === DEFAULT_JSON && yamlInput === DEFAULT_YAML;
+
   useEffect(() => {
     convertToYAML();
     convertToJSON();
@@ -103,10 +117,18 @@ export default function JSONYAMLConverter() {
           <ArrowLeft className="w-4 h-4 mr-2" />
           YAML to JSON
         </Button>
-        <Button onClick={handleReset} variant="outline">
-          <RotateCcw className="w-4 h-4 mr-2" />
-          Reset
-        </Button>
+        <ResetButton
+          onClick={handleReset}
+          tooltip="Reset to default examples"
+          hasModifiedData={hasModifiedData}
+          disabled={isAtDefault}
+        />
+        <ClearButton
+          onClick={handleClear}
+          tooltip="Clear all inputs"
+          hasModifiedData={hasModifiedData}
+          disabled={jsonInput.trim() === "" && yamlInput.trim() === ""}
+        />
       </div>
 
       <div className="space-y-8">

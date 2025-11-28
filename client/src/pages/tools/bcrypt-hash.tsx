@@ -354,7 +354,11 @@ export default function BcryptHash() {
                   onClick={handleClear}
                   tooltip="Clear all inputs"
                   hasModifiedData={hasModifiedData}
-                  disabled={plaintext.trim() === "" && hash.trim() === "" && verifyText.trim() === ""}
+                  disabled={
+                    plaintext.trim() === "" &&
+                    hash.trim() === "" &&
+                    verifyText.trim() === ""
+                  }
                 />
               </div>
             </div>

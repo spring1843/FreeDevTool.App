@@ -15,6 +15,7 @@ import {
   getUserTimezone,
 } from "@/lib/time-tools";
 import { Clock, Globe, Plus, X } from "lucide-react";
+import { ClearButton } from "@/components/ui/tool-button";
 import { useToast } from "@/hooks/use-toast";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
@@ -179,14 +180,12 @@ export default function WorldClock() {
             Add Clock
           </Button>
           {displayedCities.length > 0 && (
-            <Button
+            <ClearButton
               onClick={resetToDefault}
-              variant="outline"
-              data-testid="reset-clocks"
-            >
-              <X className="w-4 h-4 mr-2" />
-              Clear All
-            </Button>
+              tooltip="Clear all custom clocks"
+              hasModifiedData={displayedCities.length > 0}
+              disabled={displayedCities.length === 0}
+            />
           )}
         </div>
       </div>

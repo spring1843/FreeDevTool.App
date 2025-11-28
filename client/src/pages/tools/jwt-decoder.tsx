@@ -4,7 +4,11 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Key, CheckCircle, XCircle } from "lucide-react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useState, useEffect, useCallback } from "react";
-import { ToolButton, ResetButton, ClearButton } from "@/components/ui/tool-button";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+} from "@/components/ui/tool-button";
 import { DEFAULT_JWT } from "@/data/defaults";
 import { useTheme } from "@/providers/theme-provider";
 import { getToolByPath } from "@/data/tools";
@@ -173,7 +177,12 @@ export default function JWTDecoder() {
               onClick={handleClear}
               tooltip="Clear all inputs"
               hasModifiedData={hasModifiedData}
-              disabled={token.trim() === "" && header.trim() === "" && payload.trim() === "" && signature.trim() === ""}
+              disabled={
+                token.trim() === "" &&
+                header.trim() === "" &&
+                payload.trim() === "" &&
+                signature.trim() === ""
+              }
             />
           </div>
           <TextArea

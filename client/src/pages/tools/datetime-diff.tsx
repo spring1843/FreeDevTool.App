@@ -6,14 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  CalendarDays,
-  Clock,
-  Calculator,
-  Copy,
-  Check,
-  RotateCcw,
-} from "lucide-react";
+import { CalendarDays, Clock, Calculator, Copy, Check } from "lucide-react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 import { useToast } from "@/hooks/use-toast";
 import { usePersistentForm } from "@/hooks/use-persistent-state";
 import { getUserTimezone } from "@/lib/time-tools";
@@ -310,6 +304,10 @@ export default function DateTimeDiff() {
     resetFields();
   };
 
+  const hasModifiedData =
+    fields.startDate.trim() !== "" || fields.endDate.trim() !== "";
+  const isAtDefault = false; // Time-based tools always allow reset
+
   // Format large numbers with commas
   const formatNumber = (num: number): string =>
     Math.floor(num).toLocaleString();
@@ -543,15 +541,18 @@ export default function DateTimeDiff() {
 
           {/* Controls */}
           <div className="flex gap-2">
-            <Button
-              variant="outline"
+            <ResetButton
               onClick={clearAll}
-              className="flex-1"
-              data-testid="clear-all-button"
-            >
-              <RotateCcw className="w-4 h-4 mr-2" />
-              Clear All
-            </Button>
+              tooltip="Reset to default values"
+              hasModifiedData={hasModifiedData}
+              disabled={isAtDefault}
+            />
+            <ClearButton
+              onClick={clearAll}
+              tooltip="Clear all date inputs"
+              hasModifiedData={hasModifiedData}
+              disabled={!hasModifiedData}
+            />
           </div>
         </div>
 

@@ -365,7 +365,12 @@ export default function CompoundInterestCalculator() {
                 onClick={handleClear}
                 tooltip="Clear all inputs"
                 hasModifiedData={hasModifiedData}
-                disabled={principal === 0 && annualRate === 0 && years === 0 && monthlyContribution === 0}
+                disabled={
+                  principal === 0 &&
+                  annualRate === 0 &&
+                  years === 0 &&
+                  monthlyContribution === 0
+                }
               />
             </div>
           </CardContent>

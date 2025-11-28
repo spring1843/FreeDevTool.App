@@ -53,8 +53,7 @@ export default function GraphQLFormatter() {
   };
 
   const hasModifiedData =
-    (input !== DEFAULT_GRAPHQL && input.trim() !== "") ||
-    output.trim() !== "";
+    (input !== DEFAULT_GRAPHQL && input.trim() !== "") || output.trim() !== "";
   const isAtDefault = input === DEFAULT_GRAPHQL && output === "";
 
   useEffect(() => {

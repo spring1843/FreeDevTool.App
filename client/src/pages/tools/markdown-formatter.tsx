@@ -53,8 +53,7 @@ export default function MarkdownFormatter() {
   };
 
   const hasModifiedData =
-    (input !== DEFAULT_MARKDOWN && input.trim() !== "") ||
-    output.trim() !== "";
+    (input !== DEFAULT_MARKDOWN && input.trim() !== "") || output.trim() !== "";
   const isAtDefault = input === DEFAULT_MARKDOWN && output === "";
 
   useEffect(() => {
