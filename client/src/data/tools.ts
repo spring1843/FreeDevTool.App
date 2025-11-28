@@ -147,21 +147,98 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
+          notice: {
+            type: "info",
+            title: "JSON vs YAML: The Format War",
+            items: [
+              { label: "JSON (2001):", text: "Douglas Crockford—subset of JavaScript, strict syntax, APIs & data exchange" },
+              { label: "YAML (2001):", text: "'YAML Ain't Markup Language'—human-friendly, indentation-based, config files" },
+              { label: "Fun fact:", text: "YAML is a superset of JSON—every valid JSON file is also valid YAML!" },
+            ],
+          },
+          shortcuts: [
+            { key: "Ctrl+Shift+Y", action: "Open JSON ↔ YAML Converter" },
+          ],
           sections: [
             {
-              title: "Features",
+              title: "When to Use Which Format",
               items: [
-                "Bidirectional conversion between JSON and YAML",
-                "Syntax validation and error reporting",
-                "Preserves structure and keys",
+                { label: "JSON:", text: "APIs, package.json, tsconfig.json, browser storage, data interchange" },
+                { label: "YAML:", text: "Kubernetes, Docker Compose, GitHub Actions, Ansible, config files humans edit" },
+                { label: "Rule of thumb:", text: "Machines read JSON, humans read YAML" },
+                { label: "Comments:", text: "YAML supports # comments, JSON doesn't (use JSONC for comments)" },
               ],
             },
             {
-              title: "Use cases",
+              title: "YAML Gotchas That Break Deployments",
               items: [
-                "Convert Kubernetes, Docker Compose, or CI configs",
-                "Switch formats between teams or tools",
-                "Validate configuration before deployment",
+                { label: "Norway problem:", text: "'NO' (country code) becomes boolean false—use quotes: 'NO'" },
+                { label: "Version strings:", text: "version: 3.10 becomes 3.1 (float)—use quotes: '3.10'" },
+                { label: "Octal numbers:", text: "0777 is octal 511 in YAML 1.1, but string '0777' in 1.2" },
+                { label: "Timestamps:", text: "2024-01-01 auto-parses as date—quote if you want string" },
+                { label: "Colon in values:", text: "'key: value: more' breaks—use quotes or block scalar" },
+              ],
+            },
+            {
+              title: "DevOps Config Examples",
+              items: [
+                { label: "Kubernetes:", text: "Deployments, Services, ConfigMaps—almost always YAML" },
+                { label: "Docker Compose:", text: "docker-compose.yml defines multi-container apps" },
+                { label: "GitHub Actions:", text: ".github/workflows/*.yml for CI/CD pipelines" },
+                { label: "Helm Charts:", text: "values.yaml for Kubernetes package configuration" },
+                { label: "Ansible:", text: "Playbooks and inventories in YAML" },
+              ],
+            },
+            {
+              title: "YAML Syntax Cheatsheet",
+              items: [
+                "Strings: plain, 'single quoted', or \"double quoted\"",
+                "Multiline: | (literal, keeps newlines) or > (folded, joins lines)",
+                "Lists: - item (dash + space) or [item1, item2] inline",
+                "Objects: key: value (colon + space) or {key: value} inline",
+                "Anchors: &name to define, *name to reference (DRY configs)",
+                "Merge: <<: *anchor to inherit properties from another object",
+              ],
+            },
+            {
+              title: "JSON Syntax Refresher",
+              items: [
+                "Strings: Always double quotes \"text\" (never single quotes)",
+                "Numbers: 42, 3.14, 1e10 (no leading zeros except 0.x)",
+                "Booleans: true, false (lowercase only)",
+                "Null: null (not None, nil, or undefined)",
+                "No trailing commas: [1, 2, 3] not [1, 2, 3,]",
+                "No comments: Use JSONC (.jsonc) for commented config files",
+              ],
+            },
+            {
+              title: "Common Conversion Scenarios",
+              items: [
+                "Copy API response (JSON) → paste into config file (YAML)",
+                "Debug Kubernetes: convert YAML manifest to JSON for jq processing",
+                "Migrate configs: old JSON configs → modern YAML format",
+                "Terraform: some providers accept either format",
+                "VS Code settings: settings.json to share as readable YAML snippets",
+              ],
+            },
+            {
+              title: "Tools That Accept Both Formats",
+              items: [
+                { label: "kubectl:", text: "kubectl apply -f works with .json or .yaml" },
+                { label: "Terraform:", text: "Accepts .tf.json as alternative to HCL" },
+                { label: "AWS CloudFormation:", text: "Templates can be JSON or YAML" },
+                { label: "Swagger/OpenAPI:", text: "API specs work in either format" },
+                { label: "ESLint:", text: ".eslintrc.json or .eslintrc.yml" },
+              ],
+            },
+            {
+              title: "Pro Tips",
+              items: [
+                "YAML indentation: Use 2 spaces consistently (never tabs!)",
+                "Validate before deploy: A single wrong indent can break everything",
+                "Use yamllint or jsonlint in your CI pipeline",
+                "VS Code: YAML extension catches errors as you type",
+                "When in doubt, quote it: Strings with special chars should be quoted",
               ],
             },
           ],
