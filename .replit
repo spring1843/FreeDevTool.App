@@ -11,7 +11,7 @@ build = ["sh", "-c", "make build"]
 run = ["sh", "-c", "npm start"]
 
 [env]
-PORT = "9500"
+PORT = "9095"
 
 [workflows]
 runButton = "Project"
@@ -37,3 +37,7 @@ waitForPort = 9095
 [[ports]]
 localPort = 9095
 externalPort = 80
+
+[[ports]]
+localPort = 37147
+externalPort = 3000
