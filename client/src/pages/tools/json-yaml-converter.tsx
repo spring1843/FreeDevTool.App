@@ -12,13 +12,15 @@ import {
   ActionButtonGroup,
   DataButtonGroup,
 } from "@/components/ui/tool-button";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_JSON } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+
+const DEFAULT_YAML = convertJSONToYAML(DEFAULT_JSON).converted;
 
 export default function JSONYAMLConverter() {
   const tool = getToolByPath("/tools/json-yaml-converter");
@@ -61,10 +63,18 @@ export default function JSONYAMLConverter() {
     setError(null);
   };
 
+  // Convert default JSON to YAML on initial load
+  useEffect(() => {
+    const { converted } = convertJSONToYAML(DEFAULT_JSON);
+    setYamlText(converted);
+  }, []);
+
   const hasModifiedData =
     (jsonText !== DEFAULT_JSON && jsonText.trim() !== "") ||
-    yamlText.trim() !== "";
-  const isAtDefault = jsonText === DEFAULT_JSON && yamlText === "";
+    (yamlText !== DEFAULT_YAML && yamlText.trim() !== "");
+  const isAtDefault =
+    jsonText === DEFAULT_JSON &&
+    (yamlText === "" || yamlText === DEFAULT_YAML);
 
   return (
     <div className="max-w-6xl mx-auto">
