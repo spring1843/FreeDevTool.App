@@ -1255,21 +1255,43 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
+          notice: {
+            type: "info",
+            title: "Reading the Diff",
+            items: [
+              { label: "Green (+)", text: "Line added in the new version" },
+              { label: "Red (−)", text: "Line removed from old version" },
+              { label: "Yellow (~)", text: "Line modified between versions" },
+              { label: "Gray", text: "Unchanged context lines" },
+            ],
+          },
           sections: [
             {
-              title: "Features",
+              title: "The Origin of Diff",
               items: [
-                "Side-by-side comparison",
-                "Highlights insertions and deletions",
-                "Line-by-line view",
+                "Created by Douglas McIlroy at Bell Labs in 1974 for Unix",
+                "Based on 'longest common subsequence' algorithm (Hunt-McIlroy)",
+                "Became the foundation for all version control: RCS, CVS, SVN, Git",
+                "Git uses an optimized variant that handles millions of lines efficiently",
               ],
             },
             {
-              title: "Use cases",
+              title: "Real-World Uses",
               items: [
-                "Review changes between versions",
-                "Compare generated output",
-                "Spot regressions",
+                "Code review: Spot exactly what changed in a pull request",
+                "Config auditing: Compare production vs staging environment files",
+                "Contract review: Find what changed between document versions",
+                "Debugging: Compare working output vs broken output to isolate bugs",
+                "Migration testing: Verify API responses match after refactoring",
+              ],
+            },
+            {
+              title: "Pro Tips",
+              items: [
+                "Normalize whitespace first if formatting differences aren't meaningful",
+                "Sort lines alphabetically before diffing unordered lists (like dependencies)",
+                "For large files, focus on the colored lines—gray context is unchanged",
+                "Copy just the changed lines to share specific modifications",
               ],
             },
           ],
