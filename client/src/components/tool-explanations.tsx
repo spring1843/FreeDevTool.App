@@ -1,5 +1,6 @@
-import { type ReactNode, useState, useEffect } from "react";
+import { type ReactNode, useState, useEffect, useRef } from "react";
 import { ChevronDown } from "lucide-react";
+import { useLocation } from "wouter";
 
 export interface ToolExplanationItem {
   label?: string;
@@ -163,6 +164,21 @@ export function ToolExplanations({
 }) {
   const [expanded, setExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [location] = useLocation();
+  const ssrRemovedRef = useRef(false);
+
+  useEffect(() => {
+    const ssrElement = document.getElementById("ssr-explanations");
+    if (ssrElement && !ssrRemovedRef.current) {
+      const ssrPath = ssrElement.getAttribute("data-tool-path");
+      if (ssrPath === location) {
+        ssrElement.remove();
+        ssrRemovedRef.current = true;
+      } else if (ssrPath !== location) {
+        ssrElement.remove();
+      }
+    }
+  }, [location]);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
