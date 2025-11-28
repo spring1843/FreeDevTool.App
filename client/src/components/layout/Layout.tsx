@@ -36,6 +36,7 @@ import {
 import { toolsData, getToolByPath } from "@/data/tools";
 import { useDemo } from "@/hooks/use-demo-hook";
 import { useTheme } from "@/providers/theme-provider";
+import { HOMEPAGE_TITLE, getToolPageTitle } from "@shared/page-title";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -108,11 +109,11 @@ export function Layout({ children }: LayoutProps) {
   // Update document title based on current location
   useEffect(() => {
     if (location === "/") {
-      document.title = "FreeDevTool.app | Free Developer Tools";
+      document.title = HOMEPAGE_TITLE;
     } else if (location.startsWith("/tools/")) {
       const tool = getToolByPath(location);
       if (tool) {
-        document.title = `${tool.name} | FreeDevTool.app`;
+        document.title = getToolPageTitle(tool);
       }
     }
   }, [location]);
