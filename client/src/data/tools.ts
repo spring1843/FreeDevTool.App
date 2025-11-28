@@ -1679,6 +1679,37 @@ export const toolsData: ToolData = {
             "multiple timezones",
           ],
         },
+        explanations: {
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Live-updating clocks with second-precision",
+                "Auto-detected local timezone display",
+                "Custom clocks collection you can build",
+                "Continental view organized by region",
+                "UTC offset shown for each city",
+              ],
+            },
+            {
+              title: "Continental Coverage",
+              items: [
+                "Africa, Americas, Asia, Europe, Oceania",
+                "Major cities sorted by timezone offset",
+                "One-click add from any continental city",
+              ],
+            },
+            {
+              title: "Use Cases",
+              items: [
+                "Coordinate meetings across timezones",
+                "Track business hours in different regions",
+                "Plan international calls or travel",
+                "Monitor team availability globally",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "Timer",
@@ -1738,6 +1769,38 @@ export const toolsData: ToolData = {
             "Precision stopwatch with lap timing. Track elapsed time and record multiple laps.",
           keywords: ["stopwatch", "lap timer", "time tracker", "elapsed time"],
         },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "Keyboard Shortcuts",
+            items: [
+              { label: "Enter", text: "Start stopwatch or record lap" },
+              { label: "Space", text: "Pause running stopwatch" },
+              { label: "Escape", text: "Stop and reset" },
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Millisecond precision timing (MM:SS.mmm)",
+                "Unlimited lap recording",
+                "Lap statistics: fastest, slowest, average",
+                "Visual highlighting of best/worst laps",
+                "Running/Stopped status indicator",
+              ],
+            },
+            {
+              title: "Use Cases",
+              items: [
+                "Track workout intervals and rest periods",
+                "Time coding challenges or tasks",
+                "Record split times for racing or training",
+                "Measure process duration for optimization",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "Countdown",
@@ -1752,6 +1815,46 @@ export const toolsData: ToolData = {
             "event countdown",
             "days until",
             "time until",
+          ],
+        },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "Keyboard Shortcuts",
+            items: [
+              { label: "Enter", text: "Start countdown" },
+              { label: "Space", text: "Pause/Resume countdown" },
+              { label: "Escape", text: "Stop countdown" },
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Count down to any future date and time",
+                "Timezone-aware target selection",
+                "Visual breakdown: days, hours, minutes, seconds",
+                "Sound notification when countdown reaches zero",
+                "Auto-starts with New Year countdown by default",
+              ],
+            },
+            {
+              title: "Quick Presets",
+              items: [
+                "New Year and Christmas countdowns",
+                "Weekend countdown",
+                "Relative: 1 Hour, 24 Hours, 1 Week",
+              ],
+            },
+            {
+              title: "Use Cases",
+              items: [
+                "Track time until important events or deadlines",
+                "Build anticipation for holidays and celebrations",
+                "Set reminders for upcoming meetings",
+                "Count down to product launches or releases",
+              ],
+            },
           ],
         },
       },
@@ -2161,6 +2264,48 @@ export const toolsData: ToolData = {
             "user agent",
             "device info",
             "screen size detector",
+          ],
+        },
+        explanations: {
+          sections: [
+            {
+              title: "Browser Details",
+              items: [
+                "User agent string and platform",
+                "Language preferences and cookie status",
+                "Online/offline status",
+                "Vendor and app version info",
+              ],
+            },
+            {
+              title: "Screen & Hardware",
+              items: [
+                "Screen resolution and available size",
+                "Window dimensions and scroll position",
+                "Color depth and device pixel ratio",
+                "CPU cores and device memory",
+                "Touch points for mobile devices",
+              ],
+            },
+            {
+              title: "Capabilities Detected",
+              items: [
+                "Storage: localStorage, sessionStorage, IndexedDB",
+                "Graphics: WebGL, WebGL2, Canvas",
+                "Media: WebRTC, Web Audio, Speech APIs",
+                "Workers: Web Workers, Service Workers",
+                "Sensors: Geolocation, Device Motion/Orientation",
+              ],
+            },
+            {
+              title: "Use Cases",
+              items: [
+                "Debug responsive design issues",
+                "Check feature support before using APIs",
+                "Gather system info for bug reports",
+                "Verify browser capabilities for web apps",
+              ],
+            },
           ],
         },
       },

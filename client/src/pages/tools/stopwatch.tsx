@@ -5,6 +5,8 @@ import { Play, Pause, Square, Flag } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 interface LapTime {
   lapNumber: number;
@@ -338,6 +340,10 @@ export default function Stopwatch() {
             </CardContent>
           </Card>
         </div>
+      )}
+
+      {renderToolExplanations(
+        getToolByPath("/tools/stopwatch")?.explanations
       )}
     </div>
   );

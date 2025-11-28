@@ -16,6 +16,8 @@ import {
 } from "@/lib/time-tools";
 import { Clock, Globe, Plus, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function WorldClock() {
   const [currentTimes, setCurrentTimes] = useState<
@@ -449,6 +451,10 @@ export default function WorldClock() {
             </Card>
           ))}
       </div>
+
+      {renderToolExplanations(
+        getToolByPath("/tools/world-clock")?.explanations
+      )}
     </div>
   );
 }
