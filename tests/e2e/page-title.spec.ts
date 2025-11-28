@@ -31,9 +31,8 @@ test.describe("Dynamic Page Title", () => {
     const menuButton = page.locator('[data-testid="menu-button"]');
     await menuButton.click();
 
-    await page.waitForTimeout(300);
-
     const yamlLink = page.locator('a[href="/tools/yaml-formatter"]').first();
+    await expect(yamlLink).toBeVisible();
     await yamlLink.click();
 
     await page.waitForURL("/tools/yaml-formatter");
