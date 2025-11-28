@@ -7,6 +7,8 @@ import { useState, useEffect, useCallback } from "react";
 import { ToolButton, ResetButton } from "@/components/ui/tool-button";
 import { DEFAULT_JWT } from "@/data/defaults";
 import { useTheme } from "@/providers/theme-provider";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function JWTDecoder() {
   const [token, setToken] = useState(DEFAULT_JWT);
@@ -222,6 +224,9 @@ export default function JWTDecoder() {
           </CardContent>
         </Card>
       </div>
+      {renderToolExplanations(
+        getToolByPath("/tools/jwt-decoder")?.explanations
+      )}
     </div>
   );
 }

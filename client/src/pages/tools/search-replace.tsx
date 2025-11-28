@@ -15,6 +15,8 @@ import {
   DEFAULT_SEARCH_REPLACE_SEARCH,
   DEFAULT_SEARCH_REPLACE_REPLACE,
 } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function SearchReplace() {
   const [text, setText] = useState(DEFAULT_SEARCH_REPLACE_TEXT);
@@ -238,6 +240,9 @@ export default function SearchReplace() {
           </CardContent>
         </Card>
       </div>
+      {renderToolExplanations(
+        getToolByPath("/tools/search-replace")?.explanations
+      )}
     </div>
   );
 }

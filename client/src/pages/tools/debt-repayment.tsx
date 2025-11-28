@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Calculator, RotateCcw, CreditCard, BarChart3 } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 import {
   DEFAULT_DEBT_PRINCIPAL,
   DEFAULT_DEBT_ANNUAL_RATE,
@@ -422,6 +424,9 @@ export default function DebtRepaymentCalculator() {
           </Card>
         </>
       ) : null}
+      {renderToolExplanations(
+        getToolByPath("/tools/debt-repayment")?.explanations
+      )}
     </div>
   );
 }

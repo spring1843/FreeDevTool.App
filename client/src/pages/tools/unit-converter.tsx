@@ -17,6 +17,8 @@ import {
   getValidatedParam,
 } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 interface UnitGroup {
   name: string;
@@ -541,6 +543,9 @@ export default function UnitConverter() {
       </Card>
 
       <div className="flex justify-center mt-8" />
+      {renderToolExplanations(
+        getToolByPath("/tools/unit-converter")?.explanations
+      )}
     </div>
   );
 }

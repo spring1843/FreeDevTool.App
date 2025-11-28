@@ -41,6 +41,8 @@ const delimiters = [
 ];
 
 import { DEFAULT_CSV_TO_JSON } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function CSVToJSON() {
   const [csvInput, setCsvInput] = useState(DEFAULT_CSV_TO_JSON);
@@ -469,6 +471,9 @@ Jane Smith,jane@example.com,25"
           </CardContent>
         </Card>
       </div>
+      {renderToolExplanations(
+        getToolByPath("/tools/csv-to-json")?.explanations
+      )}
     </div>
   );
 }

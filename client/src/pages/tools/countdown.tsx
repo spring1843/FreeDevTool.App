@@ -509,9 +509,7 @@ export default function Countdown() {
         </Card>
       ) : null}
 
-      {renderToolExplanations(
-        getToolByPath("/tools/countdown")?.explanations
-      )}
+      {renderToolExplanations(getToolByPath("/tools/countdown")?.explanations)}
     </div>
   );
 }

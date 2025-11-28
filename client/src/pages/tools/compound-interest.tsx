@@ -14,6 +14,8 @@ import { Calculator, RotateCcw, TrendingUp, BarChart3 } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 import {
   DEFAULT_COMPOUND_PRINCIPAL,
   DEFAULT_COMPOUND_ANNUAL_RATE,
@@ -623,6 +625,9 @@ export default function CompoundInterestCalculator() {
           </CardContent>
         </Card>
       ) : null}
+      {renderToolExplanations(
+        getToolByPath("/tools/compound-interest")?.explanations
+      )}
     </div>
   );
 }

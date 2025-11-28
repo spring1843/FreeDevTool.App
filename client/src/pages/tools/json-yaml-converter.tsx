@@ -9,6 +9,8 @@ import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_JSON, DEFAULT_YAML } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function JSONYAMLConverter() {
   const [jsonInput, setJsonInput] = useState(DEFAULT_JSON);
@@ -201,6 +203,9 @@ export default function JSONYAMLConverter() {
           </Card>
         </div>
       </div>
+      {renderToolExplanations(
+        getToolByPath("/tools/json-yaml-converter")?.explanations
+      )}
     </div>
   );
 }

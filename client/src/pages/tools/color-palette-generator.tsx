@@ -33,6 +33,8 @@ import { useToast } from "@/hooks/use-toast";
 import { getParam, updateURL, generateShareableURL } from "@/lib/url-sharing";
 
 import { DEFAULT_COLOR_PALETTE_GENERATOR } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function ColorPaletteGenerator() {
   const [baseColor, setBaseColor] = useState(DEFAULT_COLOR_PALETTE_GENERATOR);
@@ -454,6 +456,9 @@ export default function ColorPaletteGenerator() {
       )}
 
       <div className="flex justify-center mt-8" />
+      {renderToolExplanations(
+        getToolByPath("/tools/color-palette-generator")?.explanations
+      )}
     </div>
   );
 }
