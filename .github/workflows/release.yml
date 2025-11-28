@@ -104,7 +104,7 @@ jobs:
           \`\`\`
 
           ## 📦 Run Dev Environment Locally
-          
+
           1. Download source code file \`${CURRENT_TAG}.tar.gz\` or \`${CURRENT_TAG}.zip\` from release assets.
           2. Extract the archive
           3. Run \`make deps\`
