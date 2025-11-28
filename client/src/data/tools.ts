@@ -1025,37 +1025,94 @@ export const toolsData: ToolData = {
         explanations: {
           notice: {
             type: "info",
-            title: "Format Selector",
+            title: "CSS: Styling the Web Since 1996",
             items: [
-              "Choose CSS, SCSS, or LESS to use the appropriate parser and rules",
+              { label: "Created:", text: "Håkon Wium Lie proposed CSS in 1994, released December 1996" },
+              { label: "The problem:", text: "Before CSS, styling was inline <font color='red'>—nightmare to maintain" },
+              { label: "Today:", text: "CSS3 has 500+ properties, but most sites use fewer than 50" },
             ],
           },
+          shortcuts: [
+            { key: "Ctrl+Shift+7", action: "Open CSS Formatter" },
+          ],
           sections: [
             {
-              title: "Features",
+              title: "CSS vs SCSS vs LESS",
               items: [
-                "Format CSS, LESS, and SCSS",
-                "Consistent indentation, spacing, and nested rules",
-                "Beautify or minify output",
+                { label: "CSS:", text: "Standard browser styling—what actually runs in the browser" },
+                { label: "SCSS (Sass):", text: "Variables ($color), nesting, mixins, @import. Compiles to CSS" },
+                { label: "LESS:", text: "Similar to SCSS but uses @color syntax. Bootstrap 3 used it" },
+                { label: "Winner?:", text: "SCSS dominates (Bootstrap 4+, Tailwind source, most frameworks)" },
               ],
             },
             {
-              title: "Options",
+              title: "Why Preprocessors Exist",
               items: [
-                {
-                  label: "Beautify",
-                  text: "Readable indentation and line breaks",
-                },
-                { label: "Minify", text: "Strip whitespace and comments" },
-                { label: "Reset", text: "Restore default example per format" },
+                "Variables: $primary-color: #007bff; → Change once, updates everywhere",
+                "Nesting: .nav { .item { color: red; } } → Cleaner than .nav .item {}",
+                "Mixins: Reusable chunks like @include button-styles;",
+                "Math: width: 100% / 3; → Calculate values at compile time",
+                "Partials: Split into _header.scss, _footer.scss, @import them together",
               ],
             },
             {
-              title: "Use cases",
+              title: "Modern CSS Features (No Preprocessor Needed!)",
               items: [
-                "Beautify styles for maintainability",
-                "Normalize code across teams",
-                "Prepare clean diffs",
+                { label: "CSS Variables:", text: "--primary: #007bff; color: var(--primary);" },
+                { label: "Nesting (2023):", text: ".card { & .title { } } — Native CSS nesting is here!" },
+                { label: "calc():", text: "width: calc(100% - 20px); — Math in plain CSS" },
+                { label: "@layer:", text: "Control specificity cascade order (CSS Cascade Layers)" },
+                { label: ":has():", text: "Parent selector! .card:has(img) { } — long-awaited feature" },
+              ],
+            },
+            {
+              title: "Minification Benefits",
+              items: [
+                "Removes whitespace, comments, and unnecessary semicolons",
+                "Typical savings: 20-40% file size reduction",
+                "Combined with GZIP: 80%+ total reduction",
+                "Shortens colors: #ffffff → #fff, rgb(0,0,0) → #000",
+                "Warning: Minified CSS is unreadable—keep source files formatted!",
+              ],
+            },
+            {
+              title: "CSS Specificity Cheat Sheet",
+              items: [
+                { label: "0,0,0,1:", text: "Element (p, div, span)" },
+                { label: "0,0,1,0:", text: "Class (.btn), attribute [type='text'], pseudo-class (:hover)" },
+                { label: "0,1,0,0:", text: "ID (#header)" },
+                { label: "1,0,0,0:", text: "Inline style (style='...')" },
+                { label: "∞:", text: "!important — nuclear option, avoid if possible" },
+              ],
+            },
+            {
+              title: "Common CSS Mistakes",
+              items: [
+                "Using IDs for styling: Too specific, hard to override. Use classes instead",
+                "!important everywhere: Sign of specificity problems—fix the cascade",
+                "z-index: 9999: Arbitrary high values cause wars. Use a scale (1, 10, 100)",
+                "Not using shorthand: margin: 10px 20px; beats four separate properties",
+                "Forgetting vendor prefixes: -webkit-backdrop-filter for Safari (use autoprefixer)",
+              ],
+            },
+            {
+              title: "CSS Architecture Patterns",
+              items: [
+                { label: "BEM:", text: ".block__element--modifier — Most popular naming convention" },
+                { label: "OOCSS:", text: "Separate structure and skin (reusable objects)" },
+                { label: "SMACSS:", text: "Categories: Base, Layout, Module, State, Theme" },
+                { label: "Atomic/Utility:", text: "Tailwind approach: .flex .items-center .p-4" },
+                { label: "CSS Modules:", text: "Scoped class names, no global conflicts" },
+              ],
+            },
+            {
+              title: "Pro Tips",
+              items: [
+                "Order properties consistently: position, display, box-model, typography, visual",
+                "Use logical properties: margin-inline-start instead of margin-left for RTL support",
+                "Group media queries with the component, not at file bottom",
+                "rem for fonts (accessibility), px for borders, % or vw for layouts",
+                "Test in Firefox: Its DevTools CSS inspector is often better than Chrome's",
               ],
             },
           ],
