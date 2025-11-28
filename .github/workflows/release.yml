@@ -79,28 +79,33 @@ jobs:
           # Create changelog content
           CHANGELOG_FILE="CHANGELOG.md"
 
-          # Header
-          echo "" >> ${CHANGELOG_FILE}
-          echo "Released on $(date '+%Y-%m-%d')" >> ${CHANGELOG_FILE}
-          echo "" >> ${CHANGELOG_FILE}
-          echo "## 🐳 Run Locally" >> ${CHANGELOG_FILE}
-          echo "" >> ${CHANGELOG_FILE}
-          echo "Using Docker" >> ${CHANGELOG_FILE}
-          echo "`docker run -p 9090:9090 ghcr.io/spring1843/freedevtool.app/app:${CURRENT_TAG}`" >> ${CHANGELOG_FILE}
-          echo "## 📦 Installation" >> ${CHANGELOG_FILE}
-          echo "" >> ${CHANGELOG_FILE}
-          echo '1. Download `freedevtool-app.tar.gz` or `freedevtool-app.zip`' >> ${CHANGELOG_FILE}
-          echo "2. Extract the archive" >> ${CHANGELOG_FILE}
-          echo "3. Run \`make deps\`" >> ${CHANGELOG_FILE}
-          echo "4. Run \`make start\`" >> ${CHANGELOG_FILE}
-          echo "5. Open http://localhost:9500 in your browser" >> ${CHANGELOG_FILE}
-          echo "" >> ${CHANGELOG_FILE}
-          echo "## 🔗 Links" >> ${CHANGELOG_FILE}
-          echo "" >> ${CHANGELOG_FILE}
-          echo "- [Live FreeDevTool.App](https://freedevtool.app)" >> ${CHANGELOG_FILE}
-          echo "- [GitHub Repository](https://github.com/spring1843/freedevtool.app)" >> ${CHANGELOG_FILE}
-          echo "- [Documentation](https://github.com/spring1843/freedevtool.app#readme)" >> ${CHANGELOG_FILE}
-          echo "- [Report Issues](https://github.com/spring1843/freedevtool.app/issues)" >> ${CHANGELOG_FILE}
+                    # Use a heredoc to write the changelog content
+                    cat <<EOF >> ${CHANGELOG_FILE}
+          
+          Released on $(date '+%Y-%m-%d')
+          
+          ## 🐳 Run Compiled Image Locally
+          
+          Using Docker
+          \`\`\`bash
+          docker run -p 9090:9090 ghcr.io/spring1843/freedevtool.app/app:${CURRENT_TAG}
+          \`\`\`
+          
+          ## 📦 Run Dev Environment Locally
+          
+          1. Download \`freedevtool-app.tar.gz\` or \`freedevtool-app.zip\`
+          2. Extract the archive
+          3. Run \`make deps\`
+          4. Run \`make start\`
+          5. Open http://localhost:9500 in your browser
+          
+          ## 🔗 Links
+          
+          - [Live FreeDevTool.App](https://freedevtool.app)
+          - [GitHub Repository](https://github.com/spring1843/freedevtool.app)
+          - [Documentation](https://github.com/spring1843/freedevtool.app#readme)
+          - [Report Issues](https://github.com/spring1843/freedevtool.app/issues)
+          EOF
 
           # Set output for release notes
           echo "changelog_file=${CHANGELOG_FILE}" >> $GITHUB_OUTPUT
