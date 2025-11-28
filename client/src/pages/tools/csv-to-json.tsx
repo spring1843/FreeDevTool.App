@@ -11,14 +11,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CopyButton } from "@/components/ui/copy-button";
-import {
-  FileSpreadsheet,
-  Code2,
-  Upload,
-  Share,
-  Download,
-  RefreshCw,
-} from "lucide-react";
+import { FileSpreadsheet, Code2, Upload, Share, Download, RefreshCw } from "lucide-react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 import {
   updateURL,
   copyShareableURL,
@@ -240,6 +234,19 @@ Jane Smith      jane@example.com        25      Marketing`,
     setError("");
   };
 
+  const handleReset = () => {
+    setCsvInput(DEFAULT_CSV_TO_JSON);
+    setSelectedDelimiter(",");
+    setParsedData([]);
+    setJsonOutput("");
+    setHeaders([]);
+    setRowCount(0);
+    setError("");
+  };
+
+  const hasModifiedData = csvInput !== DEFAULT_CSV_TO_JSON && csvInput.trim() !== "";
+  const isAtDefault = csvInput === DEFAULT_CSV_TO_JSON && selectedDelimiter === ",";
+
   const downloadJSON = () => {
     if (!jsonOutput) return;
 
@@ -309,14 +316,18 @@ Jane Smith      jane@example.com        25      Marketing`,
               </Select>
 
               <div className="flex gap-2 ml-auto">
-                <Button
+                <ResetButton
+                  onClick={handleReset}
+                  tooltip="Reset to default example"
+                  hasModifiedData={hasModifiedData}
+                  disabled={isAtDefault}
+                />
+                <ClearButton
                   onClick={clearAll}
-                  variant="outline"
-                  size="sm"
-                  data-testid="clear-button"
-                >
-                  Clear
-                </Button>
+                  tooltip="Clear all inputs"
+                  hasModifiedData={hasModifiedData}
+                  disabled={csvInput.trim() === ""}
+                />
                 <Button
                   onClick={() => document.getElementById("file-input")?.click()}
                   variant="outline"

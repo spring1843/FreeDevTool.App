@@ -6,8 +6,9 @@ import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { Search, RotateCcw } from "lucide-react";
+import { Search } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import {
@@ -92,6 +93,27 @@ export default function SearchReplace() {
     setMatchCount(0);
     setError("");
   };
+
+  const handleClear = () => {
+    setText("");
+    setSearchText("");
+    setReplaceText("");
+    setResult("");
+    setMatchCount(0);
+    setError("");
+  };
+
+  const hasModifiedData =
+    (text !== DEFAULT_SEARCH_REPLACE_TEXT && text.trim() !== "") ||
+    (searchText !== DEFAULT_SEARCH_REPLACE_SEARCH && searchText.trim() !== "") ||
+    (replaceText !== DEFAULT_SEARCH_REPLACE_REPLACE && replaceText.trim() !== "");
+  const isAtDefault =
+    text === DEFAULT_SEARCH_REPLACE_TEXT &&
+    searchText === DEFAULT_SEARCH_REPLACE_SEARCH &&
+    replaceText === DEFAULT_SEARCH_REPLACE_REPLACE &&
+    isRegex === false &&
+    isCaseSensitive === false &&
+    isGlobal === true;
 
   useEffect(() => {
     performSearchReplace();
@@ -188,10 +210,18 @@ export default function SearchReplace() {
                 <Search className="w-4 h-4 mr-2" />
                 Search & Replace
               </Button>
-              <Button onClick={handleReset} variant="outline">
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Reset
-              </Button>
+              <ResetButton
+                onClick={handleReset}
+                tooltip="Reset all settings to defaults"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={handleClear}
+                tooltip="Clear all inputs"
+                hasModifiedData={hasModifiedData}
+                disabled={text.trim() === "" && searchText.trim() === "" && replaceText.trim() === ""}
+              />
             </div>
             <Badge
               variant="outline"

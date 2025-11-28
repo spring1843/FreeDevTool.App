@@ -10,8 +10,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Calculator, RotateCcw, TrendingUp, BarChart3 } from "lucide-react";
+import { Calculator, TrendingUp, BarChart3 } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { getToolByPath } from "@/data/tools";
@@ -148,6 +149,27 @@ export default function CompoundInterestCalculator() {
     setInterestFrequency("yearly");
     setResult(null);
   };
+
+  const handleClear = () => {
+    setPrincipal(0);
+    setAnnualRate(0);
+    setYears(0);
+    setMonthlyContribution(0);
+    setResult(null);
+  };
+
+  const hasModifiedData =
+    principal !== DEFAULT_COMPOUND_PRINCIPAL ||
+    annualRate !== DEFAULT_COMPOUND_ANNUAL_RATE ||
+    years !== DEFAULT_COMPOUND_YEARS ||
+    monthlyContribution !== DEFAULT_COMPOUND_MONTHLY_CONTRIBUTION;
+  const isAtDefault =
+    principal === DEFAULT_COMPOUND_PRINCIPAL &&
+    annualRate === DEFAULT_COMPOUND_ANNUAL_RATE &&
+    years === DEFAULT_COMPOUND_YEARS &&
+    monthlyContribution === DEFAULT_COMPOUND_MONTHLY_CONTRIBUTION &&
+    contributionFrequency === "monthly" &&
+    interestFrequency === "yearly";
 
   useEffect(() => {
     calculateCompoundInterest();
@@ -333,10 +355,18 @@ export default function CompoundInterestCalculator() {
                 <Calculator className="w-4 h-4 mr-2" />
                 Calculate
               </Button>
-              <Button onClick={handleReset} variant="outline">
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Reset
-              </Button>
+              <ResetButton
+                onClick={handleReset}
+                tooltip="Reset all values to defaults"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={handleClear}
+                tooltip="Clear all inputs"
+                hasModifiedData={hasModifiedData}
+                disabled={principal === 0 && annualRate === 0 && years === 0 && monthlyContribution === 0}
+              />
             </div>
           </CardContent>
         </Card>

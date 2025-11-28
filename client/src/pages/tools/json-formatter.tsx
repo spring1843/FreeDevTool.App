@@ -7,7 +7,7 @@ import { Code, Lightbulb } from "lucide-react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useState, useEffect, useCallback } from "react";
-import { ToolButton, ResetButton } from "@/components/ui/tool-button";
+import { ToolButton, ResetButton, ClearButton } from "@/components/ui/tool-button";
 
 import { DEFAULT_JSON } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
@@ -67,6 +67,15 @@ export default function JsonFormatter() {
     setOutput("");
     setError(null);
   };
+
+  const handleClear = () => {
+    setInput("");
+    setOutput("");
+    setError(null);
+  };
+
+  const hasModifiedData = input !== DEFAULT_JSON && input.trim() !== "";
+  const isAtDefault = input === DEFAULT_JSON;
 
   // Execute formatting with default value on component mount
   useEffect(() => {
@@ -130,6 +139,14 @@ export default function JsonFormatter() {
         <ResetButton
           onClick={handleReset}
           tooltip="Reset to default JSON example"
+          hasModifiedData={hasModifiedData}
+          disabled={isAtDefault}
+        />
+        <ClearButton
+          onClick={handleClear}
+          tooltip="Clear all inputs"
+          hasModifiedData={hasModifiedData}
+          disabled={input.trim() === ""}
         />
       </div>
 

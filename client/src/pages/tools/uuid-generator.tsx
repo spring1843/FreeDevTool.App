@@ -12,8 +12,9 @@ import {
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Badge } from "@/components/ui/badge";
-import { RefreshCw, Copy, RotateCcw } from "lucide-react";
+import { RefreshCw, Copy } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { getToolByPath } from "@/data/tools";
@@ -82,6 +83,17 @@ export default function UUIDGenerator() {
     setCount(1);
     setFormat("standard");
   };
+
+  const handleClear = () => {
+    setUuids([]);
+  };
+
+  const hasModifiedData = uuids.length > 0;
+  const isAtDefault =
+    uuids.length === 0 &&
+    version === 4 &&
+    count === 1 &&
+    format === "standard";
 
   const copyToClipboard = async (text: string) => {
     try {
@@ -206,10 +218,18 @@ export default function UUIDGenerator() {
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Generate UUIDs
               </Button>
-              <Button onClick={handleReset} variant="outline">
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Reset
-              </Button>
+              <ResetButton
+                onClick={handleReset}
+                tooltip="Reset all settings to defaults"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={handleClear}
+                tooltip="Clear generated UUIDs"
+                hasModifiedData={hasModifiedData}
+                disabled={uuids.length === 0}
+              />
             </div>
             <div className="flex items-center gap-2">
               <Badge variant="outline">Version {version}</Badge>

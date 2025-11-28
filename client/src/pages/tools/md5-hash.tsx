@@ -4,16 +4,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
-import {
-  Hash,
-  Copy,
-  CheckCircle,
-  XCircle,
-  Eye,
-  EyeOff,
-  RotateCcw,
-} from "lucide-react";
+import { Hash, Copy, CheckCircle, XCircle, Eye, EyeOff } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -116,6 +109,21 @@ export default function MD5Hash() {
     setIsMatch(null);
     setShowPassword(false);
   };
+
+  const handleClear = () => {
+    setInputText("");
+    setCompareHash("");
+    setHashResult("");
+    setIsMatch(null);
+    setShowPassword(false);
+  };
+
+  const hasModifiedData =
+    (inputText !== DEFAULT_MD5 && inputText.trim() !== "") ||
+    compareHash.trim() !== "" ||
+    hashResult.trim() !== "";
+  const isAtDefault =
+    inputText === DEFAULT_MD5 && compareHash === "" && hashResult === "";
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -282,10 +290,20 @@ export default function MD5Hash() {
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             Hash Details
-            <Button onClick={handleReset} variant="outline" size="sm">
-              <RotateCcw className="w-4 h-4 mr-1" />
-              Reset
-            </Button>
+            <div className="flex gap-2">
+              <ResetButton
+                onClick={handleReset}
+                tooltip="Reset to default example"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={handleClear}
+                tooltip="Clear all inputs"
+                hasModifiedData={hasModifiedData}
+                disabled={inputText.trim() === "" && compareHash.trim() === "" && hashResult.trim() === ""}
+              />
+            </div>
           </CardTitle>
         </CardHeader>
         <CardContent>

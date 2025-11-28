@@ -13,15 +13,9 @@ import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import {
-  Hash,
-  CheckCircle,
-  XCircle,
-  RotateCcw,
-  Eye,
-  EyeOff,
-} from "lucide-react";
+import { Hash, CheckCircle, XCircle, Eye, EyeOff } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -144,6 +138,26 @@ export default function BcryptHash() {
     setShowPassword(false);
     setShowVerifyPassword(false);
   };
+
+  const handleClear = () => {
+    setPlaintext("");
+    setHash("");
+    setVerifyText("");
+    setVerificationResult(null);
+    setError(null);
+    setShowPassword(false);
+    setShowVerifyPassword(false);
+  };
+
+  const hasModifiedData =
+    (plaintext !== DEFAULT_BCRYPT && plaintext.trim() !== "") ||
+    hash.trim() !== "" ||
+    verifyText.trim() !== "";
+  const isAtDefault =
+    plaintext === DEFAULT_BCRYPT &&
+    hash === "" &&
+    verifyText === "" &&
+    rounds === 10;
 
   useEffect(() => {
     generateHash();
@@ -329,10 +343,20 @@ export default function BcryptHash() {
             Generated Hash
             <div className="flex gap-2">
               <Badge variant="outline">{rounds} rounds</Badge>
-              <Button onClick={handleReset} variant="outline" size="sm">
-                <RotateCcw className="w-4 h-4 mr-1" />
-                Reset
-              </Button>
+              <div className="flex gap-2">
+                <ResetButton
+                  onClick={handleReset}
+                  tooltip="Reset to default example"
+                  hasModifiedData={hasModifiedData}
+                  disabled={isAtDefault}
+                />
+                <ClearButton
+                  onClick={handleClear}
+                  tooltip="Clear all inputs"
+                  hasModifiedData={hasModifiedData}
+                  disabled={plaintext.trim() === "" && hash.trim() === "" && verifyText.trim() === ""}
+                />
+              </div>
             </div>
           </CardTitle>
         </CardHeader>

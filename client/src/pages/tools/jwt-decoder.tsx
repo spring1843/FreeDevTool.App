@@ -4,7 +4,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Key, CheckCircle, XCircle } from "lucide-react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useState, useEffect, useCallback } from "react";
-import { ToolButton, ResetButton } from "@/components/ui/tool-button";
+import { ToolButton, ResetButton, ClearButton } from "@/components/ui/tool-button";
 import { DEFAULT_JWT } from "@/data/defaults";
 import { useTheme } from "@/providers/theme-provider";
 import { getToolByPath } from "@/data/tools";
@@ -83,6 +83,26 @@ export default function JWTDecoder() {
     setError(null);
   };
 
+  const handleClear = () => {
+    setToken("");
+    setHeader("");
+    setPayload("");
+    setSignature("");
+    setIsValid(false);
+    setError(null);
+  };
+
+  const hasModifiedData =
+    (token !== DEFAULT_JWT && token.trim() !== "") ||
+    header.trim() !== "" ||
+    payload.trim() !== "" ||
+    signature.trim() !== "";
+  const isAtDefault =
+    token === DEFAULT_JWT &&
+    header === "" &&
+    payload === "" &&
+    signature === "";
+
   useEffect(() => {
     decodeToken();
   }, [decodeToken]);
@@ -146,6 +166,14 @@ export default function JWTDecoder() {
             <ResetButton
               onClick={handleReset}
               tooltip="Reset to default token"
+              hasModifiedData={hasModifiedData}
+              disabled={isAtDefault}
+            />
+            <ClearButton
+              onClick={handleClear}
+              tooltip="Clear all inputs"
+              hasModifiedData={hasModifiedData}
+              disabled={token.trim() === "" && header.trim() === "" && payload.trim() === "" && signature.trim() === ""}
             />
           </div>
           <TextArea

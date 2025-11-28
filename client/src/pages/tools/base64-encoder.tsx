@@ -6,7 +6,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Lock, Unlock, ArrowRightLeft } from "lucide-react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useState, useEffect, useCallback } from "react";
-import { ToolButton, ResetButton } from "@/components/ui/tool-button";
+import { ToolButton, ResetButton, ClearButton } from "@/components/ui/tool-button";
 import { DEFAULT_BASE64 } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
@@ -66,6 +66,17 @@ export default function Base64Encoder() {
     setError(null);
   };
 
+  const handleClear = () => {
+    setPlainText("");
+    setEncodedText("");
+    setError(null);
+  };
+
+  const hasModifiedData =
+    (plainText !== DEFAULT_BASE64 && plainText.trim() !== "") ||
+    encodedText.trim() !== "";
+  const isAtDefault = plainText === DEFAULT_BASE64 && encodedText === "";
+
   // Execute encoding with default value on component mount
   useEffect(() => {
     encode();
@@ -124,6 +135,14 @@ export default function Base64Encoder() {
         <ResetButton
           onClick={handleReset}
           tooltip="Reset to default text example"
+          hasModifiedData={hasModifiedData}
+          disabled={isAtDefault}
+        />
+        <ClearButton
+          onClick={handleClear}
+          tooltip="Clear all inputs"
+          hasModifiedData={hasModifiedData}
+          disabled={plainText.trim() === "" && encodedText.trim() === ""}
         />
       </div>
 

@@ -11,8 +11,9 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { Play, Pause, Square, RotateCcw, Clock } from "lucide-react";
+import { Play, Pause, Square, Clock } from "lucide-react";
 import { useState, useEffect, useRef, useCallback } from "react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { getToolByPath } from "@/data/tools";
@@ -183,11 +184,25 @@ export default function Countdown() {
 
   const handleReset = () => {
     stopCountdown();
-    setTargetDate("");
-    setTargetTime("");
+    const defaultDt = getDefaultDateTime();
+    setTargetDate(defaultDt.date);
+    setTargetTime(defaultDt.time);
     setSoundEnabled(true);
     setTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
   };
+
+  const handleClear = () => {
+    stopCountdown();
+    setTargetDate("");
+    setTargetTime("");
+  };
+
+  const hasModifiedData =
+    targetDate !== defaultDateTime.date || targetTime !== defaultDateTime.time;
+  const isAtDefault =
+    targetDate === defaultDateTime.date &&
+    targetTime === defaultDateTime.time &&
+    soundEnabled === true;
 
   // Preset options for interesting countdowns
   const presets = [
@@ -437,10 +452,18 @@ export default function Countdown() {
               Stop (Esc)
             </Button>
 
-            <Button onClick={handleReset} variant="outline">
-              <RotateCcw className="w-4 h-4 mr-2" />
-              Reset
-            </Button>
+            <ResetButton
+              onClick={handleReset}
+              tooltip="Reset to New Year countdown"
+              hasModifiedData={hasModifiedData}
+              disabled={isAtDefault}
+            />
+            <ClearButton
+              onClick={handleClear}
+              tooltip="Clear date and time"
+              hasModifiedData={hasModifiedData}
+              disabled={targetDate === "" && targetTime === ""}
+            />
           </div>
         </CardContent>
       </Card>

@@ -12,8 +12,9 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { ArrowUpDown, RotateCcw } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_TEXT_SORT } from "@/data/defaults";
@@ -107,6 +108,21 @@ export default function TextSort() {
     setTrimLines(false);
     setSortedOutput("");
   };
+
+  const handleClear = () => {
+    setInput("");
+    setSortedOutput("");
+  };
+
+  const hasModifiedData =
+    input !== DEFAULT_TEXT_SORT && input.trim() !== "";
+  const isAtDefault =
+    input === DEFAULT_TEXT_SORT &&
+    sortType === "alphabetical" &&
+    sortOrder === "asc" &&
+    caseSensitive === false &&
+    unique === false &&
+    trimLines === false;
 
   useEffect(() => {
     sortText();
@@ -234,10 +250,18 @@ export default function TextSort() {
               <ArrowUpDown className="w-4 h-4 mr-2" />
               Sort Text
             </Button>
-            <Button onClick={handleReset} variant="outline">
-              <RotateCcw className="w-4 h-4 mr-2" />
-              Reset
-            </Button>
+            <ResetButton
+              onClick={handleReset}
+              tooltip="Reset all settings to defaults"
+              hasModifiedData={hasModifiedData}
+              disabled={isAtDefault}
+            />
+            <ClearButton
+              onClick={handleClear}
+              tooltip="Clear text input"
+              hasModifiedData={hasModifiedData}
+              disabled={input.trim() === ""}
+            />
           </div>
         </CardContent>
       </Card>

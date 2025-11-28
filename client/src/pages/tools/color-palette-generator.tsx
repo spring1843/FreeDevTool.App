@@ -19,15 +19,8 @@ import {
   type ColorInfo,
 } from "@/lib/color-tools";
 
-import {
-  Palette,
-  Copy,
-  Download,
-  RefreshCw,
-  Shuffle,
-  RotateCcw,
-  Share,
-} from "lucide-react";
+import { Palette, Copy, Download, RefreshCw, Shuffle, Share } from "lucide-react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 import { useToast } from "@/hooks/use-toast";
 
 import { getParam, updateURL, generateShareableURL } from "@/lib/url-sharing";
@@ -384,18 +377,26 @@ export default function ColorPaletteGenerator() {
               >
                 <Share className="w-4 h-4" />
               </Button>
-              <Button
+              <ResetButton
                 onClick={() => {
-                  setBaseColor("#3B82F6");
+                  setBaseColor(DEFAULT_COLOR_PALETTE_GENERATOR);
                   setSelectedType("complementary");
                   setGeneratedPalettes([]);
-                  updateUrl("#3B82F6", "complementary");
+                  updateUrl(DEFAULT_COLOR_PALETTE_GENERATOR, "complementary");
                 }}
-                variant="outline"
-                data-testid="reset-color-palette-button"
-              >
-                <RotateCcw className="w-4 h-4" />
-              </Button>
+                tooltip="Reset all settings to defaults"
+                hasModifiedData={baseColor !== DEFAULT_COLOR_PALETTE_GENERATOR || selectedType !== "complementary"}
+                disabled={baseColor === DEFAULT_COLOR_PALETTE_GENERATOR && selectedType === "complementary"}
+              />
+              <ClearButton
+                onClick={() => {
+                  setBaseColor("");
+                  setGeneratedPalettes([]);
+                }}
+                tooltip="Clear color input"
+                hasModifiedData={baseColor !== DEFAULT_COLOR_PALETTE_GENERATOR && baseColor.trim() !== ""}
+                disabled={baseColor.trim() === ""}
+              />
             </div>
           </div>
         </CardContent>

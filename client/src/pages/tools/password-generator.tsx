@@ -5,16 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
-import {
-  Copy,
-  Check,
-  RefreshCw,
-  Shield,
-  Eye,
-  EyeOff,
-  RotateCcw,
-} from "lucide-react";
+import { Copy, Check, RefreshCw, Shield, Eye, EyeOff } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 
 import { useToolDefault } from "@/hooks/use-tool-default";
 import { usePersistentForm } from "@/hooks/use-persistent-state";
@@ -143,6 +136,37 @@ export default function PasswordGenerator() {
     resetFields();
     setVisiblePasswords(new Set());
   };
+
+  const handleClear = () => {
+    updateField("passwords", []);
+    setVisiblePasswords(new Set());
+  };
+
+  const hasModifiedData = passwords.length > 0;
+
+  const defaultSettings = {
+    passwordCount: 1,
+    length: [16],
+    includeUppercase: true,
+    includeLowercase: true,
+    includeNumbers: true,
+    includeSymbols: true,
+    excludeSimilar: false,
+    excludeAmbiguous: false,
+    showStrength: true,
+  };
+
+  const isAtDefault =
+    passwords.length === 0 &&
+    passwordCount === defaultSettings.passwordCount &&
+    length[0] === defaultSettings.length[0] &&
+    includeUppercase === defaultSettings.includeUppercase &&
+    includeLowercase === defaultSettings.includeLowercase &&
+    includeNumbers === defaultSettings.includeNumbers &&
+    includeSymbols === defaultSettings.includeSymbols &&
+    excludeSimilar === defaultSettings.excludeSimilar &&
+    excludeAmbiguous === defaultSettings.excludeAmbiguous &&
+    showStrength === defaultSettings.showStrength;
 
   // Generate passwords with default settings on component mount
   useToolDefault(() => {
@@ -417,14 +441,18 @@ export default function PasswordGenerator() {
               Generate{" "}
               {passwordCount === 1 ? "Password" : `${passwordCount} Passwords`}
             </Button>
-            <Button
+            <ResetButton
               onClick={handleReset}
-              variant="outline"
-              data-testid="reset-button"
-            >
-              <RotateCcw className="w-4 h-4 mr-2" />
-              Reset
-            </Button>
+              tooltip="Reset all settings to defaults"
+              hasModifiedData={hasModifiedData}
+              disabled={isAtDefault}
+            />
+            <ClearButton
+              onClick={handleClear}
+              tooltip="Clear generated passwords"
+              hasModifiedData={hasModifiedData}
+              disabled={passwords.length === 0}
+            />
           </div>
         </CardContent>
       </Card>

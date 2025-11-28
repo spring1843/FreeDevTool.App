@@ -6,8 +6,9 @@ import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { Search, RotateCcw, CheckCircle, XCircle } from "lucide-react";
+import { Search, CheckCircle, XCircle } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_REGEX_PATTERN, DEFAULT_REGEX_TEXT } from "@/data/defaults";
@@ -94,6 +95,24 @@ export default function RegexTester() {
     setIsValidRegex(true);
     setError("");
   };
+
+  const handleClear = () => {
+    setPattern("");
+    setText("");
+    setMatches([]);
+    setIsValidRegex(true);
+    setError("");
+  };
+
+  const hasModifiedData =
+    (pattern !== DEFAULT_REGEX_PATTERN && pattern.trim() !== "") ||
+    (text !== DEFAULT_REGEX_TEXT && text.trim() !== "");
+  const isAtDefault =
+    pattern === DEFAULT_REGEX_PATTERN &&
+    text === DEFAULT_REGEX_TEXT &&
+    globalFlag === true &&
+    caseInsensitiveFlag === false &&
+    multilineFlag === false;
 
   useEffect(() => {
     updateFlags();
@@ -213,10 +232,18 @@ export default function RegexTester() {
                 <Search className="w-4 h-4 mr-2" />
                 Test Regex
               </Button>
-              <Button onClick={handleReset} variant="outline">
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Reset
-              </Button>
+              <ResetButton
+                onClick={handleReset}
+                tooltip="Reset all settings to defaults"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={handleClear}
+                tooltip="Clear all inputs"
+                hasModifiedData={hasModifiedData}
+                disabled={pattern.trim() === "" && text.trim() === ""}
+              />
             </div>
             <Badge
               variant="outline"

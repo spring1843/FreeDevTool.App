@@ -11,9 +11,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Code, Minimize2, RotateCcw } from "lucide-react";
+import { Code, Minimize2 } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { useLocation } from "wouter";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_CSS, DEFAULT_SCSS, DEFAULT_LESS } from "@/data/defaults";
@@ -121,6 +122,28 @@ export default function CSSFormatter() {
     setError(null);
   };
 
+  const handleClear = () => {
+    setInput("");
+    setOutput("");
+    setError(null);
+  };
+
+  const getDefaultForFormat = () => {
+    switch (format) {
+      case "scss":
+        return DEFAULT_SCSS;
+      case "less":
+        return DEFAULT_LESS;
+      default:
+        return DEFAULT_CSS;
+    }
+  };
+
+  const hasModifiedData =
+    (input !== getDefaultForFormat() && input.trim() !== "") ||
+    output.trim() !== "";
+  const isAtDefault = input === getDefaultForFormat() && output === "";
+
   useEffect(() => {
     formatCode(false); // Beautify by default
   }, [formatCode]);
@@ -185,10 +208,18 @@ export default function CSSFormatter() {
             <Minimize2 className="w-4 h-4 mr-2" />
             Minify Code
           </Button>
-          <Button onClick={handleReset} variant="outline">
-            <RotateCcw className="w-4 h-4 mr-2" />
-            Reset
-          </Button>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={input.trim() === "" && output.trim() === ""}
+          />
         </div>
       </div>
 

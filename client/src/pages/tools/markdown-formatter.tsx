@@ -4,8 +4,9 @@ import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { formatMarkdown } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { FileText, RotateCcw } from "lucide-react";
+import { FileText } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_MARKDOWN } from "@/data/defaults";
@@ -44,6 +45,17 @@ export default function MarkdownFormatter() {
     setOutput("");
     setError(null);
   };
+
+  const handleClear = () => {
+    setInput("");
+    setOutput("");
+    setError(null);
+  };
+
+  const hasModifiedData =
+    (input !== DEFAULT_MARKDOWN && input.trim() !== "") ||
+    output.trim() !== "";
+  const isAtDefault = input === DEFAULT_MARKDOWN && output === "";
 
   useEffect(() => {
     formatCode();
@@ -84,10 +96,18 @@ export default function MarkdownFormatter() {
           <FileText className="w-4 h-4 mr-2" />
           Format Markdown
         </Button>
-        <Button onClick={handleReset} variant="outline">
-          <RotateCcw className="w-4 h-4 mr-2" />
-          Reset
-        </Button>
+        <ResetButton
+          onClick={handleReset}
+          tooltip="Reset to default example"
+          hasModifiedData={hasModifiedData}
+          disabled={isAtDefault}
+        />
+        <ClearButton
+          onClick={handleClear}
+          tooltip="Clear all inputs"
+          hasModifiedData={hasModifiedData}
+          disabled={input.trim() === "" && output.trim() === ""}
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

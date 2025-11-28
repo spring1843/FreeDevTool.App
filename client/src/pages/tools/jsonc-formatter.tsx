@@ -4,8 +4,9 @@ import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { formatJSONC } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Code, RotateCcw } from "lucide-react";
+import { Code } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -45,6 +46,16 @@ export default function JSONCFormatter() {
     setOutput("");
     setError(null);
   };
+
+  const handleClear = () => {
+    setInput("");
+    setOutput("");
+    setError(null);
+  };
+
+  const hasModifiedData =
+    (input !== DEFAULT_JSONC && input.trim() !== "") || output.trim() !== "";
+  const isAtDefault = input === DEFAULT_JSONC && output === "";
 
   useEffect(() => {
     document.title = "JSONC Formatter - FreeDevTool.App";
@@ -105,14 +116,18 @@ export default function JSONCFormatter() {
               <Button onClick={formatCode} className="flex-1 sm:flex-none">
                 Format JSONC
               </Button>
-              <Button
+              <ResetButton
                 onClick={handleReset}
-                variant="outline"
-                className="flex items-center gap-2"
-              >
-                <RotateCcw className="w-4 h-4" />
-                Reset
-              </Button>
+                tooltip="Reset to default example"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={handleClear}
+                tooltip="Clear all inputs"
+                hasModifiedData={hasModifiedData}
+                disabled={input.trim() === "" && output.trim() === ""}
+              />
             </div>
           </CardContent>
         </Card>

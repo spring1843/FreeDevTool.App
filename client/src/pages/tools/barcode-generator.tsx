@@ -11,9 +11,10 @@ import {
 } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { BarChart3, Download, RotateCcw } from "lucide-react";
+import { BarChart3, Download } from "lucide-react";
 import { useState, useRef, useEffect, useCallback } from "react";
 import JsBarcode from "jsbarcode";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_BARCODE_GENERATOR } from "@/data/defaults";
@@ -130,6 +131,19 @@ export default function BarcodeGenerator() {
     setDisplayValue(true);
     setError(null);
   };
+
+  const handleClear = () => {
+    setText("");
+    setError(null);
+  };
+
+  const hasModifiedData = text !== DEFAULT_BARCODE_GENERATOR && text.trim() !== "";
+  const isAtDefault =
+    text === DEFAULT_BARCODE_GENERATOR &&
+    format === "CODE128" &&
+    width === 2 &&
+    height === 100 &&
+    displayValue === true;
 
   const getFormatInfo = (formatValue: string) =>
     barcodeFormats.find(f => f.value === formatValue);
@@ -314,16 +328,18 @@ export default function BarcodeGenerator() {
                 <Download className="w-4 h-4  mr-2" />
                 Download
               </Button>
-              <Button
+              <ResetButton
                 onClick={handleReset}
-                variant="outline"
-                disabled={text === DEFAULT_BARCODE_GENERATOR}
-                id="reset"
-                title="Reset to default value"
-              >
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Reset
-              </Button>
+                tooltip="Reset all settings to defaults"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={handleClear}
+                tooltip="Clear text input"
+                hasModifiedData={hasModifiedData}
+                disabled={text.trim() === ""}
+              />
             </div>
           </CardContent>
         </Card>

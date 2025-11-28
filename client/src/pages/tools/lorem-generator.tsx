@@ -12,8 +12,9 @@ import {
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Badge } from "@/components/ui/badge";
-import { FileText, Copy, RotateCcw } from "lucide-react";
+import { FileText, Copy } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useToast } from "@/hooks/use-toast";
 import { getToolByPath } from "@/data/tools";
@@ -224,6 +225,17 @@ export default function LoremGenerator() {
     setGenerated("");
   };
 
+  const handleClear = () => {
+    setGenerated("");
+  };
+
+  const hasModifiedData = generated.trim() !== "";
+  const isAtDefault =
+    generated === "" &&
+    type === "paragraphs" &&
+    count === 3 &&
+    startWithLorem === true;
+
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(generated);
@@ -330,10 +342,18 @@ export default function LoremGenerator() {
                 <FileText className="w-4 h-4 mr-2" />
                 Generate Lorem
               </Button>
-              <Button onClick={handleReset} variant="outline">
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Reset
-              </Button>
+              <ResetButton
+                onClick={handleReset}
+                tooltip="Reset all settings to defaults"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={handleClear}
+                tooltip="Clear generated text"
+                hasModifiedData={hasModifiedData}
+                disabled={generated.trim() === ""}
+              />
             </div>
             <Badge variant="outline">
               {count} {type}

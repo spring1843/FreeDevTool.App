@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, RotateCcw, Clock, Copy } from "lucide-react";
+import { Calendar, Clock, Copy } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useToast } from "@/hooks/use-toast";
@@ -268,6 +269,15 @@ export default function DateConverter() {
     setFormats([]);
   };
 
+  const handleClear = () => {
+    setInputDate("");
+    setFormats([]);
+  };
+
+  const DEFAULT_DATE = "1699123456";
+  const hasModifiedData = inputDate !== DEFAULT_DATE && inputDate.trim() !== "";
+  const isAtDefault = inputDate === DEFAULT_DATE;
+
   const handleCurrentTime = () => {
     const now = new Date();
     // Use the user's timezone for current time display
@@ -350,10 +360,18 @@ export default function DateConverter() {
               <Clock className="w-4 h-4 mr-2" />
               Use Current Time
             </Button>
-            <Button onClick={handleReset} variant="outline">
-              <RotateCcw className="w-4 h-4 mr-2" />
-              Reset
-            </Button>
+            <ResetButton
+              onClick={handleReset}
+              tooltip="Reset to default example"
+              hasModifiedData={hasModifiedData}
+              disabled={isAtDefault}
+            />
+            <ClearButton
+              onClick={handleClear}
+              tooltip="Clear date input"
+              hasModifiedData={hasModifiedData}
+              disabled={inputDate.trim() === ""}
+            />
           </div>
         </CardContent>
       </Card>

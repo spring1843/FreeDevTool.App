@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -5,6 +6,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import {
   Copy,
   RefreshCw,
@@ -15,6 +26,7 @@ import {
   Pause,
   Square,
   RotateCcw,
+  Trash2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -154,18 +166,133 @@ export function ResetButton({
   onClick,
   disabled,
   tooltip = "Reset to default values",
+  hasModifiedData = false,
 }: {
   onClick: () => void;
   disabled?: boolean;
   tooltip?: string;
+  hasModifiedData?: boolean;
 }) {
+  const [showDialog, setShowDialog] = useState(false);
+
+  const handleClick = () => {
+    if (hasModifiedData) {
+      setShowDialog(true);
+    } else {
+      onClick();
+    }
+  };
+
   return (
-    <ToolButton
-      variant="reset"
-      onClick={onClick}
-      disabled={disabled}
-      tooltip={tooltip}
-    />
+    <>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              onClick={handleClick}
+              disabled={disabled}
+              data-testid="button-reset"
+            >
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Reset
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{tooltip}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+
+      <AlertDialog open={showDialog} onOpenChange={setShowDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Reset to defaults?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will reset all inputs to their default values. Any changes
+              you have made will be lost.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel data-testid="button-reset-cancel">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={onClick}
+              data-testid="button-reset-confirm"
+            >
+              Reset
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
+  );
+}
+
+export function ClearButton({
+  onClick,
+  disabled,
+  tooltip = "Clear all inputs to start fresh",
+  hasModifiedData = false,
+}: {
+  onClick: () => void;
+  disabled?: boolean;
+  tooltip?: string;
+  hasModifiedData?: boolean;
+}) {
+  const [showDialog, setShowDialog] = useState(false);
+
+  const handleClick = () => {
+    if (hasModifiedData) {
+      setShowDialog(true);
+    } else {
+      onClick();
+    }
+  };
+
+  return (
+    <>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              onClick={handleClick}
+              disabled={disabled}
+              data-testid="button-clear"
+            >
+              <Trash2 className="w-4 h-4 mr-2" />
+              Clear
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{tooltip}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+
+      <AlertDialog open={showDialog} onOpenChange={setShowDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Clear all inputs?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will clear all inputs so you can start fresh. Any data you
+              have entered will be lost.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel data-testid="button-clear-cancel">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={onClick}
+              data-testid="button-clear-confirm"
+            >
+              Clear
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }
 

@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Badge } from "@/components/ui/badge";
-import { GitCompare, RotateCcw } from "lucide-react";
+import { GitCompare } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_TEXT_DIFF_1, DEFAULT_TEXT_DIFF_2 } from "@/data/defaults";
@@ -106,6 +107,19 @@ export default function TextDiff() {
     setDiffResult([]);
     setDiffStats(null);
   };
+
+  const handleClear = () => {
+    setText1("");
+    setText2("");
+    setDiffResult([]);
+    setDiffStats(null);
+  };
+
+  const hasModifiedData =
+    (text1 !== DEFAULT_TEXT_DIFF_1 && text1.trim() !== "") ||
+    (text2 !== DEFAULT_TEXT_DIFF_2 && text2.trim() !== "");
+  const isAtDefault =
+    text1 === DEFAULT_TEXT_DIFF_1 && text2 === DEFAULT_TEXT_DIFF_2;
 
   useEffect(() => {
     calculateDiff();
@@ -211,10 +225,18 @@ export default function TextDiff() {
           <GitCompare className="w-4 h-4 mr-2" />
           Compare Text
         </Button>
-        <Button onClick={handleReset} variant="outline">
-          <RotateCcw className="w-4 h-4 mr-2" />
-          Reset
-        </Button>
+        <ResetButton
+          onClick={handleReset}
+          tooltip="Reset to default examples"
+          hasModifiedData={hasModifiedData}
+          disabled={isAtDefault}
+        />
+        <ClearButton
+          onClick={handleClear}
+          tooltip="Clear all text"
+          hasModifiedData={hasModifiedData}
+          disabled={text1.trim() === "" && text2.trim() === ""}
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">

@@ -6,8 +6,9 @@ import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { Split, RotateCcw } from "lucide-react";
+import { Split } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_TEXT_SPLIT } from "@/data/defaults";
@@ -60,6 +61,18 @@ export default function TextSplit() {
     setTrimWhitespace(true);
     setSplitResult([]);
   };
+
+  const handleClear = () => {
+    setText("");
+    setSplitResult([]);
+  };
+
+  const hasModifiedData = text !== DEFAULT_TEXT_SPLIT && text.trim() !== "";
+  const isAtDefault =
+    text === DEFAULT_TEXT_SPLIT &&
+    delimiter === "," &&
+    removeEmpty === true &&
+    trimWhitespace === true;
 
   useEffect(() => {
     splitText();
@@ -144,10 +157,18 @@ export default function TextSplit() {
                 <Split className="w-4 h-4 mr-2" />
                 Split Text
               </Button>
-              <Button onClick={handleReset} variant="outline">
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Reset
-              </Button>
+              <ResetButton
+                onClick={handleReset}
+                tooltip="Reset all settings to defaults"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={handleClear}
+                tooltip="Clear text input"
+                hasModifiedData={hasModifiedData}
+                disabled={text.trim() === ""}
+              />
             </div>
             <Badge
               variant="outline"
