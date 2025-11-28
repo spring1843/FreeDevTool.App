@@ -2936,30 +2936,75 @@ export const toolsData: ToolData = {
         explanations: {
           notice: {
             type: "info",
-            title: "Privacy & Permissions",
+            title: "Privacy First",
             items: [
-              "All processing is local; no data is transmitted",
-              "Browser permission is required to access the camera",
-              "Captured photos are saved directly to your device",
+              { label: "100% local:", text: "Video never leaves your device—no uploads, no cloud, no servers" },
+              { label: "Permission required:", text: "Browser asks once; revoke anytime in site settings" },
+              { label: "Photos stay local:", text: "Captured images download directly to your device" },
             ],
           },
+          shortcuts: [
+            { key: "Ctrl+Shift+.", action: "Open Camera Test tool" },
+          ],
           sections: [
             {
-              title: "Features",
+              title: "When to Test Your Camera",
               items: [
-                "Request camera permission",
-                "Select camera device when labels are available",
-                "Start/Stop camera preview",
-                "Capture photo and download as PNG",
-                "Show live resolution and active status",
+                "Before job interviews: Nothing worse than 'your camera isn't working' mid-interview",
+                "New webcam setup: Verify it's detected and working before your first call",
+                "Multiple cameras: Check which one is active (laptop vs external vs virtual)",
+                "After OS updates: Windows/Mac updates sometimes reset camera permissions",
+                "Lighting check: See how you actually look before going live",
               ],
             },
             {
-              title: "Errors",
+              title: "Common Webcam Resolutions",
               items: [
-                "Permission denied (NotAllowedError)",
-                "No camera found (NotFoundError)",
-                "Enumerate devices failures with helpful messages",
+                { label: "480p (SD):", text: "640×480 — Built-in laptop cameras from 2010s, barely acceptable" },
+                { label: "720p (HD):", text: "1280×720 — Most common laptop webcam, fine for calls" },
+                { label: "1080p (Full HD):", text: "1920×1080 — External webcams (Logitech C920/C922), looks professional" },
+                { label: "4K:", text: "3840×2160 — High-end streaming cameras, often overkill for video calls" },
+              ],
+            },
+            {
+              title: "Why Your Camera Might Not Work",
+              items: [
+                "Another app is using it: Zoom, Teams, Chrome—only one app can access at a time",
+                "Permission denied: Check browser settings → Privacy → Camera",
+                "Wrong camera selected: Virtual cameras (OBS, Snap) can confuse selection",
+                "Hardware switch: Some laptops have physical camera kill switches (check keyboard)",
+                "Privacy shutter: Many webcams now have sliding covers—is yours open?",
+                "Driver issues: Windows? Try Device Manager → Cameras → Update driver",
+              ],
+            },
+            {
+              title: "Virtual Cameras Explained",
+              items: [
+                { label: "OBS Virtual Camera:", text: "Stream your desktop, overlays, or scenes as a 'webcam'" },
+                { label: "Snap Camera:", text: "Add filters and effects to any video call (RIP 2024)" },
+                { label: "ManyCam:", text: "Multiple sources, picture-in-picture, screen sharing" },
+                { label: "Camo:", text: "Use your iPhone as a high-quality webcam (Apple Continuity)" },
+                { label: "DroidCam:", text: "Turn Android phone into wireless webcam" },
+              ],
+            },
+            {
+              title: "Pro Tips for Better Video",
+              items: [
+                "Light from the front: Window behind you = silhouette. Ring light or desk lamp facing you helps",
+                "Eye level: Stack books under laptop so camera is at eye height, not nostril height",
+                "Clean the lens: Laptop webcam lenses get surprisingly dusty/smudgy",
+                "Background matters: Plain wall > messy room. Or use virtual backgrounds",
+                "Wired > WiFi: For streaming, ethernet eliminates dropped frames",
+              ],
+            },
+            {
+              title: "Browser Compatibility",
+              items: [
+                "Chrome/Edge: Best support, all features work",
+                "Firefox: Full support, may ask permission more often",
+                "Safari: Works but sometimes quirky with device selection",
+                "Brave: Works if shields allow camera access",
+                "Incognito/Private: Will always re-ask for camera permission",
               ],
             },
           ],
