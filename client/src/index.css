@@ -376,4 +376,20 @@
   * {
     border-radius: 0 !important;
   }
+
+  /* Mobile CodeMirror fix - prevent focus lock on mobile devices */
+  /* Ensure CodeMirror allows touch events to propagate properly */
+  .cm-editor {
+    touch-action: pan-x pan-y pinch-zoom;
+  }
+
+  /* Ensure interactive elements have proper touch handling */
+  header button,
+  header a,
+  header input,
+  [data-testid="menu-button"],
+  [data-testid="theme-toggle"],
+  [data-testid="mobile-search-toggle"] {
+    touch-action: manipulation;
+  }
 }

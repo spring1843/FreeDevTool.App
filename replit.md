@@ -4,6 +4,10 @@
 
 is a web-based collection of 49+ open-source, free, and completely offline developer tools. It offers a wide range of utilities including converters, formatters, encoders, text tools, timing utilities, financial calculators, hardware tests, and generators. Designed with privacy in mind, all processing occurs locally without network dependencies, making it suitable for sensitive business environments and air-gapped systems.
 
+## Recent Changes
+
+- **November 27, 2025**: Fixed mobile performance/focus lock issue on CodeMirror TextArea. Root cause: Full CodeMirror stack with expensive extensions (foldGutter, autocompletion, highlightActiveLine, etc.) plus onUpdate cursor tracking saturated iOS main thread during touch events, blocking navbar taps. Fix: Mobile-optimized CodeMirror configuration that (1) disables expensive extensions (foldGutter, highlightActiveLine, closeBrackets, autocompletion, etc.), (2) adds custom theme extension with touch-action: manipulation CSS, (3) adds DOM event handler to release pointer capture on touchend/pointerup, and (4) disables onUpdate cursor tracking on mobile. Syntax highlighting preserved while maintaining responsive UI.
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
