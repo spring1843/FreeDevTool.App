@@ -1369,48 +1369,54 @@ export const toolsData: ToolData = {
         },
         explanations: {
           notice: {
-            type: "info",
-            title: "Format Notes",
+            type: "tips",
+            title: "Did You Know?",
             items: [
-              { label: "CODE 128", text: "Most versatile; supports all ASCII" },
-              {
-                label: "EAN-13 / EAN-8",
-                text: "Require exactly 13 or 8 digits",
-              },
-              { label: "UPC-A", text: "Requires exactly 12 digits" },
-              { label: "ITF-14", text: "Requires exactly 14 digits" },
-              { label: "CODE 39", text: "A–Z, 0–9 and symbols . - $ / + %" },
-              { label: "MSI", text: "Numeric characters only" },
-              { label: "Pharmacode", text: "Integer in [3, 131070]" },
+              "The first product scanned was a pack of Wrigley's gum on June 26, 1974 at a Marsh supermarket in Ohio",
+              "UPC barcodes encode a check digit—scanners reject codes with math errors",
+              "Pharmacode barcodes are intentionally hard to decode without special equipment to prevent medication errors",
+              "The 'quiet zone' (white space) around barcodes is critical—without it, scanners fail",
             ],
           },
           sections: [
             {
-              title: "Features",
+              title: "Which Format to Use",
               items: [
-                "Generate CODE128, CODE39, EAN-13/8, UPC-A, ITF-14, MSI, Pharmacode",
-                "Input validation per format with helpful messages",
-                "Adjust bar width (1–4px) and height (50–200px)",
-                "Toggle human-readable text below the barcode",
-                "Download as PNG",
+                {
+                  label: "CODE 128:",
+                  text: "Best default choice—encodes any ASCII character, used in shipping labels (FedEx, UPS)",
+                },
+                {
+                  label: "EAN-13/UPC:",
+                  text: "Required for retail products sold in stores—EAN in Europe/Asia, UPC in North America",
+                },
+                {
+                  label: "CODE 39:",
+                  text: "US military and automotive industry standard—no check digit required",
+                },
+                {
+                  label: "ITF-14:",
+                  text: "Printed directly on corrugated cardboard boxes—tolerates low print quality",
+                },
               ],
             },
             {
-              title: "Common Use Cases",
+              title: "Real-World Uses",
               items: [
-                "Retail labels (EAN-13/UPC)",
-                "Shipping and logistics (CODE 128)",
-                "Industrial applications (CODE 39)",
-                "Packaging and cases (ITF-14)",
+                "Asset tracking: Label laptops, equipment, and inventory with CODE 128",
+                "Event tickets: Generate unique CODE 128 barcodes for entry validation",
+                "Library systems: Most libraries use CODE 39 for book tracking",
+                "Warehouse shelving: ITF-14 on boxes, EAN-13 on individual products inside",
+                "Membership cards: Encode member IDs for quick scanning at checkout",
               ],
             },
             {
-              title: "Tips",
+              title: "Printing Tips",
               items: [
-                "Use CODE 128 for maximum compatibility",
-                "Ensure required digit lengths for EAN/UPC/ITF",
-                "Test with your barcode scanner",
-                "Consider printing size and resolution",
+                "Minimum bar width of 2px for reliable scanning at 300 DPI",
+                "Print at 100% scale—never stretch or compress barcodes",
+                "Use matte paper to avoid glare that confuses scanners",
+                "Test with your actual scanner before printing batches",
               ],
             },
           ],
