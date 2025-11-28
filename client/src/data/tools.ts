@@ -179,35 +179,72 @@ export const toolsData: ToolData = {
         explanations: {
           notice: {
             type: "info",
-            title: "About Timezone Converter",
+            title: "Why Timezones Exist",
             items: [
-              {
-                label: "Features",
-                text: "Second-level time precision; 100+ supported timezones; automatic DST handling; multiple target conversions; real-time offset; copy converted times",
-              },
+              { label: "Before 1883:", text: "Every city set clocks by local solar noon—chaos for train schedules!" },
+              { label: "The fix:", text: "Railroads created 4 US time zones. Within a year, 85% of cities adopted them" },
+              { label: "UTC:", text: "Coordinated Universal Time replaced GMT in 1972 as the world's reference point" },
             ],
           },
           sections: [
             {
-              title: "Features",
+              title: "Weird Timezone Facts",
               items: [
-                "Second-level time precision",
-                "100+ supported timezones worldwide",
-                "Automatic daylight saving time handling",
-                "Multiple target timezone conversion",
-                "Real-time offset calculation",
-                "Copy converted times to clipboard",
+                "China spans 5 geographical zones but uses ONE timezone (Beijing Time)—sunset at 10pm in the west!",
+                "Nepal is UTC+5:45—the only country with a 45-minute offset",
+                "Australia has 3 timezones, but 5 during daylight saving (some states opt out)",
+                "Russia has 11 timezones—most of any country",
+                "France has 12 timezones (if you count overseas territories)—more than Russia!",
+                "Arizona doesn't observe DST, except the Navajo Nation, which contains the Hopi Reservation, which doesn't",
               ],
             },
             {
-              title: "Usage Tips",
+              title: "Daylight Saving Time Chaos",
               items: [
-                "Use 24-hour format for precise conversion",
-                "Add/remove target timezones as needed",
-                "Click 'Now' to use current date/time",
-                "Copy button includes both date and time",
-                "UTC offsets adjust for DST automatically",
-                "Perfect for scheduling global meetings",
+                { label: "Start/end dates:", text: "Vary by country—US, EU, and Australia all differ" },
+                { label: "2023 example:", text: "US changed Mar 12, EU changed Mar 26—two weeks of extra confusion" },
+                { label: "Equator countries:", text: "Don't use DST (sun rises/sets at same time year-round)" },
+                { label: "The shift:", text: "Most countries shift 1 hour, but Lord Howe Island (Australia) shifts 30 minutes" },
+                { label: "Abolishing DST:", text: "EU voted to end it in 2019—still hasn't happened" },
+              ],
+            },
+            {
+              title: "Global Meeting Sweet Spots",
+              items: [
+                { label: "US + Europe:", text: "2-5pm London = 9am-12pm New York = reasonable for both" },
+                { label: "US + Asia:", text: "Brutal—someone's always in the middle of the night. Try 7am Pacific = 11pm Tokyo" },
+                { label: "Europe + Asia:", text: "8am London = 4pm Singapore = 5pm Tokyo works well" },
+                { label: "All three:", text: "Nearly impossible. Best bet: 6am Pacific = 2pm London = 10pm Tokyo (sorry, Tokyo)" },
+              ],
+            },
+            {
+              title: "For Developers",
+              items: [
+                "ALWAYS store times in UTC in your database—convert to local only for display",
+                "Use IANA timezone names (America/New_York), not abbreviations (EST is ambiguous)",
+                "Don't assume 24 hours in a day—DST creates 23 and 25-hour days",
+                "Test your app on DST transition days (second Sunday of March, first Sunday of November in US)",
+                "JavaScript Date objects are in local time by default—a common source of bugs",
+              ],
+            },
+            {
+              title: "Common Timezone Abbreviations",
+              items: [
+                { label: "UTC/GMT:", text: "The reference point (London in winter, but UK uses BST in summer)" },
+                { label: "EST/EDT:", text: "Eastern Standard/Daylight Time (New York) — UTC-5 or UTC-4" },
+                { label: "PST/PDT:", text: "Pacific Standard/Daylight Time (LA) — UTC-8 or UTC-7" },
+                { label: "CET/CEST:", text: "Central European Time (Paris, Berlin) — UTC+1 or UTC+2" },
+                { label: "JST:", text: "Japan Standard Time — UTC+9 (no DST, ever)" },
+                { label: "IST:", text: "India Standard Time — UTC+5:30 (also means Irish Standard Time!)" },
+              ],
+            },
+            {
+              title: "Tools & Conventions",
+              items: [
+                "ISO 8601: The standard format—2024-03-15T14:30:00Z (Z = UTC, no offset)",
+                "Unix timestamp: Seconds since Jan 1, 1970 UTC—timezone-agnostic",
+                "Share times with timezone: '3pm ET' not just '3pm' to avoid confusion",
+                "World clock apps: Add cities you work with frequently for quick reference",
               ],
             },
           ],
