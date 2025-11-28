@@ -3,7 +3,7 @@ import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { convertJSONToYAML, convertYAMLToJSON } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { ArrowRight, ArrowLeft, ArrowRightLeft } from "lucide-react";
+import { ArrowRight, ArrowLeft } from "lucide-react";
 import {
   ToolButton,
   ResetButton,
@@ -38,13 +38,6 @@ export default function JSONYAMLConverter() {
     setJsonText(converted);
     setError(convertError || null);
   }, [yamlText]);
-
-  const swapContent = () => {
-    const temp = jsonText;
-    setJsonText(yamlText);
-    setYamlText(temp);
-    setError(null);
-  };
 
   const handleJsonChange = (value: string) => {
     setJsonText(value);
@@ -117,14 +110,6 @@ export default function JSONYAMLConverter() {
             tooltip="Convert YAML to JSON"
           >
             YAML → JSON
-          </ToolButton>
-          <ToolButton
-            variant="custom"
-            onClick={swapContent}
-            icon={<ArrowRightLeft className="w-4 h-4 mr-2" />}
-            tooltip="Swap content between JSON and YAML"
-          >
-            Swap
           </ToolButton>
         </ActionButtonGroup>
         <DataButtonGroup>
