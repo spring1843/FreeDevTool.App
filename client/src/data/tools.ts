@@ -1251,30 +1251,84 @@ export const toolsData: ToolData = {
         },
         explanations: {
           notice: {
-            type: "examples",
-            title: "URL Encoding Examples",
+            type: "info",
+            title: "Why URL Encoding Exists",
             items: [
-              { label: "Space", text: "%20" },
-              { label: "@", text: "%40" },
-              { label: "&", text: "%26" },
-              { label: "=", text: "%3D" },
+              { label: "The problem:", text: "URLs can only contain ASCII letters, numbers, and a few special chars" },
+              { label: "The solution:", text: "Percent-encoding: unsafe chars become %XX (hex code)" },
+              { label: "Example:", text: "'Hello World!' → 'Hello%20World%21' (%20=space, %21=!)" },
             ],
           },
+          shortcuts: [
+            { key: "Ctrl+Shift+~", action: "Open URL Encoder tool" },
+          ],
           sections: [
             {
-              title: "Features",
+              title: "Common Encodings Cheat Sheet",
               items: [
-                "Encode plain text to URL-safe format",
-                "Decode URL-encoded strings back to plain text",
-                "Real-time preview while typing",
+                { label: "Space:", text: "%20 (or + in query strings—both are valid)" },
+                { label: "&:", text: "%26 — separates query params, must encode if it's data" },
+                { label: "=:", text: "%3D — separates key=value, encode if it's in the value" },
+                { label: "?:", text: "%3F — starts query string, encode if it's data" },
+                { label: "#:", text: "%23 — starts fragment, encode to include in data" },
+                { label: "/:", text: "%2F — path separator, encode to use in filenames" },
+                { label: "@:", text: "%40 — used in emails, encode for query params" },
+                { label: "+:", text: "%2B — represents space in forms, encode for literal +" },
               ],
             },
             {
-              title: "Use cases",
+              title: "encodeURI vs encodeURIComponent",
               items: [
-                "Prepare query parameters for HTTP requests",
-                "Sanitize user input for URLs",
-                "Debug API payloads with encoded fields",
+                { label: "encodeURI():", text: "Encodes a FULL URL—preserves ://?#& so URL structure stays intact" },
+                { label: "encodeURIComponent():", text: "Encodes a PART of URL—encodes everything except A-Z a-z 0-9 - _ . ~" },
+                { label: "This tool uses:", text: "encodeURIComponent() — safest for query parameter values" },
+                { label: "Common mistake:", text: "Using encodeURI() on query values leaves & and = unencoded, breaking URLs" },
+              ],
+            },
+            {
+              title: "Real-World Scenarios",
+              items: [
+                "Search queries: 'C++ tutorial' → 'C%2B%2B%20tutorial' (+ must be encoded!)",
+                "API params: 'filter=status=active' → 'filter=status%3Dactive'",
+                "Redirect URLs: 'redirect=https://example.com' → 'redirect=https%3A%2F%2Fexample.com'",
+                "Filenames in URLs: 'Report (Final).pdf' → 'Report%20%28Final%29.pdf'",
+                "Email in URL: 'email=user@domain.com' → 'email=user%40domain.com'",
+              ],
+            },
+            {
+              title: "Double Encoding Trap",
+              items: [
+                "Already encoded '%20' becomes '%2520' if encoded again",
+                "Symptom: Spaces appear as '%20' in the UI instead of actual spaces",
+                "Fix: Decode first, then encode once—never chain multiple encodes",
+                "API debugging tip: If data looks weird, try decoding multiple times",
+              ],
+            },
+            {
+              title: "Characters That DON'T Need Encoding",
+              items: [
+                "Letters: A-Z, a-z (unreserved, always safe)",
+                "Numbers: 0-9 (unreserved, always safe)",
+                "Special unreserved: - _ . ~ (safe in all URL parts)",
+                "Reserved but allowed: Depends on URL section (path vs query)",
+              ],
+            },
+            {
+              title: "Unicode & International Characters",
+              items: [
+                "UTF-8 first: '日本' becomes bytes E6 97 A5 E6 9C AC",
+                "Then percent-encode: '日本' → '%E6%97%A5%E6%9C%AC'",
+                "Emoji work too: '👍' → '%F0%9F%91%8D' (4 bytes = 12 characters encoded)",
+                "Fun fact: Punycode is different—it's for domain names, not query strings",
+              ],
+            },
+            {
+              title: "Security Considerations",
+              items: [
+                "URL encoding is NOT sanitization—XSS payloads survive encoding",
+                "Decode user input server-side before validation",
+                "Watch for path traversal: '../' encoded is '%2E%2E%2F'—still dangerous",
+                "Log decoded URLs: Encoded logs hide attack patterns",
               ],
             },
           ],
