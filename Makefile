@@ -152,6 +152,8 @@ clean: ## Clean build artifacts and temporary files
 	rm -rf dist/
 	rm -rf node_modules/.cache/
 	rm -rf .next/
+	rm -rf playwright-report/
+	rm -rf test-results/
 
 clean-all: clean ## Clean everything including node_modules
 	rm -rf node_modules/
