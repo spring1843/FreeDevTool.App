@@ -141,3 +141,13 @@ jobs:
 
       - name: Deploy to Production
         run: make deploy-to-production
+
+      - name: Preload Production Cache Few Times
+        run: |
+          make warm-cache-production
+          make warm-cache-production
+          make warm-cache-production
+
+      - name: Run E2E Tests Against Production
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: TARGET=https://freedevtool.app make e2e-test
