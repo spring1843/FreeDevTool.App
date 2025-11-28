@@ -17,7 +17,14 @@ import { go } from "@codemirror/lang-go";
 import { java } from "@codemirror/lang-java";
 import { cpp } from "@codemirror/lang-cpp";
 import { json } from "@codemirror/lang-json";
-import { Copy, Download, Upload } from "lucide-react";
+import {
+  Copy,
+  Download,
+  Upload,
+  WrapText,
+  Expand,
+  Minimize2,
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 // Detect mobile/touch devices for optimized CodeMirror configuration
@@ -96,10 +103,23 @@ export interface TextAreaProps {
   minHeight?: string;
   onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
   theme?: "light" | "dark";
+  lineWrapping?: boolean;
+  fixedHeight?: boolean; // when true, cap visible height by max lines; when false, allow full height
 }
 
 const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
-  ({ className, value, onChange, theme = "light", ...props }) => {
+  (
+    {
+      className,
+      value,
+      onChange,
+      theme = "light",
+      lineWrapping = false,
+      fixedHeight = true,
+      ...props
+    },
+    _ref // The ref is not used, but forwardRef requires it.
+  ) => {
     const isMobile = useIsMobile();
 
     const baseClassName = cn(
@@ -217,8 +237,60 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         // Consumers expect e.target.value; other fields are not used.
         target: { value: val } as unknown as EventTarget & HTMLTextAreaElement,
       }) as unknown as React.ChangeEvent<HTMLTextAreaElement>;
+    // Local UI toggles for wrap and height, synced to props
+    const [isWrapping, setIsWrapping] = React.useState<boolean>(lineWrapping);
+    React.useEffect(() => {
+      setIsWrapping(lineWrapping);
+    }, [lineWrapping]);
+
+    const [isFixedHeight, setIsFixedHeight] =
+      React.useState<boolean>(fixedHeight);
+    React.useEffect(() => {
+      setIsFixedHeight(fixedHeight);
+    }, [fixedHeight]);
+
     const langExt = getLanguageExtension(currentLang);
-    const extensions = Array.isArray(langExt) ? langExt : [langExt];
+
+    // Dynamically cap the editor's visible height by number of lines.
+    const wrapperRef = React.useRef<HTMLDivElement | null>(null);
+    const [lineHeightPx, setLineHeightPx] = React.useState<number>(18);
+
+    React.useEffect(() => {
+      const measure = () => {
+        if (!wrapperRef.current) return;
+        const line = wrapperRef.current.querySelector(
+          ".cm-editor .cm-line"
+        ) as HTMLElement | null;
+        if (line) {
+          const cs = window.getComputedStyle(line);
+          const lh = parseFloat(cs.lineHeight);
+          if (!Number.isNaN(lh) && lh > 0) setLineHeightPx(lh);
+        }
+      };
+      // initial measure and on next tick in case CodeMirror mounts after first paint
+      measure();
+      const id = window.setTimeout(measure, 50);
+      return () => window.clearTimeout(id);
+    }, [value, theme]);
+
+    const DESKTOP_MAX_LINES = 300;
+    const MOBILE_MAX_LINES = 100;
+    const maxVisibleLines = isMobile ? MOBILE_MAX_LINES : DESKTOP_MAX_LINES;
+    const maxHeightPx = Math.max(1, Math.round(lineHeightPx * maxVisibleLines));
+
+    const heightLimitExtension = React.useMemo(
+      () =>
+        EditorView.theme({
+          "&": { maxHeight: `${maxHeightPx}px`, overflow: "auto" },
+        }),
+      [maxHeightPx]
+    );
+
+    const extensions = [
+      ...(Array.isArray(langExt) ? langExt : [langExt]),
+      ...(isWrapping ? [EditorView.lineWrapping] : []),
+      ...(isFixedHeight ? [heightLimitExtension] : []),
+    ];
     const { toast } = useToast();
 
     const handleCopy = async () => {
@@ -438,6 +510,7 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         data-testid="textarea-drop-area"
+        ref={wrapperRef}
       >
         {/* Toolbar / Navbar above the editor */}
         <div className="flex justify-end">
@@ -450,6 +523,78 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
             )}
             data-testid="textarea-toolbar"
           >
+            {/* Toggle word wrapping */}
+            <div className="relative group">
+              <Button
+                onClick={() => {
+                  setIsWrapping(v => !v);
+                  toast({
+                    title: isWrapping
+                      ? "Word wrapping disabled"
+                      : "Word wrapping enabled",
+                    description: isWrapping
+                      ? "Text will not wrap; long lines may require horizontal scroll."
+                      : "Text will wrap, so you can read long lines without horizontal scrolling.",
+                    duration: 2000,
+                  });
+                }}
+                size="sm"
+                variant="ghost"
+                aria-label="Toggle word wrapping"
+                title={
+                  isWrapping ? "Disable word wrapping" : "Enable word wrapping"
+                }
+                data-testid="toggle-wrap-button"
+                className="p-0 h-5 w-5"
+              >
+                <WrapText className="w-3.5 h-3.5" />
+              </Button>
+              <span
+                className={cn(
+                  "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
+                  "border"
+                )}
+              >
+                {isWrapping ? "Unwrap" : "Wrap"}
+              </span>
+            </div>
+            {/* Toggle fixed/full height */}
+            <div className="relative group">
+              <Button
+                onClick={() => {
+                  setIsFixedHeight(v => !v);
+                  toast({
+                    title: isFixedHeight
+                      ? "Full height enabled"
+                      : "Fixed height enabled",
+                    description: isFixedHeight
+                      ? "Editor will use full height; horizontal scrollbar goes away when combined with wrapping."
+                      : "Editor height is capped to keep the layout compact; overflow will scroll vertically.",
+                    duration: 2000,
+                  });
+                }}
+                size="sm"
+                variant="ghost"
+                aria-label="Toggle fixed height"
+                title={isFixedHeight ? "Use full height" : "Use fixed height"}
+                data-testid="toggle-height-button"
+                className="p-0 h-5 w-5"
+              >
+                {isFixedHeight ? (
+                  <Expand className="w-3.5 h-3.5" />
+                ) : (
+                  <Minimize2 className="w-3.5 h-3.5" />
+                )}
+              </Button>
+              <span
+                className={cn(
+                  "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
+                  "border"
+                )}
+              >
+                {isFixedHeight ? "Full height" : "Fixed height"}
+              </span>
+            </div>
             <div className="relative group">
               <Button
                 onClick={handleCopy}

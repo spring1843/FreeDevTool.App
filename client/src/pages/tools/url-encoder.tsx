@@ -142,6 +142,7 @@ export default function URLEncoder() {
               minHeight="400px"
               fileExtension="txt"
               theme={theme}
+              lineWrapping={true}
             />
           </CardContent>
         </Card>
@@ -163,6 +164,7 @@ export default function URLEncoder() {
               rows={20}
               minHeight="400px"
               theme={theme}
+              lineWrapping={true}
             />
           </CardContent>
         </Card>
