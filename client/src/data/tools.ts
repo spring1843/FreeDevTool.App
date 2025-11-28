@@ -640,29 +640,54 @@ export const toolsData: ToolData = {
         explanations: {
           notice: {
             type: "info",
-            title: "Syntax Examples",
+            title: "Quick Syntax Reference",
             items: [
-              { label: "Headings", text: "#, ##" },
-              { label: "Emphasis", text: "**bold**, *italic*" },
-              { label: "Lists", text: "- bullets, 1. ordered" },
-              { label: "Links & Code", text: "[Link](url), `code`" },
+              { label: "# Heading", text: "H1 (use ## for H2, ### for H3)" },
+              { label: "**bold** / *italic*", text: "or __bold__ / _italic_" },
+              { label: "[text](url)", text: "hyperlink" },
+              { label: "![alt](image.png)", text: "image (! prefix)" },
+              { label: "```language", text: "fenced code block with syntax highlighting" },
             ],
           },
           sections: [
             {
-              title: "Features",
+              title: "Markdown Origin Story",
               items: [
-                "Prettier formatting for Markdown",
-                "Consistent lists, headings, and code blocks",
-                "Supports large docs",
+                "Created by John Gruber & Aaron Swartz in 2004 as 'email-style' writing",
+                "Goal: Write prose that reads naturally AND converts to valid HTML",
+                "Name is a wordplay on 'markup' (HTML) → 'markdown' (simpler)",
+                "Now powers GitHub, Reddit, Stack Overflow, Notion, Discord, and most dev docs",
               ],
             },
             {
-              title: "Use cases",
+              title: "Flavor Differences",
               items: [
-                "Polish README and docs",
-                "Normalize content before publishing",
-                "Improve readability for reviews",
+                {
+                  label: "CommonMark:",
+                  text: "Standardized spec (2014) to fix ambiguities in original",
+                },
+                {
+                  label: "GitHub Flavored (GFM):",
+                  text: "Adds tables, task lists [ ], strikethrough ~~text~~",
+                },
+                {
+                  label: "MDX:",
+                  text: "Markdown + JSX components for React docs",
+                },
+                {
+                  label: "This formatter:",
+                  text: "Uses Prettier with CommonMark + GFM support",
+                },
+              ],
+            },
+            {
+              title: "Pro Tips",
+              items: [
+                "Two spaces at line end = <br> (soft break). Empty line = new paragraph",
+                "Indent code blocks with 4 spaces OR use ``` fences (fences are cleaner)",
+                "Reference-style links [text][id] keep paragraphs readable in source",
+                "Escape special chars with backslash: \\* \\# \\[ to show literally",
+                "Tables: | Col1 | Col2 | with |---| separator row (GFM only)",
               ],
             },
           ],
