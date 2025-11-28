@@ -17,6 +17,8 @@ import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_TEXT_SORT } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 type SortType = "alphabetical" | "numerical" | "length" | "reverse" | "random";
 type SortOrder = "asc" | "desc";
@@ -280,6 +282,7 @@ export default function TextSort() {
           </CardContent>
         </Card>
       </div>
+      {renderToolExplanations(getToolByPath("/tools/text-sort")?.explanations)}
     </div>
   );
 }

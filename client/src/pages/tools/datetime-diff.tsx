@@ -1,4 +1,6 @@
 import { useState, useMemo } from "react";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -716,51 +718,9 @@ export default function DateTimeDiff() {
         </div>
       </div>
 
-      {/* Quick Examples */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Common Use Cases & Examples</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div>
-              <h4 className="font-semibold mb-3 text-purple-700 dark:text-purple-300">
-                Project Planning
-              </h4>
-              <ul className="text-sm space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• Calculate project durations</li>
-                <li>• Track milestone deadlines</li>
-                <li>• Plan resource allocation</li>
-                <li>• Estimate delivery timelines</li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-semibold mb-3 text-green-700 dark:text-green-300">
-                Personal Milestones
-              </h4>
-              <ul className="text-sm space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• Age calculations</li>
-                <li>• Anniversary countdowns</li>
-                <li>• Travel duration planning</li>
-                <li>• Event time remaining</li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-semibold mb-3 text-blue-700 dark:text-blue-300">
-                Business Applications
-              </h4>
-              <ul className="text-sm space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• Contract durations</li>
-                <li>• Service level agreements</li>
-                <li>• Billing periods</li>
-                <li>• Warranty calculations</li>
-              </ul>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      {renderToolExplanations(
+        getToolByPath("/tools/datetime-diff")?.explanations
+      )}
     </div>
   );
 }

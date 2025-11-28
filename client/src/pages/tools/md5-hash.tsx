@@ -50,6 +50,8 @@ const simpleMD5 = (input: string): string => {
 };
 
 import { DEFAULT_MD5 } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function MD5Hash() {
   const [inputText, setInputText] = useState(DEFAULT_MD5);
@@ -295,31 +297,7 @@ export default function MD5Hash() {
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-          <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-            MD5 Features:
-          </h3>
-          <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-            <li>• Fast hash generation for integrity checking</li>
-            <li>• Fixed 32-character hexadecimal output</li>
-            <li>• Deterministic - same input always produces same hash</li>
-            <li>• Commonly used for file checksums and verification</li>
-          </ul>
-        </div>
-
-        <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-          <h3 className="font-semibold text-yellow-800 dark:text-yellow-200 mb-2">
-            Security Notice:
-          </h3>
-          <ul className="text-sm text-yellow-700 dark:text-yellow-300 space-y-1">
-            <li>• MD5 is not cryptographically secure for passwords</li>
-            <li>• Use for data integrity, not password storage</li>
-            <li>• Consider SHA-256 or bcrypt for security purposes</li>
-            <li>• This tool uses SHA-256 truncated to MD5 length</li>
-          </ul>
-        </div>
-      </div>
+      {renderToolExplanations(getToolByPath("/tools/md5-hash")?.explanations)}
     </div>
   );
 }

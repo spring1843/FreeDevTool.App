@@ -9,6 +9,8 @@ import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_TLS_DECODER } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 interface CertificateInfo {
   subject: string;
@@ -311,6 +313,9 @@ export default function TLSDecoder() {
           </Card>
         </div>
       ) : null}
+      {renderToolExplanations(
+        getToolByPath("/tools/tls-decoder")?.explanations
+      )}
     </div>
   );
 }

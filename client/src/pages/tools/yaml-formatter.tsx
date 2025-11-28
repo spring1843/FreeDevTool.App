@@ -8,6 +8,8 @@ import { Code, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_YAML } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function YAMLFormatter() {
   const [input, setInput] = useState(DEFAULT_YAML);
@@ -128,19 +130,9 @@ export default function YAMLFormatter() {
         </Card>
       </div>
 
-      <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-          YAML Features:
-        </h3>
-        <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-          <li>• Human-readable data serialization standard</li>
-          <li>
-            • Supports complex data structures like lists and dictionaries
-          </li>
-          <li>• Commonly used for configuration files and data exchange</li>
-          <li>• Strict indentation rules using spaces (not tabs)</li>
-        </ul>
-      </div>
+      {renderToolExplanations(
+        getToolByPath("/tools/yaml-formatter")?.explanations
+      )}
     </div>
   );
 }

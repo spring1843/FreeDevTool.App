@@ -11,6 +11,8 @@ import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_REGEX_PATTERN, DEFAULT_REGEX_TEXT } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 interface RegexMatch {
   match: string;
@@ -294,6 +296,9 @@ export default function RegexTester() {
             </div>
           </CardContent>
         </Card>
+      )}
+      {renderToolExplanations(
+        getToolByPath("/tools/regex-tester")?.explanations
       )}
     </div>
   );

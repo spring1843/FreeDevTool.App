@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { usePersistentForm } from "@/hooks/use-persistent-state";
 import { DEFAULT_TEXT_COUNTER } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 const defaultFields = {
   text: DEFAULT_TEXT_COUNTER,
@@ -232,6 +234,9 @@ export default function TextCounter() {
           </CardContent>
         </Card>
       </div>
+      {renderToolExplanations(
+        getToolByPath("/tools/text-counter")?.explanations
+      )}
     </div>
   );
 }

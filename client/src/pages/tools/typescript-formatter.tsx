@@ -9,6 +9,8 @@ import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_TYPESCRIPT } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function TypeScriptFormatter() {
   const [input, setInput] = useState(DEFAULT_TYPESCRIPT);
@@ -144,44 +146,9 @@ export default function TypeScriptFormatter() {
         </Card>
       </div>
 
-      <div className="mt-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center text-slate-700 dark:text-slate-300">
-              <Code className="w-5 h-5 mr-2" />
-              TypeScript Formatting Features
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  Beautification Features:
-                </h4>
-                <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
-                  <li>• Type annotation formatting</li>
-                  <li>• Interface and type definition styling</li>
-                  <li>• Generic type parameter alignment</li>
-                  <li>• Enum and namespace formatting</li>
-                  <li>• Decorator and metadata styling</li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  TypeScript Benefits:
-                </h4>
-                <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
-                  <li>• Preserves type information</li>
-                  <li>• Maintains type safety</li>
-                  <li>• Consistent code style</li>
-                  <li>• Improved readability</li>
-                  <li>• Professional formatting standards</li>
-                </ul>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      {renderToolExplanations(
+        getToolByPath("/tools/typescript-formatter")?.explanations
+      )}
     </div>
   );
 }

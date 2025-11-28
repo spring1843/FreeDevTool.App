@@ -18,6 +18,8 @@ import { Switch } from "@/components/ui/switch";
 
 import { useToolDefault } from "@/hooks/use-tool-default";
 import { usePersistentForm } from "@/hooks/use-persistent-state";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 interface PasswordStrength {
   score: number;
@@ -541,6 +543,9 @@ export default function PasswordGenerator() {
             </div>
           </CardContent>
         </Card>
+      )}
+      {renderToolExplanations(
+        getToolByPath("/tools/password-generator")?.explanations
       )}
     </div>
   );

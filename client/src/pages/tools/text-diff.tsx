@@ -8,6 +8,8 @@ import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_TEXT_DIFF_1, DEFAULT_TEXT_DIFF_2 } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 interface DiffLine {
   type: "added" | "removed" | "unchanged" | "modified";
@@ -276,6 +278,7 @@ export default function TextDiff() {
           </CardContent>
         </Card>
       )}
+      {renderToolExplanations(getToolByPath("/tools/text-diff")?.explanations)}
     </div>
   );
 }

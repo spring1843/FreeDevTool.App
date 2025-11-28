@@ -1,3 +1,5 @@
+import type { ToolExplanation } from "@/components/tool-explanations";
+
 // Global tools data with keyboard shortcuts
 export interface Tool {
   name: string;
@@ -9,6 +11,7 @@ export interface Tool {
     keywords: string[];
   };
   experimental?: boolean;
+  explanations?: ToolExplanation;
 }
 
 export interface ToolCategory {
@@ -43,6 +46,84 @@ export const toolsData: ToolData = {
             "RFC 2822",
           ],
         },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "Format Categories & Detection",
+            items: [
+              {
+                label: "Auto-detection",
+                text: "Paste Unix (seconds/milliseconds), ISO 8601, RFC strings, or human-readable dates – format is detected automatically",
+              },
+              {
+                label: "Categories",
+                text: "Timestamp, ISO Standards, RFC Standards, Regional, Database, Human Readable, Web/API",
+              },
+              {
+                label: "Pre-epoch",
+                text: "Negative Unix timestamps supported for dates before 1970",
+              },
+            ],
+          },
+          examples: [
+            {
+              from: "1699123456",
+              to: "Parsed as Unix seconds → converted to all 20+ formats",
+            },
+            {
+              from: "2024-01-15T14:30:45Z",
+              to: "ISO 8601 detected (UTC) → grouped outputs by category",
+            },
+            {
+              from: "Jan 15, 2024",
+              to: "Human-readable date auto-detected → standardized outputs",
+            },
+          ],
+          sections: [
+            {
+              title: "Supported Formats",
+              items: [
+                "Unix seconds & milliseconds",
+                "ISO 8601 (full, date-only, time-only)",
+                "RFC 2822 & RFC 3339",
+                "Regional (US, EU, ISO numeric)",
+                "Database (SQL datetime/date, synthetic MongoDB ObjectId timestamp)",
+                "Human Readable (full, short, 12h, 24h)",
+                "Web/API (HTTP Date, JSON, Cookie Expires)",
+              ],
+            },
+            {
+              title: "Features",
+              items: [
+                "Convert input into 20+ practical formats",
+                "Automatic input parsing & validation",
+                "Grouped outputs by category for quick scanning",
+                "Copy any individual format value (toast feedback)",
+                "Reset to example timestamp",
+                "Use Current Time (Now) button",
+                "Error feedback for invalid inputs (shows supported types)",
+              ],
+            },
+            {
+              title: "Edge Cases",
+              items: [
+                "Negative Unix timestamps",
+                "Millisecond vs second length differentiation",
+                "Human-readable month/day ambiguity handled by native Date parsing",
+                "Synthetic ObjectId: only leading 8 hex chars are timestamp (rest static demo)",
+              ],
+            },
+            {
+              title: "Use Cases",
+              items: [
+                "Debug API payload timestamps",
+                "Prepare database seed values",
+                "Compare regional date display",
+                "Generate multiple representations for docs/logs",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "JSON ↔ YAML",
@@ -59,6 +140,26 @@ export const toolsData: ToolData = {
             "JSON YAML converter",
           ],
         },
+        explanations: {
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Bidirectional conversion between JSON and YAML",
+                "Syntax validation and error reporting",
+                "Preserves structure and keys",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Convert Kubernetes, Docker Compose, or CI configs",
+                "Switch formats between teams or tools",
+                "Validate configuration before deployment",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "Timezone Converter",
@@ -73,6 +174,42 @@ export const toolsData: ToolData = {
             "time zone conversion",
             "UTC converter",
             "world time converter",
+          ],
+        },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "About Timezone Converter",
+            items: [
+              {
+                label: "Features",
+                text: "Second-level time precision; 100+ supported timezones; automatic DST handling; multiple target conversions; real-time offset; copy converted times",
+              },
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Second-level time precision",
+                "100+ supported timezones worldwide",
+                "Automatic daylight saving time handling",
+                "Multiple target timezone conversion",
+                "Real-time offset calculation",
+                "Copy converted times to clipboard",
+              ],
+            },
+            {
+              title: "Usage Tips",
+              items: [
+                "Use 24-hour format for precise conversion",
+                "Add/remove target timezones as needed",
+                "Click 'Now' to use current date/time",
+                "Copy button includes both date and time",
+                "UTC offsets adjust for DST automatically",
+                "Perfect for scheduling global meetings",
+              ],
+            },
           ],
         },
       },
@@ -92,6 +229,26 @@ export const toolsData: ToolData = {
             "temperature converter",
           ],
         },
+        explanations: {
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Length, weight, temperature, volume, and more",
+                "Accurate conversions with common units",
+                "Friendly UI for quick comparisons",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Engineering and science tasks",
+                "Cooking and DIY measurements",
+                "Normalize data across unit systems",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "URL to JSON",
@@ -106,6 +263,54 @@ export const toolsData: ToolData = {
             "query string parser",
             "URL to JSON",
             "parse URL",
+          ],
+        },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "About URL to JSON Converter",
+            items: [
+              {
+                label: "Extracted Components",
+                text: "Protocol, Hostname, TLD, Domain, Subdomain, Port, Path, Query Parameters",
+              },
+            ],
+          },
+          examples: [
+            {
+              from: "https://api.github.com/repos/owner/repo?per_page=100&sort=updated#readme",
+              to: "Breaks into protocol=https, hostname=api.github.com, path=/repos/owner/repo, params={per_page:100, sort:updated}, hash=#readme",
+            },
+            {
+              from: "https://shop.example.co.uk:8080/products/electronics?category=laptops&brand=apple&sort=price",
+              to: "Parses multi-part TLD co.uk, port 8080, path segments, and query params",
+            },
+            {
+              from: "ftp://files.example.com/downloads/software/installer.exe",
+              to: "Shows protocol ftp, hostname files.example.com, and path",
+            },
+          ],
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Parse full URL into protocol, host, path, hash, and query",
+                "Convert query parameters to JSON",
+                "Detect common and multi-part TLDs",
+                "Copy JSON output with one click",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "API development and testing",
+                "URL analysis and debugging",
+                "Web scraping and automation",
+                "SEO and analytics",
+                "Documentation and training",
+                "Link validation and parsing",
+              ],
+            },
           ],
         },
       },
@@ -124,6 +329,26 @@ export const toolsData: ToolData = {
             "convert CSV",
           ],
         },
+        explanations: {
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Parse comma- and tab-separated values",
+                "Header row detection and field mapping",
+                "Output pretty or compact JSON",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Prepare data for APIs",
+                "Convert spreadsheets into JSON payloads",
+                "Clean and transform CSV exports",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "Number Base Converter",
@@ -138,6 +363,49 @@ export const toolsData: ToolData = {
             "binary converter",
             "hex converter",
             "decimal to binary",
+          ],
+        },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "About Number Base Converter",
+            items: [
+              {
+                label: "Supported Bases",
+                text: "Binary (2), Octal (8), Decimal (10), Hex (16), Base32, Base36, and custom bases from 2–64",
+              },
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Convert from any base to any other base (2–64)",
+                "Multiple output bases simultaneously",
+                "Input validation for each base",
+                "Character set display for each base",
+                "URL sharing with current settings",
+                "Example data for quick testing",
+                "Copy individual results to clipboard",
+              ],
+            },
+            {
+              title: "Common Use Cases",
+              items: [
+                {
+                  label: "Programming",
+                  text: "Binary operations, hexadecimal colors, memory addresses",
+                },
+                {
+                  label: "Networking",
+                  text: "IP address conversion, subnet calculations, Base64 encoding",
+                },
+                {
+                  label: "Mathematics",
+                  text: "Number theory, computer science, algorithm design",
+                },
+              ],
+            },
           ],
         },
       },
@@ -162,6 +430,49 @@ export const toolsData: ToolData = {
             "prettify JSON",
           ],
         },
+        explanations: {
+          notice: {
+            type: "tips",
+            title: "Pro Tips",
+            items: [
+              "Use Ctrl+A to select all text quickly",
+              "The formatter will auto-detect and fix common JSON issues",
+              "Validation shows specific error locations",
+              "Minified JSON is optimized for data transmission",
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Beautify JSON with consistent indentation",
+                "Validate JSON syntax and show errors",
+                "Minify to a single line",
+                "Security banner reminds no data leaves the browser",
+              ],
+            },
+            {
+              title: "Actions",
+              items: [
+                { label: "Format", text: "Prettier-powered beautification" },
+                { label: "Minify", text: "Compact single-line output" },
+                {
+                  label: "Validate",
+                  text: "Quick syntax check via JSON.parse",
+                },
+                { label: "Reset", text: "Restore default example input" },
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Clean up API responses before sharing",
+                "Verify config files quickly",
+                "Generate compact payloads for transport",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "JSONC Formatter",
@@ -175,6 +486,40 @@ export const toolsData: ToolData = {
             "JSONC formatter",
             "JSON with comments",
             "VS Code config formatter",
+          ],
+        },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "About JSONC",
+            items: [
+              {
+                label: "Comment types",
+                text: "Supports single-line (//) and multi-line (/* */) comments",
+              },
+              {
+                label: "Popular uses",
+                text: "VS Code settings, TypeScript configs, Azure DevOps",
+              },
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Format JSON while preserving // and /* */ comments",
+                "Helpful error messages on invalid structure",
+                "Compact output area with copy-friendly monospace",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Beautify configuration files",
+                "Share readable snippets with comments intact",
+                "Validate commented JSON before committing",
+              ],
+            },
           ],
         },
       },
@@ -193,6 +538,45 @@ export const toolsData: ToolData = {
             "HTML code formatter",
           ],
         },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "Validation Issues",
+            items: [
+              "Shows errors and warnings (unclosed tags, missing attributes, accessibility/SEO) with counts",
+            ],
+          },
+          sections: [
+            {
+              title: "Formatting Options",
+              items: [
+                { label: "Beautify", text: "Adds indentation and line breaks" },
+                { label: "Minify", text: "Removes whitespace and comments" },
+                {
+                  label: "Validation",
+                  text: "Checks common HTML issues and best practices",
+                },
+              ],
+            },
+            {
+              title: "Validation Features",
+              items: [
+                "Detects unclosed/mismatched tags",
+                "Validates required attributes (e.g., alt, src)",
+                "Highlights accessibility and SEO problems",
+                "Suggests best-practice improvements",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Clean up templates",
+                "Improve readability for code reviews",
+                "Normalize markup before commit",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "YAML Formatter",
@@ -207,6 +591,34 @@ export const toolsData: ToolData = {
             "YAML validator",
             "YAML beautifier",
             "config formatter",
+          ],
+        },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "YAML Basics",
+            items: [
+              "Human-readable serialization; strict indentation with spaces (no tabs)",
+              "Supports lists and dictionaries; widely used for configs",
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Format YAML with consistent indentation",
+                "Helpful errors on invalid structure",
+                "Works for multi-document YAML",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Validate CI/CD or Kubernetes manifests",
+                "Beautify config files",
+                "Reduce indentation mistakes",
+              ],
+            },
           ],
         },
       },
@@ -225,6 +637,36 @@ export const toolsData: ToolData = {
             "prettify markdown",
           ],
         },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "Syntax Examples",
+            items: [
+              { label: "Headings", text: "#, ##" },
+              { label: "Emphasis", text: "**bold**, *italic*" },
+              { label: "Lists", text: "- bullets, 1. ordered" },
+              { label: "Links & Code", text: "[Link](url), `code`" },
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Prettier formatting for Markdown",
+                "Consistent lists, headings, and code blocks",
+                "Supports large docs",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Polish README and docs",
+                "Normalize content before publishing",
+                "Improve readability for reviews",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "CSS/LESS/SCSS Formatter",
@@ -239,6 +681,44 @@ export const toolsData: ToolData = {
             "CSS beautifier",
             "prettify CSS",
             "CSS code formatter",
+          ],
+        },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "Format Selector",
+            items: [
+              "Choose CSS, SCSS, or LESS to use the appropriate parser and rules",
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Format CSS, LESS, and SCSS",
+                "Consistent indentation, spacing, and nested rules",
+                "Beautify or minify output",
+              ],
+            },
+            {
+              title: "Options",
+              items: [
+                {
+                  label: "Beautify",
+                  text: "Readable indentation and line breaks",
+                },
+                { label: "Minify", text: "Strip whitespace and comments" },
+                { label: "Reset", text: "Restore default example per format" },
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Beautify styles for maintainability",
+                "Normalize code across teams",
+                "Prepare clean diffs",
+              ],
+            },
           ],
         },
       },
@@ -257,6 +737,45 @@ export const toolsData: ToolData = {
             "Prettier",
           ],
         },
+        explanations: {
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Prettier formatting for TS/JS",
+                "Consistent code style across files",
+                "Improves diff readability",
+                "Beautify and minify actions",
+              ],
+            },
+            {
+              title: "TypeScript Formatting Details",
+              items: [
+                "Type annotation formatting",
+                "Interface and type definition styling",
+                "Generic type parameter alignment",
+                "Enum and namespace formatting",
+                "Decorator and metadata styling",
+              ],
+            },
+            {
+              title: "Benefits",
+              items: [
+                "Preserves type information",
+                "Maintains type safety",
+                "Professional formatting standards",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Prepare code for review",
+                "Normalize style before commit",
+                "Reduce noise in pull requests",
+              ],
+            },
+          ],
+        },
       },
 
       {
@@ -273,6 +792,38 @@ export const toolsData: ToolData = {
             "GraphQL schema formatter",
           ],
         },
+        explanations: {
+          sections: [
+            {
+              title: "Supported Elements",
+              items: [
+                "Type definitions and interfaces",
+                "Queries, mutations, and subscriptions",
+                "Input types and enums",
+                "Schema definitions",
+                "Directive declarations",
+              ],
+            },
+            {
+              title: "Formatting Benefits",
+              items: [
+                "Consistent field alignment",
+                "Proper indentation for nested types",
+                "Clean argument formatting",
+                "Readable schema structure",
+                "Industry-standard formatting",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Clean schema files for readability",
+                "Prepare query docs",
+                "Improve review experience",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "Time Formatter",
@@ -286,6 +837,59 @@ export const toolsData: ToolData = {
             "time formatter",
             "12 hour to 24 hour",
             "time format converter",
+          ],
+        },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "About Time Formatter",
+            items: [
+              {
+                label: "Tips",
+                text: "Use the Now button to set current date/time; copy any formatted value with one click; select timezone to make outputs TZ-aware",
+              },
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Convert 12-hour ↔ 24-hour",
+                "Normalize time strings",
+                "Handle edge cases like midnight and noon",
+                "Timezone-aware formatting",
+                "Copy formatted values to clipboard",
+              ],
+            },
+            {
+              title: "Standard Formats",
+              items: [
+                "24-hour and 12-hour formats",
+                "ISO 8601 and RFC 3339",
+                "Unix timestamps (seconds and milliseconds)",
+                "UTC and local time representations",
+                "Microsecond precision support",
+              ],
+            },
+            {
+              title: "Special Formats",
+              items: [
+                "French Revolutionary decimal time",
+                "Swatch Internet Time (.beats)",
+                "Julian Day Number (JDN)",
+                "Modified Julian Day (MJD)",
+                "Excel serial date",
+                "Time with explicit timezone offset (±HH:MM)",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Standardize times for logs",
+                "Prepare UI display values",
+                "Convert user input reliably",
+              ],
+            },
           ],
         },
       },
@@ -310,6 +914,26 @@ export const toolsData: ToolData = {
             "decode Base64",
           ],
         },
+        explanations: {
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Encode and decode Base64",
+                "Works with text and binary data",
+                "Input validation and error messages",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Embed assets in HTML/CSS",
+                "Convert small files to text form",
+                "Decode API responses",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "URL Encoder",
@@ -324,6 +948,36 @@ export const toolsData: ToolData = {
             "URL decoder",
             "percent encoding",
             "URI encoder",
+          ],
+        },
+        explanations: {
+          notice: {
+            type: "examples",
+            title: "URL Encoding Examples",
+            items: [
+              { label: "Space", text: "%20" },
+              { label: "@", text: "%40" },
+              { label: "&", text: "%26" },
+              { label: "=", text: "%3D" },
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Encode plain text to URL-safe format",
+                "Decode URL-encoded strings back to plain text",
+                "Real-time preview while typing",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Prepare query parameters for HTTP requests",
+                "Sanitize user input for URLs",
+                "Debug API payloads with encoded fields",
+              ],
+            },
           ],
         },
       },
@@ -342,6 +996,26 @@ export const toolsData: ToolData = {
             "token decoder",
           ],
         },
+        explanations: {
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Decode header and payload",
+                "Pretty-print claims",
+                "Works without signature verification",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Inspect tokens during development",
+                "Debug auth flows",
+                "Verify claim contents quickly",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "TLS Certificate Decoder",
@@ -356,6 +1030,26 @@ export const toolsData: ToolData = {
             "SSL certificate decoder",
             "X.509 decoder",
             "certificate inspector",
+          ],
+        },
+        explanations: {
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Parse PEM certificates and show fields",
+                "Inspect subject, issuer, validity",
+                "Support for chains",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Debug TLS issues",
+                "Check expiration dates",
+                "Verify SANs and key usage",
+              ],
+            },
           ],
         },
       },
@@ -374,6 +1068,37 @@ export const toolsData: ToolData = {
             "checksum",
           ],
         },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "Security Notice",
+            items: [
+              "MD5 is not cryptographically secure for passwords",
+              "Use for data integrity, not password storage",
+              "Consider SHA-256 or bcrypt for security purposes",
+              "Implementation uses SHA-256 truncated to 32 chars to simulate MD5 length",
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Fast hash generation for integrity checking",
+                "Fixed 32-character hexadecimal output",
+                "Deterministic: same input → same hash",
+                "Copy result to clipboard",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Verify file integrity",
+                "Compare outputs across systems",
+                "Generate quick fingerprints",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "BCrypt Hash",
@@ -388,6 +1113,37 @@ export const toolsData: ToolData = {
             "password hash generator",
             "secure hash",
             "BCrypt generator",
+          ],
+        },
+        explanations: {
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Adaptive hashing function for passwords",
+                "Built-in salt generation",
+                "Configurable work factor (rounds)",
+                "Resistant to rainbow table attacks",
+                "Generate hashes and verify against plaintext",
+              ],
+            },
+            {
+              title: "Security Notes",
+              items: [
+                "Use 10+ rounds for production",
+                "Higher rounds increase security but slow hashing",
+                "Each hash includes a unique salt",
+                "Same password produces different hashes",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Prototype auth logic",
+                "Validate password hashing",
+                "Compare implementations",
+              ],
+            },
           ],
         },
       },
@@ -412,6 +1168,26 @@ export const toolsData: ToolData = {
             "compare text files",
           ],
         },
+        explanations: {
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Side-by-side comparison",
+                "Highlights insertions and deletions",
+                "Line-by-line view",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Review changes between versions",
+                "Compare generated output",
+                "Spot regressions",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "Regex Tester",
@@ -426,6 +1202,26 @@ export const toolsData: ToolData = {
             "regular expression tester",
             "regex debugger",
             "pattern matcher",
+          ],
+        },
+        explanations: {
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Live matching and highlighting",
+                "Supports JS regex syntax",
+                "Shows groups and matches",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Design and verify regex patterns",
+                "Debug complex captures",
+                "Validate input formats",
+              ],
+            },
           ],
         },
       },
@@ -444,6 +1240,28 @@ export const toolsData: ToolData = {
             "line sorter",
           ],
         },
+        explanations: {
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Alphabetical, numerical, by length, reverse, and random sorts",
+                "Ascending/descending order",
+                "Case-sensitive toggle",
+                "Trim lines before processing",
+                "Remove duplicate lines",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Normalize lists before committing",
+                "Create ordered indexes",
+                "Deduplicate data pasted from spreadsheets",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "Word Counter",
@@ -458,6 +1276,26 @@ export const toolsData: ToolData = {
             "word counter",
             "text statistics",
             "line counter",
+          ],
+        },
+        explanations: {
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Counts characters, words, lines, and paragraphs",
+                "Reading time estimation",
+                "Monospace editor for clarity",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Meet content length requirements",
+                "Estimate reading time",
+                "Analyze text density",
+              ],
+            },
           ],
         },
       },
@@ -476,6 +1314,43 @@ export const toolsData: ToolData = {
             "barcode generator",
           ],
         },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "QR Code Types & Usage",
+            items: [
+              {
+                label: "Supported Types",
+                text: "Plain Text, Website URL, Email (mailto), Phone (tel), SMS (pre-filled), WiFi (WIFI:T;S;P), Contact Card (vCard)",
+              },
+              {
+                label: "Auto-generate",
+                text: "QR codes update as you type; use size selector for readability",
+              },
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Generate QR codes for text, URLs, email, phone, SMS, WiFi, and vCard",
+                "Adjust output size (150–500px)",
+                "Auto-generate on input change",
+                "Download as SVG and copy data URL",
+              ],
+            },
+            {
+              title: "Usage Tips",
+              items: [
+                "Larger sizes work better for complex content",
+                "WiFi format: NetworkName:Password:Security",
+                "SMS format: PhoneNumber:Message",
+                "Contact format: Name:Phone:Email",
+                "Test codes with multiple apps/devices",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "Barcode Generator",
@@ -490,6 +1365,54 @@ export const toolsData: ToolData = {
             "create barcode",
             "Code128",
             "EAN generator",
+          ],
+        },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "Format Notes",
+            items: [
+              { label: "CODE 128", text: "Most versatile; supports all ASCII" },
+              {
+                label: "EAN-13 / EAN-8",
+                text: "Require exactly 13 or 8 digits",
+              },
+              { label: "UPC-A", text: "Requires exactly 12 digits" },
+              { label: "ITF-14", text: "Requires exactly 14 digits" },
+              { label: "CODE 39", text: "A–Z, 0–9 and symbols . - $ / + %" },
+              { label: "MSI", text: "Numeric characters only" },
+              { label: "Pharmacode", text: "Integer in [3, 131070]" },
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Generate CODE128, CODE39, EAN-13/8, UPC-A, ITF-14, MSI, Pharmacode",
+                "Input validation per format with helpful messages",
+                "Adjust bar width (1–4px) and height (50–200px)",
+                "Toggle human-readable text below the barcode",
+                "Download as PNG",
+              ],
+            },
+            {
+              title: "Common Use Cases",
+              items: [
+                "Retail labels (EAN-13/UPC)",
+                "Shipping and logistics (CODE 128)",
+                "Industrial applications (CODE 39)",
+                "Packaging and cases (ITF-14)",
+              ],
+            },
+            {
+              title: "Tips",
+              items: [
+                "Use CODE 128 for maximum compatibility",
+                "Ensure required digit lengths for EAN/UPC/ITF",
+                "Test with your barcode scanner",
+                "Consider printing size and resolution",
+              ],
+            },
           ],
         },
       },
@@ -508,6 +1431,38 @@ export const toolsData: ToolData = {
             "lorem generator",
           ],
         },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "About Lorem Ipsum",
+            items: [
+              "Industry standard placeholder text since the 1500s",
+              "Based on a work by Cicero (45 BC)",
+              "Scrambled Latin that's readable but meaningless",
+              "Perfect for focusing on design without content distraction",
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Generate paragraphs, sentences, or words",
+                "Option to start with 'Lorem ipsum'",
+                "Word/sentence/paragraph counts shown",
+                "Copy to clipboard",
+                "Monospace preview editor with fixed height",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Fill mockups with realistic text",
+                "Test layout density and typography",
+                "Prototype content flows quickly",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "Unicode Characters",
@@ -522,6 +1477,26 @@ export const toolsData: ToolData = {
             "special characters",
             "unicode symbols",
             "character map",
+          ],
+        },
+        explanations: {
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Browse and search Unicode symbols",
+                "Copy easily",
+                "Categorized character sets",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Insert symbols in text",
+                "Explore character support",
+                "Design iconography",
+              ],
+            },
           ],
         },
       },
@@ -540,6 +1515,26 @@ export const toolsData: ToolData = {
             "password creator",
           ],
         },
+        explanations: {
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Adjust length and character sets",
+                "Generate multiple variants",
+                "Copy with one click",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Create credentials securely",
+                "Avoid weak patterns",
+                "Prototype auth flows",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "UUID Generator",
@@ -554,6 +1549,26 @@ export const toolsData: ToolData = {
             "GUID generator",
             "unique ID generator",
             "UUID v4",
+          ],
+        },
+        explanations: {
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Generate UUIDs (e.g., v4)",
+                "Bulk creation",
+                "Copy and reuse easily",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Create identifiers for test data",
+                "Name resources uniquely",
+                "Seed databases",
+              ],
+            },
           ],
         },
       },
@@ -572,6 +1587,26 @@ export const toolsData: ToolData = {
             "regex replace",
           ],
         },
+        explanations: {
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Find and replace with regex",
+                "Case sensitivity toggle",
+                "Global or scoped replacement",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Refactor text blocks",
+                "Fix formatting patterns",
+                "Clean imported content",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "Text Split",
@@ -586,6 +1621,40 @@ export const toolsData: ToolData = {
             "string split",
             "delimiter split",
             "text separator",
+          ],
+        },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "Common Delimiters",
+            items: [
+              {
+                label: "Built-ins",
+                text: ", (comma), ; (semicolon), | (pipe), space",
+              },
+              { label: "Special", text: "\\n (new line), \\t (tab)" },
+              { label: "Other", text: ": (colon), - (dash)" },
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Split by any custom delimiter, including \\n and \\t",
+                "Trim whitespace and remove empty parts toggles",
+                "Live preview with part count and per-part length",
+                "Copy individual parts or all results",
+                "Export cleaned lists (newline-separated)",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Process CSV-like or list data",
+                "Extract tokens for parsing",
+                "Prepare arrays and inputs for code",
+              ],
+            },
           ],
         },
       },
@@ -610,6 +1679,37 @@ export const toolsData: ToolData = {
             "multiple timezones",
           ],
         },
+        explanations: {
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Live-updating clocks with second-precision",
+                "Auto-detected local timezone display",
+                "Custom clocks collection you can build",
+                "Continental view organized by region",
+                "UTC offset shown for each city",
+              ],
+            },
+            {
+              title: "Continental Coverage",
+              items: [
+                "Africa, Americas, Asia, Europe, Oceania",
+                "Major cities sorted by timezone offset",
+                "One-click add from any continental city",
+              ],
+            },
+            {
+              title: "Use Cases",
+              items: [
+                "Coordinate meetings across timezones",
+                "Track business hours in different regions",
+                "Plan international calls or travel",
+                "Monitor team availability globally",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "Timer",
@@ -626,6 +1726,38 @@ export const toolsData: ToolData = {
             "time tracker",
           ],
         },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "Keyboard Shortcuts",
+            items: [
+              { label: "Enter", text: "Add new timer" },
+              { label: "Space", text: "Start/Pause first timer" },
+              { label: "Escape", text: "Stop all timers" },
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Create multiple timers (default 5 minutes)",
+                "Custom name and H:M:S duration",
+                "Configurable alarm plays: 1, 2, 3, or until stopped",
+                "Visual status badges (Running/Finished)",
+                "Shareable URL with current timer settings",
+                "Quick presets (Coffee Break, Meditation, Study Block, …)",
+              ],
+            },
+            {
+              title: "Behavior",
+              items: [
+                "Alarms play at 2s intervals; 'Until stopped' loops until silenced",
+                "Reset returns to original duration",
+                "No auto-start on load to respect sound policies",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "Stopwatch",
@@ -636,6 +1768,38 @@ export const toolsData: ToolData = {
           description:
             "Precision stopwatch with lap timing. Track elapsed time and record multiple laps.",
           keywords: ["stopwatch", "lap timer", "time tracker", "elapsed time"],
+        },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "Keyboard Shortcuts",
+            items: [
+              { label: "Enter", text: "Start stopwatch or record lap" },
+              { label: "Space", text: "Pause running stopwatch" },
+              { label: "Escape", text: "Stop and reset" },
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Millisecond precision timing (MM:SS.mmm)",
+                "Unlimited lap recording",
+                "Lap statistics: fastest, slowest, average",
+                "Visual highlighting of best/worst laps",
+                "Running/Stopped status indicator",
+              ],
+            },
+            {
+              title: "Use Cases",
+              items: [
+                "Track workout intervals and rest periods",
+                "Time coding challenges or tasks",
+                "Record split times for racing or training",
+                "Measure process duration for optimization",
+              ],
+            },
+          ],
         },
       },
       {
@@ -651,6 +1815,46 @@ export const toolsData: ToolData = {
             "event countdown",
             "days until",
             "time until",
+          ],
+        },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "Keyboard Shortcuts",
+            items: [
+              { label: "Enter", text: "Start countdown" },
+              { label: "Space", text: "Pause/Resume countdown" },
+              { label: "Escape", text: "Stop countdown" },
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Count down to any future date and time",
+                "Timezone-aware target selection",
+                "Visual breakdown: days, hours, minutes, seconds",
+                "Sound notification when countdown reaches zero",
+                "Auto-starts with New Year countdown by default",
+              ],
+            },
+            {
+              title: "Quick Presets",
+              items: [
+                "New Year and Christmas countdowns",
+                "Weekend countdown",
+                "Relative: 1 Hour, 24 Hours, 1 Week",
+              ],
+            },
+            {
+              title: "Use Cases",
+              items: [
+                "Track time until important events or deadlines",
+                "Build anticipation for holidays and celebrations",
+                "Set reminders for upcoming meetings",
+                "Count down to product launches or releases",
+              ],
+            },
           ],
         },
       },
@@ -670,6 +1874,47 @@ export const toolsData: ToolData = {
             "date calculator",
           ],
         },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "Quick Presets",
+            items: [
+              {
+                label: "Future",
+                text: "5 min, 1 hour, 1 day, 1 week, 1 month, 1 year from now",
+              },
+              {
+                label: "Historical",
+                text: "Year 1 AD, 1000, Unix epoch (1970), Y2K, 2010 → now",
+              },
+              {
+                label: "Far Future",
+                text: "100/500/1000 years from now; to year 3000 or 10000",
+              },
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Precise difference between start and end date/time",
+                "Readable summary (years, months, weeks, days, hours, minutes, seconds)",
+                "Totals in multiple units (years, months, weeks, days, hours, minutes, seconds)",
+                "Copy individual totals to clipboard",
+                "Set 'Now' for start or end instantly",
+                "Persistent inputs and quick presets",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Project planning and milestone tracking",
+                "Personal milestones (age, anniversaries, travel)",
+                "Business applications (contracts, SLAs, billing, warranties)",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "Metronome",
@@ -684,6 +1929,43 @@ export const toolsData: ToolData = {
             "online metronome",
             "BPM metronome",
             "music metronome",
+          ],
+        },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "Keyboard",
+            items: [
+              { label: "Enter", text: "Start" },
+              { label: "Space/Esc", text: "Stop" },
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Multi-tone metronome: configure multiple notes and intervals",
+                "Enable/disable tones individually",
+                "Interval slider (0.1–10s) with quick presets",
+                "Visual play feedback per tone",
+                "Shareable URL with current tone schedules",
+                "Test tones before starting",
+              ],
+            },
+            {
+              title: "Examples",
+              items: [
+                "Basic Beat (C5 + G4)",
+                "Complex Rhythm (A4, E4, A5)",
+                "C Major progression (C4, E4, G4, C5)",
+              ],
+            },
+            {
+              title: "Pro Tip",
+              items: [
+                "Use intervals like 0.5s, 1.5s, and 3s to create polyrhythms that repeat every 6s",
+              ],
+            },
           ],
         },
       },
@@ -708,6 +1990,26 @@ export const toolsData: ToolData = {
             "savings calculator",
           ],
         },
+        explanations: {
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Principal, rate, duration inputs",
+                "Compound frequency",
+                "Growth visualization",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Plan savings goals",
+                "Compare investment scenarios",
+                "Educate on compounding",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "Debt Repayment",
@@ -722,6 +2024,26 @@ export const toolsData: ToolData = {
             "loan calculator",
             "debt repayment",
             "payoff calculator",
+          ],
+        },
+        explanations: {
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Payment schedules",
+                "Interest totals",
+                "Adjust extra payments",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Plan debt payoff",
+                "Compare strategies",
+                "Understand interest impact",
+              ],
+            },
           ],
         },
       },
@@ -746,6 +2068,26 @@ export const toolsData: ToolData = {
             "palette creator",
           ],
         },
+        explanations: {
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Generate harmonious palettes",
+                "Copy hex codes",
+                "Preview combinations",
+              ],
+            },
+            {
+              title: "Use cases",
+              items: [
+                "Design UI themes",
+                "Pick brand colors",
+                "Explore color theory",
+              ],
+            },
+          ],
+        },
       },
     ],
   },
@@ -764,6 +2106,37 @@ export const toolsData: ToolData = {
             "Test your webcam and camera devices. Check video quality and device functionality in your browser.",
           keywords: ["webcam test", "camera test", "test camera", "video test"],
         },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "Privacy & Permissions",
+            items: [
+              "All processing is local; no data is transmitted",
+              "Browser permission is required to access the camera",
+              "Captured photos are saved directly to your device",
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Request camera permission",
+                "Select camera device when labels are available",
+                "Start/Stop camera preview",
+                "Capture photo and download as PNG",
+                "Show live resolution and active status",
+              ],
+            },
+            {
+              title: "Errors",
+              items: [
+                "Permission denied (NotAllowedError)",
+                "No camera found (NotFoundError)",
+                "Enumerate devices failures with helpful messages",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "Microphone Test",
@@ -780,6 +2153,47 @@ export const toolsData: ToolData = {
             "test microphone",
           ],
         },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "Privacy",
+            items: [
+              "Runs entirely in your browser; no audio is uploaded",
+              "Browser will ask for microphone permission",
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Select microphone device",
+                "Record audio as WebM/Opus",
+                "Live waveform visualization",
+                "Play back recording",
+                "Download recording",
+                "Status and device count indicators",
+              ],
+            },
+            {
+              title: "Errors",
+              items: [
+                "NotAllowedError: permission denied",
+                "NotFoundError: no microphone detected",
+                "NotReadableError: device in use",
+                "OverconstrainedError: selected device unavailable",
+                "SecurityError: access blocked",
+              ],
+            },
+            {
+              title: "How to Use",
+              items: [
+                "Request permission, select device",
+                "Start recording and speak",
+                "Stop recording, play back, or download",
+              ],
+            },
+          ],
+        },
       },
       {
         name: "Keyboard Test",
@@ -794,6 +2208,40 @@ export const toolsData: ToolData = {
             "key test",
             "keyboard tester",
             "test keys",
+          ],
+        },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "Usage Notes",
+            items: [
+              "Ensure the page has focus",
+              "Press keys to see real-time feedback",
+              "Some special keys may be restricted by browser security",
+            ],
+          },
+          sections: [
+            {
+              title: "Features",
+              items: [
+                "Real-time pressed-keys display",
+                "Key press history (last 50)",
+                "Categorization: letters, numbers, arrows, modifiers, specials, functions",
+                "Per-category statistics and percentages",
+                "Clear history and start/stop testing controls",
+              ],
+            },
+            {
+              title: "Key Categories",
+              items: [
+                "Letters (A–Z)",
+                "Numbers (0–9)",
+                "Arrow keys",
+                "Modifiers (Ctrl, Alt, Shift, Meta)",
+                "Specials (Space, Enter, Tab, Backspace, Delete, Escape)",
+                "Function keys (F1–F12)",
+              ],
+            },
           ],
         },
       },
@@ -818,6 +2266,48 @@ export const toolsData: ToolData = {
             "screen size detector",
           ],
         },
+        explanations: {
+          sections: [
+            {
+              title: "Browser Details",
+              items: [
+                "User agent string and platform",
+                "Language preferences and cookie status",
+                "Online/offline status",
+                "Vendor and app version info",
+              ],
+            },
+            {
+              title: "Screen & Hardware",
+              items: [
+                "Screen resolution and available size",
+                "Window dimensions and scroll position",
+                "Color depth and device pixel ratio",
+                "CPU cores and device memory",
+                "Touch points for mobile devices",
+              ],
+            },
+            {
+              title: "Capabilities Detected",
+              items: [
+                "Storage: localStorage, sessionStorage, IndexedDB",
+                "Graphics: WebGL, WebGL2, Canvas",
+                "Media: WebRTC, Web Audio, Speech APIs",
+                "Workers: Web Workers, Service Workers",
+                "Sensors: Geolocation, Device Motion/Orientation",
+              ],
+            },
+            {
+              title: "Use Cases",
+              items: [
+                "Debug responsive design issues",
+                "Check feature support before using APIs",
+                "Gather system info for bug reports",
+                "Verify browser capabilities for web apps",
+              ],
+            },
+          ],
+        },
       },
     ],
   },
@@ -826,6 +2316,11 @@ export const toolsData: ToolData = {
 // Utility function to get all tools in a flat array
 export function getAllTools(): Tool[] {
   return Object.values(toolsData).flatMap(category => category.tools);
+}
+
+// Utility function to get a tool by its path
+export function getToolByPath(path: string): Tool | undefined {
+  return getAllTools().find(tool => tool.path === path);
 }
 
 // Cached tool count - calculated once and reused

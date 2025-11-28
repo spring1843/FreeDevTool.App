@@ -66,7 +66,7 @@ test.describe("Barcode Generator Tool", () => {
     // Change barcode format
     const formatSelect = page.locator('[id="download"]');
     await formatSelect.click();
-    await page.locator("text=Code 39").click();
+    await page.getByText("CODE 39", { exact: true }).click();
 
     // Enter text compatible with Code 39
     await inputField.clear();

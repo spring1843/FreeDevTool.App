@@ -16,6 +16,8 @@ import { RefreshCw, Copy, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function UUIDGenerator() {
   const [uuids, setUuids] = useState<string[]>([]);
@@ -275,27 +277,9 @@ export default function UUIDGenerator() {
         </Card>
       )}
 
-      <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-          UUID Information:
-        </h3>
-        <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-          <div>
-            <strong>Version 1:</strong> Timestamp-based, includes MAC address
-            (or random node)
-          </div>
-          <div>
-            <strong>Version 4:</strong> Randomly generated, most commonly used
-          </div>
-          <div>
-            <strong>Format:</strong> 8-4-4-4-12 hexadecimal digits (32 total)
-          </div>
-          <div>
-            <strong>Use cases:</strong> Database keys, session IDs, file names,
-            API tokens
-          </div>
-        </div>
-      </div>
+      {renderToolExplanations(
+        getToolByPath("/tools/uuid-generator")?.explanations
+      )}
     </div>
   );
 }

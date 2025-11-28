@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -385,38 +387,9 @@ export default function TimeFormatter() {
         </Card>
       )}
 
-      {/* Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle>About Time Formatter</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-            <div>
-              <h4 className="font-semibold mb-2">Standard Formats:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• 24-hour and 12-hour formats</li>
-                <li>• ISO 8601 and RFC 3339 standards</li>
-                <li>• Unix timestamps (seconds/milliseconds)</li>
-                <li>• UTC and local time representations</li>
-                <li>• Timezone-aware formatting</li>
-                <li>• Microsecond precision support</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-2">Special Formats:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• French Revolutionary decimal time</li>
-                <li>• Swatch Internet Time (.beats)</li>
-                <li>• Julian Day Numbers (astronomical)</li>
-                <li>• Modified Julian Day (MJD)</li>
-                <li>• Excel serial date format</li>
-                <li>• Custom timezone offsets</li>
-              </ul>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      {renderToolExplanations(
+        getToolByPath("/tools/time-formatter")?.explanations
+      )}
     </div>
   );
 }

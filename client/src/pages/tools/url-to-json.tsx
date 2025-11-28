@@ -30,6 +30,8 @@ interface URLComponents {
 
 import { DEFAULT_URL_TO_JSON } from "@/data/defaults";
 import { Input } from "@/components/ui/input";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function URLToJSON() {
   const [inputUrl, setInputUrl] = useState(DEFAULT_URL_TO_JSON);
@@ -381,75 +383,9 @@ export default function URLToJSON() {
         </div>
       </div>
 
-      <div className="flex justify-center my-8" />
-
-      {/* Information */}
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>About URL to JSON Converter</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-            <div>
-              <h4 className="font-semibold mb-2">Extracted Components:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>
-                  • <strong>Protocol:</strong> HTTP, HTTPS, FTP, etc.
-                </li>
-                <li>
-                  • <strong>Hostname:</strong> Full domain name
-                </li>
-                <li>
-                  • <strong>TLD:</strong> Top-level domain (.com, .org, etc.)
-                </li>
-                <li>
-                  • <strong>Domain:</strong> Main domain name
-                </li>
-                <li>
-                  • <strong>Subdomain:</strong> www, api, etc.
-                </li>
-                <li>
-                  • <strong>Port:</strong> Custom port numbers
-                </li>
-                <li>
-                  • <strong>Path:</strong> URL path segments
-                </li>
-                <li>
-                  • <strong>Query Parameters:</strong> Individual URL parameters
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-2">Use Cases:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• API development and testing</li>
-                <li>• URL analysis and debugging</li>
-                <li>• Web scraping and automation</li>
-                <li>• SEO and analytics tools</li>
-                <li>• Documentation and training</li>
-                <li>• Link validation and parsing</li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
-            <h4 className="font-semibold mb-2">Example URLs to try:</h4>
-            <div className="space-y-2 text-sm">
-              <code className="block p-2 bg-slate-100 dark:bg-slate-800 rounded">
-                https://api.github.com/repos/owner/repo?per_page=100&sort=updated#readme
-              </code>
-              <code className="block p-2 bg-slate-100 dark:bg-slate-800 rounded">
-                https://shop.example.co.uk:8080/products/electronics?category=laptops&brand=apple&sort=price
-              </code>
-              <code className="block p-2 bg-slate-100 dark:bg-slate-800 rounded">
-                ftp://files.example.com/downloads/software/installer.exe
-              </code>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="flex justify-center mt-8" />
+      {renderToolExplanations(
+        getToolByPath("/tools/url-to-json")?.explanations
+      )}
     </div>
   );
 }

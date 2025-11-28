@@ -21,6 +21,8 @@ import {
   getValidatedParam,
 } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 interface TimezoneConversion {
   timezone: string;
@@ -482,40 +484,9 @@ export default function TimezoneConverter() {
         </Card>
       )}
 
-      {/* Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle>About Timezone Converter</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-            <div>
-              <h4 className="font-semibold mb-2">Features:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• Second-level time precision</li>
-                <li>• 100+ supported timezones worldwide</li>
-                <li>• Automatic daylight saving time handling</li>
-                <li>• Multiple target timezone conversion</li>
-                <li>• Real-time offset calculation</li>
-                <li>• Copy converted times to clipboard</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-2">Usage Tips:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• Use 24-hour format for precise conversion</li>
-                <li>• Add/remove target timezones as needed</li>
-                <li>• Click "Now" to use current date/time</li>
-                <li>• Copy button includes both date and time</li>
-                <li>• UTC offsets adjust for DST automatically</li>
-                <li>• Perfect for scheduling global meetings</li>
-              </ul>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="flex justify-center mt-8" />
+      {renderToolExplanations(
+        getToolByPath("/tools/timezone-converter")?.explanations
+      )}
     </div>
   );
 }

@@ -17,6 +17,8 @@ import JsBarcode from "jsbarcode";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_BARCODE_GENERATOR } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function BarcodeGenerator() {
   const [text, setText] = useState(DEFAULT_BARCODE_GENERATOR);
@@ -339,39 +341,9 @@ export default function BarcodeGenerator() {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-          <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-            Common Use Cases:
-          </h3>
-          <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-            <li>
-              • <strong>EAN-13/UPC:</strong> Retail products
-            </li>
-            <li>
-              • <strong>CODE 128:</strong> Shipping and logistics
-            </li>
-            <li>
-              • <strong>CODE 39:</strong> Industrial applications
-            </li>
-            <li>
-              • <strong>ITF-14:</strong> Packaging and cases
-            </li>
-          </ul>
-        </div>
-
-        <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-          <h3 className="font-semibold text-green-800 dark:text-green-200 mb-2">
-            Tips:
-          </h3>
-          <ul className="text-sm text-green-700 dark:text-green-300 space-y-1">
-            <li>• Use CODE 128 for maximum compatibility</li>
-            <li>• EAN/UPC codes need specific lengths</li>
-            <li>• Test with your barcode scanner</li>
-            <li>• Consider printing size and resolution</li>
-          </ul>
-        </div>
-      </div>
+      {renderToolExplanations(
+        getToolByPath("/tools/barcode-generator")?.explanations
+      )}
     </div>
   );
 }

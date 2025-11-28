@@ -9,6 +9,8 @@ import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_GRAPHQL } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { renderToolExplanations } from "@/components/tool-explanations";
 
 export default function GraphQLFormatter() {
   const [input, setInput] = useState(DEFAULT_GRAPHQL);
@@ -128,44 +130,9 @@ export default function GraphQLFormatter() {
         </Card>
       </div>
 
-      <div className="mt-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center text-slate-700 dark:text-slate-300">
-              <Code className="w-5 h-5 mr-2" />
-              GraphQL Formatting Features
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  Supported GraphQL Elements:
-                </h4>
-                <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
-                  <li>• Type definitions and interfaces</li>
-                  <li>• Queries, mutations, and subscriptions</li>
-                  <li>• Input types and enums</li>
-                  <li>• Schema definitions</li>
-                  <li>• Directive declarations</li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  Formatting Benefits:
-                </h4>
-                <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
-                  <li>• Consistent field alignment</li>
-                  <li>• Proper indentation for nested types</li>
-                  <li>• Clean argument formatting</li>
-                  <li>• Readable schema structure</li>
-                  <li>• Industry-standard formatting</li>
-                </ul>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      {renderToolExplanations(
+        getToolByPath("/tools/graphql-formatter")?.explanations
+      )}
     </div>
   );
 }
