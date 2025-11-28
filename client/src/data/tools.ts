@@ -2360,21 +2360,62 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
+          notice: {
+            type: "info",
+            title: "The Math That Banks Don't Highlight",
+            items: [
+              { label: "Credit card trap:", text: "$5,000 at 22% APR with minimum payments = 22 years to pay off + $7,723 interest" },
+              { label: "The $50 difference:", text: "Adding just $50/month to that card cuts payoff to 5 years, saves $5,500+" },
+            ],
+          },
           sections: [
             {
-              title: "Features",
+              title: "Debt Payoff Strategies",
               items: [
-                "Payment schedules",
-                "Interest totals",
-                "Adjust extra payments",
+                { label: "Avalanche Method:", text: "Pay highest interest first—mathematically optimal, saves most money" },
+                { label: "Snowball Method:", text: "Pay smallest balance first—quick wins build momentum (Dave Ramsey's favorite)" },
+                { label: "Hybrid Approach:", text: "Start with one small win, then switch to avalanche for savings" },
+                { label: "Balance Transfer:", text: "Move high-interest debt to 0% APR card (watch the 3-5% transfer fee)" },
               ],
             },
             {
-              title: "Use cases",
+              title: "Typical Interest Rates (US 2024)",
               items: [
-                "Plan debt payoff",
-                "Compare strategies",
-                "Understand interest impact",
+                "Credit cards: 20-29% APR (some store cards hit 30%+)",
+                "Personal loans: 8-15% APR (depends on credit score)",
+                "Auto loans: 5-12% APR (new cars get better rates)",
+                "Student loans: 5-8% federal, 4-14% private",
+                "Mortgages: 6-8% (historically low was 2.65% in Jan 2021)",
+              ],
+            },
+            {
+              title: "Psychology of Debt Freedom",
+              items: [
+                "Automate payments: Remove willpower from the equation entirely",
+                "Celebrate milestones: Paid off a card? Treat yourself (reasonably!)",
+                "Visualize progress: Track your debt-free date—watching it shrink motivates",
+                "Tell someone: Accountability partners increase success rate by 65%",
+                "Avoid new debt: Cut up cards or freeze them in ice (literally)",
+              ],
+            },
+            {
+              title: "Extra Payment Hacks",
+              items: [
+                "Round up: $267 payment? Make it $300—barely noticeable, big impact",
+                "Biweekly payments: Pay half every 2 weeks = 13 full payments/year instead of 12",
+                "Tax refund attack: Average US refund ($3,167) can eliminate a whole debt",
+                "Side hustle rule: 100% of extra income to debt until free (then 50% to savings)",
+                "Expense audit: Cancel 3 subscriptions = $30-50/month extra toward debt",
+              ],
+            },
+            {
+              title: "Warning Signs You Need Help",
+              items: [
+                "Only making minimum payments across all debts",
+                "Using credit cards to pay other credit cards",
+                "Debt-to-income ratio above 43% (mortgage lenders' red line)",
+                "Missing payments or getting collection calls",
+                "Consider: Nonprofit credit counseling (free!), not debt settlement scams",
               ],
             },
           ],
