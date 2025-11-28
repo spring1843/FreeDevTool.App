@@ -27,6 +27,7 @@ interface URLComponents {
   subdomain?: string;
   domain?: string;
   queryParams?: Record<string, string>;
+  isTldKnown?: boolean;
 }
 
 import { DEFAULT_URL_TO_JSON } from "@/data/defaults";
@@ -82,7 +83,7 @@ export default function URLToJSON() {
       }
 
       const url = new URL(urlToParse);
-      const { tld, domain, subdomain } = extractTLD(url.hostname);
+      const { tld, domain, subdomain, isTldKnown } = extractTLD(url.hostname);
 
       // Parse query parameters
       const queryParams: Record<string, string> = {};
@@ -103,6 +104,7 @@ export default function URLToJSON() {
         subdomain: subdomain || undefined,
         queryParams:
           Object.keys(queryParams).length > 0 ? queryParams : undefined,
+        isTldKnown: tld ? isTldKnown : undefined,
       };
 
       // Remove undefined values for cleaner JSON
@@ -309,19 +311,28 @@ export default function URLToJSON() {
                     ) : null}
 
                     {urlComponents.tld ? (
-                      <div className="flex justify-between items-center p-2 bg-purple-50 dark:bg-purple-900/20 rounded border border-purple-200 dark:border-purple-800">
-                        <span className="text-sm font-medium text-purple-700 dark:text-purple-400">
-                          TLD:
-                        </span>
-                        <span className="text-sm font-mono text-purple-900 dark:text-purple-100">
-                          {urlComponents.tld}
-                        </span>
+                      <div className="p-2 bg-purple-50 dark:bg-purple-900/20 rounded border border-purple-200 dark:border-purple-800">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm font-medium text-purple-700 dark:text-purple-400">
+                            TLD:
+                          </span>
+                          <span className="text-sm font-mono text-purple-900 dark:text-purple-100">
+                            {urlComponents.tld}
+                          </span>
+                        </div>
+                        {urlComponents.isTldKnown === false ? (
+                          <div className="mt-2 p-2 bg-amber-50 dark:bg-amber-900/30 rounded border border-amber-300 dark:border-amber-700">
+                            <p className="text-xs text-amber-700 dark:text-amber-300">
+                              ⚠️ This TLD is not recognized in our database of known TLDs. It may be invalid or a newly registered TLD.
+                            </p>
+                          </div>
+                        ) : null}
                       </div>
                     ) : null}
 
                     {urlComponents.queryParams &&
                     Object.keys(urlComponents.queryParams).length > 0 ? (
-                      <div className="p-2 bg-orange-50 dark:bg-orange-900/20 rounded border border-orange-200 dark:border-orange-800">
+                      <div className="p-2 bg-orange-50 dark:bg-orange-900/20 rounded border border-orange-200 dark:border-orange-800 overflow-hidden">
                         <span className="text-sm font-medium text-orange-700 dark:text-orange-400 block mb-2">
                           Query Parameters (
                           {Object.keys(urlComponents.queryParams).length}):
@@ -331,12 +342,12 @@ export default function URLToJSON() {
                             ([key, value]) => (
                               <div
                                 key={key}
-                                className="flex justify-between items-center"
+                                className="flex flex-wrap gap-1"
                               >
-                                <span className="text-sm font-mono text-orange-800 dark:text-orange-200">
+                                <span className="text-sm font-mono text-orange-800 dark:text-orange-200 break-all">
                                   {key}:
                                 </span>
-                                <span className="text-sm font-mono text-orange-900 dark:text-orange-100">
+                                <span className="text-sm font-mono text-orange-900 dark:text-orange-100 break-all">
                                   {value}
                                 </span>
                               </div>
