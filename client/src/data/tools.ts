@@ -1836,33 +1836,38 @@ export const toolsData: ToolData = {
           keywords: ["stopwatch", "lap timer", "time tracker", "elapsed time"],
         },
         explanations: {
-          notice: {
-            type: "info",
-            title: "Keyboard Shortcuts",
-            items: [
-              { label: "Enter", text: "Start stopwatch or record lap" },
-              { label: "Space", text: "Pause running stopwatch" },
-              { label: "Escape", text: "Stop and reset" },
-            ],
-          },
+          shortcuts: [
+            { key: "Enter", action: "Start or record lap" },
+            { key: "Space", action: "Pause stopwatch" },
+            { key: "Escape", action: "Reset to zero" },
+          ],
           sections: [
             {
-              title: "Features",
+              title: "Productivity Techniques",
               items: [
-                "Millisecond precision timing (MM:SS.mmm)",
-                "Unlimited lap recording",
-                "Lap statistics: fastest, slowest, average",
-                "Visual highlighting of best/worst laps",
-                "Running/Stopped status indicator",
+                "Pomodoro: Work 25 min, break 5 min—use laps to track each cycle",
+                "Time boxing: Set a goal, start timer, see how long tasks actually take",
+                "Meeting audit: Track how much time you spend in meetings weekly",
+                "Deep work tracking: Measure uninterrupted focus time (aim for 90+ min blocks)",
               ],
             },
             {
-              title: "Use Cases",
+              title: "Lap Timer Use Cases",
               items: [
-                "Track workout intervals and rest periods",
-                "Time coding challenges or tasks",
-                "Record split times for racing or training",
-                "Measure process duration for optimization",
+                "Running/cycling: Track each lap or mile split to monitor pace",
+                "HIIT workouts: Record work intervals and rest periods",
+                "Speedcubing: Time each Rubik's cube solve (world record: 3.13 seconds!)",
+                "Cooking: Time multiple dishes—lap when each one goes in the oven",
+                "Presentations: Practice with laps per slide to nail your timing",
+              ],
+            },
+            {
+              title: "Fun Timing Challenges",
+              items: [
+                "How fast can you type the alphabet? (Record: ~2 seconds)",
+                "Hold your breath timer (average person: 30-60 seconds)",
+                "Speed reading: Time yourself reading 1000 words (average: 4-5 minutes)",
+                "Reaction time: Start, look away, stop when you think 10 seconds passed",
               ],
             },
           ],
