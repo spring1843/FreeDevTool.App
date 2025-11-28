@@ -10,6 +10,7 @@ import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 import { DEFAULT_JSONC } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
 
 export default function JSONCFormatter() {
   const [input, setInput] = useState(DEFAULT_JSONC);
@@ -144,28 +145,8 @@ export default function JSONCFormatter() {
         <CardHeader>
           <CardTitle>About JSONC Format</CardTitle>
         </CardHeader>
-        <CardContent className="text-sm text-slate-600 dark:text-slate-400 space-y-2">
-          <p>
-            <strong>JSONC (JSON with Comments)</strong> is an extension of JSON
-            that allows comments:
-          </p>
-          <ul className="list-disc ml-6 space-y-1">
-            <li>
-              <strong>Single-line comments:</strong> {`// This is a comment`}
-            </li>
-            <li>
-              <strong>Multi-line comments:</strong>{" "}
-              {`/* This is a multi-line comment */`}
-            </li>
-            <li>
-              <strong>Use cases:</strong> Configuration files, VS Code settings,
-              TypeScript configs
-            </li>
-            <li>
-              <strong>Popular tools:</strong> VS Code, TypeScript, Azure DevOps,
-              and more
-            </li>
-          </ul>
+        <CardContent>
+          {getToolByPath("/tools/jsonc-formatter")?.getExplanations?.()}
         </CardContent>
       </Card>
     </div>
