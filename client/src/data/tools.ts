@@ -738,40 +738,44 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
+          notice: {
+            type: "tips",
+            title: "Why Prettier Exists",
+            items: [
+              "Created by James Long in 2017 to end style debates—it's opinionated by design",
+              "Parses your code into an AST, then reprints it from scratch—not just regex find/replace",
+              "Used by React, Vue, Angular, Babel, Webpack, and most major JS projects",
+              "Handles edge cases you'd never think of: long strings, nested ternaries, method chains",
+            ],
+          },
           sections: [
             {
-              title: "Features",
+              title: "Style Debates Prettier Ends",
               items: [
-                "Prettier formatting for TS/JS",
-                "Consistent code style across files",
-                "Improves diff readability",
-                "Beautify and minify actions",
+                "Tabs vs spaces: Prettier picks for you (spaces by default, configurable)",
+                "Semicolons: Yes or no—both camps can configure their preference",
+                "Trailing commas: Always, never, or ES5-compatible—your choice",
+                "Single vs double quotes: Set once, never argue again",
+                "Line length: 80 chars default, but 100 or 120 also common",
               ],
             },
             {
-              title: "TypeScript Formatting Details",
+              title: "What Minify Actually Does",
               items: [
-                "Type annotation formatting",
-                "Interface and type definition styling",
-                "Generic type parameter alignment",
-                "Enum and namespace formatting",
-                "Decorator and metadata styling",
+                "Removes all whitespace, newlines, and comments",
+                "Shortens code without changing behavior",
+                "Reduces file size by 30-60% typically",
+                "Essential for production bundles (though bundlers usually handle this)",
+                "Warning: Minified code is nearly impossible to debug",
               ],
             },
             {
-              title: "Benefits",
+              title: "Pro Tips",
               items: [
-                "Preserves type information",
-                "Maintains type safety",
-                "Professional formatting standards",
-              ],
-            },
-            {
-              title: "Use cases",
-              items: [
-                "Prepare code for review",
-                "Normalize style before commit",
-                "Reduce noise in pull requests",
+                "Paste minified code → Beautify to make it readable (great for debugging production issues)",
+                "Format before committing to keep git diffs clean",
+                "TypeScript-specific: Prettier preserves type annotations perfectly",
+                "JSX/TSX: Handles React component formatting including props alignment",
               ],
             },
           ],
