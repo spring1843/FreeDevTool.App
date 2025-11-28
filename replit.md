@@ -6,6 +6,8 @@ is a web-based collection of 49+ open-source, free, and completely offline devel
 
 ## Recent Changes
 
+- **November 28, 2025**: Implemented consistent button layout across all 47 tools with tooltips and toast notifications. Action buttons (Format, Convert, Generate, etc.) are now grouped on the left, while data manipulation buttons (Reset, Clear, Now) are grouped on the right with distinct colors: Reset (amber), Clear (rose), Now (sky). All buttons have tooltips. ResetButton/ClearButton/NowButton components now show toast notifications when clicked. Added ToolButtonGroup, ActionButtonGroup, and DataButtonGroup wrapper components for consistent layout.
+
 - **November 27, 2025**: Fixed mobile performance/focus lock issue on CodeMirror TextArea. Root cause: Full CodeMirror stack with expensive extensions (foldGutter, autocompletion, highlightActiveLine, etc.) plus onUpdate cursor tracking saturated iOS main thread during touch events, blocking navbar taps. Fix: Mobile-optimized CodeMirror configuration that (1) disables expensive extensions (foldGutter, highlightActiveLine, closeBrackets, autocompletion, etc.), (2) adds custom theme extension with touch-action: manipulation CSS, (3) adds DOM event handler to release pointer capture on touchend/pointerup, and (4) disables onUpdate cursor tracking on mobile. Syntax highlighting preserved while maintaining responsive UI.
 
 ## User Preferences
