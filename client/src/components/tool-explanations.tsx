@@ -69,7 +69,9 @@ function renderShortcuts(shortcuts: ToolExplanation["shortcuts"]): ReactNode {
             <kbd className="px-2 py-1 bg-purple-100 dark:bg-purple-800/50 border border-purple-300 dark:border-purple-700 rounded text-xs font-mono text-purple-800 dark:text-purple-200">
               {shortcut.key}
             </kbd>
-            <span className="text-purple-700 dark:text-purple-300">{shortcut.action}</span>
+            <span className="text-purple-700 dark:text-purple-300">
+              {shortcut.action}
+            </span>
           </div>
         ))}
       </div>
@@ -141,7 +143,9 @@ function renderSections(sections: ToolExplanation["sections"]): ReactNode {
                 {section.title}
               </h4>
             ) : null}
-            <ul className={`space-y-1 ${colors.text} text-sm list-disc list-inside`}>
+            <ul
+              className={`space-y-1 ${colors.text} text-sm list-disc list-inside`}
+            >
               {section.items.map((item, j) => (
                 <li key={j}>
                   {typeof item === "string" ? (
