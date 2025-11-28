@@ -16,6 +16,9 @@ import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
+// Pre-compute the default encoded value for comparison
+const DEFAULT_BASE64_ENCODED = encodeBase64(DEFAULT_BASE64);
+
 export default function Base64Encoder() {
   const tool = getToolByPath("/tools/base64");
   const [plainText, setPlainText] = useState(DEFAULT_BASE64);
@@ -78,8 +81,10 @@ export default function Base64Encoder() {
 
   const hasModifiedData =
     (plainText !== DEFAULT_BASE64 && plainText.trim() !== "") ||
-    encodedText.trim() !== "";
-  const isAtDefault = plainText === DEFAULT_BASE64 && encodedText === "";
+    (encodedText !== DEFAULT_BASE64_ENCODED && encodedText.trim() !== "");
+  const isAtDefault =
+    plainText === DEFAULT_BASE64 &&
+    (encodedText === "" || encodedText === DEFAULT_BASE64_ENCODED);
 
   // Execute encoding with default value on component mount
   useEffect(() => {
@@ -167,8 +172,8 @@ export default function Base64Encoder() {
               rows={20}
               autoFocus={true}
               minHeight="400px"
-              lang="html"
-              fileExtension="html"
+              lang="plaintext"
+              fileExtension="txt"
               theme={theme}
               data-default-input="true"
             />
