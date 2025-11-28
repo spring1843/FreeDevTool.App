@@ -18,7 +18,14 @@ import { go } from "@codemirror/lang-go";
 import { java } from "@codemirror/lang-java";
 import { cpp } from "@codemirror/lang-cpp";
 import { json } from "@codemirror/lang-json";
-import { Copy, Download, Upload } from "lucide-react";
+import {
+  Copy,
+  Download,
+  Upload,
+  WrapText,
+  Expand,
+  Minimize2,
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 // Define props for the CodeMirror component
@@ -36,6 +43,7 @@ export interface TextAreaProps {
   onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
   theme?: "light" | "dark";
   lineWrapping?: boolean;
+  fixedHeight?: boolean; // when true, cap visible height by max lines; when false, allow full height
 }
 
 const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
@@ -45,6 +53,7 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
     onChange,
     theme = "light",
     lineWrapping = false,
+    fixedHeight = true,
     ...props
   }) => {
     const isMobile = useIsMobile();
@@ -163,6 +172,18 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         // Consumers expect e.target.value; other fields are not used.
         target: { value: val } as unknown as EventTarget & HTMLTextAreaElement,
       }) as unknown as React.ChangeEvent<HTMLTextAreaElement>;
+    // Local UI toggles for wrap and height, synced to props
+    const [isWrapping, setIsWrapping] = React.useState<boolean>(lineWrapping);
+    React.useEffect(() => {
+      setIsWrapping(lineWrapping);
+    }, [lineWrapping]);
+
+    const [isFixedHeight, setIsFixedHeight] =
+      React.useState<boolean>(fixedHeight);
+    React.useEffect(() => {
+      setIsFixedHeight(fixedHeight);
+    }, [fixedHeight]);
+
     const langExt = getLanguageExtension(currentLang);
 
     // Dynamically cap the editor's visible height by number of lines.
@@ -187,9 +208,9 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
       return () => window.clearTimeout(id);
     }, [value, theme]);
 
-  const DESKTOP_MAX_LINES = 300;
-  const MOBILE_MAX_LINES = 100;
-  const maxVisibleLines = isMobile ? MOBILE_MAX_LINES : DESKTOP_MAX_LINES;
+    const DESKTOP_MAX_LINES = 300;
+    const MOBILE_MAX_LINES = 100;
+    const maxVisibleLines = isMobile ? MOBILE_MAX_LINES : DESKTOP_MAX_LINES;
     const maxHeightPx = Math.max(1, Math.round(lineHeightPx * maxVisibleLines));
 
     const heightLimitExtension = EditorView.theme({
@@ -198,8 +219,8 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
 
     const extensions = [
       ...(Array.isArray(langExt) ? langExt : [langExt]),
-      ...(lineWrapping ? [EditorView.lineWrapping] : []),
-      heightLimitExtension,
+      ...(isWrapping ? [EditorView.lineWrapping] : []),
+      ...(isFixedHeight ? [heightLimitExtension] : []),
     ];
     const { toast } = useToast();
 
@@ -404,6 +425,78 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
             )}
             data-testid="textarea-toolbar"
           >
+            {/* Toggle word wrapping */}
+            <div className="relative group">
+              <Button
+                onClick={() => {
+                  setIsWrapping(v => !v);
+                  toast({
+                    title: isWrapping
+                      ? "Word wrapping disabled"
+                      : "Word wrapping enabled",
+                    description: isWrapping
+                      ? "Text will not wrap; long lines may require horizontal scroll."
+                      : "Text will wrap, so you can read long lines without horizontal scrolling.",
+                    duration: 2000,
+                  });
+                }}
+                size="sm"
+                variant="ghost"
+                aria-label="Toggle word wrapping"
+                title={
+                  isWrapping ? "Disable word wrapping" : "Enable word wrapping"
+                }
+                data-testid="toggle-wrap-button"
+                className="p-0 h-5 w-5"
+              >
+                <WrapText className="w-3.5 h-3.5" />
+              </Button>
+              <span
+                className={cn(
+                  "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
+                  "border"
+                )}
+              >
+                {isWrapping ? "Unwrap" : "Wrap"}
+              </span>
+            </div>
+            {/* Toggle fixed/full height */}
+            <div className="relative group">
+              <Button
+                onClick={() => {
+                  setIsFixedHeight(v => !v);
+                  toast({
+                    title: isFixedHeight
+                      ? "Full height enabled"
+                      : "Fixed height enabled",
+                    description: isFixedHeight
+                      ? "Editor will use full height; horizontal scrollbar goes away when combined with wrapping."
+                      : "Editor height is capped to keep the layout compact; overflow will scroll vertically.",
+                    duration: 2000,
+                  });
+                }}
+                size="sm"
+                variant="ghost"
+                aria-label="Toggle fixed height"
+                title={isFixedHeight ? "Use full height" : "Use fixed height"}
+                data-testid="toggle-height-button"
+                className="p-0 h-5 w-5"
+              >
+                {isFixedHeight ? (
+                  <Expand className="w-3.5 h-3.5" />
+                ) : (
+                  <Minimize2 className="w-3.5 h-3.5" />
+                )}
+              </Button>
+              <span
+                className={cn(
+                  "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
+                  "border"
+                )}
+              >
+                {isFixedHeight ? "Full height" : "Fixed height"}
+              </span>
+            </div>
             <div className="relative group">
               <Button
                 onClick={handleCopy}
