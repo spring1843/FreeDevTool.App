@@ -10,15 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CopyButton } from "@/components/ui/copy-button";
-import {
-  FileSpreadsheet,
-  Code2,
-  Upload,
-  Share,
-  Download,
-  RefreshCw,
-} from "lucide-react";
+import { FileSpreadsheet, Code2, Share, RefreshCw } from "lucide-react";
 import { ResetButton, ClearButton } from "@/components/ui/tool-button";
 import {
   updateURL,
@@ -256,32 +248,6 @@ Jane Smith      jane@example.com        25      Marketing`,
   const isAtDefault =
     csvInput === DEFAULT_CSV_TO_JSON && selectedDelimiter === ",";
 
-  const downloadJSON = () => {
-    if (!jsonOutput) return;
-
-    const blob = new Blob([jsonOutput], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "data.json";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
-
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = e => {
-      const content = e.target?.result as string;
-      setCsvInput(content);
-    };
-    reader.readAsText(file);
-  };
-
   return (
     <div className="container mx-auto p-6 max-w-7xl">
       <div className="mb-6">
@@ -305,53 +271,57 @@ Jane Smith      jane@example.com        25      Marketing`,
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex flex-wrap gap-2 items-center">
-              <Label htmlFor="delimiter-select">Delimiter:</Label>
-              <Select
-                value={selectedDelimiter}
-                onValueChange={setSelectedDelimiter}
-                data-testid="delimiter-select"
-              >
-                <SelectTrigger className="w-48">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {delimiters.map(delimiter => (
-                    <SelectItem key={delimiter.value} value={delimiter.value}>
-                      {delimiter.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <div className="flex flex-wrap gap-2 items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Label htmlFor="delimiter-select">Delimiter:</Label>
+                <Select
+                  value={selectedDelimiter}
+                  onValueChange={setSelectedDelimiter}
+                  data-testid="delimiter-select"
+                >
+                  <SelectTrigger className="w-40">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {delimiters.map(delimiter => (
+                      <SelectItem key={delimiter.value} value={delimiter.value}>
+                        {delimiter.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
 
-              <div className="flex gap-2 ml-auto">
+              <div className="flex gap-2">
+                <Button
+                  onClick={convertCSV}
+                  size="sm"
+                  data-testid="convert-button"
+                >
+                  <RefreshCw className="w-4 h-4 mr-1" />
+                  Convert
+                </Button>
+                <Button
+                  onClick={shareConverter}
+                  variant="outline"
+                  size="sm"
+                  data-testid="share-converter-button"
+                >
+                  <Share className="w-4 h-4" />
+                </Button>
                 <ResetButton
                   onClick={handleReset}
                   tooltip="Reset to default example"
                   hasModifiedData={hasModifiedData}
                   disabled={isAtDefault}
+                  iconOnly
                 />
                 <ClearButton
                   onClick={clearAll}
                   tooltip="Clear all inputs"
                   hasModifiedData={hasModifiedData}
                   disabled={csvInput.trim() === ""}
-                />
-                <Button
-                  onClick={() => document.getElementById("file-input")?.click()}
-                  variant="outline"
-                  size="sm"
-                  data-testid="upload-file-button"
-                >
-                  <Upload className="w-4 h-4 mr-1" />
-                  Upload
-                </Button>
-                <input
-                  id="file-input"
-                  type="file"
-                  accept=".csv"
-                  onChange={handleFileUpload}
-                  className="hidden"
+                  iconOnly
                 />
               </div>
             </div>
@@ -380,26 +350,6 @@ Jane Smith,jane@example.com,25"
                 </p>
               </div>
             ) : null}
-
-            <div className="flex gap-2">
-              <Button
-                onClick={convertCSV}
-                className="flex-1"
-                data-testid="convert-button"
-              >
-                <RefreshCw className="w-4 h-4 mr-2" />
-                Convert
-              </Button>
-
-              <Button
-                onClick={shareConverter}
-                variant="outline"
-                data-testid="share-converter-button"
-              >
-                <Share className="w-4 h-4 mr-2" />
-                Share
-              </Button>
-            </div>
 
             <div className="grid grid-cols-2 gap-2">
               <Button
@@ -451,23 +401,6 @@ Jane Smith,jane@example.com,25"
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex gap-2">
-              <CopyButton
-                text={jsonOutput}
-                className="flex-1"
-                data-testid="copy-json-button"
-              />
-              <Button
-                onClick={downloadJSON}
-                variant="outline"
-                disabled={!jsonOutput}
-                data-testid="download-json-button"
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Download
-              </Button>
-            </div>
-
             <TextArea
               id="output"
               value={jsonOutput}
