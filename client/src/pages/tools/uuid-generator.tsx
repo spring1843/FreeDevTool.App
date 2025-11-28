@@ -17,9 +17,11 @@ import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { getToolByPath } from "@/data/tools";
-import { renderToolExplanations } from "@/components/tool-explanations";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function UUIDGenerator() {
+  const tool = getToolByPath("/tools/uuid-generator");
   const [uuids, setUuids] = useState<string[]>([]);
   const [version, setVersion] = useState<1 | 4>(4);
   const [count, setCount] = useState(1);
@@ -120,8 +122,11 @@ export default function UUIDGenerator() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               UUID Generator
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Generate UUIDs (v1, v4) for unique identifiers
@@ -277,9 +282,7 @@ export default function UUIDGenerator() {
         </Card>
       )}
 
-      {renderToolExplanations(
-        getToolByPath("/tools/uuid-generator")?.explanations
-      )}
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

@@ -42,9 +42,11 @@ const delimiters = [
 
 import { DEFAULT_CSV_TO_JSON } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
-import { renderToolExplanations } from "@/components/tool-explanations";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function CSVToJSON() {
+  const tool = getToolByPath("/tools/csv-to-json");
   const [csvInput, setCsvInput] = useState(DEFAULT_CSV_TO_JSON);
   const [selectedDelimiter, setSelectedDelimiter] = useState(",");
   const [jsonOutput, setJsonOutput] = useState("");
@@ -270,6 +272,7 @@ Jane Smith      jane@example.com        25      Marketing`,
         <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
           <FileSpreadsheet className="h-8 w-8 text-blue-600" />
           CSV to JSON Converter
+          {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
           Convert CSV data to JSON format with customizable delimiters and
@@ -471,9 +474,7 @@ Jane Smith,jane@example.com,25"
           </CardContent>
         </Card>
       </div>
-      {renderToolExplanations(
-        getToolByPath("/tools/csv-to-json")?.explanations
-      )}
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

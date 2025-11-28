@@ -18,11 +18,13 @@ import { useLocation } from "wouter";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_CSS, DEFAULT_SCSS, DEFAULT_LESS } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
-import { renderToolExplanations } from "@/components/tool-explanations";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 type FormatType = "css" | "scss" | "less";
 
 export default function CSSFormatter() {
+  const tool = getToolByPath("/tools/css-formatter");
   const [location] = useLocation();
   const { theme } = useTheme();
 
@@ -128,8 +130,11 @@ export default function CSSFormatter() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               CSS/LESS/SCSS Formatter
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Format, beautify, or minify CSS, LESS, and SCSS stylesheets using
@@ -233,9 +238,7 @@ export default function CSSFormatter() {
         </Card>
       </div>
 
-      {renderToolExplanations(
-        getToolByPath("/tools/css-formatter")?.explanations
-      )}
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

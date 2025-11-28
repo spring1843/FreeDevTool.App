@@ -51,9 +51,11 @@ const simpleMD5 = (input: string): string => {
 
 import { DEFAULT_MD5 } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
-import { renderToolExplanations } from "@/components/tool-explanations";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function MD5Hash() {
+  const tool = getToolByPath("/tools/md5-hash");
   const [inputText, setInputText] = useState(DEFAULT_MD5);
   const [compareHash, setCompareHash] = useState("");
   const [hashResult, setHashResult] = useState("");
@@ -128,8 +130,11 @@ export default function MD5Hash() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               MD5 Hash Generator
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Generate MD5-like hashes and compare for verification
@@ -297,7 +302,7 @@ export default function MD5Hash() {
         </CardContent>
       </Card>
 
-      {renderToolExplanations(getToolByPath("/tools/md5-hash")?.explanations)}
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

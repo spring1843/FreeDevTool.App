@@ -9,9 +9,11 @@ import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_YAML } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
-import { renderToolExplanations } from "@/components/tool-explanations";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function YAMLFormatter() {
+  const tool = getToolByPath("/tools/yaml-formatter");
   const [input, setInput] = useState(DEFAULT_YAML);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -51,8 +53,11 @@ export default function YAMLFormatter() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               YAML Formatter
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Format and beautify YAML configuration files
@@ -130,9 +135,7 @@ export default function YAMLFormatter() {
         </Card>
       </div>
 
-      {renderToolExplanations(
-        getToolByPath("/tools/yaml-formatter")?.explanations
-      )}
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

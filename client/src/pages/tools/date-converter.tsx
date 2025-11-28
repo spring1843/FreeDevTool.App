@@ -9,7 +9,8 @@ import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useToast } from "@/hooks/use-toast";
 import { getToolByPath } from "@/data/tools";
-import { renderToolExplanations } from "@/components/tool-explanations";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 interface DateFormat {
   name: string;
@@ -156,6 +157,7 @@ const DATE_FORMATS = [
 ];
 
 export default function DateConverter() {
+  const tool = getToolByPath("/tools/date-converter");
   const [inputDate, setInputDate] = useState("1699123456");
   const [formats, setFormats] = useState<DateFormat[]>([]);
   const { toast } = useToast();
@@ -297,8 +299,11 @@ export default function DateConverter() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Date Converter
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Convert between 20 essential date formats: Unix timestamps, ISO
@@ -439,9 +444,7 @@ export default function DateConverter() {
         </Card>
       )}
 
-      {renderToolExplanations(
-        getToolByPath("/tools/date-converter")?.explanations
-      )}
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }
