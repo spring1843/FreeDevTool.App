@@ -11,7 +11,7 @@ export interface Tool {
     keywords: string[];
   };
   experimental?: boolean;
-  explanations?: ToolExplanation;
+  explanations: ToolExplanation;
 }
 
 export interface ToolCategory {
