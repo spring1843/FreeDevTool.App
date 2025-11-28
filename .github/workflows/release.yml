@@ -93,26 +93,26 @@ jobs:
 
                     # Use a heredoc to write the changelog content
                     cat <<EOF >> ${CHANGELOG_FILE}
-          
+
           Released on $(date '+%Y-%m-%d')
-          
+
           ## 🐳 Run Compiled Image Locally
-          
+
           Using Docker
           \`\`\`bash
           docker run -p 9090:9090 ghcr.io/spring1843/freedevtool.app/app:${CURRENT_TAG}
           \`\`\`
-          
+
           ## 📦 Run Dev Environment Locally
           
           1. Download source code file \`${CURRENT_TAG}.tar.gz\` or \`${CURRENT_TAG}.zip\` from release assets.
           2. Extract the archive
           3. Run \`make deps\`
-          4. Run \`make start\`
+          4. Run \`make dev\`
           5. Open http://localhost:9500 in your browser
-          
+
           ## 🔗 Links
-          
+
           - [Live FreeDevTool.App](https://freedevtool.app)
           - [GitHub Repository](https://github.com/spring1843/freedevtool.app)
           - [Documentation](https://github.com/spring1843/freedevtool.app#readme)
@@ -142,7 +142,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v5.1.0
         with:
-          role-to-assume: 'arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/${{ vars.AWS_ROLE_PRODUCTION }}'
+          role-to-assume: "arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/${{ vars.AWS_ROLE_PRODUCTION }}"
           aws-region: ${{ vars.AWS_REGION }}
 
       - name: Deploy to Production

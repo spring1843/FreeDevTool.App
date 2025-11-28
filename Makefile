@@ -68,8 +68,8 @@ deps-audit-fix: ## Fix dependency security issues
 help: ## Display this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "$(GREEN)%-20s$(NC) %s\n", $$1, $$2}'
 
-start: ## Start the development server
-	npm run dev
+start: clean build ## Build and serve static files locally (for preview)
+	npx serve dist/public
 
 stop: ## Stop the development server (if running in background)
 	@pkill -f "tsx server/index.ts" || true
@@ -82,9 +82,6 @@ dev: ## Start development server with verbose logging
 
 build: clean
 	npm run build
-
-build-static: clean
-	npm run build:static
 
 build-image: ## Build the Docker image for the app
 	docker build --platform linux/amd64 -t ${IMAGE_TAG} -f infra/images/Dockerfile .
@@ -191,7 +188,7 @@ invalidate-stage-cdn:
 warm-cache-stage: ## Warm CloudFront cache for staging (shortcut for warm-cache DOMAIN=stage.freedevtool.app)
 	npx tsx scripts/warm-cache.ts https://stage.freedevtool.app
 
-deploy-to-stage: build-static copy-static-assets-to-stage invalidate-stage-cdn warm-cache-stage
+deploy-to-stage: build copy-static-assets-to-stage invalidate-stage-cdn warm-cache-stage
 
 copy-static-assets-to-production:
 	aws s3 sync ./dist/public s3://freedevtool-production
@@ -203,7 +200,7 @@ invalidate-production-cdn:
 warm-cache-production:
 	npx tsx scripts/warm-cache.ts https://freedevtool.app
 
-deploy-to-production: build-static copy-static-assets-to-production invalidate-production-cdn warm-cache-production
+deploy-to-production: build copy-static-assets-to-production invalidate-production-cdn warm-cache-production
 
 ## Infra Commands
 

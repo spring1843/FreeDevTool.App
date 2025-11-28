@@ -9,10 +9,11 @@ This application is designed to be deployed as a fully static website to any sta
 Run the static site generation build:
 
 ```bash
-npm run build:static
+make build
 ```
 
 This command:
+
 1. Builds the Vite frontend application
 2. Generates SEO-optimized HTML files for all 47 routes
 3. Creates the proper directory structure in `dist/public/`
@@ -41,6 +42,7 @@ dist/public/
 ```
 
 Each `index.html` file contains:
+
 - Unique, descriptive page title
 - SEO-optimized meta description
 - Relevant keywords
@@ -51,6 +53,7 @@ Each `index.html` file contains:
 ### Build Size
 
 The complete static build is approximately **2.6 MB** including:
+
 - All 46 tools
 - React and UI libraries
 - Code formatting engines (Prettier)
@@ -61,16 +64,19 @@ The complete static build is approximately **2.6 MB** including:
 ### AWS S3 + CloudFront
 
 1. **Create S3 Bucket:**
+
    ```bash
    aws s3 mb s3://your-bucket-name
    ```
 
 2. **Configure for Static Website Hosting:**
+
    ```bash
    aws s3 website s3://your-bucket-name --index-document index.html
    ```
 
 3. **Upload Files:**
+
    ```bash
    aws s3 sync dist/public/ s3://your-bucket-name --delete
    ```
@@ -92,6 +98,7 @@ The complete static build is approximately **2.6 MB** including:
 ### Netlify
 
 1. **Install Netlify CLI:**
+
    ```bash
    npm install -g netlify-cli
    ```
@@ -102,12 +109,14 @@ The complete static build is approximately **2.6 MB** including:
    ```
 
 Or use Netlify's web interface:
+
 - Drag and drop the `dist/public` folder
-- Or connect your Git repository and set build command to `npm run build:static`
+- Or connect your Git repository and set build command to `make build`
 
 ### Vercel
 
 1. **Install Vercel CLI:**
+
    ```bash
    npm install -g vercel
    ```
@@ -118,9 +127,10 @@ Or use Netlify's web interface:
    ```
 
 Configuration in `vercel.json`:
+
 ```json
 {
-  "buildCommand": "npm run build:static",
+  "buildCommand": "make build",
   "outputDirectory": "dist/public",
   "cleanUrls": true
 }
@@ -129,8 +139,9 @@ Configuration in `vercel.json`:
 ### GitHub Pages
 
 1. **Build Locally:**
+
    ```bash
-   npm run build:static
+   make build
    ```
 
 2. **Deploy to gh-pages Branch:**
@@ -158,10 +169,11 @@ Or use GitHub Actions (recommended) - see `.github/workflows/deploy.yml`
 1. **Connect Git Repository** in Cloudflare dashboard
 
 2. **Configure Build Settings:**
-   - Build command: `npm run build:static`
+   - Build command: `make build`
    - Build output directory: `dist/public`
 
 Or use Wrangler CLI:
+
 ```bash
 npx wrangler pages deploy dist/public
 ```
@@ -188,6 +200,7 @@ Configured to allow all search engine crawlers.
 ### Social Sharing
 
 Open Graph tags ensure proper previews when shared on:
+
 - Twitter/X
 - LinkedIn
 - Facebook
@@ -207,6 +220,7 @@ Configure your CDN/hosting to cache assets aggressively:
 ### Compression
 
 Enable gzip or brotli compression:
+
 - Main JS bundle: ~1.3MB → ~352KB gzipped
 - CSS bundle: ~83KB → ~14KB gzipped
 
@@ -215,6 +229,7 @@ Most static hosting platforms enable this automatically.
 ### HTTP/2
 
 Use hosting platforms that support HTTP/2 for:
+
 - Parallel asset loading
 - Header compression
 - Server push (optional)
@@ -226,20 +241,24 @@ Use hosting platforms that support HTTP/2 for:
 Point your domain to your hosting platform:
 
 **AWS CloudFront:**
+
 - Create CNAME record: `www.yourdomain.com` → `d111111abcdef8.cloudfront.net`
 - Create A record (Alias): `yourdomain.com` → CloudFront distribution
 
 **Netlify:**
+
 - Add custom domain in Netlify dashboard
 - Update DNS to Netlify's nameservers or add CNAME
 
 **Vercel:**
+
 - Add domain in Vercel dashboard
 - Update DNS with provided records
 
 ### SSL/TLS
 
 Most platforms provide automatic HTTPS:
+
 - **AWS**: Use AWS Certificate Manager (ACM)
 - **Netlify/Vercel/Cloudflare**: Automatic Let's Encrypt certificates
 - **GitHub Pages**: Automatic for custom domains
@@ -259,8 +278,9 @@ Avoid client-side tracking that compromises the offline-first, privacy-focused n
 This application doesn't require environment variables in production as all processing is client-side.
 
 If you need to customize:
+
 - Update meta tags in `scripts/generate-static-routes.ts`
-- Rebuild with `npm run build:static`
+- Rebuild with `make build`
 
 ## Rollback Strategy
 
@@ -281,7 +301,7 @@ aws s3 sync dist/public-20250104-153000/ s3://your-bucket-name --delete
 Test the production build locally:
 
 ```bash
-npm run build:static
+make build
 npx serve dist/public
 ```
 
@@ -303,16 +323,19 @@ curl https://yourdomain.com/tools/date-converter/ | grep "<meta name=\"descripti
 Configure your hosting platform for SPA routing:
 
 **AWS S3:**
+
 - Set error document to `index.html`
 
 **Netlify:**
 Add `_redirects` file:
+
 ```
 /*    /index.html   200
 ```
 
 **Vercel:**
 Add to `vercel.json`:
+
 ```json
 {
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
@@ -322,6 +345,7 @@ Add to `vercel.json`:
 ### Assets Not Loading
 
 Ensure all paths are absolute (start with `/`):
+
 - ✅ `/assets/index-abc123.js`
 - ❌ `assets/index-abc123.js`
 
@@ -330,22 +354,26 @@ The build script already handles this correctly.
 ### CSP Errors
 
 The Content Security Policy is strict for security. If you need to modify:
+
 - Edit `client/index.html`
-- Rebuild with `npm run build:static`
+- Rebuild with `make build`
 
 ## Cost Estimation
 
 **AWS S3 + CloudFront:**
+
 - Storage: $0.023/GB (~$0.06/month for 2.6MB)
 - Data transfer: $0.085/GB (first 10TB)
 - Requests: $0.0004/1000 GET requests
 - **Estimated**: $1-5/month for moderate traffic
 
 **Netlify/Vercel:**
+
 - Free tier: 100GB bandwidth/month
 - **Estimated**: Free for most use cases
 
 **GitHub Pages:**
+
 - **Free** for public repositories
 
 ## Continuous Deployment
@@ -361,6 +389,7 @@ Example GitHub Actions workflow included in `.github/workflows/deploy.yml`
 ## Support
 
 For deployment issues:
+
 - Check hosting platform documentation
-- Review build logs: `npm run build:static`
+- Review build logs: `make build`
 - Verify route structure: `ls -R dist/public/tools/`

@@ -2,7 +2,8 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { getAllTools } from "../client/src/data/tools.js";
+import { getAllTools, getToolByPath } from "../client/src/data/tools.js";
+import { renderExplanationsHtml } from "./render-explanations.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -73,6 +74,14 @@ function generateRouteHTML(
 ) {
   const metadata = toolsMetadata[route] || toolsMetadata["/"];
 
+  let ssrExplanations = "";
+  if (route.startsWith("/tools/")) {
+    const tool = getToolByPath(route);
+    if (tool?.explanations) {
+      ssrExplanations = renderExplanationsHtml(tool.explanations, route);
+    }
+  }
+
   const html = `<!doctype html>
 <html lang="en">
   <head>
@@ -109,7 +118,7 @@ function generateRouteHTML(
     <link rel="stylesheet" crossorigin href="${assets.cssFile}">
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"></div>${ssrExplanations ? `\n    ${ssrExplanations}` : ""}
   </body>
 </html>`;
 
