@@ -342,7 +342,10 @@ export default function ColorPaletteGenerator() {
             <div>
               <Label htmlFor="palette-type">Palette Type</Label>
               <Select value={selectedType} onValueChange={handleTypeChange}>
-                <SelectTrigger data-testid="palette-type-select" className="w-[140px]">
+                <SelectTrigger
+                  data-testid="palette-type-select"
+                  className="w-[140px]"
+                >
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>

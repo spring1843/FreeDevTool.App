@@ -12,22 +12,7 @@ import {
   getValidatedParam,
 } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
-import { extractDomainParts } from "@/data/domain-tlds";
-
-interface URLComponents {
-  protocol?: string;
-  hostname?: string;
-  port?: string;
-  pathname?: string;
-  search?: string;
-  hash?: string;
-  origin?: string;
-  tld?: string;
-  subdomain?: string;
-  domain?: string;
-  queryParams?: Record<string, string>;
-  isTldKnown?: boolean;
-}
+import { parseURL, type URLComponents } from "@/lib/url-parser";
 
 import { DEFAULT_URL_TO_JSON } from "@/data/defaults";
 import { Input } from "@/components/ui/input";
@@ -55,70 +40,24 @@ export default function URLToJSON() {
   }, []);
 
   useEffect(() => {
-    parseURL();
-    // Update URL when input changes
+    handleParseURL();
     updateURL({ url: inputUrl });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputUrl]);
 
-  // Use optimized domain/TLD extraction backed by cached sets
-  const extractTLD = (hostname: string) => extractDomainParts(hostname);
+  const handleParseURL = useCallback(() => {
+    const result = parseURL(inputUrl);
 
-  const parseURL = useCallback(() => {
-    try {
+    if (result.success) {
       setError("");
-
-      if (!inputUrl.trim()) {
-        setUrlComponents({});
-        setJsonOutput("");
-        return;
-      }
-
-      let urlToParse = inputUrl.trim();
-
-      // Check if URL has a known protocol scheme
-      const knownProtocols = /^(https?|ftp|file|mailto|tel|irc|ircs|ssh|sftp|ldap|ldaps|news|nntp|rtsp|sip|sips|xmpp|ws|wss|git|svn|magnet|data):\/?\/?/i;
-      if (!knownProtocols.test(urlToParse)) {
-        // Add https:// if no protocol is present
-        urlToParse = `https://${urlToParse}`;
-      }
-
-      const url = new URL(urlToParse);
-      const { tld, domain, subdomain, isTldKnown } = extractTLD(url.hostname);
-
-      // Parse query parameters
-      const queryParams: Record<string, string> = {};
-      url.searchParams.forEach((value, key) => {
-        queryParams[key] = value;
-      });
-
-      const components: URLComponents = {
-        protocol: url.protocol.slice(0, -1), // Remove trailing ':'
-        hostname: url.hostname,
-        port: url.port || undefined,
-        pathname: url.pathname,
-        search: url.search || undefined,
-        hash: url.hash || undefined,
-        origin: url.origin,
-        tld: tld || undefined,
-        domain: domain || undefined,
-        subdomain: subdomain || undefined,
-        queryParams:
-          Object.keys(queryParams).length > 0 ? queryParams : undefined,
-        isTldKnown: tld ? isTldKnown : undefined,
-      };
-
-      // Remove undefined values for cleaner JSON
-      const cleanComponents = Object.fromEntries(
-        Object.entries(components).filter(
-          ([_, value]) => value !== undefined && value !== ""
-        )
+      setUrlComponents(result.components);
+      setJsonOutput(
+        Object.keys(result.components).length > 0
+          ? JSON.stringify(result.components, null, 2)
+          : ""
       );
-
-      setUrlComponents(cleanComponents);
-      setJsonOutput(JSON.stringify(cleanComponents, null, 2));
-    } catch {
-      setError("Invalid URL format");
+    } else {
+      setError(result.error || "Invalid URL format");
       setUrlComponents({});
       setJsonOutput("");
     }
@@ -214,7 +153,7 @@ export default function URLToJSON() {
 
               <div className="flex gap-2">
                 <Button
-                  onClick={parseURL}
+                  onClick={handleParseURL}
                   className="flex-1"
                   data-testid="parse-button"
                 >
@@ -319,7 +258,9 @@ export default function URLToJSON() {
                         {urlComponents.isTldKnown === false ? (
                           <div className="mt-2 p-2 bg-amber-50 dark:bg-amber-900/30 rounded border border-amber-300 dark:border-amber-700">
                             <p className="text-xs text-amber-700 dark:text-amber-300">
-                              ⚠️ This TLD is not recognized in our database of known TLDs. It may be invalid or a newly registered TLD.
+                              ⚠️ This TLD is not recognized in our database of
+                              known TLDs. It may be invalid or a newly
+                              registered TLD.
                             </p>
                           </div>
                         ) : null}
@@ -336,10 +277,7 @@ export default function URLToJSON() {
                         <div className="space-y-1">
                           {Object.entries(urlComponents.queryParams).map(
                             ([key, value]) => (
-                              <div
-                                key={key}
-                                className="flex flex-wrap gap-1"
-                              >
+                              <div key={key} className="flex flex-wrap gap-1">
                                 <span className="text-sm font-mono text-orange-800 dark:text-orange-200 break-all">
                                   {key}:
                                 </span>
