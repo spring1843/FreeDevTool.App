@@ -2349,33 +2349,74 @@ export const toolsData: ToolData = {
         explanations: {
           notice: {
             type: "info",
-            title: "Common Delimiters",
+            title: "The .split() Method—Made Visual",
             items: [
-              {
-                label: "Built-ins",
-                text: ", (comma), ; (semicolon), | (pipe), space",
-              },
-              { label: "Special", text: "\\n (new line), \\t (tab)" },
-              { label: "Other", text: ": (colon), - (dash)" },
+              { label: "JavaScript:", text: "'a,b,c'.split(',') → ['a', 'b', 'c']" },
+              { label: "Python:", text: "'a,b,c'.split(',') → ['a', 'b', 'c']" },
+              { label: "This tool:", text: "Does the same thing, but you can see and copy each part instantly" },
             ],
           },
+          shortcuts: [
+            { key: "Ctrl+Shift+X", action: "Open Text Split tool" },
+          ],
           sections: [
             {
-              title: "Features",
+              title: "Delimiter Cheat Sheet",
               items: [
-                "Split by any custom delimiter, including \\n and \\t",
-                "Trim whitespace and remove empty parts toggles",
-                "Live preview with part count and per-part length",
-                "Copy individual parts or all results",
-                "Export cleaned lists (newline-separated)",
+                { label: ", (comma):", text: "CSV data, lists, function arguments" },
+                { label: "; (semicolon):", text: "European CSVs, SQL statements, PATH variable on Windows" },
+                { label: "| (pipe):", text: "Database exports, Unix command chains, markdown tables" },
+                { label: ": (colon):", text: "Key-value pairs, time formats, PATH on Linux/Mac" },
+                { label: "\\n (newline):", text: "Log files, multiline inputs, one-item-per-line lists" },
+                { label: "\\t (tab):", text: "TSV files, spreadsheet pastes, formatted output" },
+                { label: "Space:", text: "Words in a sentence, command arguments, natural text" },
               ],
             },
             {
-              title: "Use cases",
+              title: "Real-World Use Cases",
               items: [
-                "Process CSV-like or list data",
-                "Extract tokens for parsing",
-                "Prepare arrays and inputs for code",
+                "Split CSV row: 'John,Doe,30,NYC' → 4 separate fields for processing",
+                "Parse log timestamps: '2024-01-15 14:30:00' split by space → date and time separately",
+                "Extract email parts: 'user@domain.com' split by '@' → username and domain",
+                "Break URLs: 'example.com/path/to/page' split by '/' → domain + path segments",
+                "Parse version numbers: '2.4.1' split by '.' → major, minor, patch",
+              ],
+            },
+            {
+              title: "Developer Workflows",
+              items: [
+                "Turn comma-separated values into array literals: a,b,c → ['a', 'b', 'c']",
+                "Convert pasted spreadsheet column into SQL IN clause values",
+                "Parse environment variables: KEY=value split by '=' → key and value",
+                "Break down file paths to extract directories and filename",
+                "Split hostnames: 'api.staging.example.com' → ['api', 'staging', 'example', 'com']",
+              ],
+            },
+            {
+              title: "Options Explained",
+              items: [
+                { label: "Trim whitespace:", text: "' hello ' → 'hello' — removes leading/trailing spaces from each part" },
+                { label: "Remove empty:", text: "'a,,b' → ['a', 'b'] not ['a', '', 'b'] — skip blank entries" },
+              ],
+            },
+            {
+              title: "Multi-Character Delimiters",
+              items: [
+                "Split by ' - ' (space-dash-space): 'New York - USA' → ['New York', 'USA']",
+                "Split by ' | ' for markdown tables: '| Cell 1 | Cell 2 |'",
+                "Split by ', ' (comma-space) for cleaner results than just comma",
+                "Split by '::' for namespace separators: 'std::vector::push_back'",
+                "Split by '->' for PHP/C++ method chains",
+              ],
+            },
+            {
+              title: "Fun Fact: Why Different Delimiters Exist",
+              items: [
+                "Comma: Simple, but breaks when data contains commas (addresses, numbers)",
+                "Tab: Invisible but reliable—tabs almost never appear in actual data",
+                "Pipe: Unix chose | because it's rare in text and visually clear",
+                "Null byte (\\0): The ultimate delimiter—impossible in normal text, used in find -print0",
+                "CSV wasn't standardized until 2005 (RFC 4180)—40+ years after its invention!",
               ],
             },
           ],
