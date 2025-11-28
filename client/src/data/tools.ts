@@ -1349,23 +1349,44 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
+          notice: {
+            type: "info",
+            title: "Sort Modes Explained",
+            items: [
+              { label: "Alphabetical", text: "A-Z using locale-aware comparison (handles accents correctly)" },
+              { label: "Numerical", text: "Treats lines as numbers (1, 2, 10 not 1, 10, 2)" },
+              { label: "By Length", text: "Shortest to longest lines (great for finding outliers)" },
+              { label: "Random", text: "Fisher-Yates shuffle for true randomness" },
+            ],
+          },
           sections: [
             {
-              title: "Features",
+              title: "Developer Use Cases",
               items: [
-                "Alphabetical, numerical, by length, reverse, and random sorts",
-                "Ascending/descending order",
-                "Case-sensitive toggle",
-                "Trim lines before processing",
-                "Remove duplicate lines",
+                "Sort package.json dependencies alphabetically (npm/yarn convention)",
+                "Organize CSS properties in consistent order",
+                "Sort .gitignore patterns for easier scanning",
+                "Alphabetize import statements at top of files",
+                "Randomize test data or seed lists for A/B testing",
               ],
             },
             {
-              title: "Use cases",
+              title: "Data Cleanup Workflows",
               items: [
-                "Normalize lists before committing",
-                "Create ordered indexes",
-                "Deduplicate data pasted from spreadsheets",
+                "Deduplicate email lists: Sort + Remove Duplicates + export clean list",
+                "Find duplicates: Sort first, then duplicates are adjacent and obvious",
+                "Merge lists: Paste both, sort, dedupe—instant merge without Excel",
+                "Length sort reveals: Blank lines at top, unusually long entries at bottom",
+              ],
+            },
+            {
+              title: "Fun & Creative Uses",
+              items: [
+                "Randomize raffle winners or team assignments fairly",
+                "Shuffle playlist or reading list for variety",
+                "Create word scrambles: Sort letters of a word randomly",
+                "Reverse a poem line by line for artistic effect",
+                "Sort high scores numerically to find the winner",
               ],
             },
           ],
