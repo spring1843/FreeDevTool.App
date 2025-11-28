@@ -754,7 +754,7 @@ export const toolsData: ToolData = {
         metadata: {
           title: "JSON Formatter - Format and Validate JSON",
           description:
-            "Format, validate, and beautify JSON with syntax highlighting. Industry-standard Prettier formatting with error detection.",
+            "Format, validate, and beautify JSON with syntax highlighting. Professional-grade formatting with error detection.",
           keywords: [
             "JSON formatter",
             "JSON validator",
@@ -816,7 +816,7 @@ export const toolsData: ToolData = {
               title: "Pro Developer Workflow",
               items: [
                 "Pipe curl to jq: curl api.example.com | jq '.' for instant formatting",
-                "VS Code: Ctrl+Shift+I formats JSON in place (with Prettier extension)",
+                "VS Code: Ctrl+Shift+I formats JSON in place (with a formatting extension)",
                 "Chrome DevTools: Network tab → Response → Pretty Print button",
                 "Bookmark this tool: Paste sensitive API responses here—nothing leaves your browser",
               ],
@@ -930,7 +930,7 @@ export const toolsData: ToolData = {
         metadata: {
           title: "HTML Formatter - Format and Beautify HTML",
           description:
-            "Format and beautify HTML code with proper indentation. Industry-standard Prettier formatting for clean, readable markup.",
+            "Format and beautify HTML code with proper indentation. Professional-grade formatting for clean, readable markup.",
           keywords: [
             "HTML formatter",
             "HTML beautifier",
@@ -1111,7 +1111,7 @@ export const toolsData: ToolData = {
         metadata: {
           title: "Markdown Formatter - Format Markdown Files",
           description:
-            "Format and beautify Markdown files with consistent styling. Industry-standard Prettier formatting for documentation.",
+            "Format and beautify Markdown files with consistent styling. Professional-grade formatting for documentation.",
           keywords: [
             "Markdown formatter",
             "MD formatter",
@@ -1158,7 +1158,7 @@ export const toolsData: ToolData = {
                 },
                 {
                   label: "This formatter:",
-                  text: "Uses Prettier with CommonMark + GFM support",
+                  text: "Supports CommonMark + GFM specifications",
                 },
               ],
             },
@@ -1182,7 +1182,7 @@ export const toolsData: ToolData = {
         metadata: {
           title: "CSS Formatter - Format and Beautify CSS",
           description:
-            "Format and beautify CSS code with proper indentation. Industry-standard Prettier formatting for stylesheets.",
+            "Format and beautify CSS code with proper indentation. Professional-grade formatting for stylesheets.",
           keywords: [
             "CSS formatter",
             "CSS beautifier",
@@ -1293,20 +1293,20 @@ export const toolsData: ToolData = {
         metadata: {
           title: "TypeScript Formatter - Format TypeScript Code",
           description:
-            "Format TypeScript and JavaScript code with Prettier. Industry-standard formatting for clean, consistent code.",
+            "Format TypeScript and JavaScript code with professional-grade formatting for clean, consistent code.",
           keywords: [
             "TypeScript formatter",
             "JavaScript formatter",
             "TS formatter",
-            "Prettier",
+            "code formatter",
           ],
         },
         explanations: {
           notice: {
             type: "tips",
-            title: "Why Prettier Exists",
+            title: "Why Code Formatters Exist",
             items: [
-              "Created by James Long in 2017 to end style debates—it's opinionated by design",
+              "Created to end style debates once and for all—opinionated by design",
               "Parses your code into an AST, then reprints it from scratch—not just regex find/replace",
               "Used by React, Vue, Angular, Babel, Webpack, and most major JS projects",
               "Handles edge cases you'd never think of: long strings, nested ternaries, method chains",
@@ -1314,9 +1314,9 @@ export const toolsData: ToolData = {
           },
           sections: [
             {
-              title: "Style Debates Prettier Ends",
+              title: "Style Debates Formatting Ends",
               items: [
-                "Tabs vs spaces: Prettier picks for you (spaces by default, configurable)",
+                "Tabs vs spaces: The formatter picks for you (configurable)",
                 "Semicolons: Yes or no—both camps can configure their preference",
                 "Trailing commas: Always, never, or ES5-compatible—your choice",
                 "Single vs double quotes: Set once, never argue again",
@@ -1338,7 +1338,7 @@ export const toolsData: ToolData = {
               items: [
                 "Paste minified code → Beautify to make it readable (great for debugging production issues)",
                 "Format before committing to keep git diffs clean",
-                "TypeScript-specific: Prettier preserves type annotations perfectly",
+                "TypeScript-specific: Type annotations are preserved perfectly",
                 "JSX/TSX: Handles React component formatting including props alignment",
               ],
             },
@@ -1353,7 +1353,7 @@ export const toolsData: ToolData = {
         metadata: {
           title: "GraphQL Formatter - Format GraphQL Schemas",
           description:
-            "Format and beautify GraphQL schemas and queries. Industry-standard Prettier formatting for GraphQL.",
+            "Format and beautify GraphQL schemas and queries. Professional-grade formatting for GraphQL.",
           keywords: [
             "GraphQL formatter",
             "GraphQL beautifier",
