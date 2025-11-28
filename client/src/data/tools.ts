@@ -65,7 +65,6 @@ export const toolsData: ToolData = {
               },
             ],
           },
-          shortcuts: [{ key: "Ctrl+Shift+1", action: "Open Date Converter" }],
           sections: [
             {
               title: "Date Format Standards Explained",
@@ -211,9 +210,6 @@ export const toolsData: ToolData = {
               },
             ],
           },
-          shortcuts: [
-            { key: "Ctrl+Shift+Y", action: "Open JSON ↔ YAML Converter" },
-          ],
           sections: [
             {
               title: "When to Use Which Format",
@@ -531,7 +527,6 @@ export const toolsData: ToolData = {
               },
             ],
           },
-          shortcuts: [{ key: "Ctrl+Shift+U", action: "Open Unit Converter" }],
           sections: [
             {
               title: "Why These Weird Units Exist",
@@ -879,7 +874,6 @@ export const toolsData: ToolData = {
               },
             ],
           },
-          shortcuts: [{ key: "Ctrl+Shift+4", action: "Open CSV to JSON tool" }],
           sections: [
             {
               title: "Delimiter Options Explained",
@@ -1016,9 +1010,6 @@ export const toolsData: ToolData = {
               },
             ],
           },
-          shortcuts: [
-            { key: "Ctrl+Shift+5", action: "Open Number Base Converter" },
-          ],
           sections: [
             {
               title: "Hex Colors Decoded",
@@ -1307,7 +1298,6 @@ export const toolsData: ToolData = {
               },
             ],
           },
-          shortcuts: [{ key: "Ctrl+Shift+C", action: "Open JSONC Formatter" }],
           sections: [
             {
               title: "Files That Use JSONC",
@@ -1828,7 +1818,6 @@ export const toolsData: ToolData = {
               },
             ],
           },
-          shortcuts: [{ key: "Ctrl+Shift+7", action: "Open CSS Formatter" }],
           sections: [
             {
               title: "CSS vs SCSS vs LESS",
@@ -2187,7 +2176,6 @@ export const toolsData: ToolData = {
               },
             ],
           },
-          shortcuts: [{ key: "Ctrl+Shift+T", action: "Open Time Formatter" }],
           sections: [
             {
               title: "Time Format Standards Explained",
@@ -2409,7 +2397,6 @@ export const toolsData: ToolData = {
               },
             ],
           },
-          shortcuts: [{ key: "Ctrl+Shift+~", action: "Open URL Encoder tool" }],
           sections: [
             {
               title: "Common Encodings Cheat Sheet",
@@ -3792,7 +3779,6 @@ export const toolsData: ToolData = {
               },
             ],
           },
-          shortcuts: [{ key: "Ctrl+Shift+X", action: "Open Text Split tool" }],
           sections: [
             {
               title: "Delimiter Cheat Sheet",
@@ -3923,7 +3909,6 @@ export const toolsData: ToolData = {
               },
             ],
           },
-          shortcuts: [{ key: "Ctrl+Shift+0", action: "Open World Clock" }],
           sections: [
             {
               title: "Weird Timezone Facts",
@@ -4550,12 +4535,6 @@ export const toolsData: ToolData = {
               },
             ],
           },
-          shortcuts: [
-            {
-              key: "Ctrl+Shift+;",
-              action: "Open Compound Interest Calculator",
-            },
-          ],
           sections: [
             {
               title: "The Power of Starting Early",
@@ -4834,9 +4813,6 @@ export const toolsData: ToolData = {
               },
             ],
           },
-          shortcuts: [
-            { key: "Ctrl+Shift+,", action: "Open Color Palette Generator" },
-          ],
           sections: [
             {
               title: "Palette Types Explained",
@@ -5028,7 +5004,6 @@ export const toolsData: ToolData = {
               },
             ],
           },
-          shortcuts: [{ key: "Ctrl+Shift+.", action: "Open Camera Test tool" }],
           sections: [
             {
               title: "When to Test Your Camera",
