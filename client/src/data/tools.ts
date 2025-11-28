@@ -5307,9 +5307,14 @@ export function getAllTools(): Tool[] {
   return Object.values(toolsData).flatMap(category => category.tools);
 }
 
-// Utility function to get a tool by its path
+// Pre-computed lookup map for O(1) path-based access
+const toolsByPath: Map<string, Tool> = new Map(
+  getAllTools().map(tool => [tool.path, tool])
+);
+
+// Utility function to get a tool by its path - O(1) lookup
 export function getToolByPath(path: string): Tool | undefined {
-  return getAllTools().find(tool => tool.path === path);
+  return toolsByPath.get(path);
 }
 
 // Cached tool count - calculated once and reused
