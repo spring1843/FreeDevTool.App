@@ -35,5 +35,13 @@ args = "PORT=9095 npm run dev"
 waitForPort = 9095
 
 [[ports]]
+localPort = 3000
+externalPort = 3000
+
+[[ports]]
 localPort = 9095
 externalPort = 80
+
+[[ports]]
+localPort = 36717
+externalPort = 3001

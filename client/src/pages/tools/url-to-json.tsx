@@ -77,8 +77,10 @@ export default function URLToJSON() {
 
       let urlToParse = inputUrl.trim();
 
-      // Add protocol if missing
-      if (!urlToParse.match(/^https?:\/\//)) {
+      // Check if URL has a known protocol scheme
+      const knownProtocols = /^(https?|ftp|file|mailto|tel|irc|ircs|ssh|sftp|ldap|ldaps|news|nntp|rtsp|sip|sips|xmpp|ws|wss|git|svn|magnet|data):\/?\/?/i;
+      if (!knownProtocols.test(urlToParse)) {
+        // Add https:// if no protocol is present
         urlToParse = `https://${urlToParse}`;
       }
 

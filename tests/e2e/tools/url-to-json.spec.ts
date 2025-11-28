@@ -130,4 +130,179 @@ test.describe("URL to JSON Tool", () => {
     await expect(urlInput).toHaveValue(modifiedUrl);
     await expectNoErrors(page);
   });
+
+  test("should show warning for unknown TLD", async ({ page }) => {
+    const urlInput = page.getByTestId("url-input");
+
+    // Enter a URL with an unknown TLD
+    await urlInput.fill("https://example.invalidtld123");
+    await page.getByTestId("parse-button").click();
+
+    // Check that the warning message is displayed
+    const warningText = page.locator("text=This TLD is not recognized");
+    await expect(warningText).toBeVisible();
+    await expectNoErrors(page);
+  });
+
+  test("should not show warning for known TLD", async ({ page }) => {
+    const urlInput = page.getByTestId("url-input");
+
+    // Enter a URL with a known TLD
+    await urlInput.fill("https://example.com");
+    await page.getByTestId("parse-button").click();
+
+    // Check that the warning message is NOT displayed
+    const warningText = page.locator("text=This TLD is not recognized");
+    await expect(warningText).not.toBeVisible();
+    await expectNoErrors(page);
+  });
+
+  test("should correctly parse FTP URLs", async ({ page }) => {
+    const urlInput = page.getByTestId("url-input");
+
+    await urlInput.fill("ftp://ftp.example.com/pub/files");
+    await page.getByTestId("parse-button").click();
+
+    const jsonOutput = page.locator("#output .cm-content");
+    await expect(jsonOutput).toBeVisible();
+    const outputText = await jsonOutput.textContent();
+    const parsed = JSON.parse(outputText || "{}");
+
+    expect(parsed.protocol).toBe("ftp");
+    expect(parsed.hostname).toBe("ftp.example.com");
+    expect(parsed.tld).toBe("com");
+    expect(parsed.domain).toBe("example");
+    expect(parsed.subdomain).toBe("ftp");
+    await expectNoErrors(page);
+  });
+
+  test("should correctly parse FILE URLs", async ({ page }) => {
+    const urlInput = page.getByTestId("url-input");
+
+    await urlInput.fill("file:///home/user/documents/file.txt");
+    await page.getByTestId("parse-button").click();
+
+    const jsonOutput = page.locator("#output .cm-content");
+    await expect(jsonOutput).toBeVisible();
+    const outputText = await jsonOutput.textContent();
+    const parsed = JSON.parse(outputText || "{}");
+
+    expect(parsed.protocol).toBe("file");
+    expect(parsed.pathname).toBe("/home/user/documents/file.txt");
+    await expectNoErrors(page);
+  });
+
+  test("should correctly parse MAILTO URLs", async ({ page }) => {
+    const urlInput = page.getByTestId("url-input");
+
+    await urlInput.fill("mailto:user@example.com?subject=Hello");
+    await page.getByTestId("parse-button").click();
+
+    const jsonOutput = page.locator("#output .cm-content");
+    await expect(jsonOutput).toBeVisible();
+    const outputText = await jsonOutput.textContent();
+    const parsed = JSON.parse(outputText || "{}");
+
+    expect(parsed.protocol).toBe("mailto");
+    await expectNoErrors(page);
+  });
+
+  test("should correctly parse TEL URLs", async ({ page }) => {
+    const urlInput = page.getByTestId("url-input");
+
+    await urlInput.fill("tel:+1-555-123-4567");
+    await page.getByTestId("parse-button").click();
+
+    const jsonOutput = page.locator("#output .cm-content");
+    await expect(jsonOutput).toBeVisible();
+    const outputText = await jsonOutput.textContent();
+    const parsed = JSON.parse(outputText || "{}");
+
+    expect(parsed.protocol).toBe("tel");
+    await expectNoErrors(page);
+  });
+
+  test("should correctly parse IRC URLs", async ({ page }) => {
+    const urlInput = page.getByTestId("url-input");
+
+    await urlInput.fill("irc://irc.freenode.net/channel");
+    await page.getByTestId("parse-button").click();
+
+    const jsonOutput = page.locator("#output .cm-content");
+    await expect(jsonOutput).toBeVisible();
+    const outputText = await jsonOutput.textContent();
+    const parsed = JSON.parse(outputText || "{}");
+
+    expect(parsed.protocol).toBe("irc");
+    expect(parsed.hostname).toBe("irc.freenode.net");
+    await expectNoErrors(page);
+  });
+
+  test("should correctly parse SSH URLs", async ({ page }) => {
+    const urlInput = page.getByTestId("url-input");
+
+    await urlInput.fill("ssh://user@server.example.com:22/path");
+    await page.getByTestId("parse-button").click();
+
+    const jsonOutput = page.locator("#output .cm-content");
+    await expect(jsonOutput).toBeVisible();
+    const outputText = await jsonOutput.textContent();
+    const parsed = JSON.parse(outputText || "{}");
+
+    expect(parsed.protocol).toBe("ssh");
+    expect(parsed.hostname).toBe("server.example.com");
+    expect(parsed.port).toBe("22");
+    await expectNoErrors(page);
+  });
+
+  test("should correctly parse WebSocket URLs", async ({ page }) => {
+    const urlInput = page.getByTestId("url-input");
+
+    await urlInput.fill("wss://socket.example.com/ws");
+    await page.getByTestId("parse-button").click();
+
+    const jsonOutput = page.locator("#output .cm-content");
+    await expect(jsonOutput).toBeVisible();
+    const outputText = await jsonOutput.textContent();
+    const parsed = JSON.parse(outputText || "{}");
+
+    expect(parsed.protocol).toBe("wss");
+    expect(parsed.hostname).toBe("socket.example.com");
+    expect(parsed.pathname).toBe("/ws");
+    await expectNoErrors(page);
+  });
+
+  test("should handle HTTPS URLs correctly", async ({ page }) => {
+    const urlInput = page.getByTestId("url-input");
+
+    await urlInput.fill("https://secure.example.com:443/api/v1");
+    await page.getByTestId("parse-button").click();
+
+    const jsonOutput = page.locator("#output .cm-content");
+    await expect(jsonOutput).toBeVisible();
+    const outputText = await jsonOutput.textContent();
+    const parsed = JSON.parse(outputText || "{}");
+
+    expect(parsed.protocol).toBe("https");
+    expect(parsed.hostname).toBe("secure.example.com");
+    expect(parsed.pathname).toBe("/api/v1");
+    await expectNoErrors(page);
+  });
+
+  test("should handle HTTP URLs correctly", async ({ page }) => {
+    const urlInput = page.getByTestId("url-input");
+
+    await urlInput.fill("http://www.example.com/page?id=123");
+    await page.getByTestId("parse-button").click();
+
+    const jsonOutput = page.locator("#output .cm-content");
+    await expect(jsonOutput).toBeVisible();
+    const outputText = await jsonOutput.textContent();
+    const parsed = JSON.parse(outputText || "{}");
+
+    expect(parsed.protocol).toBe("http");
+    expect(parsed.hostname).toBe("www.example.com");
+    expect(parsed.queryParams).toEqual({ id: "123" });
+    await expectNoErrors(page);
+  });
 });
