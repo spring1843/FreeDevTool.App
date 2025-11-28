@@ -30,17 +30,6 @@ export interface ToolExplanation {
   sections?: ToolExplanationSection[];
 }
 
-function renderItem(item: string | ToolExplanationItem, index: number): ReactNode {
-  if (typeof item === "string") {
-    return <div key={index}>{item}</div>;
-  }
-  return (
-    <div key={index}>
-      {item.label ? <strong>{item.label}</strong> : null} {item.text}
-    </div>
-  );
-}
-
 function renderNotice(notice: ToolExplanation["notice"]): ReactNode {
   if (!notice) return null;
 
@@ -49,9 +38,19 @@ function renderNotice(notice: ToolExplanation["notice"]): ReactNode {
       <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
         {notice.title}
       </h3>
-      <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-        {notice.items.map((item, i) => renderItem(item, i))}
-      </div>
+      <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1 list-disc list-inside">
+        {notice.items.map((item, i) => (
+          <li key={i}>
+            {typeof item === "string" ? (
+              item
+            ) : (
+              <>
+                {item.label ? <strong>{item.label}</strong> : null} {item.text}
+              </>
+            )}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -109,7 +108,7 @@ function renderSections(sections: ToolExplanation["sections"]): ReactNode {
       {sections.map((section, i) => (
         <div key={i}>
           {section.title ? <h4 className="font-semibold mb-2">{section.title}</h4> : null}
-          <ul className="space-y-1 text-slate-600 dark:text-slate-400">
+          <ul className="space-y-1 text-slate-600 dark:text-slate-400 list-disc list-inside">
             {section.items.map((item, j) => (
               <li key={j}>
                 {typeof item === "string" ? (
