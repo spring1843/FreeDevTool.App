@@ -2030,33 +2030,47 @@ export const toolsData: ToolData = {
           ],
         },
         explanations: {
-          notice: {
-            type: "info",
-            title: "Keyboard Shortcuts",
-            items: [
-              { label: "Enter", text: "Add new timer" },
-              { label: "Space", text: "Start/Pause first timer" },
-              { label: "Escape", text: "Stop all timers" },
-            ],
-          },
+          shortcuts: [
+            { key: "Enter", action: "Add new timer" },
+            { key: "Space", action: "Start/Pause first timer" },
+            { key: "Escape", action: "Stop all timers" },
+          ],
           sections: [
             {
-              title: "Features",
+              title: "Productivity Timer Presets",
               items: [
-                "Create multiple timers (default 5 minutes)",
-                "Custom name and H:M:S duration",
-                "Configurable alarm plays: 1, 2, 3, or until stopped",
-                "Visual status badges (Running/Finished)",
-                "Shareable URL with current timer settings",
-                "Quick presets (Coffee Break, Meditation, Study Block, …)",
+                { label: "Pomodoro:", text: "25 min work + 5 min break (repeat 4x, then 15-30 min long break)" },
+                { label: "52-17 Method:", text: "52 min focused work + 17 min break (studied as optimal by DeskTime)" },
+                { label: "Time Boxing:", text: "Set fixed time for a task—when it rings, stop and evaluate" },
+                { label: "Ultradian Rhythm:", text: "90 min work cycles matching your body's natural focus waves" },
               ],
             },
             {
-              title: "Behavior",
+              title: "Everyday Timer Uses",
               items: [
-                "Alarms play at 2s intervals; 'Until stopped' loops until silenced",
-                "Reset returns to original duration",
-                "No auto-start on load to respect sound policies",
+                "Cooking: Pasta (8-12 min), boiled eggs (6-12 min), rice (18-20 min)",
+                "Laundry: Washer done reminder, dryer cycle, hand-wash soak time",
+                "Parking meters: Set timer to avoid tickets (leave 5 min buffer!)",
+                "Screen breaks: 20-20-20 rule—every 20 min, look 20 ft away for 20 sec",
+                "Kids' screen time: Set agreed-upon limits with an audible 'time's up!'",
+              ],
+            },
+            {
+              title: "Multiple Timers Power",
+              items: [
+                "Thanksgiving dinner: Turkey, sides, and pie all with different timers",
+                "Meeting agenda: Set 5-min timers for each topic to stay on track",
+                "Workout intervals: Run concurrent timers for exercise/rest cycles",
+                "Board games: Chess clock alternative—each player gets their own countdown",
+              ],
+            },
+            {
+              title: "Pro Tips",
+              items: [
+                "Name your timers—'Laundry' is easier to track than 'Timer 45:00'",
+                "Use 'Until stopped' alarm for things you might not hear immediately",
+                "Share timer URLs with teammates for synchronized countdowns",
+                "Stack timers: Start a 5-min break timer right when your work timer ends",
               ],
             },
           ],
