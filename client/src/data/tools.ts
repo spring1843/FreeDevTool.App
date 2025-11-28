@@ -673,33 +673,83 @@ export const toolsData: ToolData = {
         explanations: {
           notice: {
             type: "info",
-            title: "About JSONC",
+            title: "JSONC: JSON's Practical Cousin",
             items: [
-              {
-                label: "Comment types",
-                text: "Supports single-line (//) and multi-line (/* */) comments",
-              },
-              {
-                label: "Popular uses",
-                text: "VS Code settings, TypeScript configs, Azure DevOps",
-              },
+              { label: "The problem:", text: "Douglas Crockford intentionally excluded comments from JSON to prevent abuse" },
+              { label: "The reality:", text: "Config files desperately need comments—JSONC fills that gap" },
+              { label: "Not standard:", text: "JSONC isn't official JSON—most parsers will reject it" },
             ],
           },
+          shortcuts: [
+            { key: "Ctrl+Shift+C", action: "Open JSONC Formatter" },
+          ],
           sections: [
             {
-              title: "Features",
+              title: "Files That Use JSONC",
               items: [
-                "Format JSON while preserving // and /* */ comments",
-                "Helpful error messages on invalid structure",
-                "Compact output area with copy-friendly monospace",
+                { label: "tsconfig.json:", text: "TypeScript config—despite the .json extension, it's actually JSONC!" },
+                { label: "settings.json:", text: "VS Code user and workspace settings" },
+                { label: "launch.json:", text: "VS Code debug configurations" },
+                { label: "tasks.json:", text: "VS Code task runner definitions" },
+                { label: "devcontainer.json:", text: "VS Code Dev Containers configuration" },
+                { label: ".vscode/*.json:", text: "Almost all VS Code config files support comments" },
+                { label: "azure-pipelines.yml:", text: "Uses JSON sections that allow comments" },
               ],
             },
             {
-              title: "Use cases",
+              title: "Comment Syntax",
               items: [
-                "Beautify configuration files",
-                "Share readable snippets with comments intact",
-                "Validate commented JSON before committing",
+                { label: "// single line:", text: "Most common, works anywhere" },
+                { label: "/* block */:", text: "Multi-line comments, can span lines" },
+                { label: "Trailing commas:", text: "JSONC often allows them too: [1, 2, 3,] ← valid!" },
+                { label: "Inside strings:", text: "// in a string value is NOT a comment—it's literal text" },
+              ],
+            },
+            {
+              title: "Why Crockford Banned Comments",
+              items: [
+                "His actual words: 'I removed comments because people were using them to hold parsing directives'",
+                "Example abuse: /* @directive: dont-validate */ before invalid data",
+                "JSON was designed for data interchange, not human-edited config files",
+                "Irony: Every major editor now supports JSONC for their own config files",
+              ],
+            },
+            {
+              title: "JSONC vs JSON5 vs YAML",
+              items: [
+                { label: "JSONC:", text: "JSON + comments + trailing commas. Nothing else changes" },
+                { label: "JSON5:", text: "JSONC + unquoted keys + single quotes + hex numbers + more" },
+                { label: "YAML:", text: "Completely different syntax, indentation-based, very flexible" },
+                { label: "TOML:", text: "INI-style sections, popular for Rust (Cargo.toml) and Python (pyproject.toml)" },
+              ],
+            },
+            {
+              title: "Parsing JSONC in Code",
+              items: [
+                { label: "VS Code:", text: "jsonc-parser npm package (official, battle-tested)" },
+                { label: "Strip comments:", text: "npm install strip-json-comments, then JSON.parse()" },
+                { label: "TypeScript:", text: "Built-in ts.parseConfigFileTextToJson() handles tsconfig.json" },
+                { label: "Python:", text: "commentjson or json5 packages" },
+                { label: "Go:", text: "hujson package from Tailscale" },
+              ],
+            },
+            {
+              title: "Common Mistakes",
+              items: [
+                "Sending JSONC to an API: Standard JSON.parse() will throw—strip comments first!",
+                "Forgetting file extension: .jsonc tells editors to enable comment highlighting",
+                "Comments in arrays: // works, but some parsers struggle with inline comments",
+                "Nested block comments: /* /* nested */ */ doesn't work—block comments don't nest",
+              ],
+            },
+            {
+              title: "Pro Tips",
+              items: [
+                "VS Code intellisense: Add '$schema' to get autocomplete for known config formats",
+                "Document deprecated options: // DEPRECATED: Use 'newOption' instead",
+                "Section headers: // ===== Editor Settings ===== for visual organization",
+                "Explain magic numbers: 'timeout': 30000 // 30 seconds in milliseconds",
+                "Link to docs: // See: https://docs.example.com/config for options",
               ],
             },
           ],
