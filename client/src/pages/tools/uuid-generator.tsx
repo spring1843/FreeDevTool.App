@@ -12,8 +12,16 @@ import {
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Badge } from "@/components/ui/badge";
-import { RefreshCw, Copy, RotateCcw } from "lucide-react";
+import { RefreshCw, Copy } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { getToolByPath } from "@/data/tools";
@@ -82,6 +90,13 @@ export default function UUIDGenerator() {
     setCount(1);
     setFormat("standard");
   };
+
+  const handleClear = () => {
+    setUuids([]);
+  };
+
+  const hasModifiedData = uuids.length > 0;
+  const isAtDefault = version === 4 && count === 1 && format === "standard";
 
   const copyToClipboard = async (text: string) => {
     try {
@@ -197,25 +212,37 @@ export default function UUIDGenerator() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between">
-            <div className="flex gap-3">
-              <Button
+          <ToolButtonGroup>
+            <ActionButtonGroup>
+              <ToolButton
+                variant="custom"
                 onClick={generateUUID}
+                tooltip="Generate new UUIDs"
                 className="bg-purple-600 hover:bg-purple-700 text-white"
+                icon={<RefreshCw className="w-4 h-4 mr-2" />}
               >
-                <RefreshCw className="w-4 h-4 mr-2" />
                 Generate UUIDs
-              </Button>
-              <Button onClick={handleReset} variant="outline">
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Reset
-              </Button>
-            </div>
-            <div className="flex items-center gap-2">
-              <Badge variant="outline">Version {version}</Badge>
-              <Badge variant="outline">{getFormatDescription(format)}</Badge>
-            </div>
-          </div>
+              </ToolButton>
+              <div className="flex items-center gap-2">
+                <Badge variant="outline">Version {version}</Badge>
+                <Badge variant="outline">{getFormatDescription(format)}</Badge>
+              </div>
+            </ActionButtonGroup>
+            <DataButtonGroup>
+              <ResetButton
+                onClick={handleReset}
+                tooltip="Reset all settings to defaults"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={handleClear}
+                tooltip="Clear generated UUIDs"
+                hasModifiedData={hasModifiedData}
+                disabled={uuids.length === 0}
+              />
+            </DataButtonGroup>
+          </ToolButtonGroup>
         </CardContent>
       </Card>
 

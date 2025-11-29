@@ -1,10 +1,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { Shield, RotateCcw, CheckCircle, XCircle } from "lucide-react";
+import { Shield, CheckCircle, XCircle } from "lucide-react";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
@@ -31,6 +38,8 @@ interface CertificateInfo {
 export default function TLSDecoder() {
   const tool = getToolByPath("/tools/tls-decoder");
   const [certificate, setCertificate] = useState(DEFAULT_TLS_DECODER);
+  // Incrementing key to force CodeMirror remount on reset/clear preventing residual merged content
+  const [editorEpoch, setEditorEpoch] = useState(0);
   const [certificateInfo, setCertificateInfo] =
     useState<CertificateInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -92,10 +101,24 @@ export default function TLSDecoder() {
   };
 
   const handleReset = () => {
+    // Reset explicitly to the original default example (no residual decoded modifications)
     setCertificate(DEFAULT_TLS_DECODER);
     setCertificateInfo(null);
     setError(null);
+    setEditorEpoch(e => e + 1);
   };
+
+  const handleClear = () => {
+    setCertificate("");
+    setCertificateInfo(null);
+    setError(null);
+    setEditorEpoch(e => e + 1);
+  };
+
+  const hasModifiedData =
+    certificate.trim() !== DEFAULT_TLS_DECODER.trim() &&
+    certificate.trim() !== "";
+  const isAtDefault = certificate === DEFAULT_TLS_DECODER;
 
   useEffect(() => {
     decodeCertificate();
@@ -179,20 +202,34 @@ export default function TLSDecoder() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="mb-4 flex gap-3">
-            <Button
-              onClick={decodeCertificate}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              <Shield className="w-4 h-4 mr-2" />
-              Decode Certificate
-            </Button>
-            <Button onClick={handleReset} variant="outline">
-              <RotateCcw className="w-4 h-4 mr-2" />
-              Reset
-            </Button>
-          </div>
+          <ToolButtonGroup className="mb-4">
+            <ActionButtonGroup>
+              <ToolButton
+                variant="custom"
+                onClick={decodeCertificate}
+                icon={<Shield className="w-4 h-4 mr-2" />}
+                tooltip="Decode TLS certificate"
+              >
+                Decode Certificate
+              </ToolButton>
+            </ActionButtonGroup>
+            <DataButtonGroup>
+              <ResetButton
+                onClick={handleReset}
+                tooltip="Reset to default example"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={handleClear}
+                tooltip="Clear certificate input"
+                hasModifiedData={hasModifiedData}
+                disabled={certificate.trim() === ""}
+              />
+            </DataButtonGroup>
+          </ToolButtonGroup>
           <TextArea
+            key={editorEpoch}
             id="input"
             value={certificate}
             onChange={e => handleCertificateChange(e.target.value)}
@@ -202,6 +239,7 @@ export default function TLSDecoder() {
             rows={10}
             autoFocus={true}
             minHeight="200px"
+            lang="plaintext"
             fileExtension="txt"
             theme={theme}
             data-default-input="true"

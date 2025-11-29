@@ -28,7 +28,7 @@ test.describe("Barcode Generator Tool", () => {
     await expect(page.locator("canvas")).toBeVisible();
 
     // Verify download button is visible
-    const downloadButton = page.locator('[id="download"]');
+    const downloadButton = page.getByTestId("button-download");
     await expect(downloadButton).toBeVisible();
 
     // Set up download promise before clicking
@@ -76,7 +76,7 @@ test.describe("Barcode Generator Tool", () => {
     await expect(page.locator("canvas")).toBeVisible();
 
     // Verify download is still available
-    const downloadButton = page.locator('[id="download"]');
+    const downloadButton = page.getByTestId("button-download");
     await expect(downloadButton).toBeVisible();
 
     // Test download with different format

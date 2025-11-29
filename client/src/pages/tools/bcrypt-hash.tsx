@@ -13,15 +13,16 @@ import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import {
-  Hash,
-  CheckCircle,
-  XCircle,
-  RotateCcw,
-  Eye,
-  EyeOff,
-} from "lucide-react";
+import { Hash, CheckCircle, XCircle, Eye, EyeOff } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -144,6 +145,26 @@ export default function BcryptHash() {
     setShowPassword(false);
     setShowVerifyPassword(false);
   };
+
+  const handleClear = () => {
+    setPlaintext("");
+    setHash("");
+    setVerifyText("");
+    setVerificationResult(null);
+    setError(null);
+    setShowPassword(false);
+    setShowVerifyPassword(false);
+  };
+
+  const hasModifiedData =
+    (plaintext !== DEFAULT_BCRYPT && plaintext.trim() !== "") ||
+    hash.trim() !== "" ||
+    verifyText.trim() !== "";
+  const isAtDefault =
+    plaintext === DEFAULT_BCRYPT &&
+    hash === "" &&
+    verifyText === "" &&
+    rounds === 10;
 
   useEffect(() => {
     generateHash();
@@ -327,15 +348,49 @@ export default function BcryptHash() {
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             Generated Hash
-            <div className="flex gap-2">
-              <Badge variant="outline">{rounds} rounds</Badge>
-              <Button onClick={handleReset} variant="outline" size="sm">
-                <RotateCcw className="w-4 h-4 mr-1" />
-                Reset
-              </Button>
-            </div>
+            <Badge variant="outline">{rounds} rounds</Badge>
           </CardTitle>
         </CardHeader>
+        <ToolButtonGroup className="px-6 pb-4">
+          <ActionButtonGroup>
+            <ToolButton
+              variant="custom"
+              onClick={generateHash}
+              disabled={isHashing || !plaintext.trim()}
+              icon={<Hash className="w-4 h-4 mr-2" />}
+              tooltip="Generate bcrypt hash from password"
+            >
+              {isHashing ? "Generating..." : "Generate Hash"}
+            </ToolButton>
+            <ToolButton
+              variant="custom"
+              onClick={verifyHash}
+              disabled={isVerifying || !verifyText.trim() || !hash.trim()}
+              icon={<CheckCircle className="w-4 h-4 mr-2" />}
+              tooltip="Verify password against hash"
+            >
+              {isVerifying ? "Verifying..." : "Verify"}
+            </ToolButton>
+          </ActionButtonGroup>
+          <DataButtonGroup>
+            <ResetButton
+              onClick={handleReset}
+              tooltip="Reset to default example"
+              hasModifiedData={hasModifiedData}
+              disabled={isAtDefault}
+            />
+            <ClearButton
+              onClick={handleClear}
+              tooltip="Clear all inputs"
+              hasModifiedData={hasModifiedData}
+              disabled={
+                plaintext.trim() === "" &&
+                hash.trim() === "" &&
+                verifyText.trim() === ""
+              }
+            />
+          </DataButtonGroup>
+        </ToolButtonGroup>
         <CardContent>
           <TextArea
             id="output"
@@ -345,6 +400,7 @@ export default function BcryptHash() {
             data-testid="hash-output"
             className="min-h-[100px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
             rows={5}
+            lang="plaintext"
             fileExtension="txt"
             theme={theme}
           />

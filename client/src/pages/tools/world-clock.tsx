@@ -15,10 +15,17 @@ import {
   getUserTimezone,
 } from "@/lib/time-tools";
 import { Clock, Globe, Plus, X } from "lucide-react";
+import {
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import { useToast } from "@/hooks/use-toast";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
 
 export default function WorldClock() {
   const tool = getToolByPath("/tools/world-clock");
@@ -159,35 +166,44 @@ export default function WorldClock() {
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
-            World Clock
-            {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
-          </h2>
-          <p className="text-slate-600 dark:text-slate-400">
-            Browse all continents and important time zones, then add the ones
-            you're interested in to your custom clocks
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Button
-            onClick={() => setShowAddClock(!showAddClock)}
-            data-testid="add-clock-toggle"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Clock
-          </Button>
-          {displayedCities.length > 0 && (
-            <Button
-              onClick={resetToDefault}
-              variant="outline"
-              data-testid="reset-clocks"
-            >
-              <X className="w-4 h-4 mr-2" />
-              Clear All
-            </Button>
-          )}
+      <div className="mb-6">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              World Clock
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Browse all continents and important time zones, then add the ones
+              you're interested in to your custom clocks
+            </p>
+          </div>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <SecurityBanner variant="compact" className="shrink-0" />
+            <ToolButtonGroup>
+              <ActionButtonGroup>
+                <Button
+                  onClick={() => setShowAddClock(!showAddClock)}
+                  data-testid="add-clock-toggle"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Clock
+                </Button>
+              </ActionButtonGroup>
+              {displayedCities.length > 0 && (
+                <DataButtonGroup>
+                  <ClearButton
+                    onClick={resetToDefault}
+                    tooltip="Clear all custom clocks"
+                    hasModifiedData={displayedCities.length > 0}
+                    disabled={displayedCities.length === 0}
+                  />
+                </DataButtonGroup>
+              )}
+            </ToolButtonGroup>
+          </div>
         </div>
       </div>
 

@@ -12,15 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Play,
-  Square,
-  Music,
-  Plus,
-  Trash2,
-  Volume2,
-  Share,
-} from "lucide-react";
+import { Play, Square, Music, Plus, Trash2, Volume2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
@@ -29,6 +21,12 @@ import { Separator } from "@/components/ui/separator";
 import { getParam, copyShareableURL } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
 import { SecurityBanner } from "@/components/ui/security-banner";
+import {
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 interface ToneSchedule {
   id: string;
@@ -163,10 +161,14 @@ export default function Metronome() {
 
     // Capture ref values at effect time to avoid stale closures
     const currentTimeouts = toneTimeoutsRef.current;
+    const audioContext = audioContextRef.current;
 
     return () => {
-      if (audioContextRef.current) {
-        audioContextRef.current.close();
+      // Only close if not already closed
+      if (audioContext && audioContext.state !== "closed") {
+        audioContext.close().catch(() => {
+          // Ignore errors when closing - context may already be closed
+        });
       }
       // Clear all timeouts using captured value
       currentTimeouts.forEach((timeout: NodeJS.Timeout) =>
@@ -399,40 +401,41 @@ export default function Metronome() {
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Main Controls */}
-          <div className="flex gap-4 items-center justify-center p-4 bg-slate-50 dark:bg-slate-900 rounded-lg">
-            {!isRunning ? (
-              <Button
-                onClick={startMetronome}
-                disabled={toneSchedules.filter(s => s.enabled).length === 0}
-                size="lg"
-                className="flex items-center space-x-2"
-                data-testid="start-button"
-              >
-                <Play className="w-5 h-5" />
-                <span>Start (Enter)</span>
-              </Button>
-            ) : (
-              <Button
-                onClick={stopMetronome}
-                variant="destructive"
-                size="lg"
-                className="flex items-center space-x-2"
-                data-testid="stop-button"
-              >
-                <Square className="w-5 h-5" />
-                <span>Stop (Space/Esc)</span>
-              </Button>
-            )}
-
-            <Button
-              onClick={shareMetronome}
-              variant="outline"
-              className="flex items-center space-x-2"
-              data-testid="share-metronome-button"
-            >
-              <Share className="w-4 h-4" />
-              <span>Share</span>
-            </Button>
+          <div className="flex justify-center p-4 bg-slate-50 dark:bg-slate-900 rounded-lg">
+            <ToolButtonGroup>
+              <ActionButtonGroup>
+                {!isRunning ? (
+                  <Button
+                    onClick={startMetronome}
+                    disabled={toneSchedules.filter(s => s.enabled).length === 0}
+                    size="lg"
+                    className="flex items-center space-x-2"
+                    data-testid="start-button"
+                  >
+                    <Play className="w-5 h-5" />
+                    <span>Start (Enter)</span>
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={stopMetronome}
+                    variant="destructive"
+                    size="lg"
+                    className="flex items-center space-x-2"
+                    data-testid="stop-button"
+                  >
+                    <Square className="w-5 h-5" />
+                    <span>Stop (Space/Esc)</span>
+                  </Button>
+                )}
+              </ActionButtonGroup>
+              <DataButtonGroup>
+                <ToolButton
+                  variant="share"
+                  onClick={shareMetronome}
+                  tooltip="Copy shareable metronome URL"
+                />
+              </DataButtonGroup>
+            </ToolButtonGroup>
           </div>
 
           {toneSchedules.filter(s => s.enabled).length === 0 && (

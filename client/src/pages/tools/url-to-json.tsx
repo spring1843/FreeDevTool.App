@@ -1,38 +1,31 @@
 import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Label } from "@/components/ui/label";
-import { CopyButton } from "@/components/ui/copy-button";
-import { Link, Globe, Hash, Share } from "lucide-react";
+import { Link, Hash, Globe } from "lucide-react";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import {
   updateURL,
   copyShareableURL,
   getValidatedParam,
 } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
-import { extractDomainParts } from "@/data/domain-tlds";
-
-interface URLComponents {
-  protocol?: string;
-  hostname?: string;
-  port?: string;
-  pathname?: string;
-  search?: string;
-  hash?: string;
-  origin?: string;
-  tld?: string;
-  subdomain?: string;
-  domain?: string;
-  queryParams?: Record<string, string>;
-}
+import { parseURL, type URLComponents } from "@/lib/url-parser";
 
 import { DEFAULT_URL_TO_JSON } from "@/data/defaults";
 import { Input } from "@/components/ui/input";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
 
 export default function URLToJSON() {
   const tool = getToolByPath("/tools/url-to-json");
@@ -54,67 +47,24 @@ export default function URLToJSON() {
   }, []);
 
   useEffect(() => {
-    parseURL();
-    // Update URL when input changes
+    handleParseURL();
     updateURL({ url: inputUrl });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputUrl]);
 
-  // Use optimized domain/TLD extraction backed by cached sets
-  const extractTLD = (hostname: string) => extractDomainParts(hostname);
+  const handleParseURL = useCallback(() => {
+    const result = parseURL(inputUrl);
 
-  const parseURL = useCallback(() => {
-    try {
+    if (result.success) {
       setError("");
-
-      if (!inputUrl.trim()) {
-        setUrlComponents({});
-        setJsonOutput("");
-        return;
-      }
-
-      let urlToParse = inputUrl.trim();
-
-      // Add protocol if missing
-      if (!urlToParse.match(/^https?:\/\//)) {
-        urlToParse = `https://${urlToParse}`;
-      }
-
-      const url = new URL(urlToParse);
-      const { tld, domain, subdomain } = extractTLD(url.hostname);
-
-      // Parse query parameters
-      const queryParams: Record<string, string> = {};
-      url.searchParams.forEach((value, key) => {
-        queryParams[key] = value;
-      });
-
-      const components: URLComponents = {
-        protocol: url.protocol.slice(0, -1), // Remove trailing ':'
-        hostname: url.hostname,
-        port: url.port || undefined,
-        pathname: url.pathname,
-        search: url.search || undefined,
-        hash: url.hash || undefined,
-        origin: url.origin,
-        tld: tld || undefined,
-        domain: domain || undefined,
-        subdomain: subdomain || undefined,
-        queryParams:
-          Object.keys(queryParams).length > 0 ? queryParams : undefined,
-      };
-
-      // Remove undefined values for cleaner JSON
-      const cleanComponents = Object.fromEntries(
-        Object.entries(components).filter(
-          ([_, value]) => value !== undefined && value !== ""
-        )
+      setUrlComponents(result.components);
+      setJsonOutput(
+        Object.keys(result.components).length > 0
+          ? JSON.stringify(result.components, null, 2)
+          : ""
       );
-
-      setUrlComponents(cleanComponents);
-      setJsonOutput(JSON.stringify(cleanComponents, null, 2));
-    } catch {
-      setError("Invalid URL format");
+    } else {
+      setError(result.error || "Invalid URL format");
       setUrlComponents({});
       setJsonOutput("");
     }
@@ -143,25 +93,67 @@ export default function URLToJSON() {
     setError("");
   };
 
-  const loadExample = () => {
-    setInputUrl(
-      "https://api.example.com:8080/v1/users/123?include=profile,settings&format=json&sort=name#results"
-    );
+  const handleReset = () => {
+    setInputUrl(DEFAULT_URL_TO_JSON);
+    setUrlComponents({});
+    setJsonOutput("");
+    setError("");
   };
+
+  const hasModifiedData =
+    inputUrl !== DEFAULT_URL_TO_JSON && inputUrl.trim() !== "";
+  const isAtDefault = inputUrl === DEFAULT_URL_TO_JSON;
 
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
-          URL to JSON Converter
-          {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
-        </h2>
-        <p className="text-slate-600 dark:text-slate-400">
-          Break down URLs into their components including protocol, hostname,
-          TLD, and query parameters
-        </p>
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              URL to JSON Converter
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Break down URLs into their components including protocol,
+              hostname, TLD, and query parameters
+            </p>
+          </div>
+          <SecurityBanner variant="compact" className="shrink-0" />
+        </div>
       </div>
+
+      {error ? (
+        <div className="mb-6 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+          <p className="text-sm text-red-700 dark:text-red-400">{error}</p>
+        </div>
+      ) : null}
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="share"
+            onClick={shareConverter}
+            tooltip="Copy shareable URL to clipboard"
+          />
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default URL"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={clearInput}
+            tooltip="Clear URL input"
+            hasModifiedData={hasModifiedData}
+            disabled={inputUrl.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       {/* Main Content */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
@@ -188,56 +180,6 @@ export default function URLToJSON() {
                   data-default-input="true"
                 />
               </div>
-
-              {error ? (
-                <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                  <p className="text-sm text-red-700 dark:text-red-400">
-                    {error}
-                  </p>
-                </div>
-              ) : null}
-
-              <div className="flex gap-2">
-                <Button
-                  onClick={parseURL}
-                  className="flex-1"
-                  data-testid="parse-button"
-                >
-                  <Globe className="w-4 h-4 mr-2" />
-                  Parse URL
-                </Button>
-
-                <Button
-                  onClick={shareConverter}
-                  variant="outline"
-                  data-testid="share-converter-button"
-                >
-                  <Share className="w-4 h-4 mr-2" />
-                  Share
-                </Button>
-              </div>
-
-              <div className="flex gap-2">
-                <Button
-                  onClick={loadExample}
-                  variant="outline"
-                  size="sm"
-                  className="flex-1"
-                  data-testid="load-example-button"
-                >
-                  Load Example
-                </Button>
-
-                <Button
-                  onClick={clearInput}
-                  variant="outline"
-                  size="sm"
-                  className="flex-1"
-                  data-testid="clear-button"
-                >
-                  Clear
-                </Button>
-              </div>
             </CardContent>
           </Card>
         </div>
@@ -246,15 +188,10 @@ export default function URLToJSON() {
         <div className="space-y-4">
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center">
-                  <Hash className="w-5 h-5 mr-2" />
-                  JSON Output
-                </CardTitle>
-                {jsonOutput ? (
-                  <CopyButton text={jsonOutput} variant="outline" size="sm" />
-                ) : null}
-              </div>
+              <CardTitle className="flex items-center">
+                <Hash className="w-5 h-5 mr-2" />
+                JSON Output
+              </CardTitle>
             </CardHeader>
             <CardContent>
               {jsonOutput ? (
@@ -295,19 +232,30 @@ export default function URLToJSON() {
                     ) : null}
 
                     {urlComponents.tld ? (
-                      <div className="flex justify-between items-center p-2 bg-purple-50 dark:bg-purple-900/20 rounded border border-purple-200 dark:border-purple-800">
-                        <span className="text-sm font-medium text-purple-700 dark:text-purple-400">
-                          TLD:
-                        </span>
-                        <span className="text-sm font-mono text-purple-900 dark:text-purple-100">
-                          {urlComponents.tld}
-                        </span>
+                      <div className="p-2 bg-purple-50 dark:bg-purple-900/20 rounded border border-purple-200 dark:border-purple-800">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm font-medium text-purple-700 dark:text-purple-400">
+                            TLD:
+                          </span>
+                          <span className="text-sm font-mono text-purple-900 dark:text-purple-100">
+                            {urlComponents.tld}
+                          </span>
+                        </div>
+                        {urlComponents.isTldKnown === false ? (
+                          <div className="mt-2 p-2 bg-amber-50 dark:bg-amber-900/30 rounded border border-amber-300 dark:border-amber-700">
+                            <p className="text-xs text-amber-700 dark:text-amber-300">
+                              ⚠️ This TLD is not recognized in our database of
+                              known TLDs. It may be invalid or a newly
+                              registered TLD.
+                            </p>
+                          </div>
+                        ) : null}
                       </div>
                     ) : null}
 
                     {urlComponents.queryParams &&
                     Object.keys(urlComponents.queryParams).length > 0 ? (
-                      <div className="p-2 bg-orange-50 dark:bg-orange-900/20 rounded border border-orange-200 dark:border-orange-800">
+                      <div className="p-2 bg-orange-50 dark:bg-orange-900/20 rounded border border-orange-200 dark:border-orange-800 overflow-hidden">
                         <span className="text-sm font-medium text-orange-700 dark:text-orange-400 block mb-2">
                           Query Parameters (
                           {Object.keys(urlComponents.queryParams).length}):
@@ -315,14 +263,11 @@ export default function URLToJSON() {
                         <div className="space-y-1">
                           {Object.entries(urlComponents.queryParams).map(
                             ([key, value]) => (
-                              <div
-                                key={key}
-                                className="flex justify-between items-center"
-                              >
-                                <span className="text-sm font-mono text-orange-800 dark:text-orange-200">
+                              <div key={key} className="flex flex-wrap gap-1">
+                                <span className="text-sm font-mono text-orange-800 dark:text-orange-200 break-all">
                                   {key}:
                                 </span>
-                                <span className="text-sm font-mono text-orange-900 dark:text-orange-100">
+                                <span className="text-sm font-mono text-orange-900 dark:text-orange-100 break-all">
                                   {value}
                                 </span>
                               </div>

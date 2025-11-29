@@ -39,13 +39,14 @@ describe("extractDomainParts", () => {
     expect(subdomain).toBe("api");
   });
 
-  it("treats unknown TLD as full domain (no recognized TLD)", () => {
-    const { tld, domain, subdomain } = extractDomainParts(
+  it("identifies unknown TLD with isTldKnown flag", () => {
+    const { tld, domain, subdomain, isTldKnown } = extractDomainParts(
       "example.unknown-tld"
     );
-    expect(tld).toBe("");
-    expect(domain).toBe("example.unknown-tld");
+    expect(tld).toBe("unknown-tld");
+    expect(domain).toBe("example");
     expect(subdomain).toBe("");
+    expect(isTldKnown).toBe(false);
   });
 
   it("returns input hostname as domain when there is only one label", () => {

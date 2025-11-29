@@ -4,7 +4,14 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Key, CheckCircle, XCircle } from "lucide-react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useState, useEffect, useCallback } from "react";
-import { ToolButton, ResetButton } from "@/components/ui/tool-button";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import { DEFAULT_JWT } from "@/data/defaults";
 import { useTheme } from "@/providers/theme-provider";
 import { getToolByPath } from "@/data/tools";
@@ -83,6 +90,18 @@ export default function JWTDecoder() {
     setError(null);
   };
 
+  const handleClear = () => {
+    setToken("");
+    setHeader("");
+    setPayload("");
+    setSignature("");
+    setIsValid(false);
+    setError(null);
+  };
+
+  const hasModifiedData = token !== DEFAULT_JWT && token.trim() !== "";
+  const isAtDefault = token === DEFAULT_JWT;
+
   useEffect(() => {
     decodeToken();
   }, [decodeToken]);
@@ -134,20 +153,37 @@ export default function JWTDecoder() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="mb-4 flex gap-3">
-            <ToolButton
-              variant="custom"
-              onClick={decodeToken}
-              icon={<Key className="w-4 h-4 mr-2" />}
-              tooltip="Decode JWT token"
-            >
-              Decode
-            </ToolButton>
-            <ResetButton
-              onClick={handleReset}
-              tooltip="Reset to default token"
-            />
-          </div>
+          <ToolButtonGroup className="mb-4">
+            <ActionButtonGroup>
+              <ToolButton
+                variant="custom"
+                onClick={decodeToken}
+                icon={<Key className="w-4 h-4 mr-2" />}
+                tooltip="Decode JWT token"
+              >
+                Decode
+              </ToolButton>
+            </ActionButtonGroup>
+            <DataButtonGroup>
+              <ResetButton
+                onClick={handleReset}
+                tooltip="Reset to default token"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={handleClear}
+                tooltip="Clear all inputs"
+                hasModifiedData={hasModifiedData}
+                disabled={
+                  token.trim() === "" &&
+                  header.trim() === "" &&
+                  payload.trim() === "" &&
+                  signature.trim() === ""
+                }
+              />
+            </DataButtonGroup>
+          </ToolButtonGroup>
           <TextArea
             id="input"
             value={token}
@@ -158,8 +194,10 @@ export default function JWTDecoder() {
             rows={5}
             data-default-input="true"
             autoFocus={true}
-            fileExtension="json"
+            lang="plaintext"
+            fileExtension="txt"
             theme={theme}
+            lineWrapping={true}
           />
         </CardContent>
       </Card>

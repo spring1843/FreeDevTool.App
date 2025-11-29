@@ -84,9 +84,8 @@ app.use((req, res, next) => {
   }
 
   // ALWAYS serve the app on the port specified in the environment variable PORT
-  // Replit expects port 5000 for the preview to work.
   // this serves both the API and the client.
-  const port = parseInt(process.env.PORT || "5000", 10);
+  const port = parseInt(process.env.PORT || "9595", 10);
   server.listen(
     {
       port,

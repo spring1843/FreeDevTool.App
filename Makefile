@@ -78,7 +78,7 @@ stop: ## Stop the development server (if running in background)
 restart: stop start ## Restart the development server
 
 dev: ## Start development server with verbose logging
-	NODE_ENV=development DEBUG=* npm run dev
+	PORT=9095 NODE_ENV=development DEBUG=* npm run dev
 
 build: clean
 	npm run build
@@ -134,7 +134,8 @@ test-coverage: ## Run tests with coverage report
 	npx vitest run --coverage
 
 e2e-test: ## Run end-to-end tests with Playwright (use TARGET=https://host to test remote)
-	TARGET=$${TARGET} npx playwright test
+	@echo "Running e2e tests against: ${TARGET:-http://localhost:3000}"
+	@npx playwright test
 
 e2e-test-ui: ## Run end-to-end tests with UI
 	npx playwright test --ui

@@ -10,6 +10,8 @@ import {
   Pause,
   ChevronDown,
   ChevronRight,
+  Github,
+  Shield,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -145,6 +147,62 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Technical Design Principles */}
+      <div
+        id="security"
+        className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 mb-8"
+      >
+        <div className="grid md:grid-cols-3 gap-4 text-sm">
+          <div className="text-center">
+            <div className="font-medium text-green-700 dark:text-green-400 mb-2">
+              Your Data Never Leaves Your Device
+            </div>
+            <p className="text-slate-600 dark:text-slate-400">
+              No back-end desgin. All processing happens entirely in your
+              browser. Your data is never sent to any server.
+            </p>
+          </div>
+          <div className="text-center">
+            <div className="font-medium text-blue-700 dark:text-blue-400 mb-2">
+              No Cookies, No Tracking, No Ads
+            </div>
+            <p className="text-slate-600 dark:text-slate-400">
+              No cookies, tracking pixels, or ads. Only browser local storage
+              for your preferences. No external dependencies.
+            </p>
+          </div>
+          <div className="text-center">
+            <div className="font-medium text-purple-700 dark:text-purple-400 mb-2">
+              Open Source & Transparent
+            </div>
+            <p className="text-slate-600 dark:text-slate-400 mb-3">
+              Designed for ultimate privacy and security. Inspect the code
+              yourself.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-2 justify-center">
+              <a
+                href="https://github.com/spring1843/FreeDevTool.App"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-slate-800 dark:bg-slate-700 text-white rounded-md hover:bg-slate-700 dark:hover:bg-slate-600 transition-colors text-xs font-medium"
+              >
+                <Github className="w-3.5 h-3.5" />
+                Open Source
+              </a>
+              <a
+                href="https://github.com/spring1843/FreeDevTool.App/blob/main/SECURITY.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-green-600 dark:bg-green-700 text-white rounded-md hover:bg-green-700 dark:hover:bg-green-600 transition-colors text-xs font-medium"
+              >
+                <Shield className="w-3.5 h-3.5" />
+                Safety and Security
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Tools Grid */}
       <div className="space-y-8">
         {Object.entries(filteredToolsData).map(([section, data]) => (
@@ -196,127 +254,8 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Key Advantages Section */}
+      {/* Keyboard Shortcuts Help */}
       <div className="mt-16">
-        {/* Why Choose Us - Prominent Section */}
-        <Card className="border-2 border-blue-200 dark:border-blue-800 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950 mb-8">
-          <CardHeader className="text-center pb-4">
-            <CardTitle className="text-2xl text-slate-900 dark:text-slate-100 mb-2">
-              Why FreeDevTool.App is Different
-            </CardTitle>
-            <p className="text-slate-600 dark:text-slate-400">
-              Built by developers, for developers. Designed with privacy,
-              security, and transparency as core values.
-            </p>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="text-center group">
-                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                  <span className="text-2xl">🌟</span>
-                </div>
-                <h4 className="font-semibold text-blue-700 dark:text-blue-400 mb-2">
-                  Open Source
-                </h4>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Community-driven development with transparent code. You can
-                  audit, contribute, and trust every line of code.
-                </p>
-              </div>
-
-              <div className="text-center group">
-                <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                  <span className="text-2xl">💰</span>
-                </div>
-                <h4 className="font-semibold text-green-700 dark:text-green-400 mb-2">
-                  Free Core Features
-                </h4>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Current tools are free since computation happens in your
-                  browser for enhanced security.
-                </p>
-              </div>
-
-              <div className="text-center group">
-                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                  <span className="text-2xl">🔒</span>
-                </div>
-                <h4 className="font-semibold text-purple-700 dark:text-purple-400 mb-2">
-                  Zero Data Transmission
-                </h4>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Your data stays in your browser. All processing happens
-                  locally for enhanced security.
-                </p>
-              </div>
-
-              <div className="text-center group">
-                <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                  <span className="text-2xl">✈️</span>
-                </div>
-                <h4 className="font-semibold text-amber-700 dark:text-amber-400 mb-2">
-                  Offline Design
-                </h4>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Built to function without internet connectivity. Designed for
-                  environments where network access is limited or restricted.
-                </p>
-              </div>
-            </div>
-
-            {/* Call to Action */}
-            <div className="mt-8 text-center">
-              <div className="inline-flex items-center bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-3 shadow-sm">
-                <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse" />
-                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                  Ready to use right now • No signup required • Privacy-focused
-                  design
-                </span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Technical Details */}
-        <div
-          id="security"
-          className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 mb-8"
-        >
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4 text-center">
-            Technical Design Principles
-          </h3>
-          <div className="grid md:grid-cols-3 gap-4 text-sm">
-            <div className="text-center">
-              <div className="font-medium text-green-700 dark:text-green-400 mb-2">
-                Content Security Policy
-              </div>
-              <p className="text-slate-600 dark:text-slate-400">
-                Implemented with CSP headers designed to block external
-                connections and prevent unintended data transmission.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="font-medium text-blue-700 dark:text-blue-400 mb-2">
-                Local Processing Design
-              </div>
-              <p className="text-slate-600 dark:text-slate-400">
-                Built to handle all computations in your browser using
-                JavaScript, avoiding server-side processing.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="font-medium text-purple-700 dark:text-purple-400 mb-2">
-                No External Dependencies
-              </div>
-              <p className="text-slate-600 dark:text-slate-400">
-                Designed with minimal external dependencies to reduce potential
-                network requests and data sharing.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Keyboard Shortcuts Help */}
         <div className="mb-8">
           <Card>
             <CardHeader>

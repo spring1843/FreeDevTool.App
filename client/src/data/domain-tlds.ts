@@ -10104,11 +10104,12 @@ export function extractDomainParts(hostname: string): {
   tld: string;
   domain: string;
   subdomain: string;
+  isTldKnown: boolean;
 } {
   const host = (hostname || "").toLowerCase();
   const parts = host.split(".").filter(Boolean);
   if (parts.length < 2) {
-    return { tld: "", domain: host, subdomain: "" };
+    return { tld: "", domain: host, subdomain: "", isTldKnown: false };
   }
 
   // Attempt multi-part TLD match from longest to shortest (>= 2 labels)
@@ -10119,7 +10120,7 @@ export function extractDomainParts(hostname: string): {
       const remaining = parts.slice(0, -k);
       const domain = remaining.pop() || "";
       const subdomain = remaining.join(".");
-      return { tld: candidate, domain, subdomain };
+      return { tld: candidate, domain, subdomain, isTldKnown: true };
     }
   }
 
@@ -10128,11 +10129,14 @@ export function extractDomainParts(hostname: string): {
   if (SINGLE_PART_TLDS.has(potentialTLD)) {
     const domain = parts[parts.length - 2];
     const subdomain = parts.slice(0, -2).join(".");
-    return { tld: potentialTLD, domain, subdomain };
+    return { tld: potentialTLD, domain, subdomain, isTldKnown: true };
   }
 
-  // Unknown TLD: treat full hostname as domain
-  return { tld: "", domain: host, subdomain: "" };
+  // Unknown TLD: use the last part as tld but mark as unknown
+  const unknownTld = parts[parts.length - 1];
+  const domain = parts[parts.length - 2] || "";
+  const subdomain = parts.slice(0, -2).join(".");
+  return { tld: unknownTld, domain, subdomain, isTldKnown: false };
 }
 
 export const IsCommonTLD = (tld: string): boolean =>

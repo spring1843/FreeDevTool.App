@@ -25,9 +25,16 @@ import {
   Download,
   RefreshCw,
   Shuffle,
-  RotateCcw,
   Share,
 } from "lucide-react";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import { useToast } from "@/hooks/use-toast";
 
 import { getParam, updateURL, generateShareableURL } from "@/lib/url-sharing";
@@ -36,6 +43,7 @@ import { DEFAULT_COLOR_PALETTE_GENERATOR } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
 
 export default function ColorPaletteGenerator() {
   const tool = getToolByPath("/tools/color-palette-generator");
@@ -287,14 +295,21 @@ export default function ColorPaletteGenerator() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
-          Color Palette Generator
-          {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
-        </h2>
-        <p className="text-slate-600 dark:text-slate-400">
-          Generate beautiful color palettes from any base color using color
-          theory principles
-        </p>
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              Color Palette Generator
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Generate beautiful color palettes from any base color using color
+              theory principles
+            </p>
+          </div>
+          <SecurityBanner variant="compact" className="shrink-0" />
+        </div>
       </div>
 
       {/* Controls */}
@@ -342,8 +357,11 @@ export default function ColorPaletteGenerator() {
             <div>
               <Label htmlFor="palette-type">Palette Type</Label>
               <Select value={selectedType} onValueChange={handleTypeChange}>
-                <SelectTrigger data-testid="palette-type-select">
-                  <SelectValue placeholder="Select palette type" />
+                <SelectTrigger
+                  data-testid="palette-type-select"
+                  className="w-[140px]"
+                >
+                  <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>
                   {paletteTypes.map(type => (
@@ -355,48 +373,73 @@ export default function ColorPaletteGenerator() {
               </Select>
             </div>
 
-            <div className="flex items-end gap-2">
-              <Button
-                onClick={generatePalette}
-                disabled={isGenerating}
-                className="flex-1"
-                data-testid="generate-palette-button"
-              >
-                {isGenerating ? (
-                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                ) : (
-                  <Palette className="w-4 h-4 mr-2" />
-                )}
-                Generate Palette
-              </Button>
-              <Button
-                variant="outline"
-                onClick={generateAllPalettes}
-                disabled={isGenerating}
-                data-testid="generate-all-button"
-              >
-                All Types
-              </Button>
-              <Button
-                variant="outline"
-                onClick={shareCurrentPalette}
-                data-testid="share-palette-button"
-              >
-                <Share className="w-4 h-4" />
-              </Button>
-              <Button
-                onClick={() => {
-                  setBaseColor("#3B82F6");
-                  setSelectedType("complementary");
-                  setGeneratedPalettes([]);
-                  updateUrl("#3B82F6", "complementary");
-                }}
-                variant="outline"
-                data-testid="reset-color-palette-button"
-              >
-                <RotateCcw className="w-4 h-4" />
-              </Button>
-            </div>
+            <ToolButtonGroup className="flex items-end gap-2">
+              <ActionButtonGroup>
+                <ToolButton
+                  variant="custom"
+                  onClick={generatePalette}
+                  disabled={isGenerating}
+                  tooltip="Generate color palette"
+                  icon={
+                    isGenerating ? (
+                      <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                    ) : (
+                      <Palette className="w-4 h-4 mr-2" />
+                    )
+                  }
+                >
+                  Generate
+                </ToolButton>
+                <ToolButton
+                  variant="custom"
+                  onClick={generateAllPalettes}
+                  disabled={isGenerating}
+                  tooltip="Generate all palette types"
+                >
+                  All
+                </ToolButton>
+                <ToolButton
+                  variant="share"
+                  onClick={shareCurrentPalette}
+                  tooltip="Copy shareable URL to clipboard"
+                  size="icon"
+                  icon={<Share className="w-4 h-4" />}
+                />
+              </ActionButtonGroup>
+              <DataButtonGroup>
+                <ResetButton
+                  onClick={() => {
+                    setBaseColor(DEFAULT_COLOR_PALETTE_GENERATOR);
+                    setSelectedType("complementary");
+                    setGeneratedPalettes([]);
+                    updateUrl(DEFAULT_COLOR_PALETTE_GENERATOR, "complementary");
+                  }}
+                  tooltip="Reset all settings to defaults"
+                  hasModifiedData={
+                    baseColor !== DEFAULT_COLOR_PALETTE_GENERATOR ||
+                    selectedType !== "complementary"
+                  }
+                  disabled={
+                    baseColor === DEFAULT_COLOR_PALETTE_GENERATOR &&
+                    selectedType === "complementary"
+                  }
+                  iconOnly
+                />
+                <ClearButton
+                  onClick={() => {
+                    setBaseColor("");
+                    setGeneratedPalettes([]);
+                  }}
+                  tooltip="Clear color input"
+                  hasModifiedData={
+                    baseColor !== DEFAULT_COLOR_PALETTE_GENERATOR &&
+                    baseColor.trim() !== ""
+                  }
+                  disabled={baseColor.trim() === ""}
+                  iconOnly
+                />
+              </DataButtonGroup>
+            </ToolButtonGroup>
           </div>
         </CardContent>
       </Card>

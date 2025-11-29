@@ -2,13 +2,21 @@ import { useState, useEffect, useCallback } from "react";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TimezoneSelector } from "@/components/ui/timezone-selector";
 import { getUserTimezone } from "@/lib/time-tools";
-import { Clock, Copy, Check, RefreshCw } from "lucide-react";
+import { Clock, Copy, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  ResetButton,
+  ClearButton,
+  NowButton,
+  ToolButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 interface TimeFormat {
   name: string;
@@ -274,17 +282,33 @@ export default function TimeFormatter() {
     setInputTime(timeStr);
   };
 
+  const handleClear = () => {
+    setInputDate("");
+    setInputTime("");
+    setFormats([]);
+  };
+
+  const hasModifiedData = inputDate.trim() !== "" && inputTime.trim() !== "";
+  const isAtDefault = false; // Time formatter always starts with current time
+
   return (
     <div className="max-w-4xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
-          Time Formatter
-          {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
-        </h2>
-        <p className="text-slate-600 dark:text-slate-400">
-          Format time to all existing time standards and formats
-        </p>
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              Time Formatter
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Format time to all existing time standards and formats
+            </p>
+          </div>
+          <SecurityBanner variant="compact" className="shrink-0" />
+        </div>
       </div>
 
       {/* Input Section */}
@@ -330,15 +354,30 @@ export default function TimeFormatter() {
               />
             </div>
             <div className="flex items-end">
-              <Button
-                onClick={setCurrentDateTime}
-                variant="outline"
-                className="w-full"
-                data-testid="set-current-button"
-              >
-                <RefreshCw className="w-4 h-4 mr-2" />
-                Now
-              </Button>
+              <ToolButtonGroup>
+                <DataButtonGroup>
+                  <NowButton
+                    onClick={setCurrentDateTime}
+                    tooltip="Set to current date and time"
+                    toastTitle="Time updated"
+                    toastDescription="Set to current date and time"
+                  />
+                  <ResetButton
+                    onClick={setCurrentDateTime}
+                    tooltip="Reset to current time"
+                    hasModifiedData={hasModifiedData}
+                    disabled={isAtDefault}
+                  />
+                  <ClearButton
+                    onClick={handleClear}
+                    tooltip="Clear all inputs"
+                    hasModifiedData={hasModifiedData}
+                    disabled={
+                      inputDate.trim() === "" && inputTime.trim() === ""
+                    }
+                  />
+                </DataButtonGroup>
+              </ToolButtonGroup>
             </div>
           </div>
         </CardContent>

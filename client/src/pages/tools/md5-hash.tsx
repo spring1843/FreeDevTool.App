@@ -4,16 +4,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
-import {
-  Hash,
-  Copy,
-  CheckCircle,
-  XCircle,
-  Eye,
-  EyeOff,
-  RotateCcw,
-} from "lucide-react";
+import { Hash, Copy, CheckCircle, XCircle, Eye, EyeOff } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -116,6 +116,21 @@ export default function MD5Hash() {
     setIsMatch(null);
     setShowPassword(false);
   };
+
+  const handleClear = () => {
+    setInputText("");
+    setCompareHash("");
+    setHashResult("");
+    setIsMatch(null);
+    setShowPassword(false);
+  };
+
+  const hasModifiedData =
+    (inputText !== DEFAULT_MD5 && inputText.trim() !== "") ||
+    compareHash.trim() !== "" ||
+    hashResult.trim() !== "";
+  const isAtDefault =
+    inputText === DEFAULT_MD5 && compareHash === "" && hashResult === "";
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -280,14 +295,39 @@ export default function MD5Hash() {
 
       <Card className="mb-6">
         <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            Hash Details
-            <Button onClick={handleReset} variant="outline" size="sm">
-              <RotateCcw className="w-4 h-4 mr-1" />
-              Reset
-            </Button>
-          </CardTitle>
+          <CardTitle>Hash Details</CardTitle>
         </CardHeader>
+        <ToolButtonGroup className="px-6 pb-4">
+          <ActionButtonGroup>
+            <ToolButton
+              variant="custom"
+              onClick={generateHash}
+              disabled={isLoading || !inputText.trim()}
+              icon={<Hash className="w-4 h-4 mr-2" />}
+              tooltip="Generate MD5 hash from input"
+            >
+              {isLoading ? "Generating..." : "Generate Hash"}
+            </ToolButton>
+          </ActionButtonGroup>
+          <DataButtonGroup>
+            <ResetButton
+              onClick={handleReset}
+              tooltip="Reset to default example"
+              hasModifiedData={hasModifiedData}
+              disabled={isAtDefault}
+            />
+            <ClearButton
+              onClick={handleClear}
+              tooltip="Clear all inputs"
+              hasModifiedData={hasModifiedData}
+              disabled={
+                inputText.trim() === "" &&
+                compareHash.trim() === "" &&
+                hashResult.trim() === ""
+              }
+            />
+          </DataButtonGroup>
+        </ToolButtonGroup>
         <CardContent>
           <TextArea
             id="output"
@@ -296,6 +336,7 @@ export default function MD5Hash() {
             data-testid="hash-output"
             className="min-h-[100px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
             rows={5}
+            lang="plaintext"
             fileExtension="txt"
             theme={theme}
           />

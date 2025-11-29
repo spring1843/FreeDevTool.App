@@ -11,8 +11,15 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { Play, Pause, Square, RotateCcw, Clock } from "lucide-react";
+import { Play, Pause, Square, Clock } from "lucide-react";
 import { useState, useEffect, useRef, useCallback } from "react";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { getToolByPath } from "@/data/tools";
@@ -183,11 +190,25 @@ export default function Countdown() {
 
   const handleReset = () => {
     stopCountdown();
-    setTargetDate("");
-    setTargetTime("");
+    const defaultDt = getDefaultDateTime();
+    setTargetDate(defaultDt.date);
+    setTargetTime(defaultDt.time);
     setSoundEnabled(true);
     setTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
   };
+
+  const handleClear = () => {
+    stopCountdown();
+    setTargetDate("");
+    setTargetTime("");
+  };
+
+  const hasModifiedData =
+    targetDate !== defaultDateTime.date || targetTime !== defaultDateTime.time;
+  const isAtDefault =
+    targetDate === defaultDateTime.date &&
+    targetTime === defaultDateTime.time &&
+    soundEnabled === true;
 
   // Preset options for interesting countdowns
   const presets = [
@@ -406,42 +427,53 @@ export default function Countdown() {
             </div>
           </div>
 
-          <div className="flex gap-3">
-            {!isActive ? (
-              <Button
-                onClick={startCountdown}
-                disabled={!targetDate || !targetTime}
-                className="bg-green-600 hover:bg-green-700 text-white disabled:opacity-50"
-                data-testid="button-start"
-              >
-                <Play className="w-4 h-4 mr-2" />
-                Start (Enter)
-              </Button>
-            ) : (
-              <Button
-                onClick={pauseCountdown}
-                className="bg-yellow-600 hover:bg-yellow-700 text-white"
-                data-testid="button-pause"
-              >
-                <Pause className="w-4 h-4 mr-2" />
-                Pause (Space)
-              </Button>
-            )}
+          <ToolButtonGroup>
+            <ActionButtonGroup>
+              {!isActive ? (
+                <Button
+                  onClick={startCountdown}
+                  disabled={!targetDate || !targetTime}
+                  className="bg-green-600 hover:bg-green-700 text-white disabled:opacity-50"
+                  data-testid="button-start"
+                >
+                  <Play className="w-4 h-4 mr-2" />
+                  Start (Enter)
+                </Button>
+              ) : (
+                <Button
+                  onClick={pauseCountdown}
+                  className="bg-yellow-600 hover:bg-yellow-700 text-white"
+                  data-testid="button-pause"
+                >
+                  <Pause className="w-4 h-4 mr-2" />
+                  Pause (Space)
+                </Button>
+              )}
 
-            <Button
-              onClick={stopCountdown}
-              variant="outline"
-              data-testid="button-stop"
-            >
-              <Square className="w-4 h-4 mr-2" />
-              Stop (Esc)
-            </Button>
-
-            <Button onClick={handleReset} variant="outline">
-              <RotateCcw className="w-4 h-4 mr-2" />
-              Reset
-            </Button>
-          </div>
+              <Button
+                onClick={stopCountdown}
+                variant="outline"
+                data-testid="button-stop"
+              >
+                <Square className="w-4 h-4 mr-2" />
+                Stop (Esc)
+              </Button>
+            </ActionButtonGroup>
+            <DataButtonGroup>
+              <ResetButton
+                onClick={handleReset}
+                tooltip="Reset to New Year countdown"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={handleClear}
+                tooltip="Clear date and time"
+                hasModifiedData={hasModifiedData}
+                disabled={targetDate === "" && targetTime === ""}
+              />
+            </DataButtonGroup>
+          </ToolButtonGroup>
         </CardContent>
       </Card>
 

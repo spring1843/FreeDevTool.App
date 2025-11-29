@@ -1,11 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { formatMarkdown } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { FileText, RotateCcw } from "lucide-react";
+import { FileText } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_MARKDOWN } from "@/data/defaults";
@@ -45,6 +52,15 @@ export default function MarkdownFormatter() {
     setError(null);
   };
 
+  const handleClear = () => {
+    setInput("");
+    setOutput("");
+    setError(null);
+  };
+
+  const hasModifiedData = input !== DEFAULT_MARKDOWN && input.trim() !== "";
+  const isAtDefault = input === DEFAULT_MARKDOWN;
+
   useEffect(() => {
     formatCode();
   }, [formatCode]);
@@ -76,19 +92,33 @@ export default function MarkdownFormatter() {
         </Alert>
       ) : null}
 
-      <div className="mb-6 flex gap-4">
-        <Button
-          onClick={formatCode}
-          className="bg-purple-600 hover:bg-purple-700 text-white"
-        >
-          <FileText className="w-4 h-4 mr-2" />
-          Format Markdown
-        </Button>
-        <Button onClick={handleReset} variant="outline">
-          <RotateCcw className="w-4 h-4 mr-2" />
-          Reset
-        </Button>
-      </div>
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={formatCode}
+            icon={<FileText className="w-4 h-4 mr-2" />}
+            tooltip="Format and beautify Markdown"
+            className="bg-purple-600 hover:bg-purple-700 text-white"
+          >
+            Format Markdown
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={input.trim() === "" && output.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>

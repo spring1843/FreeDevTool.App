@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -10,13 +9,20 @@ import {
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Camera, Square, RotateCcw, Download } from "lucide-react";
+import { Camera, Square, Download, Play } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import {
+  ToolButton,
+  ResetButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 export default function WebcamTest() {
   const tool = getToolByPath("/tools/webcam-test");
@@ -200,6 +206,7 @@ export default function WebcamTest() {
   };
 
   const permissionStatus = getPermissionStatus();
+  const hasModifiedState = isActive || hasPermission !== null;
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -266,48 +273,63 @@ export default function WebcamTest() {
             </div>
           )}
 
-          <div className="flex gap-3">
-            {!hasPermission ? (
-              <Button
-                onClick={requestPermission}
-                className="bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                <Camera className="w-4 h-4 mr-2" />
-                Request Camera Permission
-              </Button>
-            ) : !isActive ? (
-              <Button
-                onClick={startCamera}
-                disabled={devices.length === 0}
-                className="bg-green-600 hover:bg-green-700 text-white disabled:opacity-50"
-              >
-                <Camera className="w-4 h-4 mr-2" />
-                Start Camera
-              </Button>
-            ) : (
-              <Button
-                onClick={stopCamera}
-                className="bg-red-600 hover:bg-red-700 text-white"
-              >
-                <Square className="w-4 h-4 mr-2" />
-                Stop Camera
-              </Button>
-            )}
+          <ToolButtonGroup>
+            <ActionButtonGroup>
+              {!hasPermission ? (
+                <ToolButton
+                  variant="custom"
+                  onClick={requestPermission}
+                  tooltip="Request camera access permission"
+                  icon={<Camera className="w-4 h-4 mr-2" />}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  Request Camera Permission
+                </ToolButton>
+              ) : !isActive ? (
+                <ToolButton
+                  variant="custom"
+                  onClick={startCamera}
+                  disabled={devices.length === 0}
+                  tooltip="Start the camera preview"
+                  icon={<Play className="w-4 h-4 mr-2" />}
+                  className="bg-green-600 hover:bg-green-700 text-white disabled:opacity-50"
+                >
+                  Start Camera
+                </ToolButton>
+              ) : (
+                <ToolButton
+                  variant="custom"
+                  onClick={stopCamera}
+                  tooltip="Stop the camera preview"
+                  icon={<Square className="w-4 h-4 mr-2" />}
+                  className="bg-red-600 hover:bg-red-700 text-white"
+                >
+                  Stop Camera
+                </ToolButton>
+              )}
 
-            <Button
-              onClick={capturePhoto}
-              disabled={!isActive}
-              className="bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
-            >
-              <Download className="w-4 h-4 mr-2" />
-              Capture Photo
-            </Button>
-
-            <Button onClick={handleReset} variant="outline">
-              <RotateCcw className="w-4 h-4 mr-2" />
-              Reset
-            </Button>
-          </div>
+              <ToolButton
+                variant="custom"
+                onClick={capturePhoto}
+                disabled={!isActive}
+                tooltip="Capture and download a photo"
+                icon={<Download className="w-4 h-4 mr-2" />}
+                className="bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
+              >
+                Capture Photo
+              </ToolButton>
+            </ActionButtonGroup>
+            <DataButtonGroup>
+              <ResetButton
+                onClick={handleReset}
+                tooltip="Stop camera and reset all settings"
+                hasModifiedData={hasModifiedState}
+                disabled={!hasModifiedState}
+                toastTitle="Camera reset"
+                toastDescription="Camera has been stopped and settings reset"
+              />
+            </DataButtonGroup>
+          </ToolButtonGroup>
         </CardContent>
       </Card>
 

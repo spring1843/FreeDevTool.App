@@ -1,11 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { formatGraphQL } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Code, RotateCcw } from "lucide-react";
+import { Code } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_GRAPHQL } from "@/data/defaults";
@@ -45,6 +52,15 @@ export default function GraphQLFormatter() {
     setError(null);
   };
 
+  const handleClear = () => {
+    setInput("");
+    setOutput("");
+    setError(null);
+  };
+
+  const hasModifiedData = input !== DEFAULT_GRAPHQL && input.trim() !== "";
+  const isAtDefault = input === DEFAULT_GRAPHQL;
+
   useEffect(() => {
     document.title = "GraphQL Formatter - FreeDevTool.App";
     formatCode();
@@ -78,19 +94,33 @@ export default function GraphQLFormatter() {
         </Alert>
       ) : null}
 
-      <div className="mb-6 flex gap-4">
-        <Button
-          onClick={formatCode}
-          className="bg-green-600 hover:bg-green-700 text-white"
-        >
-          <Code className="w-4 h-4 mr-2" />
-          Format GraphQL
-        </Button>
-        <Button onClick={handleReset} variant="outline">
-          <RotateCcw className="w-4 h-4 mr-2" />
-          Reset
-        </Button>
-      </div>
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={formatCode}
+            icon={<Code className="w-4 h-4 mr-2" />}
+            tooltip="Format and beautify GraphQL code"
+            className="bg-green-600 hover:bg-green-700 text-white"
+          >
+            Format GraphQL
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={input.trim() === "" && output.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>

@@ -1,11 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { formatTypeScript } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Code, Minimize2, RotateCcw } from "lucide-react";
+import { Code, Minimize2 } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_TYPESCRIPT } from "@/data/defaults";
@@ -51,6 +58,15 @@ export default function TypeScriptFormatter() {
     setError(null);
   };
 
+  const handleClear = () => {
+    setInput("");
+    setOutput("");
+    setError(null);
+  };
+
+  const hasModifiedData = input !== DEFAULT_TYPESCRIPT && input.trim() !== "";
+  const isAtDefault = input === DEFAULT_TYPESCRIPT;
+
   useEffect(() => {
     document.title = "TypeScript Formatter - FreeDevTool.App";
     formatCode(false); // Beautify by default
@@ -84,26 +100,42 @@ export default function TypeScriptFormatter() {
         </Alert>
       ) : null}
 
-      <div className="mb-6 flex gap-4">
-        <Button
-          onClick={() => formatCode(false)}
-          className="bg-green-600 hover:bg-green-700 text-white"
-        >
-          <Code className="w-4 h-4 mr-2" />
-          Beautify Code
-        </Button>
-        <Button
-          onClick={() => formatCode(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
-        >
-          <Minimize2 className="w-4 h-4 mr-2" />
-          Minify Code
-        </Button>
-        <Button onClick={handleReset} variant="outline">
-          <RotateCcw className="w-4 h-4 mr-2" />
-          Reset
-        </Button>
-      </div>
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={() => formatCode(false)}
+            icon={<Code className="w-4 h-4 mr-2" />}
+            tooltip="Format and beautify JavaScript/TypeScript code"
+            className="bg-green-600 hover:bg-green-700 text-white"
+          >
+            Beautify Code
+          </ToolButton>
+          <ToolButton
+            variant="custom"
+            onClick={() => formatCode(true)}
+            icon={<Minimize2 className="w-4 h-4 mr-2" />}
+            tooltip="Minify code to reduce file size"
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Minify Code
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={input.trim() === "" && output.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>

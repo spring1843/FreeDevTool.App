@@ -6,11 +6,21 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Lock, Unlock, ArrowRightLeft } from "lucide-react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useState, useEffect, useCallback } from "react";
-import { ToolButton, ResetButton } from "@/components/ui/tool-button";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import { DEFAULT_BASE64 } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+
+// Pre-compute the default encoded value for comparison
+const DEFAULT_BASE64_ENCODED = encodeBase64(DEFAULT_BASE64);
 
 export default function Base64Encoder() {
   const tool = getToolByPath("/tools/base64");
@@ -66,6 +76,19 @@ export default function Base64Encoder() {
     setError(null);
   };
 
+  const handleClear = () => {
+    setPlainText("");
+    setEncodedText("");
+    setError(null);
+  };
+
+  const hasModifiedData =
+    (plainText !== DEFAULT_BASE64 && plainText.trim() !== "") ||
+    (encodedText !== DEFAULT_BASE64_ENCODED && encodedText.trim() !== "");
+  const isAtDefault =
+    plainText === DEFAULT_BASE64 &&
+    (encodedText === "" || encodedText === DEFAULT_BASE64_ENCODED);
+
   // Execute encoding with default value on component mount
   useEffect(() => {
     encode();
@@ -96,36 +119,48 @@ export default function Base64Encoder() {
       ) : null}
 
       {/* Controls */}
-      <div className="mb-6 flex flex-wrap gap-3">
-        <ToolButton
-          variant="custom"
-          onClick={encode}
-          icon={<Lock className="w-4 h-4 mr-2" />}
-          tooltip="Encode plain text to Base64"
-        >
-          Encode
-        </ToolButton>
-        <ToolButton
-          variant="custom"
-          onClick={decode}
-          icon={<Unlock className="w-4 h-4 mr-2" />}
-          tooltip="Decode Base64 to plain text"
-        >
-          Decode
-        </ToolButton>
-        <ToolButton
-          variant="custom"
-          onClick={swapContent}
-          icon={<ArrowRightLeft className="w-4 h-4 mr-2" />}
-          tooltip="Swap content between input and output"
-        >
-          Swap
-        </ToolButton>
-        <ResetButton
-          onClick={handleReset}
-          tooltip="Reset to default text example"
-        />
-      </div>
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={encode}
+            icon={<Lock className="w-4 h-4 mr-2" />}
+            tooltip="Encode plain text to Base64"
+          >
+            Encode
+          </ToolButton>
+          <ToolButton
+            variant="custom"
+            onClick={decode}
+            icon={<Unlock className="w-4 h-4 mr-2" />}
+            tooltip="Decode Base64 to plain text"
+          >
+            Decode
+          </ToolButton>
+          <ToolButton
+            variant="custom"
+            onClick={swapContent}
+            icon={<ArrowRightLeft className="w-4 h-4 mr-2" />}
+            tooltip="Swap content between input and output"
+          >
+            Swap
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default text example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={plainText.trim() === "" && encodedText.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       {/* Editor Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -144,6 +179,7 @@ export default function Base64Encoder() {
               rows={20}
               autoFocus={true}
               minHeight="400px"
+              lang="plaintext"
               fileExtension="txt"
               theme={theme}
               data-default-input="true"
@@ -165,7 +201,9 @@ export default function Base64Encoder() {
               className="min-h-[400px] font-mono text-sm"
               rows={20}
               minHeight="400px"
+              lang="plaintext"
               fileExtension="txt"
+              lineWrapping={true}
               theme={theme}
             />
           </CardContent>

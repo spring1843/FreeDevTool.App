@@ -2,11 +2,12 @@ import { useState, useEffect, useCallback } from "react";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Keyboard, RotateCcw, Info } from "lucide-react";
+import { Keyboard, Info, Play, Square } from "lucide-react";
+import { ToolButton } from "@/components/ui/tool-button";
 
 interface KeyPress {
   key: string;
@@ -64,11 +65,6 @@ export default function KeyboardTest() {
       window.removeEventListener("keyup", handleKeyUp);
     };
   }, [handleKeyDown, handleKeyUp, isActive]);
-
-  const clearHistory = () => {
-    setKeyHistory([]);
-    setPressedKeys(new Set());
-  };
 
   const toggleTesting = () => {
     setIsActive(!isActive);
@@ -143,14 +139,21 @@ export default function KeyboardTest() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
-          Keyboard Test
-          {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
-        </h2>
-        <p className="text-slate-600 dark:text-slate-400">
-          Test your keyboard keys and see which buttons you're pressing in
-          real-time
-        </p>
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              Keyboard Test
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Test your keyboard keys and see which buttons you're pressing in
+              real-time
+            </p>
+          </div>
+          <SecurityBanner variant="compact" className="shrink-0" />
+        </div>
       </div>
 
       {/* Controls */}
@@ -161,25 +164,28 @@ export default function KeyboardTest() {
               <Keyboard className="w-5 h-5 mr-2" />
               Keyboard Testing
             </div>
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={clearHistory}
-                data-testid="clear-history"
-              >
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Clear History
-              </Button>
-              <Button
-                variant={isActive ? "destructive" : "default"}
-                size="sm"
-                onClick={toggleTesting}
-                data-testid="toggle-testing"
-              >
-                {isActive ? "Stop Testing" : "Start Testing"}
-              </Button>
-            </div>
+            <ToolButton
+              variant="custom"
+              onClick={toggleTesting}
+              tooltip={
+                isActive ? "Stop keyboard testing" : "Start keyboard testing"
+              }
+              icon={
+                isActive ? (
+                  <Square className="w-4 h-4 mr-2" />
+                ) : (
+                  <Play className="w-4 h-4 mr-2" />
+                )
+              }
+              className={
+                isActive
+                  ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  : ""
+              }
+              size="sm"
+            >
+              {isActive ? "Stop Testing" : "Start Testing"}
+            </ToolButton>
           </CardTitle>
         </CardHeader>
         <CardContent>

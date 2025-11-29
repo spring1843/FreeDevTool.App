@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -11,9 +10,17 @@ import {
 } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { BarChart3, Download, RotateCcw } from "lucide-react";
+import { BarChart3 } from "lucide-react";
 import { useState, useRef, useEffect, useCallback } from "react";
 import JsBarcode from "jsbarcode";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_BARCODE_GENERATOR } from "@/data/defaults";
@@ -130,6 +137,20 @@ export default function BarcodeGenerator() {
     setDisplayValue(true);
     setError(null);
   };
+
+  const handleClear = () => {
+    setText("");
+    setError(null);
+  };
+
+  const hasModifiedData =
+    text !== DEFAULT_BARCODE_GENERATOR && text.trim() !== "";
+  const isAtDefault =
+    text === DEFAULT_BARCODE_GENERATOR &&
+    format === "CODE128" &&
+    width === 2 &&
+    height === 100 &&
+    displayValue === true;
 
   const getFormatInfo = (formatValue: string) =>
     barcodeFormats.find(f => f.value === formatValue);
@@ -293,38 +314,40 @@ export default function BarcodeGenerator() {
               <Label htmlFor="display-value">Display text below barcode</Label>
             </div>
 
-            <div className="flex gap-3">
-              <Button
-                onClick={generateBarcode}
-                disabled={!text.trim() || !!inputError}
-                className="bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
-                title="Generate the barcode with the current settings"
-                id="generate"
-              >
-                <BarChart3 className="w-4 h-4 mr-2" />
-                Generate Barcode
-              </Button>
-              <Button
-                onClick={downloadBarcode}
-                variant="outline"
-                disabled={!!error || !!inputError}
-                title="Download barcode as a PNG file."
-                id="download"
-              >
-                <Download className="w-4 h-4  mr-2" />
-                Download
-              </Button>
-              <Button
-                onClick={handleReset}
-                variant="outline"
-                disabled={text === DEFAULT_BARCODE_GENERATOR}
-                id="reset"
-                title="Reset to default value"
-              >
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Reset
-              </Button>
-            </div>
+            <ToolButtonGroup>
+              <ActionButtonGroup>
+                <ToolButton
+                  variant="custom"
+                  onClick={generateBarcode}
+                  disabled={!text.trim() || !!inputError}
+                  tooltip="Generate barcode with current settings"
+                  className="bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
+                  icon={<BarChart3 className="w-4 h-4 mr-2" />}
+                >
+                  Generate Barcode
+                </ToolButton>
+                <ToolButton
+                  variant="download"
+                  onClick={downloadBarcode}
+                  disabled={!!error || !!inputError}
+                  tooltip="Download barcode as PNG"
+                />
+              </ActionButtonGroup>
+              <DataButtonGroup>
+                <ResetButton
+                  onClick={handleReset}
+                  tooltip="Reset all settings to defaults"
+                  hasModifiedData={hasModifiedData}
+                  disabled={isAtDefault}
+                />
+                <ClearButton
+                  onClick={handleClear}
+                  tooltip="Clear text input"
+                  hasModifiedData={hasModifiedData}
+                  disabled={text.trim() === ""}
+                />
+              </DataButtonGroup>
+            </ToolButtonGroup>
           </CardContent>
         </Card>
 

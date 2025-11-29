@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import {
@@ -12,8 +11,16 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { ArrowUpDown, RotateCcw } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_TEXT_SORT } from "@/data/defaults";
@@ -107,6 +114,20 @@ export default function TextSort() {
     setTrimLines(false);
     setSortedOutput("");
   };
+
+  const handleClear = () => {
+    setInput("");
+    setSortedOutput("");
+  };
+
+  const hasModifiedData = input !== DEFAULT_TEXT_SORT && input.trim() !== "";
+  const isAtDefault =
+    input === DEFAULT_TEXT_SORT &&
+    sortType === "alphabetical" &&
+    sortOrder === "asc" &&
+    caseSensitive === false &&
+    unique === false &&
+    trimLines === false;
 
   useEffect(() => {
     sortText();
@@ -226,19 +247,33 @@ export default function TextSort() {
             </div>
           </div>
 
-          <div className="flex gap-3 mt-6">
-            <Button
-              onClick={sortText}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              <ArrowUpDown className="w-4 h-4 mr-2" />
-              Sort Text
-            </Button>
-            <Button onClick={handleReset} variant="outline">
-              <RotateCcw className="w-4 h-4 mr-2" />
-              Reset
-            </Button>
-          </div>
+          <ToolButtonGroup className="mt-6">
+            <ActionButtonGroup>
+              <ToolButton
+                variant="custom"
+                onClick={sortText}
+                tooltip="Sort the text lines"
+                icon={<ArrowUpDown className="w-4 h-4 mr-2" />}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                Sort Text
+              </ToolButton>
+            </ActionButtonGroup>
+            <DataButtonGroup>
+              <ResetButton
+                onClick={handleReset}
+                tooltip="Reset all settings to defaults"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={handleClear}
+                tooltip="Clear text input"
+                hasModifiedData={hasModifiedData}
+                disabled={input.trim() === ""}
+              />
+            </DataButtonGroup>
+          </ToolButtonGroup>
         </CardContent>
       </Card>
 

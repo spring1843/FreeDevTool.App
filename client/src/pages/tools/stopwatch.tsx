@@ -3,6 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Play, Pause, Square, Flag } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import {
+  ToolButtonGroup,
+  ActionButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { getToolByPath } from "@/data/tools";
@@ -215,51 +219,54 @@ export default function Stopwatch() {
             </div>
           </div>
 
-          <div className="flex justify-center gap-3">
-            {!isRunning ? (
+          <ToolButtonGroup className="justify-center">
+            <ActionButtonGroup>
+              {!isRunning ? (
+                <Button
+                  onClick={startStopwatch}
+                  className="bg-green-600 hover:bg-green-700 text-white"
+                  size="lg"
+                  data-testid="start-button"
+                >
+                  <Play className="w-5 h-5 mr-2" />
+                  Start <span className="text-xs opacity-75 ml-2">(Enter)</span>
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    onClick={pauseStopwatch}
+                    className="bg-yellow-600 hover:bg-yellow-700 text-white"
+                    size="lg"
+                    data-testid="pause-button"
+                  >
+                    <Pause className="w-5 h-5 mr-2" />
+                    Pause{" "}
+                    <span className="text-xs opacity-75 ml-2">(Space)</span>
+                  </Button>
+
+                  <Button
+                    onClick={recordLap}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                    size="lg"
+                    data-testid="lap-button"
+                  >
+                    <Flag className="w-5 h-5 mr-2" />
+                    Lap <span className="text-xs opacity-75 ml-2">(Enter)</span>
+                  </Button>
+                </>
+              )}
+
               <Button
-                onClick={startStopwatch}
-                className="bg-green-600 hover:bg-green-700 text-white"
+                onClick={handleReset}
+                variant="outline"
                 size="lg"
-                data-testid="start-button"
+                data-testid="stop-button"
               >
-                <Play className="w-5 h-5 mr-2" />
-                Start <span className="text-xs opacity-75 ml-2">(Enter)</span>
+                <Square className="w-5 h-5 mr-2" />
+                Stop <span className="text-xs opacity-75 ml-2">(Esc)</span>
               </Button>
-            ) : (
-              <>
-                <Button
-                  onClick={pauseStopwatch}
-                  className="bg-yellow-600 hover:bg-yellow-700 text-white"
-                  size="lg"
-                  data-testid="pause-button"
-                >
-                  <Pause className="w-5 h-5 mr-2" />
-                  Pause <span className="text-xs opacity-75 ml-2">(Space)</span>
-                </Button>
-
-                <Button
-                  onClick={recordLap}
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
-                  size="lg"
-                  data-testid="lap-button"
-                >
-                  <Flag className="w-5 h-5 mr-2" />
-                  Lap <span className="text-xs opacity-75 ml-2">(Enter)</span>
-                </Button>
-              </>
-            )}
-
-            <Button
-              onClick={handleReset}
-              variant="outline"
-              size="lg"
-              data-testid="stop-button"
-            >
-              <Square className="w-5 h-5 mr-2" />
-              Stop <span className="text-xs opacity-75 ml-2">(Esc)</span>
-            </Button>
-          </div>
+            </ActionButtonGroup>
+          </ToolButtonGroup>
         </CardContent>
       </Card>
 

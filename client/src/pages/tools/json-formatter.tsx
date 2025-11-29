@@ -7,7 +7,14 @@ import { Code, Lightbulb } from "lucide-react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useState, useEffect, useCallback } from "react";
-import { ToolButton, ResetButton } from "@/components/ui/tool-button";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { DEFAULT_JSON } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
@@ -68,6 +75,15 @@ export default function JsonFormatter() {
     setError(null);
   };
 
+  const handleClear = () => {
+    setInput("");
+    setOutput("");
+    setError(null);
+  };
+
+  const hasModifiedData = input !== DEFAULT_JSON && input.trim() !== "";
+  const isAtDefault = input === DEFAULT_JSON;
+
   // Execute formatting with default value on component mount
   useEffect(() => {
     formatCode();
@@ -103,35 +119,47 @@ export default function JsonFormatter() {
       ) : null}
 
       {/* Controls */}
-      <div className="mb-6 flex flex-wrap gap-3">
-        <ToolButton
-          variant="custom"
-          onClick={formatCode}
-          icon={<Code className="w-4 h-4 mr-2" />}
-          tooltip="Format and beautify JSON code"
-        >
-          Format
-        </ToolButton>
-        <ToolButton
-          variant="custom"
-          onClick={minifyCode}
-          tooltip="Minify JSON to single line"
-        >
-          Minify
-        </ToolButton>
-        <ToolButton
-          variant="custom"
-          onClick={validateCode}
-          icon={<Lightbulb className="w-4 h-4 mr-2" />}
-          tooltip="Validate JSON syntax"
-        >
-          Validate
-        </ToolButton>
-        <ResetButton
-          onClick={handleReset}
-          tooltip="Reset to default JSON example"
-        />
-      </div>
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={formatCode}
+            icon={<Code className="w-4 h-4 mr-2" />}
+            tooltip="Format and beautify JSON code"
+          >
+            Format
+          </ToolButton>
+          <ToolButton
+            variant="custom"
+            onClick={minifyCode}
+            tooltip="Minify JSON to single line"
+          >
+            Minify
+          </ToolButton>
+          <ToolButton
+            variant="custom"
+            onClick={validateCode}
+            icon={<Lightbulb className="w-4 h-4 mr-2" />}
+            tooltip="Validate JSON syntax"
+          >
+            Validate
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default JSON example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={input.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       {/* Editor Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
