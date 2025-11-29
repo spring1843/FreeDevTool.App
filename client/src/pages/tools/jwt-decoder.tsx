@@ -125,6 +125,28 @@ export default function JWTDecoder() {
         </div>
       </div>
 
+      <ToolButtonGroup className="mb-6 justify-end">
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default token"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={
+              token.trim() === "" &&
+              header.trim() === "" &&
+              payload.trim() === "" &&
+              signature.trim() === ""
+            }
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       {error ? (
         <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
           <AlertDescription className="text-red-800 dark:text-red-200">
@@ -164,25 +186,6 @@ export default function JWTDecoder() {
                 Decode
               </ToolButton>
             </ActionButtonGroup>
-            <DataButtonGroup>
-              <ResetButton
-                onClick={handleReset}
-                tooltip="Reset to default token"
-                hasModifiedData={hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={handleClear}
-                tooltip="Clear all inputs"
-                hasModifiedData={hasModifiedData}
-                disabled={
-                  token.trim() === "" &&
-                  header.trim() === "" &&
-                  payload.trim() === "" &&
-                  signature.trim() === ""
-                }
-              />
-            </DataButtonGroup>
           </ToolButtonGroup>
           <TextArea
             id="input"
