@@ -57,9 +57,8 @@ export default function YAMLFormatter() {
     setError(null);
   };
 
-  const hasModifiedData =
-    (input !== DEFAULT_YAML && input.trim() !== "") || output.trim() !== "";
-  const isAtDefault = input === DEFAULT_YAML && output === "";
+  const hasModifiedData = input !== DEFAULT_YAML && input.trim() !== "";
+  const isAtDefault = input === DEFAULT_YAML;
 
   useEffect(() => {
     formatCode();
