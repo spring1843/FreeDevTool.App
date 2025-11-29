@@ -145,6 +145,45 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Technical Design Principles */}
+      <div
+        id="security"
+        className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 mb-8"
+      >
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4 text-center">
+          Technical Design Principles
+        </h3>
+        <div className="grid md:grid-cols-3 gap-4 text-sm">
+          <div className="text-center">
+            <div className="font-medium text-green-700 dark:text-green-400 mb-2">
+              Content Security Policy
+            </div>
+            <p className="text-slate-600 dark:text-slate-400">
+              Implemented with CSP headers designed to block external
+              connections and prevent unintended data transmission.
+            </p>
+          </div>
+          <div className="text-center">
+            <div className="font-medium text-blue-700 dark:text-blue-400 mb-2">
+              Local Processing Design
+            </div>
+            <p className="text-slate-600 dark:text-slate-400">
+              Built to handle all computations in your browser using
+              JavaScript, avoiding server-side processing.
+            </p>
+          </div>
+          <div className="text-center">
+            <div className="font-medium text-purple-700 dark:text-purple-400 mb-2">
+              No External Dependencies
+            </div>
+            <p className="text-slate-600 dark:text-slate-400">
+              Designed with minimal external dependencies to reduce potential
+              network requests and data sharing.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Tools Grid */}
       <div className="space-y-8">
         {Object.entries(filteredToolsData).map(([section, data]) => (
@@ -196,47 +235,8 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Technical Details Section */}
+      {/* Keyboard Shortcuts Help */}
       <div className="mt-16">
-        <div
-          id="security"
-          className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 mb-8"
-        >
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4 text-center">
-            Technical Design Principles
-          </h3>
-          <div className="grid md:grid-cols-3 gap-4 text-sm">
-            <div className="text-center">
-              <div className="font-medium text-green-700 dark:text-green-400 mb-2">
-                Content Security Policy
-              </div>
-              <p className="text-slate-600 dark:text-slate-400">
-                Implemented with CSP headers designed to block external
-                connections and prevent unintended data transmission.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="font-medium text-blue-700 dark:text-blue-400 mb-2">
-                Local Processing Design
-              </div>
-              <p className="text-slate-600 dark:text-slate-400">
-                Built to handle all computations in your browser using
-                JavaScript, avoiding server-side processing.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="font-medium text-purple-700 dark:text-purple-400 mb-2">
-                No External Dependencies
-              </div>
-              <p className="text-slate-600 dark:text-slate-400">
-                Designed with minimal external dependencies to reduce potential
-                network requests and data sharing.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Keyboard Shortcuts Help */}
         <div className="mb-8">
           <Card>
             <CardHeader>
