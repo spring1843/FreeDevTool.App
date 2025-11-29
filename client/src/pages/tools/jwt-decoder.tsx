@@ -99,16 +99,8 @@ export default function JWTDecoder() {
     setError(null);
   };
 
-  const hasModifiedData =
-    (token !== DEFAULT_JWT && token.trim() !== "") ||
-    header.trim() !== "" ||
-    payload.trim() !== "" ||
-    signature.trim() !== "";
-  const isAtDefault =
-    token === DEFAULT_JWT &&
-    header === "" &&
-    payload === "" &&
-    signature === "";
+  const hasModifiedData = token !== DEFAULT_JWT && token.trim() !== "";
+  const isAtDefault = token === DEFAULT_JWT;
 
   useEffect(() => {
     decodeToken();
@@ -202,8 +194,10 @@ export default function JWTDecoder() {
             rows={5}
             data-default-input="true"
             autoFocus={true}
-            fileExtension="json"
+            lang="text"
+            fileExtension="txt"
             theme={theme}
+            lineWrapping={true}
           />
         </CardContent>
       </Card>
