@@ -312,7 +312,7 @@ export default function DateConverter() {
   return (
     <div className="max-w-6xl mx-auto">
       <div className="mb-6">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Date Converter
@@ -325,7 +325,7 @@ export default function DateConverter() {
               standards, RFC formats, regional formats, and database formats
             </p>
           </div>
-          <SecurityBanner variant="compact" className="shrink-0" />
+          <SecurityBanner variant="compact" />
         </div>
       </div>
 
