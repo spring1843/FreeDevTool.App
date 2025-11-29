@@ -529,6 +529,20 @@ export const toolsData: ToolData = {
           },
           sections: [
             {
+              title: "Supported Categories",
+              items: [
+                "Weight/Mass (mg, g, kg, oz, lb, stone, ton)",
+                "Distance/Length (mm, cm, m, km, in, ft, yd, mi)",
+                "Area (mm², cm², m², km², in², ft², acre, hectare)",
+                "Volume (ml, l, m³, fl oz, cup, pint, quart, gallon)",
+                "Pressure (Pa, bar, atm, psi, torr, mmHg)",
+                "Temperature (°C, °F, K, °R)",
+                "Energy (J, cal, Wh, BTU, eV)",
+                "Power (W, kW, hp, BTU/h)",
+                "Speed (m/s, km/h, mph, knot, Mach)",
+              ],
+            },
+            {
               title: "Why These Weird Units Exist",
               items: [
                 {

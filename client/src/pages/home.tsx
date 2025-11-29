@@ -158,7 +158,7 @@ export default function Home() {
               Your Data Never Leaves Your Device
             </div>
             <p className="text-slate-600 dark:text-slate-400">
-              No backend required. All processing happens entirely in your
+              No back-end desgin. All processing happens entirely in your
               browser. Your data is never sent to any server.
             </p>
           </div>
@@ -176,7 +176,8 @@ export default function Home() {
               Open Source & Transparent
             </div>
             <p className="text-slate-600 dark:text-slate-400 mb-3">
-              Designed for ultimate privacy and security. Inspect the code yourself.
+              Designed for ultimate privacy and security. Inspect the code
+              yourself.
             </p>
             <div className="flex flex-col sm:flex-row gap-2 justify-center">
               <a
