@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/select";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
-import { Badge } from "@/components/ui/badge";
 import { FileText, Copy } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import {
@@ -294,9 +293,6 @@ export default function LoremGenerator() {
           >
             Generate Lorem
           </ToolButton>
-          <Badge variant="outline">
-            {count} {type}
-          </Badge>
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

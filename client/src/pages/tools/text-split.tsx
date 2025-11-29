@@ -127,12 +127,6 @@ export default function TextSplit() {
           >
             Split Text
           </ToolButton>
-          <Badge
-            variant="outline"
-            className="bg-orange-50 text-orange-700 border-orange-200"
-          >
-            Delimiter: {getDelimiterDisplay(delimiter)}
-          </Badge>
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton
