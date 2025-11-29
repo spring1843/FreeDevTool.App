@@ -363,21 +363,21 @@ export default function DateTimeDiff() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <div>
+        <div className="flex items-start justify-between gap-6 mb-4">
+          <div className="flex-1">
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Date & Time Difference Calculator
               {tool?.shortcut ? (
                 <ShortcutBadge shortcut={tool.shortcut} />
               ) : null}
             </h2>
-            <p className="text-slate-600 dark:text-slate-400 pr-4">
+            <p className="text-slate-600 dark:text-slate-400">
               Calculate the precise difference between two dates and times with
               detailed breakdowns. Explore fascinating time spans from
               historical dates to far future dates.
             </p>
           </div>
-          <SecurityBanner variant="compact" className="ml-4 flex-shrink-0" />
+          <SecurityBanner variant="compact" className="flex-shrink-0" />
         </div>
       </div>
 
