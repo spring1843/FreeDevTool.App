@@ -28,9 +28,9 @@ export default function JWTDecoder() {
   const [error, setError] = useState<string | null>(null);
   const { theme } = useTheme();
 
-  const decodeToken = useCallback(() => {
+  const decodeToken = useCallback((tokenToDecode: string) => {
     try {
-      const parts = token.split(".");
+      const parts = tokenToDecode.split(".");
       if (parts.length !== 3) {
         setError(
           "Invalid JWT format: Token must have 3 parts separated by dots"
@@ -69,7 +69,7 @@ export default function JWTDecoder() {
       setPayload("");
       setSignature("");
     }
-  }, [token]);
+  }, []);
 
   const handleTokenChange = (value: string) => {
     setToken(value);
@@ -103,8 +103,8 @@ export default function JWTDecoder() {
   const isAtDefault = token === DEFAULT_JWT;
 
   useEffect(() => {
-    decodeToken();
-  }, [decodeToken]);
+    decodeToken(token);
+  }, [decodeToken, token]);
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -129,7 +129,7 @@ export default function JWTDecoder() {
         <ActionButtonGroup>
           <ToolButton
             variant="custom"
-            onClick={decodeToken}
+            onClick={() => decodeToken(token)}
             icon={<Key className="w-4 h-4 mr-2" />}
             tooltip="Decode JWT token"
           >
