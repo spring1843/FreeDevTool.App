@@ -283,6 +283,37 @@ export default function LoremGenerator() {
         </div>
       </div>
 
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={generateLorem}
+            tooltip="Generate Lorem Ipsum text"
+            className="bg-purple-600 hover:bg-purple-700 text-white"
+            icon={<FileText className="w-4 h-4 mr-2" />}
+          >
+            Generate Lorem
+          </ToolButton>
+          <Badge variant="outline">
+            {count} {type}
+          </Badge>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset all settings to defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear generated text"
+            hasModifiedData={hasModifiedData}
+            disabled={generated.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       <Card className="mb-6">
         <CardHeader>
           <CardTitle>Generation Options</CardTitle>
@@ -340,36 +371,6 @@ export default function LoremGenerator() {
             </div>
           </div>
 
-          <ToolButtonGroup>
-            <ActionButtonGroup>
-              <ToolButton
-                variant="custom"
-                onClick={generateLorem}
-                tooltip="Generate Lorem Ipsum text"
-                className="bg-purple-600 hover:bg-purple-700 text-white"
-                icon={<FileText className="w-4 h-4 mr-2" />}
-              >
-                Generate Lorem
-              </ToolButton>
-              <Badge variant="outline">
-                {count} {type}
-              </Badge>
-            </ActionButtonGroup>
-            <DataButtonGroup>
-              <ResetButton
-                onClick={handleReset}
-                tooltip="Reset all settings to defaults"
-                hasModifiedData={hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={handleClear}
-                tooltip="Clear generated text"
-                hasModifiedData={hasModifiedData}
-                disabled={generated.trim() === ""}
-              />
-            </DataButtonGroup>
-          </ToolButtonGroup>
         </CardContent>
       </Card>
 

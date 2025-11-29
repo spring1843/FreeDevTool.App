@@ -146,6 +146,44 @@ export default function SearchReplace() {
         </div>
       </div>
 
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={performSearchReplace}
+            tooltip="Find and replace matching text"
+            icon={<Search className="w-4 h-4 mr-2" />}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Search & Replace
+          </ToolButton>
+          <Badge
+            variant="outline"
+            className="bg-blue-50 text-blue-700 border-blue-200"
+          >
+            {matchCount} matches found
+          </Badge>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset all settings to defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={
+              text.trim() === "" &&
+              searchText.trim() === "" &&
+              replaceText.trim() === ""
+            }
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       <Card className="mb-6">
         <CardHeader>
           <CardTitle>Search & Replace Options</CardTitle>
@@ -209,45 +247,6 @@ export default function SearchReplace() {
             </div>
           ) : null}
 
-          <ToolButtonGroup>
-            <ActionButtonGroup>
-              <ToolButton
-                variant="custom"
-                onClick={performSearchReplace}
-                tooltip="Find and replace matching text"
-                icon={<Search className="w-4 h-4 mr-2" />}
-                className="bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                Search & Replace
-              </ToolButton>
-            </ActionButtonGroup>
-            <div className="flex items-center gap-2">
-              <DataButtonGroup>
-                <ResetButton
-                  onClick={handleReset}
-                  tooltip="Reset all settings to defaults"
-                  hasModifiedData={hasModifiedData}
-                  disabled={isAtDefault}
-                />
-                <ClearButton
-                  onClick={handleClear}
-                  tooltip="Clear all inputs"
-                  hasModifiedData={hasModifiedData}
-                  disabled={
-                    text.trim() === "" &&
-                    searchText.trim() === "" &&
-                    replaceText.trim() === ""
-                  }
-                />
-              </DataButtonGroup>
-              <Badge
-                variant="outline"
-                className="bg-blue-50 text-blue-700 border-blue-200"
-              >
-                {matchCount} matches found
-              </Badge>
-            </div>
-          </ToolButtonGroup>
         </CardContent>
       </Card>
 

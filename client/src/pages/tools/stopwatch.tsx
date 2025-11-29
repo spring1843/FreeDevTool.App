@@ -6,6 +6,9 @@ import { useState, useEffect, useRef } from "react";
 import {
   ToolButtonGroup,
   ActionButtonGroup,
+  DataButtonGroup,
+  ResetButton,
+  ClearButton,
 } from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
@@ -69,6 +72,22 @@ export default function Stopwatch() {
     }
   };
 
+  // Reset: Stop and zero everything
+  const handleReset = () => {
+    stopStopwatch();
+  };
+
+  // Clear: Only clear laps (keep time running if active)
+  const clearLaps = () => {
+    setLaps([]);
+  };
+
+  // Check if at default state
+  const isAtDefault = time === 0 && laps.length === 0 && !isRunning;
+
+  // Check if there's modified data
+  const hasModifiedData = time > 0 || laps.length > 0;
+
   const recordLap = () => {
     if (isRunning) {
       const lapTime =
@@ -80,10 +99,6 @@ export default function Stopwatch() {
       };
       setLaps(prevLaps => [...prevLaps, newLap]);
     }
-  };
-
-  const handleReset = () => {
-    stopStopwatch();
   };
 
   // Keyboard shortcuts
@@ -219,7 +234,7 @@ export default function Stopwatch() {
             </div>
           </div>
 
-          <ToolButtonGroup className="justify-center">
+          <ToolButtonGroup>
             <ActionButtonGroup>
               {!isRunning ? (
                 <Button
@@ -257,7 +272,7 @@ export default function Stopwatch() {
               )}
 
               <Button
-                onClick={handleReset}
+                onClick={stopStopwatch}
                 variant="outline"
                 size="lg"
                 data-testid="stop-button"
@@ -266,6 +281,20 @@ export default function Stopwatch() {
                 Stop <span className="text-xs opacity-75 ml-2">(Esc)</span>
               </Button>
             </ActionButtonGroup>
+            <DataButtonGroup>
+              <ResetButton
+                onClick={handleReset}
+                tooltip="Reset stopwatch to zero"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={clearLaps}
+                tooltip="Clear recorded laps"
+                hasModifiedData={hasModifiedData}
+                disabled={laps.length === 0}
+              />
+            </DataButtonGroup>
           </ToolButtonGroup>
         </CardContent>
       </Card>

@@ -345,6 +345,54 @@ export default function Countdown() {
         </div>
       </div>
 
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          {!isActive ? (
+            <Button
+              onClick={startCountdown}
+              disabled={!targetDate || !targetTime}
+              className="bg-green-600 hover:bg-green-700 text-white disabled:opacity-50"
+              data-testid="button-start"
+            >
+              <Play className="w-4 h-4 mr-2" />
+              Start (Enter)
+            </Button>
+          ) : (
+            <Button
+              onClick={pauseCountdown}
+              className="bg-yellow-600 hover:bg-yellow-700 text-white"
+              data-testid="button-pause"
+            >
+              <Pause className="w-4 h-4 mr-2" />
+              Pause (Space)
+            </Button>
+          )}
+
+          <Button
+            onClick={stopCountdown}
+            variant="outline"
+            data-testid="button-stop"
+          >
+            <Square className="w-4 h-4 mr-2" />
+            Stop (Esc)
+          </Button>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to New Year countdown"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear date and time"
+            hasModifiedData={hasModifiedData}
+            disabled={targetDate === "" && targetTime === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       <Card className="mb-6">
         <CardHeader>
           <CardTitle>Target Date & Time</CardTitle>
@@ -427,53 +475,6 @@ export default function Countdown() {
             </div>
           </div>
 
-          <ToolButtonGroup>
-            <ActionButtonGroup>
-              {!isActive ? (
-                <Button
-                  onClick={startCountdown}
-                  disabled={!targetDate || !targetTime}
-                  className="bg-green-600 hover:bg-green-700 text-white disabled:opacity-50"
-                  data-testid="button-start"
-                >
-                  <Play className="w-4 h-4 mr-2" />
-                  Start (Enter)
-                </Button>
-              ) : (
-                <Button
-                  onClick={pauseCountdown}
-                  className="bg-yellow-600 hover:bg-yellow-700 text-white"
-                  data-testid="button-pause"
-                >
-                  <Pause className="w-4 h-4 mr-2" />
-                  Pause (Space)
-                </Button>
-              )}
-
-              <Button
-                onClick={stopCountdown}
-                variant="outline"
-                data-testid="button-stop"
-              >
-                <Square className="w-4 h-4 mr-2" />
-                Stop (Esc)
-              </Button>
-            </ActionButtonGroup>
-            <DataButtonGroup>
-              <ResetButton
-                onClick={handleReset}
-                tooltip="Reset to New Year countdown"
-                hasModifiedData={hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={handleClear}
-                tooltip="Clear date and time"
-                hasModifiedData={hasModifiedData}
-                disabled={targetDate === "" && targetTime === ""}
-              />
-            </DataButtonGroup>
-          </ToolButtonGroup>
         </CardContent>
       </Card>
 

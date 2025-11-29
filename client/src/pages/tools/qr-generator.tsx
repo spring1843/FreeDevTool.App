@@ -326,6 +326,51 @@ export default function QRGenerator() {
         </div>
       </div>
 
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={generateQR}
+            disabled={!inputText.trim()}
+            tooltip="Generate QR Code from input"
+          >
+            Generate QR Code
+          </ToolButton>
+          {qrUrl ? (
+            <>
+              <ToolButton
+                variant="download"
+                onClick={downloadQR}
+                tooltip="Download QR code as SVG"
+              >
+                Download
+              </ToolButton>
+              <ToolButton
+                variant="copy"
+                onClick={copyQRUrl}
+                tooltip="Copy QR code URL to clipboard"
+              >
+                Copy
+              </ToolButton>
+            </>
+          ) : null}
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={inputText.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Input Controls */}
         <div className="space-y-6">
@@ -404,50 +449,6 @@ export default function QRGenerator() {
                 </Alert>
               ) : null}
 
-              <ToolButtonGroup>
-                <ActionButtonGroup>
-                  <ToolButton
-                    variant="custom"
-                    onClick={generateQR}
-                    disabled={!inputText.trim()}
-                    tooltip="Generate QR Code from input"
-                  >
-                    Generate QR Code
-                  </ToolButton>
-                  {qrUrl ? (
-                    <>
-                      <ToolButton
-                        variant="download"
-                        onClick={downloadQR}
-                        tooltip="Download QR code as SVG"
-                      >
-                        Download
-                      </ToolButton>
-                      <ToolButton
-                        variant="copy"
-                        onClick={copyQRUrl}
-                        tooltip="Copy QR code URL to clipboard"
-                      >
-                        Copy
-                      </ToolButton>
-                    </>
-                  ) : null}
-                </ActionButtonGroup>
-                <DataButtonGroup>
-                  <ResetButton
-                    onClick={handleReset}
-                    tooltip="Reset to default example"
-                    hasModifiedData={hasModifiedData}
-                    disabled={isAtDefault}
-                  />
-                  <ClearButton
-                    onClick={handleClear}
-                    tooltip="Clear all inputs"
-                    hasModifiedData={hasModifiedData}
-                    disabled={inputText.trim() === ""}
-                  />
-                </DataButtonGroup>
-              </ToolButtonGroup>
             </CardContent>
           </Card>
 

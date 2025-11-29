@@ -363,7 +363,7 @@ export default function BrowserInfo() {
         </div>
       </div>
 
-      <ToolButtonGroup className="mb-6 justify-end">
+      <ToolButtonGroup className="mb-6">
         <ActionButtonGroup>
           <ToolButton
             variant="custom"

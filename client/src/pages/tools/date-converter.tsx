@@ -9,6 +9,8 @@ import {
   ResetButton,
   ClearButton,
   NowButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
   DataButtonGroup,
 } from "@/components/ui/tool-button";
 
@@ -329,6 +331,31 @@ export default function DateConverter() {
         </div>
       </div>
 
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <NowButton
+            onClick={handleCurrentTime}
+            tooltip="Set to current time"
+            toastTitle="Time updated"
+            toastDescription="Set to current timestamp"
+          />
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear date input"
+            hasModifiedData={hasModifiedData}
+            disabled={inputDate.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       <Card className="mb-6">
         <CardHeader>
           <CardTitle>Input Date</CardTitle>
@@ -350,29 +377,6 @@ export default function DateConverter() {
               Supports: Unix timestamps (seconds/milliseconds), ISO 8601, RFC
               formats, human-readable dates
             </p>
-          </div>
-
-          <div className="flex justify-end">
-            <DataButtonGroup>
-              <NowButton
-                onClick={handleCurrentTime}
-                tooltip="Set to current time"
-                toastTitle="Time updated"
-                toastDescription="Set to current timestamp"
-              />
-              <ResetButton
-                onClick={handleReset}
-                tooltip="Reset to default example"
-                hasModifiedData={hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={handleClear}
-                tooltip="Clear date input"
-                hasModifiedData={hasModifiedData}
-                disabled={inputDate.trim() === ""}
-              />
-            </DataButtonGroup>
           </div>
         </CardContent>
       </Card>

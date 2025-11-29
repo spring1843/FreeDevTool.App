@@ -32,7 +32,14 @@ import {
 } from "@/lib/time-tools";
 import { getParam, updateURL, copyShareableURL } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
-import { ToolButton } from "@/components/ui/tool-button";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 interface TimerInstance {
   id: string;
@@ -406,6 +413,42 @@ export default function Timer() {
     setShowAddTimer(true);
   };
 
+  // Reset to default add-timer form values
+  const handleReset = () => {
+    setNewTimerHours(0);
+    setNewTimerMinutes(5);
+    setNewTimerSeconds(0);
+    setNewTimerName("");
+    setNewTimerAlarmCount(3);
+    setShowAddTimer(false);
+    toast({
+      title: "Reset",
+      description: "Timer form reset to defaults",
+    });
+  };
+
+  // Clear all timers
+  const handleClear = () => {
+    stopAllTimers();
+    setTimers([]);
+    toast({
+      title: "Cleared",
+      description: "All timers have been removed",
+    });
+  };
+
+  // Check if form is at default values
+  const isAtDefault =
+    newTimerHours === 0 &&
+    newTimerMinutes === 5 &&
+    newTimerSeconds === 0 &&
+    newTimerName === "" &&
+    newTimerAlarmCount === 3 &&
+    !showAddTimer;
+
+  // Check if there's modified data
+  const hasModifiedData = timers.length > 0 || showAddTimer;
+
   return (
     <div className="max-w-4xl mx-auto">
       {/* Header */}
@@ -423,37 +466,50 @@ export default function Timer() {
               and Escape for quick control.
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <SecurityBanner variant="compact" />
-            <Button
-              onClick={() => setShowAddTimer(!showAddTimer)}
-              data-testid="add-timer-toggle"
-              size="sm"
-            >
-              <Plus className="w-4 h-4 mr-1" />
-              Add
-            </Button>
-            {timers.length > 0 && (
-              <Button
-                onClick={stopAllTimers}
-                variant="outline"
-                data-testid="stop-all-timers"
-                size="sm"
-              >
-                <Square className="w-4 h-4 mr-1" />
-                Stop All
-              </Button>
-            )}
-            <ToolButton
-              variant="custom"
-              onClick={copyShareURL}
-              tooltip="Copy shareable timer URL"
-              icon={<Share2 className="w-4 h-4" />}
-              size="icon"
-            />
-          </div>
+          <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <Button
+            onClick={() => setShowAddTimer(!showAddTimer)}
+            data-testid="add-timer-toggle"
+          >
+            <Plus className="w-4 h-4 mr-1" />
+            Add
+          </Button>
+          {timers.length > 0 && (
+            <Button
+              onClick={stopAllTimers}
+              variant="outline"
+              data-testid="stop-all-timers"
+            >
+              <Square className="w-4 h-4 mr-1" />
+              Stop All
+            </Button>
+          )}
+          <ToolButton
+            variant="share"
+            onClick={copyShareURL}
+            tooltip="Copy shareable timer URL"
+          />
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset timer form to defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Remove all timers"
+            hasModifiedData={hasModifiedData}
+            disabled={timers.length === 0}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       {/* Add Timer Form */}
       {showAddTimer ? (
