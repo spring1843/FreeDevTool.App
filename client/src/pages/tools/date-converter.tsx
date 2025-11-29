@@ -3,14 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Copy, Clock } from "lucide-react";
+import { Copy, Clock } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import {
   ResetButton,
   ClearButton,
   NowButton,
-  ToolButtonGroup,
-  ActionButtonGroup,
   DataButtonGroup,
 } from "@/components/ui/tool-button";
 
@@ -354,38 +352,26 @@ export default function DateConverter() {
             </p>
           </div>
 
-          <ToolButtonGroup>
-            <ActionButtonGroup>
-              <Button
-                onClick={convertDate}
-                className="bg-blue-600 hover:bg-blue-700 text-white"
-                data-testid="convert-button"
-              >
-                <Calendar className="w-4 h-4 mr-2" />
-                Convert Date
-              </Button>
-            </ActionButtonGroup>
-            <DataButtonGroup>
-              <NowButton
-                onClick={handleCurrentTime}
-                tooltip="Set to current time"
-                toastTitle="Time updated"
-                toastDescription="Set to current timestamp"
-              />
-              <ResetButton
-                onClick={handleReset}
-                tooltip="Reset to default example"
-                hasModifiedData={hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={handleClear}
-                tooltip="Clear date input"
-                hasModifiedData={hasModifiedData}
-                disabled={inputDate.trim() === ""}
-              />
-            </DataButtonGroup>
-          </ToolButtonGroup>
+          <DataButtonGroup>
+            <NowButton
+              onClick={handleCurrentTime}
+              tooltip="Set to current time"
+              toastTitle="Time updated"
+              toastDescription="Set to current timestamp"
+            />
+            <ResetButton
+              onClick={handleReset}
+              tooltip="Reset to default example"
+              hasModifiedData={hasModifiedData}
+              disabled={isAtDefault}
+            />
+            <ClearButton
+              onClick={handleClear}
+              tooltip="Clear date input"
+              hasModifiedData={hasModifiedData}
+              disabled={inputDate.trim() === ""}
+            />
+          </DataButtonGroup>
         </CardContent>
       </Card>
 
@@ -418,7 +404,7 @@ export default function DateConverter() {
                   <h3 className="text-lg font-medium mb-3 text-blue-600 dark:text-blue-400">
                     {category}
                   </h3>
-                  <div className="grid gap-3">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                     {categoryFormats.map((format, index) => (
                       <div
                         key={index}
