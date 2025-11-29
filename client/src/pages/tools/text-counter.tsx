@@ -104,6 +104,23 @@ export default function TextCounter() {
         </div>
       </div>
 
+      <ToolButtonGroup className="mb-6 justify-end">
+        <DataButtonGroup>
+          <ResetButton
+            onClick={resetFields}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear text input"
+            hasModifiedData={hasModifiedData}
+            disabled={fields.text.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Text Input */}
         <Card>
@@ -126,22 +143,6 @@ export default function TextCounter() {
               fileExtension="txt"
               theme={theme}
             />
-            <ToolButtonGroup className="mt-4 justify-end">
-              <DataButtonGroup>
-                <ResetButton
-                  onClick={resetFields}
-                  tooltip="Reset to default example"
-                  hasModifiedData={hasModifiedData}
-                  disabled={isAtDefault}
-                />
-                <ClearButton
-                  onClick={handleClear}
-                  tooltip="Clear text input"
-                  hasModifiedData={hasModifiedData}
-                  disabled={fields.text.trim() === ""}
-                />
-              </DataButtonGroup>
-            </ToolButtonGroup>
           </CardContent>
         </Card>
 

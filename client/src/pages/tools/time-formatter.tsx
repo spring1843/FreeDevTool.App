@@ -84,12 +84,14 @@ export default function TimeFormatter() {
         {
           name: "ISO 8601 Time",
           value: dateTime.toISOString().split("T")[1],
-          description: "HH:MM:SS.sssZ — International standard time format with UTC",
+          description:
+            "HH:MM:SS.sssZ — International standard time format with UTC",
         },
         {
           name: "RFC 3339 DateTime",
           value: dateTime.toISOString(),
-          description: "YYYY-MM-DDTHH:MM:SS.sssZ — Internet date/time format based on ISO 8601",
+          description:
+            "YYYY-MM-DDTHH:MM:SS.sssZ — Internet date/time format based on ISO 8601",
         },
         {
           name: "Unix Timestamp",
@@ -115,7 +117,8 @@ export default function TimeFormatter() {
             timeZoneName: "long",
             timeZone: inputTimezone,
           }),
-          description: "h:MM:SS AM/PM Timezone — Local time with full timezone name",
+          description:
+            "h:MM:SS AM/PM Timezone — Local time with full timezone name",
         },
         {
           name: "Local Time (Short)",
@@ -126,7 +129,8 @@ export default function TimeFormatter() {
             timeZoneName: "short",
             timeZone: inputTimezone,
           }),
-          description: "h:MM:SS AM/PM TZ — Local time with abbreviated timezone",
+          description:
+            "h:MM:SS AM/PM TZ — Local time with abbreviated timezone",
         },
         {
           name: "Time Only (No Seconds)",
@@ -196,12 +200,14 @@ export default function TimeFormatter() {
         {
           name: "Julian Day Number",
           value: calculateJulianDay(dateTime).toFixed(6),
-          description: "Numeric — Days since January 1, 4713 BCE proleptic Julian calendar",
+          description:
+            "Numeric — Days since January 1, 4713 BCE proleptic Julian calendar",
         },
         {
           name: "Modified Julian Day",
           value: (calculateJulianDay(dateTime) - 2400000.5).toFixed(6),
-          description: "Numeric — Modified Julian Day (MJD) for astronomical use",
+          description:
+            "Numeric — Modified Julian Day (MJD) for astronomical use",
         },
         {
           name: "Excel Serial Date",

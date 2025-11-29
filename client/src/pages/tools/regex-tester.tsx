@@ -171,6 +171,34 @@ export default function RegexTester() {
         </div>
       </div>
 
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={testRegex}
+            tooltip="Test the regex pattern against the text"
+            icon={<Search className="w-4 h-4 mr-2" />}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Test Regex
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset all settings to defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={pattern.trim() === "" && text.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       <Card className="mb-6">
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
@@ -262,41 +290,14 @@ export default function RegexTester() {
             </TooltipProvider>
           </div>
 
-          <ToolButtonGroup>
-            <ActionButtonGroup>
-              <ToolButton
-                variant="custom"
-                onClick={testRegex}
-                tooltip="Test the regex pattern against the text"
-                icon={<Search className="w-4 h-4 mr-2" />}
-                className="bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                Test Regex
-              </ToolButton>
-            </ActionButtonGroup>
-            <div className="flex items-center gap-2">
-              <DataButtonGroup>
-                <ResetButton
-                  onClick={handleReset}
-                  tooltip="Reset all settings to defaults"
-                  hasModifiedData={hasModifiedData}
-                  disabled={isAtDefault}
-                />
-                <ClearButton
-                  onClick={handleClear}
-                  tooltip="Clear all inputs"
-                  hasModifiedData={hasModifiedData}
-                  disabled={pattern.trim() === "" && text.trim() === ""}
-                />
-              </DataButtonGroup>
-              <Badge
-                variant="outline"
-                className="bg-blue-50 text-blue-700 border-blue-200"
-              >
-                {matches.length} matches found
-              </Badge>
-            </div>
-          </ToolButtonGroup>
+          <div className="flex justify-end">
+            <Badge
+              variant="outline"
+              className="bg-blue-50 text-blue-700 border-blue-200"
+            >
+              {matches.length} matches found
+            </Badge>
+          </div>
         </CardContent>
       </Card>
 

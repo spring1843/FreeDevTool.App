@@ -161,9 +161,7 @@ export default function BcryptHash() {
     hash.trim() !== "" ||
     verifyText.trim() !== "";
   const isAtDefault =
-    plaintext === DEFAULT_BCRYPT &&
-    verifyText === "" &&
-    rounds === 10;
+    plaintext === DEFAULT_BCRYPT && verifyText === "" && rounds === 10;
 
   useEffect(() => {
     generateHash();
