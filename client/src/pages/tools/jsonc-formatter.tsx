@@ -103,20 +103,6 @@ export default function JSONCFormatter() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <TextArea
-              id="input"
-              data-testid="jsonc-input"
-              value={input}
-              onChange={e => handleInputChange(e.target.value)}
-              placeholder="Paste your JSONC code here..."
-              className="font-mono text-sm min-h-[400px] resize-y"
-              lang="javascript"
-              autoFocus={true}
-              minHeight="400px"
-              fileExtension="jsonc"
-              theme={theme}
-              data-default-input="true"
-            />
             <ToolButtonGroup>
               <ActionButtonGroup>
                 <ToolButton
@@ -144,6 +130,20 @@ export default function JSONCFormatter() {
                 />
               </DataButtonGroup>
             </ToolButtonGroup>
+            <TextArea
+              id="input"
+              data-testid="jsonc-input"
+              value={input}
+              onChange={e => handleInputChange(e.target.value)}
+              placeholder="Paste your JSONC code here..."
+              className="font-mono text-sm min-h-[400px] resize-y"
+              lang="javascript"
+              autoFocus={true}
+              minHeight="400px"
+              fileExtension="jsonc"
+              theme={theme}
+              data-default-input="true"
+            />
           </CardContent>
         </Card>
 
