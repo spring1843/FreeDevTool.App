@@ -39,9 +39,9 @@ function renderNotice(notice: ToolExplanation["notice"]): ReactNode {
       <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
         {notice.title}
       </h3>
-      <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1.5 list-disc ml-4">
+      <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1.5 list-disc ml-5">
         {notice.items.map((item, i) => (
-          <li key={i} className="pl-1">
+          <li key={i}>
             {typeof item === "string" ? (
               item
             ) : (
@@ -237,10 +237,10 @@ export function ToolExplanations({
             </h4>
           ) : null}
           <ul
-            className={`space-y-1.5 ${colors.text} text-sm list-disc ml-4`}
+            className={`space-y-1.5 ${colors.text} text-sm list-disc ml-5`}
           >
             {section.items.map((item, j) => (
-              <li key={j} className="pl-1">
+              <li key={j}>
                 {typeof item === "string" ? (
                   item
                 ) : (
@@ -264,9 +264,9 @@ export function ToolExplanations({
 
   return (
     <div className="mt-8 space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
         {visibleBlocks.map((block, i) => (
-          <div key={i} className={i === 0 && !shortcuts ? "md:col-span-2" : ""}>
+          <div key={i} className={`${i === 0 && !shortcuts ? "md:col-span-2" : ""} [&>div]:h-full`}>
             {block}
           </div>
         ))}
