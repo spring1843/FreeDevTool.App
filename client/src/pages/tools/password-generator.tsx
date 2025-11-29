@@ -21,6 +21,7 @@ import { usePersistentForm } from "@/hooks/use-persistent-state";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
 
 interface PasswordStrength {
   score: number;
@@ -278,14 +279,19 @@ export default function PasswordGenerator() {
     <div className="max-w-4xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
-          Password Generator
-          {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
-        </h2>
-        <p className="text-slate-600 dark:text-slate-400">
-          Generate secure passwords with customizable options and strength
-          analysis
-        </p>
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              Password Generator
+              {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Generate secure passwords with customizable options and strength
+              analysis
+            </p>
+          </div>
+          <SecurityBanner variant="compact" className="shrink-0" />
+        </div>
       </div>
 
       {/* Configuration */}

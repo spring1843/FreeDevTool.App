@@ -44,6 +44,7 @@ import { DEFAULT_CSV_TO_JSON } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
 
 export default function CSVToJSON() {
   const tool = getToolByPath("/tools/csv-to-json");
@@ -257,16 +258,22 @@ Jane Smith      jane@example.com        25      Marketing`,
 
   return (
     <div className="container mx-auto p-6 max-w-7xl">
+      {/* Header */}
       <div className="mb-6">
-        <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-          <FileSpreadsheet className="h-8 w-8 text-blue-600" />
-          CSV to JSON Converter
-          {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          Convert CSV data to JSON format with customizable delimiters and
-          formatting options.
-        </p>
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+              <FileSpreadsheet className="h-8 w-8 text-blue-600" />
+              CSV to JSON Converter
+              {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Convert CSV data to JSON format with customizable delimiters and
+              formatting options.
+            </p>
+          </div>
+          <SecurityBanner variant="compact" className="shrink-0" />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

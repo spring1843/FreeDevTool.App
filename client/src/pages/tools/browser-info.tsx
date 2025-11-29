@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
 import {
   ToolButton,
   ToolButtonGroup,
@@ -342,16 +343,21 @@ export default function BrowserInfo() {
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
-          Browser Information
-          {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
-          <span className="text-sm bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 px-2 py-1 rounded font-medium">
-            EXPERIMENTAL
-          </span>
-        </h2>
-        <p className="text-slate-600 dark:text-slate-400">
-          Comprehensive browser and system information available to JavaScript
-        </p>
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              Browser Information
+              {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
+              <span className="text-sm bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 px-2 py-1 rounded font-medium">
+                EXPERIMENTAL
+              </span>
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Comprehensive browser and system information available to JavaScript
+            </p>
+          </div>
+          <SecurityBanner variant="compact" className="shrink-0" />
+        </div>
       </div>
 
       {/* Controls */}

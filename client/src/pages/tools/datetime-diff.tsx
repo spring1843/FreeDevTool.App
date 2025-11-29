@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -362,15 +363,20 @@ export default function DateTimeDiff() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
-          Date & Time Difference Calculator
-          {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
-        </h2>
-        <p className="text-slate-600 dark:text-slate-400">
-          Calculate the precise difference between two dates and times with
-          detailed breakdowns. Explore fascinating time spans from historical
-          dates to far future dates.
-        </p>
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              Date & Time Difference Calculator
+              {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Calculate the precise difference between two dates and times with
+              detailed breakdowns. Explore fascinating time spans from historical
+              dates to far future dates.
+            </p>
+          </div>
+          <SecurityBanner variant="compact" className="shrink-0" />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

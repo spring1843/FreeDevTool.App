@@ -236,9 +236,7 @@ export function ToolExplanations({
               {section.title}
             </h4>
           ) : null}
-          <ul
-            className={`space-y-1.5 ${colors.text} text-sm list-disc ml-5`}
-          >
+          <ul className={`space-y-1.5 ${colors.text} text-sm list-disc ml-5`}>
             {section.items.map((item, j) => (
               <li key={j}>
                 {typeof item === "string" ? (
@@ -266,7 +264,10 @@ export function ToolExplanations({
     <div className="mt-8 space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
         {visibleBlocks.map((block, i) => (
-          <div key={i} className={`${i === 0 && !shortcuts ? "md:col-span-2" : ""} [&>div]:h-full`}>
+          <div
+            key={i}
+            className={`${i === 0 && !shortcuts ? "md:col-span-2" : ""} [&>div]:h-full`}
+          >
             {block}
           </div>
         ))}

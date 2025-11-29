@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,9 +32,7 @@ import {
 } from "@/lib/time-tools";
 import { getParam, updateURL, copyShareableURL } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
-import {
-  ToolButton,
-} from "@/components/ui/tool-button";
+import { ToolButton } from "@/components/ui/tool-button";
 
 interface TimerInstance {
   id: string;
@@ -410,44 +409,47 @@ export default function Timer() {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Header */}
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
-            Timer
-            {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
-          </h2>
-          <p className="text-slate-600 dark:text-slate-400">
-            Create multiple timers with customizable alarms. Use Enter, Space,
-            and Escape for quick control.
-          </p>
-        </div>
-        <div className="flex items-center gap-2 flex-shrink-0">
-          <Button
-            onClick={() => setShowAddTimer(!showAddTimer)}
-            data-testid="add-timer-toggle"
-            size="sm"
-          >
-            <Plus className="w-4 h-4 mr-1" />
-            Add
-          </Button>
-          {timers.length > 0 && (
+      <div className="mb-6">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              Timer
+              {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Create multiple timers with customizable alarms. Use Enter, Space,
+              and Escape for quick control.
+            </p>
+          </div>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <SecurityBanner variant="compact" className="shrink-0" />
             <Button
-              onClick={stopAllTimers}
-              variant="outline"
-              data-testid="stop-all-timers"
+              onClick={() => setShowAddTimer(!showAddTimer)}
+              data-testid="add-timer-toggle"
               size="sm"
             >
-              <Square className="w-4 h-4 mr-1" />
-              Stop All
+              <Plus className="w-4 h-4 mr-1" />
+              Add
             </Button>
-          )}
-          <ToolButton
-            variant="custom"
-            onClick={copyShareURL}
-            tooltip="Copy shareable timer URL"
-            icon={<Share2 className="w-4 h-4" />}
-            size="icon"
-          />
+            {timers.length > 0 && (
+              <Button
+                onClick={stopAllTimers}
+                variant="outline"
+                data-testid="stop-all-timers"
+                size="sm"
+              >
+                <Square className="w-4 h-4 mr-1" />
+                Stop All
+              </Button>
+            )}
+            <ToolButton
+              variant="custom"
+              onClick={copyShareURL}
+              tooltip="Copy shareable timer URL"
+              icon={<Share2 className="w-4 h-4" />}
+              size="icon"
+            />
+          </div>
         </div>
       </div>
 
