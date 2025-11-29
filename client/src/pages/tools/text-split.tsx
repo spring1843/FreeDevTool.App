@@ -208,6 +208,7 @@ export default function TextSplit() {
               rows={15}
               autoFocus={true}
               minHeight="300px"
+              lang="plaintext"
               fileExtension="txt"
               theme={theme}
               data-default-input="true"
@@ -260,6 +261,35 @@ export default function TextSplit() {
           </CardContent>
         </Card>
       </div>
+
+      {splitResult.length > 0 && (
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <span>Split as Lines</span>
+              <CopyButton text={splitResult.join("\n")} variant="outline" />
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TextArea
+              id="output"
+              value={splitResult.join("\n")}
+              readOnly={true}
+              placeholder="Split results will appear here, one part per line..."
+              data-testid="lines-output"
+              className="min-h-[200px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
+              rows={10}
+              minHeight="200px"
+              lang="plaintext"
+              fileExtension="txt"
+              theme={theme}
+            />
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+              Each part is shown on a separate line for easy copying
+            </p>
+          </CardContent>
+        </Card>
+      )}
 
       <ToolExplanations explanations={tool?.explanations} />
     </div>
