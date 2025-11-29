@@ -19,13 +19,7 @@ import {
   type ColorInfo,
 } from "@/lib/color-tools";
 
-import {
-  Palette,
-  Copy,
-  Download,
-  RefreshCw,
-  Shuffle,
-} from "lucide-react";
+import { Palette, Copy, Download, RefreshCw, Shuffle } from "lucide-react";
 import {
   ResetButton,
   ClearButton,
