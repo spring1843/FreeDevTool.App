@@ -15,7 +15,6 @@ import {
   ToolButton,
   ResetButton,
   ClearButton,
-  ToolButtonGroup,
   DataButtonGroup,
 } from "@/components/ui/tool-button";
 import {
@@ -405,7 +404,7 @@ export default function UnitConverter() {
               ))}
             </SelectContent>
           </Select>
-          <ToolButtonGroup>
+          <div className="flex justify-end">
             <DataButtonGroup>
               <ResetButton
                 onClick={handleReset}
@@ -420,7 +419,7 @@ export default function UnitConverter() {
                 disabled={inputValue.trim() === ""}
               />
             </DataButtonGroup>
-          </ToolButtonGroup>
+          </div>
         </CardContent>
       </Card>
 
