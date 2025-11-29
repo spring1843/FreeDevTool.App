@@ -19,6 +19,17 @@ test.describe("Countdown Tool", () => {
     await expectDefaultValue(page);
   });
 
+  test("should start in stopped state and not auto-run", async ({ page }) => {
+    await expect(page.locator("main")).toBeVisible();
+
+    // Verify the Start button is visible (not Pause), indicating stopped state
+    await expect(page.getByTestId("button-start")).toBeVisible();
+    await expect(page.getByTestId("button-pause")).not.toBeVisible();
+
+    // Verify the status shows "Stopped"
+    await expect(page.getByText("Stopped")).toBeVisible();
+  });
+
   test("should not flicker when clicking preset buttons", async ({ page }) => {
     // Wait for the page to be fully loaded
     await expect(page.locator("main")).toBeVisible();
