@@ -390,13 +390,14 @@ export default function TimezoneConverter() {
 
           <ToolButtonGroup className="pt-4">
             <ActionButtonGroup>
-              <Button
+              <ToolButton
                 onClick={convertTimezones}
+                icon={<RefreshCw className="w-4 h-4 mr-2" />}
+                tooltip="Convert source time to all target timezones"
                 data-testid="convert-timezones-button"
               >
-                <RefreshCw className="w-4 h-4 mr-2" />
                 Convert Timezones
-              </Button>
+              </ToolButton>
               <ToolButton
                 variant="share"
                 onClick={shareConverter}
