@@ -458,22 +458,6 @@ export default function NumberBaseConverter() {
                 </Button>
               </div>
 
-              <ToolButtonGroup>
-                <DataButtonGroup>
-                  <ResetButton
-                    onClick={handleReset}
-                    tooltip="Reset to default example"
-                    hasModifiedData={hasModifiedData}
-                    disabled={isAtDefault}
-                  />
-                  <ClearButton
-                    onClick={clearAll}
-                    tooltip="Clear all inputs"
-                    hasModifiedData={hasModifiedData}
-                    disabled={inputNumber.trim() === ""}
-                  />
-                </DataButtonGroup>
-              </ToolButtonGroup>
             </CardContent>
           </Card>
 
