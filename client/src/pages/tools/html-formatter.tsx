@@ -79,9 +79,8 @@ export default function HTMLFormatter() {
     setWarnings([]);
   };
 
-  const hasModifiedData =
-    (input !== DEFAULT_HTML && input.trim() !== "") || output.trim() !== "";
-  const isAtDefault = input === DEFAULT_HTML && output === "";
+  const hasModifiedData = input !== DEFAULT_HTML && input.trim() !== "";
+  const isAtDefault = input === DEFAULT_HTML;
 
   useEffect(() => {
     formatCode(false); // Beautify by default

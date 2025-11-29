@@ -65,9 +65,8 @@ export default function TypeScriptFormatter() {
   };
 
   const hasModifiedData =
-    (input !== DEFAULT_TYPESCRIPT && input.trim() !== "") ||
-    output.trim() !== "";
-  const isAtDefault = input === DEFAULT_TYPESCRIPT && output === "";
+    input !== DEFAULT_TYPESCRIPT && input.trim() !== "";
+  const isAtDefault = input === DEFAULT_TYPESCRIPT;
 
   useEffect(() => {
     document.title = "TypeScript Formatter - FreeDevTool.App";

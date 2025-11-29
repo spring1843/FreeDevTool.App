@@ -59,8 +59,8 @@ export default function GraphQLFormatter() {
   };
 
   const hasModifiedData =
-    (input !== DEFAULT_GRAPHQL && input.trim() !== "") || output.trim() !== "";
-  const isAtDefault = input === DEFAULT_GRAPHQL && output === "";
+    input !== DEFAULT_GRAPHQL && input.trim() !== "";
+  const isAtDefault = input === DEFAULT_GRAPHQL;
 
   useEffect(() => {
     document.title = "GraphQL Formatter - FreeDevTool.App";

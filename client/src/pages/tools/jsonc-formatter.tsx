@@ -59,9 +59,8 @@ export default function JSONCFormatter() {
     setError(null);
   };
 
-  const hasModifiedData =
-    (input !== DEFAULT_JSONC && input.trim() !== "") || output.trim() !== "";
-  const isAtDefault = input === DEFAULT_JSONC && output === "";
+  const hasModifiedData = input !== DEFAULT_JSONC && input.trim() !== "";
+  const isAtDefault = input === DEFAULT_JSONC;
 
   useEffect(() => {
     document.title = "JSONC Formatter - FreeDevTool.App";
