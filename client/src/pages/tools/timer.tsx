@@ -22,6 +22,7 @@ import {
   X,
   Timer as TimerIcon,
   VolumeX,
+  Share2,
 } from "lucide-react";
 import {
   formatTimerTime,
@@ -445,9 +446,11 @@ export default function Timer() {
           </ActionButtonGroup>
           <DataButtonGroup>
             <ToolButton
-              variant="share"
+              variant="custom"
               onClick={copyShareURL}
               tooltip="Copy shareable timer URL"
+              icon={<Share2 className="w-4 h-4" />}
+              size="icon"
             />
           </DataButtonGroup>
         </ToolButtonGroup>
