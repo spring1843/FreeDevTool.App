@@ -58,9 +58,8 @@ export default function MarkdownFormatter() {
     setError(null);
   };
 
-  const hasModifiedData =
-    (input !== DEFAULT_MARKDOWN && input.trim() !== "") || output.trim() !== "";
-  const isAtDefault = input === DEFAULT_MARKDOWN && output === "";
+  const hasModifiedData = input !== DEFAULT_MARKDOWN && input.trim() !== "";
+  const isAtDefault = input === DEFAULT_MARKDOWN;
 
   useEffect(() => {
     formatCode();
