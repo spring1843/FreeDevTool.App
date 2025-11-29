@@ -153,6 +153,34 @@ export default function TextSort() {
         </div>
       </div>
 
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={sortText}
+            tooltip="Sort the text lines"
+            icon={<ArrowUpDown className="w-4 h-4 mr-2" />}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Sort Text
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset all settings to defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear text input"
+            hasModifiedData={hasModifiedData}
+            disabled={input.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       <Card className="mb-6">
         <CardHeader>
           <CardTitle>Sort Options</CardTitle>
@@ -246,34 +274,6 @@ export default function TextSort() {
               </div>
             </div>
           </div>
-
-          <ToolButtonGroup className="mt-6">
-            <ActionButtonGroup>
-              <ToolButton
-                variant="custom"
-                onClick={sortText}
-                tooltip="Sort the text lines"
-                icon={<ArrowUpDown className="w-4 h-4 mr-2" />}
-                className="bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                Sort Text
-              </ToolButton>
-            </ActionButtonGroup>
-            <DataButtonGroup>
-              <ResetButton
-                onClick={handleReset}
-                tooltip="Reset all settings to defaults"
-                hasModifiedData={hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={handleClear}
-                tooltip="Clear text input"
-                hasModifiedData={hasModifiedData}
-                disabled={input.trim() === ""}
-              />
-            </DataButtonGroup>
-          </ToolButtonGroup>
         </CardContent>
       </Card>
 

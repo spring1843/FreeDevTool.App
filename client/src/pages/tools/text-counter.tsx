@@ -88,7 +88,7 @@ export default function TextCounter() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Text Counter
@@ -100,9 +100,26 @@ export default function TextCounter() {
               Count words, characters, sentences, paragraphs and more
             </p>
           </div>
-          <SecurityBanner variant="compact" className="shrink-0" />
+          <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6 justify-end">
+        <DataButtonGroup>
+          <ResetButton
+            onClick={resetFields}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear text input"
+            hasModifiedData={hasModifiedData}
+            disabled={fields.text.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Text Input */}
@@ -126,22 +143,6 @@ export default function TextCounter() {
               fileExtension="txt"
               theme={theme}
             />
-            <ToolButtonGroup className="mt-4 justify-end">
-              <DataButtonGroup>
-                <ResetButton
-                  onClick={resetFields}
-                  tooltip="Reset to default example"
-                  hasModifiedData={hasModifiedData}
-                  disabled={isAtDefault}
-                />
-                <ClearButton
-                  onClick={handleClear}
-                  tooltip="Clear text input"
-                  hasModifiedData={hasModifiedData}
-                  disabled={fields.text.trim() === ""}
-                />
-              </DataButtonGroup>
-            </ToolButtonGroup>
           </CardContent>
         </Card>
 

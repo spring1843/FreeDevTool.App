@@ -2,8 +2,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { TextArea } from "@/components/ui/textarea";
-import { useTheme } from "@/providers/theme-provider";
 import { Hash, Copy, CheckCircle, XCircle, Eye, EyeOff } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import {
@@ -62,7 +60,6 @@ export default function MD5Hash() {
   const [isLoading, setIsLoading] = useState(false);
   const [isMatch, setIsMatch] = useState<boolean | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const { theme } = useTheme();
 
   const generateHash = useCallback(async () => {
     if (!inputText.trim()) {
@@ -159,6 +156,38 @@ export default function MD5Hash() {
         </div>
       </div>
 
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={generateHash}
+            disabled={isLoading || !inputText.trim()}
+            icon={<Hash className="w-4 h-4 mr-2" />}
+            tooltip="Generate MD5 hash from input"
+          >
+            {isLoading ? "Generating..." : "Generate Hash"}
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={
+              inputText.trim() === "" &&
+              compareHash.trim() === "" &&
+              hashResult.trim() === ""
+            }
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <Card>
           <CardHeader>
@@ -197,15 +226,6 @@ export default function MD5Hash() {
                 </Button>
               </div>
             </div>
-
-            <Button
-              onClick={generateHash}
-              disabled={isLoading || !inputText.trim()}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
-            >
-              <Hash className="w-4 h-4 mr-2" />
-              {isLoading ? "Generating..." : "Generate MD5 Hash"}
-            </Button>
 
             {hashResult ? (
               <div className="mt-4">
@@ -292,56 +312,6 @@ export default function MD5Hash() {
           </CardContent>
         </Card>
       </div>
-
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle>Hash Details</CardTitle>
-        </CardHeader>
-        <ToolButtonGroup className="px-6 pb-4">
-          <ActionButtonGroup>
-            <ToolButton
-              variant="custom"
-              onClick={generateHash}
-              disabled={isLoading || !inputText.trim()}
-              icon={<Hash className="w-4 h-4 mr-2" />}
-              tooltip="Generate MD5 hash from input"
-            >
-              {isLoading ? "Generating..." : "Generate Hash"}
-            </ToolButton>
-          </ActionButtonGroup>
-          <DataButtonGroup>
-            <ResetButton
-              onClick={handleReset}
-              tooltip="Reset to default example"
-              hasModifiedData={hasModifiedData}
-              disabled={isAtDefault}
-            />
-            <ClearButton
-              onClick={handleClear}
-              tooltip="Clear all inputs"
-              hasModifiedData={hasModifiedData}
-              disabled={
-                inputText.trim() === "" &&
-                compareHash.trim() === "" &&
-                hashResult.trim() === ""
-              }
-            />
-          </DataButtonGroup>
-        </ToolButtonGroup>
-        <CardContent>
-          <TextArea
-            id="output"
-            value={hashResult || "Hash will appear here after generation..."}
-            readOnly={true}
-            data-testid="hash-output"
-            className="min-h-[100px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
-            rows={5}
-            lang="plaintext"
-            fileExtension="txt"
-            theme={theme}
-          />
-        </CardContent>
-      </Card>
 
       <ToolExplanations explanations={tool?.explanations} />
     </div>

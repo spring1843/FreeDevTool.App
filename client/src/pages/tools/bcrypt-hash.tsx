@@ -161,10 +161,7 @@ export default function BcryptHash() {
     hash.trim() !== "" ||
     verifyText.trim() !== "";
   const isAtDefault =
-    plaintext === DEFAULT_BCRYPT &&
-    hash === "" &&
-    verifyText === "" &&
-    rounds === 10;
+    plaintext === DEFAULT_BCRYPT && verifyText === "" && rounds === 10;
 
   useEffect(() => {
     generateHash();
@@ -208,6 +205,38 @@ export default function BcryptHash() {
           <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={generateHash}
+            disabled={isHashing || !plaintext.trim()}
+            icon={<Hash className="w-4 h-4 mr-2" />}
+            tooltip="Generate bcrypt hash from password"
+          >
+            {isHashing ? "Generating..." : "Generate Hash"}
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={
+              plaintext.trim() === "" &&
+              hash.trim() === "" &&
+              verifyText.trim() === ""
+            }
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       {error ? (
         <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
@@ -276,15 +305,6 @@ export default function BcryptHash() {
                 Higher rounds = more secure but slower
               </div>
             </div>
-
-            <Button
-              onClick={generateHash}
-              disabled={isHashing || !plaintext.trim()}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
-            >
-              <Hash className="w-4 h-4 mr-2" />
-              {isHashing ? "Generating..." : "Generate Hash"}
-            </Button>
           </CardContent>
         </Card>
 
@@ -351,46 +371,6 @@ export default function BcryptHash() {
             <Badge variant="outline">{rounds} rounds</Badge>
           </CardTitle>
         </CardHeader>
-        <ToolButtonGroup className="px-6 pb-4">
-          <ActionButtonGroup>
-            <ToolButton
-              variant="custom"
-              onClick={generateHash}
-              disabled={isHashing || !plaintext.trim()}
-              icon={<Hash className="w-4 h-4 mr-2" />}
-              tooltip="Generate bcrypt hash from password"
-            >
-              {isHashing ? "Generating..." : "Generate Hash"}
-            </ToolButton>
-            <ToolButton
-              variant="custom"
-              onClick={verifyHash}
-              disabled={isVerifying || !verifyText.trim() || !hash.trim()}
-              icon={<CheckCircle className="w-4 h-4 mr-2" />}
-              tooltip="Verify password against hash"
-            >
-              {isVerifying ? "Verifying..." : "Verify"}
-            </ToolButton>
-          </ActionButtonGroup>
-          <DataButtonGroup>
-            <ResetButton
-              onClick={handleReset}
-              tooltip="Reset to default example"
-              hasModifiedData={hasModifiedData}
-              disabled={isAtDefault}
-            />
-            <ClearButton
-              onClick={handleClear}
-              tooltip="Clear all inputs"
-              hasModifiedData={hasModifiedData}
-              disabled={
-                plaintext.trim() === "" &&
-                hash.trim() === "" &&
-                verifyText.trim() === ""
-              }
-            />
-          </DataButtonGroup>
-        </ToolButtonGroup>
         <CardContent>
           <TextArea
             id="output"

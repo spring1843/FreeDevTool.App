@@ -265,7 +265,7 @@ export default function LoremGenerator() {
   }, [generateLorem]);
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -282,6 +282,37 @@ export default function LoremGenerator() {
           <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={generateLorem}
+            tooltip="Generate Lorem Ipsum text"
+            className="bg-purple-600 hover:bg-purple-700 text-white"
+            icon={<FileText className="w-4 h-4 mr-2" />}
+          >
+            Generate Lorem
+          </ToolButton>
+          <Badge variant="outline">
+            {count} {type}
+          </Badge>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset all settings to defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear generated text"
+            hasModifiedData={hasModifiedData}
+            disabled={generated.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <Card className="mb-6">
         <CardHeader>
@@ -339,37 +370,6 @@ export default function LoremGenerator() {
               <Label htmlFor="start-with-lorem">Start with "Lorem ipsum"</Label>
             </div>
           </div>
-
-          <ToolButtonGroup>
-            <ActionButtonGroup>
-              <ToolButton
-                variant="custom"
-                onClick={generateLorem}
-                tooltip="Generate Lorem Ipsum text"
-                className="bg-purple-600 hover:bg-purple-700 text-white"
-                icon={<FileText className="w-4 h-4 mr-2" />}
-              >
-                Generate Lorem
-              </ToolButton>
-              <Badge variant="outline">
-                {count} {type}
-              </Badge>
-            </ActionButtonGroup>
-            <DataButtonGroup>
-              <ResetButton
-                onClick={handleReset}
-                tooltip="Reset all settings to defaults"
-                hasModifiedData={hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={handleClear}
-                tooltip="Clear generated text"
-                hasModifiedData={hasModifiedData}
-                disabled={generated.trim() === ""}
-              />
-            </DataButtonGroup>
-          </ToolButtonGroup>
         </CardContent>
       </Card>
 

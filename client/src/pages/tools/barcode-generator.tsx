@@ -216,6 +216,41 @@ export default function BarcodeGenerator() {
         </div>
       </div>
 
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={generateBarcode}
+            disabled={!text.trim() || !!inputError}
+            tooltip="Generate barcode with current settings"
+            className="bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
+            icon={<BarChart3 className="w-4 h-4 mr-2" />}
+          >
+            Generate Barcode
+          </ToolButton>
+          <ToolButton
+            variant="download"
+            onClick={downloadBarcode}
+            disabled={!!error || !!inputError}
+            tooltip="Download barcode as PNG"
+          />
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset all settings to defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear text input"
+            hasModifiedData={hasModifiedData}
+            disabled={text.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       {error || inputError ? (
         <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
           <AlertDescription className="text-red-800 dark:text-red-200">
@@ -313,41 +348,6 @@ export default function BarcodeGenerator() {
               />
               <Label htmlFor="display-value">Display text below barcode</Label>
             </div>
-
-            <ToolButtonGroup>
-              <ActionButtonGroup>
-                <ToolButton
-                  variant="custom"
-                  onClick={generateBarcode}
-                  disabled={!text.trim() || !!inputError}
-                  tooltip="Generate barcode with current settings"
-                  className="bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
-                  icon={<BarChart3 className="w-4 h-4 mr-2" />}
-                >
-                  Generate Barcode
-                </ToolButton>
-                <ToolButton
-                  variant="download"
-                  onClick={downloadBarcode}
-                  disabled={!!error || !!inputError}
-                  tooltip="Download barcode as PNG"
-                />
-              </ActionButtonGroup>
-              <DataButtonGroup>
-                <ResetButton
-                  onClick={handleReset}
-                  tooltip="Reset all settings to defaults"
-                  hasModifiedData={hasModifiedData}
-                  disabled={isAtDefault}
-                />
-                <ClearButton
-                  onClick={handleClear}
-                  tooltip="Clear text input"
-                  hasModifiedData={hasModifiedData}
-                  disabled={text.trim() === ""}
-                />
-              </DataButtonGroup>
-            </ToolButtonGroup>
           </CardContent>
         </Card>
 

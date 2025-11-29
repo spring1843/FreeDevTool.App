@@ -329,7 +329,7 @@ export default function BrowserInfo() {
 
   if (!browserInfo) {
     return (
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
         <div className="flex items-center justify-center h-64">
           <p className="text-slate-500 dark:text-slate-400">
             Loading browser information...
@@ -340,10 +340,10 @@ export default function BrowserInfo() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container mx-auto px-4 py-8 max-w-6xl">
       {/* Header */}
       <div className="mb-6">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Browser Information
@@ -359,40 +359,37 @@ export default function BrowserInfo() {
               JavaScript
             </p>
           </div>
-          <SecurityBanner variant="compact" className="shrink-0" />
+          <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={refreshInfo}
+            tooltip="Refresh browser information"
+            icon={<RefreshCw className="w-4 h-4 mr-2" />}
+          >
+            Refresh
+          </ToolButton>
+          <ToolButton
+            variant="custom"
+            onClick={copyAllInfo}
+            tooltip="Copy all browser information to clipboard"
+            icon={<Copy className="w-4 h-4 mr-2" />}
+          >
+            Copy All
+          </ToolButton>
+        </ActionButtonGroup>
+      </ToolButtonGroup>
 
       {/* Controls */}
       <Card className="mb-6">
         <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center">
-              <Globe className="w-5 h-5 mr-2" />
-              Browser Data
-            </div>
-            <ToolButtonGroup>
-              <ActionButtonGroup>
-                <ToolButton
-                  variant="custom"
-                  onClick={refreshInfo}
-                  tooltip="Refresh browser information"
-                  icon={<RefreshCw className="w-4 h-4 mr-2" />}
-                  size="sm"
-                >
-                  Refresh
-                </ToolButton>
-                <ToolButton
-                  variant="custom"
-                  onClick={copyAllInfo}
-                  tooltip="Copy all browser information to clipboard"
-                  icon={<Copy className="w-4 h-4 mr-2" />}
-                  size="sm"
-                >
-                  Copy All
-                </ToolButton>
-              </ActionButtonGroup>
-            </ToolButtonGroup>
+          <CardTitle className="flex items-center">
+            <Globe className="w-5 h-5 mr-2" />
+            Browser Data
           </CardTitle>
         </CardHeader>
         <CardContent>

@@ -25,7 +25,6 @@ import {
   ToolButton,
   ToolButtonGroup,
   ActionButtonGroup,
-  DataButtonGroup,
 } from "@/components/ui/tool-button";
 
 interface ToneSchedule {
@@ -377,6 +376,40 @@ export default function Metronome() {
         </div>
       </div>
 
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          {!isRunning ? (
+            <Button
+              onClick={startMetronome}
+              disabled={toneSchedules.filter(s => s.enabled).length === 0}
+              size="lg"
+              className="flex items-center space-x-2"
+              data-testid="start-button"
+            >
+              <Play className="w-5 h-5 mr-2" />
+              <span>Start (Enter)</span>
+            </Button>
+          ) : (
+            <Button
+              onClick={stopMetronome}
+              variant="destructive"
+              size="lg"
+              className="flex items-center space-x-2"
+              data-testid="stop-button"
+            >
+              <Square className="w-5 h-5 mr-2" />
+              <span>Stop (Space/Esc)</span>
+            </Button>
+          )}
+          <ToolButton
+            variant="share"
+            onClick={shareMetronome}
+            tooltip="Copy shareable metronome URL"
+            size="lg"
+          />
+        </ActionButtonGroup>
+      </ToolButtonGroup>
+
       {/* Unified Metronome Interface */}
       <Card className="mb-6">
         <CardHeader>
@@ -400,44 +433,6 @@ export default function Metronome() {
           </p>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Main Controls */}
-          <div className="flex justify-center p-4 bg-slate-50 dark:bg-slate-900 rounded-lg">
-            <ToolButtonGroup>
-              <ActionButtonGroup>
-                {!isRunning ? (
-                  <Button
-                    onClick={startMetronome}
-                    disabled={toneSchedules.filter(s => s.enabled).length === 0}
-                    size="lg"
-                    className="flex items-center space-x-2"
-                    data-testid="start-button"
-                  >
-                    <Play className="w-5 h-5" />
-                    <span>Start (Enter)</span>
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={stopMetronome}
-                    variant="destructive"
-                    size="lg"
-                    className="flex items-center space-x-2"
-                    data-testid="stop-button"
-                  >
-                    <Square className="w-5 h-5" />
-                    <span>Stop (Space/Esc)</span>
-                  </Button>
-                )}
-              </ActionButtonGroup>
-              <DataButtonGroup>
-                <ToolButton
-                  variant="share"
-                  onClick={shareMetronome}
-                  tooltip="Copy shareable metronome URL"
-                />
-              </DataButtonGroup>
-            </ToolButtonGroup>
-          </div>
-
           {toneSchedules.filter(s => s.enabled).length === 0 && (
             <Alert>
               <AlertDescription>

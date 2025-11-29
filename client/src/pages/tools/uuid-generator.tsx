@@ -133,7 +133,7 @@ export default function UUIDGenerator() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -150,6 +150,38 @@ export default function UUIDGenerator() {
           <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={generateUUID}
+            tooltip="Generate new UUIDs"
+            className="bg-purple-600 hover:bg-purple-700 text-white"
+            icon={<RefreshCw className="w-4 h-4 mr-2" />}
+          >
+            Generate UUIDs
+          </ToolButton>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline">Version {version}</Badge>
+            <Badge variant="outline">{getFormatDescription(format)}</Badge>
+          </div>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset all settings to defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear generated UUIDs"
+            hasModifiedData={hasModifiedData}
+            disabled={uuids.length === 0}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <Card className="mb-6">
         <CardHeader>
@@ -211,38 +243,6 @@ export default function UUIDGenerator() {
               </Select>
             </div>
           </div>
-
-          <ToolButtonGroup>
-            <ActionButtonGroup>
-              <ToolButton
-                variant="custom"
-                onClick={generateUUID}
-                tooltip="Generate new UUIDs"
-                className="bg-purple-600 hover:bg-purple-700 text-white"
-                icon={<RefreshCw className="w-4 h-4 mr-2" />}
-              >
-                Generate UUIDs
-              </ToolButton>
-              <div className="flex items-center gap-2">
-                <Badge variant="outline">Version {version}</Badge>
-                <Badge variant="outline">{getFormatDescription(format)}</Badge>
-              </div>
-            </ActionButtonGroup>
-            <DataButtonGroup>
-              <ResetButton
-                onClick={handleReset}
-                tooltip="Reset all settings to defaults"
-                hasModifiedData={hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={handleClear}
-                tooltip="Clear generated UUIDs"
-                hasModifiedData={hasModifiedData}
-                disabled={uuids.length === 0}
-              />
-            </DataButtonGroup>
-          </ToolButtonGroup>
         </CardContent>
       </Card>
 

@@ -309,7 +309,7 @@ export default function QRGenerator() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               QR Code Generator
@@ -322,9 +322,54 @@ export default function QRGenerator() {
               and more
             </p>
           </div>
-          <SecurityBanner variant="compact" className="shrink-0" />
+          <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={generateQR}
+            disabled={!inputText.trim()}
+            tooltip="Generate QR Code from input"
+          >
+            Generate QR Code
+          </ToolButton>
+          {qrUrl ? (
+            <>
+              <ToolButton
+                variant="download"
+                onClick={downloadQR}
+                tooltip="Download QR code as SVG"
+              >
+                Download
+              </ToolButton>
+              <ToolButton
+                variant="copy"
+                onClick={copyQRUrl}
+                tooltip="Copy QR code URL to clipboard"
+              >
+                Copy
+              </ToolButton>
+            </>
+          ) : null}
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={inputText.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Input Controls */}
@@ -403,51 +448,6 @@ export default function QRGenerator() {
                   </AlertDescription>
                 </Alert>
               ) : null}
-
-              <ToolButtonGroup>
-                <ActionButtonGroup>
-                  <ToolButton
-                    variant="custom"
-                    onClick={generateQR}
-                    disabled={!inputText.trim()}
-                    tooltip="Generate QR Code from input"
-                  >
-                    Generate QR Code
-                  </ToolButton>
-                  {qrUrl ? (
-                    <>
-                      <ToolButton
-                        variant="download"
-                        onClick={downloadQR}
-                        tooltip="Download QR code as SVG"
-                      >
-                        Download
-                      </ToolButton>
-                      <ToolButton
-                        variant="copy"
-                        onClick={copyQRUrl}
-                        tooltip="Copy QR code URL to clipboard"
-                      >
-                        Copy
-                      </ToolButton>
-                    </>
-                  ) : null}
-                </ActionButtonGroup>
-                <DataButtonGroup>
-                  <ResetButton
-                    onClick={handleReset}
-                    tooltip="Reset to default example"
-                    hasModifiedData={hasModifiedData}
-                    disabled={isAtDefault}
-                  />
-                  <ClearButton
-                    onClick={handleClear}
-                    tooltip="Clear all inputs"
-                    hasModifiedData={hasModifiedData}
-                    disabled={inputText.trim() === ""}
-                  />
-                </DataButtonGroup>
-              </ToolButtonGroup>
             </CardContent>
           </Card>
 

@@ -15,6 +15,7 @@ import {
   ToolButton,
   ResetButton,
   ClearButton,
+  ToolButtonGroup,
   DataButtonGroup,
 } from "@/components/ui/tool-button";
 import {
@@ -371,10 +372,10 @@ export default function UnitConverter() {
   const unitOptions = Object.entries(currentCategory.units);
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Unit Converter
@@ -387,9 +388,27 @@ export default function UnitConverter() {
               pressure, and more
             </p>
           </div>
-          <SecurityBanner variant="compact" className="shrink-0" />
+          <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6 justify-end">
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default settings"
+            hasModifiedData={isAtDefault ? false : hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear input value"
+            hasModifiedData={hasModifiedData}
+            disabled={inputValue.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       {/* Category Selection */}
       <Card className="mb-6">
         <CardHeader>
@@ -398,7 +417,7 @@ export default function UnitConverter() {
             Select Category
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent>
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
             <SelectTrigger data-testid="category-select">
               <SelectValue />
@@ -411,22 +430,6 @@ export default function UnitConverter() {
               ))}
             </SelectContent>
           </Select>
-          <div className="flex justify-end">
-            <DataButtonGroup>
-              <ResetButton
-                onClick={handleReset}
-                tooltip="Reset to default settings"
-                hasModifiedData={isAtDefault ? false : hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={handleClear}
-                tooltip="Clear input value"
-                hasModifiedData={hasModifiedData}
-                disabled={inputValue.trim() === ""}
-              />
-            </DataButtonGroup>
-          </div>
         </CardContent>
       </Card>
       {/* Conversion Interface */}

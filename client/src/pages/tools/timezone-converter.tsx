@@ -324,10 +324,10 @@ export default function TimezoneConverter() {
   // No need for manual timezone mapping - TimezoneSelector handles this
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Timezone Converter
@@ -339,9 +339,41 @@ export default function TimezoneConverter() {
               Convert time across multiple timezones with second-level precision
             </p>
           </div>
-          <SecurityBanner variant="compact" className="shrink-0" />
+          <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            onClick={convertTimezones}
+            icon={<RefreshCw className="w-4 h-4 mr-2" />}
+            tooltip="Convert source time to all target timezones"
+            data-testid="convert-timezones-button"
+          >
+            Convert Timezones
+          </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={shareConverter}
+            tooltip="Copy shareable URL with current settings"
+          />
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to current time and defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={sourceDate.trim() === "" && sourceTime.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       {/* Source Time Input */}
       <Card className="mb-6">
@@ -395,38 +427,6 @@ export default function TimezoneConverter() {
               />
             </div>
           </div>
-
-          <ToolButtonGroup className="pt-4">
-            <ActionButtonGroup>
-              <ToolButton
-                onClick={convertTimezones}
-                icon={<RefreshCw className="w-4 h-4 mr-2" />}
-                tooltip="Convert source time to all target timezones"
-                data-testid="convert-timezones-button"
-              >
-                Convert Timezones
-              </ToolButton>
-              <ToolButton
-                variant="share"
-                onClick={shareConverter}
-                tooltip="Copy shareable URL with current settings"
-              />
-            </ActionButtonGroup>
-            <DataButtonGroup>
-              <ResetButton
-                onClick={handleReset}
-                tooltip="Reset to current time and defaults"
-                hasModifiedData={hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={handleClear}
-                tooltip="Clear all inputs"
-                hasModifiedData={hasModifiedData}
-                disabled={sourceDate.trim() === "" && sourceTime.trim() === ""}
-              />
-            </DataButtonGroup>
-          </ToolButtonGroup>
         </CardContent>
       </Card>
 

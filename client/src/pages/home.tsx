@@ -150,7 +150,7 @@ export default function Home() {
       {/* Technical Design Principles */}
       <div
         id="security"
-        className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 mb-8"
+        className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 mt-12 mb-4"
       >
         <div className="grid md:grid-cols-3 gap-4 text-sm">
           <div className="text-center">
@@ -173,7 +173,7 @@ export default function Home() {
           </div>
           <div className="text-center">
             <div className="font-medium text-purple-700 dark:text-purple-400 mb-2">
-              Open Source & Transparent
+              Free & Open Source
             </div>
             <p className="text-slate-600 dark:text-slate-400 mb-3">
               Designed for ultimate privacy and security. Inspect the code

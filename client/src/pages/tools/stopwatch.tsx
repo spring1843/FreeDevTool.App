@@ -6,6 +6,8 @@ import { useState, useEffect, useRef } from "react";
 import {
   ToolButtonGroup,
   ActionButtonGroup,
+  DataButtonGroup,
+  ResetButton,
 } from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
@@ -69,6 +71,17 @@ export default function Stopwatch() {
     }
   };
 
+  // Reset: Stop and zero everything
+  const handleReset = () => {
+    stopStopwatch();
+  };
+
+  // Check if at default state
+  const isAtDefault = time === 0 && laps.length === 0 && !isRunning;
+
+  // Check if there's modified data
+  const hasModifiedData = time > 0 || laps.length > 0;
+
   const recordLap = () => {
     if (isRunning) {
       const lapTime =
@@ -80,10 +93,6 @@ export default function Stopwatch() {
       };
       setLaps(prevLaps => [...prevLaps, newLap]);
     }
-  };
-
-  const handleReset = () => {
-    stopStopwatch();
   };
 
   // Keyboard shortcuts
@@ -177,7 +186,7 @@ export default function Stopwatch() {
     laps.length > 0 ? Math.max(...laps.map(lap => lap.lapTime)) : 0;
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -198,13 +207,69 @@ export default function Stopwatch() {
         </div>
       </div>
 
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          {!isRunning ? (
+            <Button
+              onClick={startStopwatch}
+              className="bg-green-600 hover:bg-green-700 text-white"
+              size="lg"
+              data-testid="start-button"
+            >
+              <Play className="w-5 h-5 mr-2" />
+              Start <span className="text-xs opacity-75 ml-2">(Enter)</span>
+            </Button>
+          ) : (
+            <>
+              <Button
+                onClick={pauseStopwatch}
+                className="bg-yellow-600 hover:bg-yellow-700 text-white"
+                size="lg"
+                data-testid="pause-button"
+              >
+                <Pause className="w-5 h-5 mr-2" />
+                Pause <span className="text-xs opacity-75 ml-2">(Space)</span>
+              </Button>
+
+              <Button
+                onClick={recordLap}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+                size="lg"
+                data-testid="lap-button"
+              >
+                <Flag className="w-5 h-5 mr-2" />
+                Lap <span className="text-xs opacity-75 ml-2">(Enter)</span>
+              </Button>
+            </>
+          )}
+
+          <Button
+            onClick={stopStopwatch}
+            variant="outline"
+            size="lg"
+            data-testid="stop-button"
+          >
+            <Square className="w-5 h-5 mr-2" />
+            Stop <span className="text-xs opacity-75 ml-2">(Esc)</span>
+          </Button>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset stopwatch to zero"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       <Card className="mb-6">
         <CardContent className="pt-6">
-          <div className="text-center mb-6">
+          <div className="text-center">
             <div className="text-6xl font-mono font-bold text-blue-600 dark:text-blue-400 mb-4">
               {formatTime(time)}
             </div>
-            <div className="flex justify-center items-center gap-2 mb-4">
+            <div className="flex justify-center items-center gap-2">
               <Badge
                 variant={isRunning ? "default" : "outline"}
                 className="text-sm"
@@ -218,55 +283,6 @@ export default function Stopwatch() {
               )}
             </div>
           </div>
-
-          <ToolButtonGroup className="justify-center">
-            <ActionButtonGroup>
-              {!isRunning ? (
-                <Button
-                  onClick={startStopwatch}
-                  className="bg-green-600 hover:bg-green-700 text-white"
-                  size="lg"
-                  data-testid="start-button"
-                >
-                  <Play className="w-5 h-5 mr-2" />
-                  Start <span className="text-xs opacity-75 ml-2">(Enter)</span>
-                </Button>
-              ) : (
-                <>
-                  <Button
-                    onClick={pauseStopwatch}
-                    className="bg-yellow-600 hover:bg-yellow-700 text-white"
-                    size="lg"
-                    data-testid="pause-button"
-                  >
-                    <Pause className="w-5 h-5 mr-2" />
-                    Pause{" "}
-                    <span className="text-xs opacity-75 ml-2">(Space)</span>
-                  </Button>
-
-                  <Button
-                    onClick={recordLap}
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
-                    size="lg"
-                    data-testid="lap-button"
-                  >
-                    <Flag className="w-5 h-5 mr-2" />
-                    Lap <span className="text-xs opacity-75 ml-2">(Enter)</span>
-                  </Button>
-                </>
-              )}
-
-              <Button
-                onClick={handleReset}
-                variant="outline"
-                size="lg"
-                data-testid="stop-button"
-              >
-                <Square className="w-5 h-5 mr-2" />
-                Stop <span className="text-xs opacity-75 ml-2">(Esc)</span>
-              </Button>
-            </ActionButtonGroup>
-          </ToolButtonGroup>
         </CardContent>
       </Card>
 

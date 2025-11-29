@@ -184,45 +184,6 @@ export default function TextDiff() {
         </div>
       </div>
 
-      {diffStats ? (
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle>Diff Statistics</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-4">
-              <Badge
-                variant="outline"
-                className="bg-green-50 text-green-700 border-green-200"
-              >
-                +{diffStats.linesAdded} lines
-              </Badge>
-              <Badge
-                variant="outline"
-                className="bg-red-50 text-red-700 border-red-200"
-              >
-                -{diffStats.linesRemoved} lines
-              </Badge>
-              <Badge
-                variant="outline"
-                className="bg-yellow-50 text-yellow-700 border-yellow-200"
-              >
-                ~{diffStats.linesModified} modified
-              </Badge>
-              <Badge
-                variant="outline"
-                className="bg-blue-50 text-blue-700 border-blue-200"
-              >
-                {diffStats.charactersAdded +
-                  diffStats.charactersRemoved +
-                  diffStats.charactersModified}{" "}
-                chars changed
-              </Badge>
-            </div>
-          </CardContent>
-        </Card>
-      ) : null}
-
       <ToolButtonGroup className="mb-6">
         <ActionButtonGroup>
           <ToolButton
@@ -302,7 +263,7 @@ export default function TextDiff() {
       </div>
 
       {diffResult.length > 0 && (
-        <Card>
+        <Card className="mb-6">
           <CardHeader>
             <CardTitle>Diff Results</CardTitle>
           </CardHeader>
@@ -319,6 +280,46 @@ export default function TextDiff() {
           </CardContent>
         </Card>
       )}
+
+      {diffStats ? (
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Diff Statistics</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-4">
+              <Badge
+                variant="outline"
+                className="bg-green-50 text-green-700 border-green-200"
+              >
+                +{diffStats.linesAdded} lines
+              </Badge>
+              <Badge
+                variant="outline"
+                className="bg-red-50 text-red-700 border-red-200"
+              >
+                -{diffStats.linesRemoved} lines
+              </Badge>
+              <Badge
+                variant="outline"
+                className="bg-yellow-50 text-yellow-700 border-yellow-200"
+              >
+                ~{diffStats.linesModified} modified
+              </Badge>
+              <Badge
+                variant="outline"
+                className="bg-blue-50 text-blue-700 border-blue-200"
+              >
+                {diffStats.charactersAdded +
+                  diffStats.charactersRemoved +
+                  diffStats.charactersModified}{" "}
+                chars changed
+              </Badge>
+            </div>
+          </CardContent>
+        </Card>
+      ) : null}
+
       <ToolExplanations explanations={tool?.explanations} />
     </div>
   );

@@ -257,10 +257,10 @@ Jane Smith      jane@example.com        25      Marketing`,
     csvInput === DEFAULT_CSV_TO_JSON && selectedDelimiter === ",";
 
   return (
-    <div className="container mx-auto p-6 max-w-7xl">
+    <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
               <FileSpreadsheet className="h-8 w-8 text-blue-600" />
@@ -274,9 +274,43 @@ Jane Smith      jane@example.com        25      Marketing`,
               formatting options.
             </p>
           </div>
-          <SecurityBanner variant="compact" className="shrink-0" />
+          <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={convertCSV}
+            icon={<RefreshCw className="w-4 h-4 mr-2" />}
+            tooltip="Convert CSV to JSON"
+            data-testid="convert-button"
+          >
+            Convert
+          </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={shareConverter}
+            tooltip="Copy shareable URL to clipboard"
+            data-testid="share-converter-button"
+          />
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={clearAll}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={csvInput.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
@@ -287,64 +321,24 @@ Jane Smith      jane@example.com        25      Marketing`,
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex flex-wrap gap-2 items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Label htmlFor="delimiter-select">Delimiter:</Label>
-                <Select
-                  value={selectedDelimiter}
-                  onValueChange={setSelectedDelimiter}
-                  data-testid="delimiter-select"
-                >
-                  <SelectTrigger className="w-40">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {delimiters.map(delimiter => (
-                      <SelectItem key={delimiter.value} value={delimiter.value}>
-                        {delimiter.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <ToolButtonGroup>
-                <ActionButtonGroup>
-                  <ToolButton
-                    variant="custom"
-                    onClick={convertCSV}
-                    size="sm"
-                    icon={<RefreshCw className="w-4 h-4 mr-1" />}
-                    tooltip="Convert CSV to JSON"
-                    data-testid="convert-button"
-                  >
-                    Convert
-                  </ToolButton>
-                  <ToolButton
-                    variant="share"
-                    onClick={shareConverter}
-                    size="sm"
-                    tooltip="Copy shareable URL to clipboard"
-                    data-testid="share-converter-button"
-                  />
-                </ActionButtonGroup>
-                <DataButtonGroup>
-                  <ResetButton
-                    onClick={handleReset}
-                    tooltip="Reset to default example"
-                    hasModifiedData={hasModifiedData}
-                    disabled={isAtDefault}
-                    iconOnly
-                  />
-                  <ClearButton
-                    onClick={clearAll}
-                    tooltip="Clear all inputs"
-                    hasModifiedData={hasModifiedData}
-                    disabled={csvInput.trim() === ""}
-                    iconOnly
-                  />
-                </DataButtonGroup>
-              </ToolButtonGroup>
+            <div className="flex items-center gap-2">
+              <Label htmlFor="delimiter-select">Delimiter:</Label>
+              <Select
+                value={selectedDelimiter}
+                onValueChange={setSelectedDelimiter}
+                data-testid="delimiter-select"
+              >
+                <SelectTrigger className="w-40">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {delimiters.map(delimiter => (
+                    <SelectItem key={delimiter.value} value={delimiter.value}>
+                      {delimiter.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <TextArea

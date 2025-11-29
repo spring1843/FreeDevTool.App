@@ -276,10 +276,10 @@ export default function PasswordGenerator() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Password Generator
@@ -292,9 +292,43 @@ export default function PasswordGenerator() {
               analysis
             </p>
           </div>
-          <SecurityBanner variant="compact" className="shrink-0" />
+          <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={generatePasswords}
+            disabled={
+              !includeUppercase &&
+              !includeLowercase &&
+              !includeNumbers &&
+              !includeSymbols
+            }
+            tooltip="Generate new passwords"
+            icon={<RefreshCw className="w-4 h-4 mr-2" />}
+          >
+            Generate{" "}
+            {passwordCount === 1 ? "Password" : `${passwordCount} Passwords`}
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset all settings to defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear generated passwords"
+            hasModifiedData={hasModifiedData}
+            disabled={passwords.length === 0}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       {/* Configuration */}
       <Card className="mb-6">
@@ -438,43 +472,6 @@ export default function PasswordGenerator() {
               </div>
             </div>
           </div>
-
-          {/* Generate and Reset Buttons */}
-          <ToolButtonGroup className="pt-4">
-            <ActionButtonGroup>
-              <ToolButton
-                variant="custom"
-                onClick={generatePasswords}
-                disabled={
-                  !includeUppercase &&
-                  !includeLowercase &&
-                  !includeNumbers &&
-                  !includeSymbols
-                }
-                tooltip="Generate new passwords"
-                icon={<RefreshCw className="w-4 h-4 mr-2" />}
-              >
-                Generate{" "}
-                {passwordCount === 1
-                  ? "Password"
-                  : `${passwordCount} Passwords`}
-              </ToolButton>
-            </ActionButtonGroup>
-            <DataButtonGroup>
-              <ResetButton
-                onClick={handleReset}
-                tooltip="Reset all settings to defaults"
-                hasModifiedData={hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={handleClear}
-                tooltip="Clear generated passwords"
-                hasModifiedData={hasModifiedData}
-                disabled={passwords.length === 0}
-              />
-            </DataButtonGroup>
-          </ToolButtonGroup>
         </CardContent>
       </Card>
 

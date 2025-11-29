@@ -320,7 +320,7 @@ export default function NumberBaseConverter() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Number Base Converter
@@ -333,9 +333,43 @@ export default function NumberBaseConverter() {
               hexadecimal, and custom bases)
             </p>
           </div>
-          <SecurityBanner variant="compact" className="shrink-0" />
+          <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={convertNumber}
+            icon={<RefreshCw className="w-4 h-4 mr-2" />}
+            tooltip="Convert number to selected bases"
+            data-testid="convert-button"
+          >
+            Convert
+          </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={shareConverter}
+            tooltip="Copy shareable URL to clipboard"
+            data-testid="share-converter-button"
+          />
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset all settings to defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={clearAll}
+            tooltip="Clear number input"
+            hasModifiedData={hasModifiedData}
+            disabled={inputNumber.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       {/* Main Content */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
@@ -397,27 +431,6 @@ export default function NumberBaseConverter() {
                 </div>
               ) : null}
 
-              <ToolButtonGroup>
-                <ActionButtonGroup>
-                  <ToolButton
-                    variant="custom"
-                    onClick={convertNumber}
-                    className="flex-1"
-                    icon={<RefreshCw className="w-4 h-4 mr-2" />}
-                    tooltip="Convert number to selected bases"
-                    data-testid="convert-button"
-                  >
-                    Convert
-                  </ToolButton>
-                  <ToolButton
-                    variant="share"
-                    onClick={shareConverter}
-                    tooltip="Copy shareable URL to clipboard"
-                    data-testid="share-converter-button"
-                  />
-                </ActionButtonGroup>
-              </ToolButtonGroup>
-
               <div className="grid grid-cols-3 gap-2">
                 <Button
                   onClick={() => loadExample("binary")}
@@ -444,23 +457,6 @@ export default function NumberBaseConverter() {
                   Decimal Example
                 </Button>
               </div>
-
-              <ToolButtonGroup>
-                <DataButtonGroup>
-                  <ResetButton
-                    onClick={handleReset}
-                    tooltip="Reset to default example"
-                    hasModifiedData={hasModifiedData}
-                    disabled={isAtDefault}
-                  />
-                  <ClearButton
-                    onClick={clearAll}
-                    tooltip="Clear all inputs"
-                    hasModifiedData={hasModifiedData}
-                    disabled={inputNumber.trim() === ""}
-                  />
-                </DataButtonGroup>
-              </ToolButtonGroup>
             </CardContent>
           </Card>
 
