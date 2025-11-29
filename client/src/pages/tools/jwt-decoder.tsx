@@ -125,7 +125,17 @@ export default function JWTDecoder() {
         </div>
       </div>
 
-      <ToolButtonGroup className="mb-6 justify-end">
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={decodeToken}
+            icon={<Key className="w-4 h-4 mr-2" />}
+            tooltip="Decode JWT token"
+          >
+            Decode
+          </ToolButton>
+        </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton
             onClick={handleReset}
@@ -175,18 +185,6 @@ export default function JWTDecoder() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <ToolButtonGroup className="mb-4">
-            <ActionButtonGroup>
-              <ToolButton
-                variant="custom"
-                onClick={decodeToken}
-                icon={<Key className="w-4 h-4 mr-2" />}
-                tooltip="Decode JWT token"
-              >
-                Decode
-              </ToolButton>
-            </ActionButtonGroup>
-          </ToolButtonGroup>
           <TextArea
             id="input"
             value={token}
