@@ -60,7 +60,7 @@ export default function TimeFormatter() {
 
       const timeFormats: TimeFormat[] = [
         {
-          name: "24-Hour Format (HH:MM:SS)",
+          name: "24-Hour Format",
           value: dateTime.toLocaleTimeString("en-GB", {
             hour12: false,
             hour: "2-digit",
@@ -68,10 +68,10 @@ export default function TimeFormatter() {
             second: "2-digit",
             timeZone: inputTimezone,
           }),
-          description: "Standard 24-hour military time format",
+          description: "HH:MM:SS — Standard 24-hour military time format",
         },
         {
-          name: "12-Hour Format (h:MM:SS AM/PM)",
+          name: "12-Hour Format",
           value: dateTime.toLocaleTimeString("en-US", {
             hour12: true,
             hour: "numeric",
@@ -79,32 +79,32 @@ export default function TimeFormatter() {
             second: "2-digit",
             timeZone: inputTimezone,
           }),
-          description: "Standard 12-hour format with AM/PM",
+          description: "h:MM:SS AM/PM — Standard 12-hour format with AM/PM",
         },
         {
-          name: "ISO 8601 Time (HH:MM:SSZ)",
+          name: "ISO 8601 Time",
           value: dateTime.toISOString().split("T")[1],
-          description: "International standard time format with UTC",
+          description: "HH:MM:SS.sssZ — International standard time format with UTC",
         },
         {
           name: "RFC 3339 DateTime",
           value: dateTime.toISOString(),
-          description: "Internet date/time format based on ISO 8601",
+          description: "YYYY-MM-DDTHH:MM:SS.sssZ — Internet date/time format based on ISO 8601",
         },
         {
           name: "Unix Timestamp",
           value: Math.floor(dateTime.getTime() / 1000).toString(),
-          description: "Seconds since January 1, 1970 UTC",
+          description: "Numeric — Seconds since January 1, 1970 UTC",
         },
         {
           name: "Unix Timestamp (Milliseconds)",
           value: dateTime.getTime().toString(),
-          description: "Milliseconds since January 1, 1970 UTC",
+          description: "Numeric — Milliseconds since January 1, 1970 UTC",
         },
         {
           name: "UTC Time",
           value: dateTime.toUTCString().split(" ")[4],
-          description: "Time in Coordinated Universal Time",
+          description: "HH:MM:SS — Time in Coordinated Universal Time",
         },
         {
           name: "Local Time (Long)",
@@ -115,7 +115,7 @@ export default function TimeFormatter() {
             timeZoneName: "long",
             timeZone: inputTimezone,
           }),
-          description: "Local time with full timezone name",
+          description: "h:MM:SS AM/PM Timezone — Local time with full timezone name",
         },
         {
           name: "Local Time (Short)",
@@ -126,7 +126,7 @@ export default function TimeFormatter() {
             timeZoneName: "short",
             timeZone: inputTimezone,
           }),
-          description: "Local time with abbreviated timezone",
+          description: "h:MM:SS AM/PM TZ — Local time with abbreviated timezone",
         },
         {
           name: "Time Only (No Seconds)",
@@ -136,7 +136,7 @@ export default function TimeFormatter() {
             minute: "2-digit",
             timeZone: inputTimezone,
           }),
-          description: "24-hour format without seconds",
+          description: "HH:MM — 24-hour format without seconds",
         },
         {
           name: "12-Hour (No Seconds)",
@@ -146,7 +146,7 @@ export default function TimeFormatter() {
             minute: "2-digit",
             timeZone: inputTimezone,
           }),
-          description: "12-hour format without seconds",
+          description: "h:MM AM/PM — 12-hour format without seconds",
         },
         {
           name: "Microseconds Format",
@@ -157,7 +157,7 @@ export default function TimeFormatter() {
             second: "2-digit",
             timeZone: inputTimezone,
           })}.${dateTime.getMilliseconds().toString().padStart(3, "0")}000`,
-          description: "Time with microsecond precision",
+          description: "HH:MM:SS.ssssss — Time with microsecond precision",
         },
         {
           name: "Time with Offset",
@@ -181,33 +181,32 @@ export default function TimeFormatter() {
             .format(dateTime)
             .split(" ")
             .pop()}`,
-          description: "Time with timezone offset (±HH:MM)",
+          description: "HH:MM:SS ±HH:MM — Time with timezone offset",
         },
         {
           name: "Decimal Time",
           value: convertToDecimalTime(dateTime),
-          description: "French Revolutionary decimal time format",
+          description: "d:mm:ss — French Revolutionary decimal time format",
         },
         {
           name: "Internet Time (.beats)",
           value: convertToInternetTime(dateTime),
-          description: "Swatch Internet Time (BMT - Biel Mean Time)",
+          description: "@beats — Swatch Internet Time (BMT - Biel Mean Time)",
         },
         {
           name: "Julian Day Number",
           value: calculateJulianDay(dateTime).toFixed(6),
-          description:
-            "Days since January 1, 4713 BCE proleptic Julian calendar",
+          description: "Numeric — Days since January 1, 4713 BCE proleptic Julian calendar",
         },
         {
           name: "Modified Julian Day",
           value: (calculateJulianDay(dateTime) - 2400000.5).toFixed(6),
-          description: "Modified Julian Day (MJD) for astronomical use",
+          description: "Numeric — Modified Julian Day (MJD) for astronomical use",
         },
         {
           name: "Excel Serial Date",
           value: convertToExcelDate(dateTime).toFixed(6),
-          description: "Excel date serial number format",
+          description: "Numeric — Excel date serial number format",
         },
       ];
 
