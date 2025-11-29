@@ -181,24 +181,6 @@ export default function CSSFormatter() {
         </Alert>
       ) : null}
 
-      <div className="mb-6 flex flex-wrap gap-4 items-center">
-        <div className="flex items-center gap-2">
-          <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
-            Format:
-          </label>
-          <Select value={format} onValueChange={handleFormatChange}>
-            <SelectTrigger className="w-32">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="css">CSS</SelectItem>
-              <SelectItem value="scss">SCSS</SelectItem>
-              <SelectItem value="less">LESS</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
       <ToolButtonGroup className="mb-6">
         <ActionButtonGroup>
           <ToolButton
@@ -235,6 +217,24 @@ export default function CSSFormatter() {
           />
         </DataButtonGroup>
       </ToolButtonGroup>
+
+      <div className="mb-6 flex flex-wrap gap-4 items-center">
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+            Format:
+          </label>
+          <Select value={format} onValueChange={handleFormatChange}>
+            <SelectTrigger className="w-32">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="css">CSS</SelectItem>
+              <SelectItem value="scss">SCSS</SelectItem>
+              <SelectItem value="less">LESS</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
