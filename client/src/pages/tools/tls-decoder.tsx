@@ -179,6 +179,33 @@ export default function TLSDecoder() {
         </div>
       </div>
 
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={decodeCertificate}
+            icon={<Shield className="w-4 h-4 mr-2" />}
+            tooltip="Decode TLS certificate"
+          >
+            Decode Certificate
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear certificate input"
+            hasModifiedData={hasModifiedData}
+            disabled={certificate.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       {error ? (
         <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
           <AlertDescription className="text-red-800 dark:text-red-200">
@@ -202,32 +229,6 @@ export default function TLSDecoder() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <ToolButtonGroup className="mb-4">
-            <ActionButtonGroup>
-              <ToolButton
-                variant="custom"
-                onClick={decodeCertificate}
-                icon={<Shield className="w-4 h-4 mr-2" />}
-                tooltip="Decode TLS certificate"
-              >
-                Decode Certificate
-              </ToolButton>
-            </ActionButtonGroup>
-            <DataButtonGroup>
-              <ResetButton
-                onClick={handleReset}
-                tooltip="Reset to default example"
-                hasModifiedData={hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={handleClear}
-                tooltip="Clear certificate input"
-                hasModifiedData={hasModifiedData}
-                disabled={certificate.trim() === ""}
-              />
-            </DataButtonGroup>
-          </ToolButtonGroup>
           <TextArea
             key={editorEpoch}
             id="input"
