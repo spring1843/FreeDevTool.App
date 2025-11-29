@@ -213,13 +213,76 @@ export default function Stopwatch() {
         </div>
       </div>
 
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          {!isRunning ? (
+            <Button
+              onClick={startStopwatch}
+              className="bg-green-600 hover:bg-green-700 text-white"
+              size="lg"
+              data-testid="start-button"
+            >
+              <Play className="w-5 h-5 mr-2" />
+              Start <span className="text-xs opacity-75 ml-2">(Enter)</span>
+            </Button>
+          ) : (
+            <>
+              <Button
+                onClick={pauseStopwatch}
+                className="bg-yellow-600 hover:bg-yellow-700 text-white"
+                size="lg"
+                data-testid="pause-button"
+              >
+                <Pause className="w-5 h-5 mr-2" />
+                Pause{" "}
+                <span className="text-xs opacity-75 ml-2">(Space)</span>
+              </Button>
+
+              <Button
+                onClick={recordLap}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+                size="lg"
+                data-testid="lap-button"
+              >
+                <Flag className="w-5 h-5 mr-2" />
+                Lap <span className="text-xs opacity-75 ml-2">(Enter)</span>
+              </Button>
+            </>
+          )}
+
+          <Button
+            onClick={stopStopwatch}
+            variant="outline"
+            size="lg"
+            data-testid="stop-button"
+          >
+            <Square className="w-5 h-5 mr-2" />
+            Stop <span className="text-xs opacity-75 ml-2">(Esc)</span>
+          </Button>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset stopwatch to zero"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={clearLaps}
+            tooltip="Clear recorded laps"
+            hasModifiedData={hasModifiedData}
+            disabled={laps.length === 0}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       <Card className="mb-6">
         <CardContent className="pt-6">
-          <div className="text-center mb-6">
+          <div className="text-center">
             <div className="text-6xl font-mono font-bold text-blue-600 dark:text-blue-400 mb-4">
               {formatTime(time)}
             </div>
-            <div className="flex justify-center items-center gap-2 mb-4">
+            <div className="flex justify-center items-center gap-2">
               <Badge
                 variant={isRunning ? "default" : "outline"}
                 className="text-sm"
@@ -233,69 +296,6 @@ export default function Stopwatch() {
               )}
             </div>
           </div>
-
-          <ToolButtonGroup>
-            <ActionButtonGroup>
-              {!isRunning ? (
-                <Button
-                  onClick={startStopwatch}
-                  className="bg-green-600 hover:bg-green-700 text-white"
-                  size="lg"
-                  data-testid="start-button"
-                >
-                  <Play className="w-5 h-5 mr-2" />
-                  Start <span className="text-xs opacity-75 ml-2">(Enter)</span>
-                </Button>
-              ) : (
-                <>
-                  <Button
-                    onClick={pauseStopwatch}
-                    className="bg-yellow-600 hover:bg-yellow-700 text-white"
-                    size="lg"
-                    data-testid="pause-button"
-                  >
-                    <Pause className="w-5 h-5 mr-2" />
-                    Pause{" "}
-                    <span className="text-xs opacity-75 ml-2">(Space)</span>
-                  </Button>
-
-                  <Button
-                    onClick={recordLap}
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
-                    size="lg"
-                    data-testid="lap-button"
-                  >
-                    <Flag className="w-5 h-5 mr-2" />
-                    Lap <span className="text-xs opacity-75 ml-2">(Enter)</span>
-                  </Button>
-                </>
-              )}
-
-              <Button
-                onClick={stopStopwatch}
-                variant="outline"
-                size="lg"
-                data-testid="stop-button"
-              >
-                <Square className="w-5 h-5 mr-2" />
-                Stop <span className="text-xs opacity-75 ml-2">(Esc)</span>
-              </Button>
-            </ActionButtonGroup>
-            <DataButtonGroup>
-              <ResetButton
-                onClick={handleReset}
-                tooltip="Reset stopwatch to zero"
-                hasModifiedData={hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={clearLaps}
-                tooltip="Clear recorded laps"
-                hasModifiedData={hasModifiedData}
-                disabled={laps.length === 0}
-              />
-            </DataButtonGroup>
-          </ToolButtonGroup>
         </CardContent>
       </Card>
 

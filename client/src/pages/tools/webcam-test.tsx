@@ -18,10 +18,8 @@ import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 import {
   ToolButton,
-  ResetButton,
   ToolButtonGroup,
   ActionButtonGroup,
-  DataButtonGroup,
 } from "@/components/ui/tool-button";
 
 export default function WebcamTest() {
@@ -33,7 +31,6 @@ export default function WebcamTest() {
   );
   const [error, setError] = useState<string | null>(null);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [, setPermissionRequested] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -41,7 +38,6 @@ export default function WebcamTest() {
   const requestPermission = async () => {
     try {
       setError(null);
-      setPermissionRequested(true);
 
       // Request camera permission
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -164,15 +160,6 @@ export default function WebcamTest() {
     });
   };
 
-  const handleReset = () => {
-    stopCamera();
-    setSelectedDevice(undefined);
-    setError(null);
-    setHasPermission(null);
-    setPermissionRequested(false);
-    setDevices([]);
-  };
-
   useEffect(() => {
     // Only get basic device info without permission on mount
     const getBasicDevices = async () => {
@@ -206,7 +193,6 @@ export default function WebcamTest() {
   };
 
   const permissionStatus = getPermissionStatus();
-  const hasModifiedState = isActive || hasPermission !== null;
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -319,16 +305,6 @@ export default function WebcamTest() {
                 Capture Photo
               </ToolButton>
             </ActionButtonGroup>
-            <DataButtonGroup>
-              <ResetButton
-                onClick={handleReset}
-                tooltip="Stop camera and reset all settings"
-                hasModifiedData={hasModifiedState}
-                disabled={!hasModifiedState}
-                toastTitle="Camera reset"
-                toastDescription="Camera has been stopped and settings reset"
-              />
-            </DataButtonGroup>
           </ToolButtonGroup>
         </CardContent>
       </Card>

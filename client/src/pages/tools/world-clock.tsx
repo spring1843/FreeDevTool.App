@@ -180,32 +180,31 @@ export default function WorldClock() {
               you're interested in to your custom clocks
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <SecurityBanner variant="compact" />
-            <ToolButtonGroup>
-              <ActionButtonGroup>
-                <Button
-                  onClick={() => setShowAddClock(!showAddClock)}
-                  data-testid="add-clock-toggle"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Clock
-                </Button>
-              </ActionButtonGroup>
-              {displayedCities.length > 0 && (
-                <DataButtonGroup>
-                  <ClearButton
-                    onClick={resetToDefault}
-                    tooltip="Clear all custom clocks"
-                    hasModifiedData={displayedCities.length > 0}
-                    disabled={displayedCities.length === 0}
-                  />
-                </DataButtonGroup>
-              )}
-            </ToolButtonGroup>
-          </div>
+          <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <Button
+            onClick={() => setShowAddClock(!showAddClock)}
+            data-testid="add-clock-toggle"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add Clock
+          </Button>
+        </ActionButtonGroup>
+        {displayedCities.length > 0 && (
+          <DataButtonGroup>
+            <ClearButton
+              onClick={resetToDefault}
+              tooltip="Clear all custom clocks"
+              hasModifiedData={displayedCities.length > 0}
+              disabled={displayedCities.length === 0}
+            />
+          </DataButtonGroup>
+        )}
+      </ToolButtonGroup>
 
       {/* Add Clock Dropdown */}
       {showAddClock ? (
