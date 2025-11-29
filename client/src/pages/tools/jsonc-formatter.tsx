@@ -137,7 +137,7 @@ export default function JSONCFormatter() {
               onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your JSONC code here..."
               className="font-mono text-sm min-h-[400px] resize-y"
-              lang="javascript"
+              lang="json"
               autoFocus={true}
               minHeight="400px"
               fileExtension="jsonc"
@@ -164,7 +164,7 @@ export default function JSONCFormatter() {
               className="font-mono text-sm min-h-[400px] resize-y"
               minHeight="400px"
               theme={theme}
-              lang="javascript"
+              lang="json"
               fileExtension="jsonc"
             />
             <div className="mt-4 text-sm text-slate-500 dark:text-slate-400">
