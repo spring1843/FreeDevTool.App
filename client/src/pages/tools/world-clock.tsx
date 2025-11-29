@@ -167,7 +167,7 @@ export default function WorldClock() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               World Clock
@@ -180,8 +180,8 @@ export default function WorldClock() {
               you're interested in to your custom clocks
             </p>
           </div>
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <SecurityBanner variant="compact" className="shrink-0" />
+          <div className="flex items-center gap-2">
+            <SecurityBanner variant="compact" />
             <ToolButtonGroup>
               <ActionButtonGroup>
                 <Button

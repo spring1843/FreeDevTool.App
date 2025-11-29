@@ -279,7 +279,7 @@ export default function PasswordGenerator() {
     <div className="max-w-4xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Password Generator
@@ -292,7 +292,7 @@ export default function PasswordGenerator() {
               analysis
             </p>
           </div>
-          <SecurityBanner variant="compact" className="shrink-0" />
+          <SecurityBanner variant="compact" />
         </div>
       </div>
 

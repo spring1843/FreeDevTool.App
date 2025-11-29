@@ -260,7 +260,7 @@ Jane Smith      jane@example.com        25      Marketing`,
     <div className="container mx-auto p-6 max-w-7xl">
       {/* Header */}
       <div className="mb-6">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
               <FileSpreadsheet className="h-8 w-8 text-blue-600" />
@@ -274,7 +274,7 @@ Jane Smith      jane@example.com        25      Marketing`,
               formatting options.
             </p>
           </div>
-          <SecurityBanner variant="compact" className="shrink-0" />
+          <SecurityBanner variant="compact" />
         </div>
       </div>
 
