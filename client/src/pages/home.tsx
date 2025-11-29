@@ -150,7 +150,7 @@ export default function Home() {
       {/* Technical Design Principles */}
       <div
         id="security"
-        className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 mt-12 mb-8"
+        className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 mt-12 mb-4"
       >
         <div className="grid md:grid-cols-3 gap-4 text-sm">
           <div className="text-center">
