@@ -167,6 +167,34 @@ export default function DebtRepaymentCalculator() {
         </div>
       </div>
 
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={calculateDebtRepayment}
+            tooltip="Calculate debt repayment schedule"
+            icon={<Calculator className="w-4 h-4 mr-2" />}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Calculate
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset all values to defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={principal === 0 && annualRate === 0 && monthlyPayment === 0}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <Card>
           <CardHeader>
@@ -211,36 +239,6 @@ export default function DebtRepaymentCalculator() {
                 Minimum payment: {formatCurrency(minimumPayment)}
               </div>
             </div>
-
-            <ToolButtonGroup className="pt-4">
-              <ActionButtonGroup>
-                <ToolButton
-                  variant="custom"
-                  onClick={calculateDebtRepayment}
-                  tooltip="Calculate debt repayment schedule"
-                  icon={<Calculator className="w-4 h-4 mr-2" />}
-                  className="bg-red-600 hover:bg-red-700 text-white"
-                >
-                  Calculate
-                </ToolButton>
-              </ActionButtonGroup>
-              <DataButtonGroup>
-                <ResetButton
-                  onClick={handleReset}
-                  tooltip="Reset to default values"
-                  hasModifiedData={hasModifiedData}
-                  disabled={isAtDefault}
-                />
-                <ClearButton
-                  onClick={handleClear}
-                  tooltip="Clear all inputs"
-                  hasModifiedData={hasModifiedData}
-                  disabled={
-                    principal === 0 && annualRate === 0 && monthlyPayment === 0
-                  }
-                />
-              </DataButtonGroup>
-            </ToolButtonGroup>
           </CardContent>
         </Card>
 

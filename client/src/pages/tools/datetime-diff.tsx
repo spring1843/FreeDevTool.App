@@ -371,13 +371,13 @@ export default function DateTimeDiff() {
                 <ShortcutBadge shortcut={tool.shortcut} />
               ) : null}
             </h2>
-            <p className="text-slate-600 dark:text-slate-400">
+            <p className="text-slate-600 dark:text-slate-400 pr-4">
               Calculate the precise difference between two dates and times with
               detailed breakdowns. Explore fascinating time spans from
               historical dates to far future dates.
             </p>
           </div>
-          <SecurityBanner variant="compact" />
+          <SecurityBanner variant="compact" className="ml-4 flex-shrink-0" />
         </div>
       </div>
 

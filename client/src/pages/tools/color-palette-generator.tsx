@@ -312,6 +312,70 @@ export default function ColorPaletteGenerator() {
         </div>
       </div>
 
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={generatePalette}
+            disabled={isGenerating}
+            tooltip="Generate color palette"
+            icon={
+              isGenerating ? (
+                <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <Palette className="w-4 h-4 mr-2" />
+              )
+            }
+          >
+            Generate
+          </ToolButton>
+          <ToolButton
+            variant="custom"
+            onClick={generateAllPalettes}
+            disabled={isGenerating}
+            tooltip="Generate all palette types"
+          >
+            All
+          </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={shareCurrentPalette}
+            tooltip="Copy shareable URL to clipboard"
+          />
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={() => {
+              setBaseColor(DEFAULT_COLOR_PALETTE_GENERATOR);
+              setSelectedType("complementary");
+              setGeneratedPalettes([]);
+              updateUrl(DEFAULT_COLOR_PALETTE_GENERATOR, "complementary");
+            }}
+            tooltip="Reset all settings to defaults"
+            hasModifiedData={
+              baseColor !== DEFAULT_COLOR_PALETTE_GENERATOR ||
+              selectedType !== "complementary"
+            }
+            disabled={
+              baseColor === DEFAULT_COLOR_PALETTE_GENERATOR &&
+              selectedType === "complementary"
+            }
+          />
+          <ClearButton
+            onClick={() => {
+              setBaseColor("");
+              setGeneratedPalettes([]);
+            }}
+            tooltip="Clear color input"
+            hasModifiedData={
+              baseColor !== DEFAULT_COLOR_PALETTE_GENERATOR &&
+              baseColor.trim() !== ""
+            }
+            disabled={baseColor.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       {/* Controls */}
       <Card className="mb-8">
         <CardHeader>
@@ -372,74 +436,6 @@ export default function ColorPaletteGenerator() {
                 </SelectContent>
               </Select>
             </div>
-
-            <ToolButtonGroup className="flex items-end gap-2">
-              <ActionButtonGroup>
-                <ToolButton
-                  variant="custom"
-                  onClick={generatePalette}
-                  disabled={isGenerating}
-                  tooltip="Generate color palette"
-                  icon={
-                    isGenerating ? (
-                      <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                    ) : (
-                      <Palette className="w-4 h-4 mr-2" />
-                    )
-                  }
-                >
-                  Generate
-                </ToolButton>
-                <ToolButton
-                  variant="custom"
-                  onClick={generateAllPalettes}
-                  disabled={isGenerating}
-                  tooltip="Generate all palette types"
-                >
-                  All
-                </ToolButton>
-                <ToolButton
-                  variant="share"
-                  onClick={shareCurrentPalette}
-                  tooltip="Copy shareable URL to clipboard"
-                  size="icon"
-                  icon={<Share className="w-4 h-4" />}
-                />
-              </ActionButtonGroup>
-              <DataButtonGroup>
-                <ResetButton
-                  onClick={() => {
-                    setBaseColor(DEFAULT_COLOR_PALETTE_GENERATOR);
-                    setSelectedType("complementary");
-                    setGeneratedPalettes([]);
-                    updateUrl(DEFAULT_COLOR_PALETTE_GENERATOR, "complementary");
-                  }}
-                  tooltip="Reset all settings to defaults"
-                  hasModifiedData={
-                    baseColor !== DEFAULT_COLOR_PALETTE_GENERATOR ||
-                    selectedType !== "complementary"
-                  }
-                  disabled={
-                    baseColor === DEFAULT_COLOR_PALETTE_GENERATOR &&
-                    selectedType === "complementary"
-                  }
-                  iconOnly
-                />
-                <ClearButton
-                  onClick={() => {
-                    setBaseColor("");
-                    setGeneratedPalettes([]);
-                  }}
-                  tooltip="Clear color input"
-                  hasModifiedData={
-                    baseColor !== DEFAULT_COLOR_PALETTE_GENERATOR &&
-                    baseColor.trim() !== ""
-                  }
-                  disabled={baseColor.trim() === ""}
-                  iconOnly
-                />
-              </DataButtonGroup>
-            </ToolButtonGroup>
           </div>
         </CardContent>
       </Card>

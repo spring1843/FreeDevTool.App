@@ -264,6 +264,39 @@ export default function CompoundInterestCalculator() {
         </div>
       </div>
 
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={calculateCompoundInterest}
+            tooltip="Calculate compound interest with current values"
+            icon={<Calculator className="w-4 h-4 mr-2" />}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Calculate
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset all values to defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={
+              principal === 0 &&
+              annualRate === 0 &&
+              years === 0 &&
+              monthlyContribution === 0
+            }
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <Card>
           <CardHeader>
@@ -352,39 +385,6 @@ export default function CompoundInterestCalculator() {
                 </SelectContent>
               </Select>
             </div>
-
-            <ToolButtonGroup className="pt-4">
-              <ActionButtonGroup>
-                <ToolButton
-                  variant="custom"
-                  onClick={calculateCompoundInterest}
-                  tooltip="Calculate compound interest with current values"
-                  icon={<Calculator className="w-4 h-4 mr-2" />}
-                  className="bg-green-600 hover:bg-green-700 text-white"
-                >
-                  Calculate
-                </ToolButton>
-              </ActionButtonGroup>
-              <DataButtonGroup>
-                <ResetButton
-                  onClick={handleReset}
-                  tooltip="Reset all values to defaults"
-                  hasModifiedData={hasModifiedData}
-                  disabled={isAtDefault}
-                />
-                <ClearButton
-                  onClick={handleClear}
-                  tooltip="Clear all inputs"
-                  hasModifiedData={hasModifiedData}
-                  disabled={
-                    principal === 0 &&
-                    annualRate === 0 &&
-                    years === 0 &&
-                    monthlyContribution === 0
-                  }
-                />
-              </DataButtonGroup>
-            </ToolButtonGroup>
           </CardContent>
         </Card>
 
