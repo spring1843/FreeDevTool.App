@@ -2,8 +2,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { TextArea } from "@/components/ui/textarea";
-import { useTheme } from "@/providers/theme-provider";
 import { Hash, Copy, CheckCircle, XCircle, Eye, EyeOff } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import {
@@ -62,7 +60,6 @@ export default function MD5Hash() {
   const [isLoading, setIsLoading] = useState(false);
   const [isMatch, setIsMatch] = useState<boolean | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const { theme } = useTheme();
 
   const generateHash = useCallback(async () => {
     if (!inputText.trim()) {
@@ -315,25 +312,6 @@ export default function MD5Hash() {
           </CardContent>
         </Card>
       </div>
-
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle>Hash Details</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <TextArea
-            id="output"
-            value={hashResult || "Hash will appear here after generation..."}
-            readOnly={true}
-            data-testid="hash-output"
-            className="min-h-[100px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
-            rows={5}
-            lang="plaintext"
-            fileExtension="txt"
-            theme={theme}
-          />
-        </CardContent>
-      </Card>
 
       <ToolExplanations explanations={tool?.explanations} />
     </div>
