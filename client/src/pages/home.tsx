@@ -150,9 +150,6 @@ export default function Home() {
         id="security"
         className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 mb-8"
       >
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4 text-center">
-          Technical Design Principles
-        </h3>
         <div className="grid md:grid-cols-3 gap-4 text-sm">
           <div className="text-center">
             <div className="font-medium text-green-700 dark:text-green-400 mb-2">
