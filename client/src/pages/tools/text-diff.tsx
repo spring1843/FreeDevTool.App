@@ -269,6 +269,7 @@ export default function TextDiff() {
               rows={15}
               autoFocus={true}
               minHeight="300px"
+              lang="plaintext"
               fileExtension="txt"
               theme={theme}
               data-default-input="true"
@@ -292,6 +293,7 @@ export default function TextDiff() {
               className="min-h-[300px] font-mono text-sm"
               rows={15}
               minHeight="300px"
+              lang="plaintext"
               fileExtension="txt"
               theme={theme}
             />
