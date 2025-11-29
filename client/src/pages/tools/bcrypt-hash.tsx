@@ -162,7 +162,6 @@ export default function BcryptHash() {
     verifyText.trim() !== "";
   const isAtDefault =
     plaintext === DEFAULT_BCRYPT &&
-    hash === "" &&
     verifyText === "" &&
     rounds === 10;
 
