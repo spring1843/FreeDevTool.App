@@ -13,29 +13,25 @@ export function SecurityBanner({
 }: SecurityBannerProps) {
   if (variant === "compact") {
     return (
-      <div
-        className={`inline-flex items-center bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg px-3 py-2 ${className}`}
-      >
-        <Shield className="w-4 h-4 text-green-600 dark:text-green-400 mr-2" />
-        <span className="text-sm font-medium text-green-700 dark:text-green-400">
-          <a
-            href="https://github.com/spring1843/FreeDevTool.App?tab=readme-ov-file#tenets"
-            target="_blank"
-            className="hover:underline"
-            rel="noreferrer"
-          >
-            Secure
-          </a>
-          , and{" "}
-          <a
-            href="https://github.com/spring1843/FreeDevTool.App"
-            target="_blank"
-            className="hover:underline"
-            rel="noreferrer"
-          >
-            Open Source
-          </a>
-        </span>
+      <div className={`inline-flex items-center gap-2 ${className}`}>
+        <a
+          href="https://github.com/spring1843/FreeDevTool.App"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-slate-800 dark:bg-slate-700 text-white rounded-md hover:bg-slate-700 dark:hover:bg-slate-600 transition-colors text-xs font-medium"
+        >
+          <Github className="w-3.5 h-3.5" />
+          View on GitHub
+        </a>
+        <a
+          href="https://github.com/spring1843/FreeDevTool.App/blob/main/SECURITY.md"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-green-600 dark:bg-green-700 text-white rounded-md hover:bg-green-700 dark:hover:bg-green-600 transition-colors text-xs font-medium"
+        >
+          <Shield className="w-3.5 h-3.5" />
+          Security Policy
+        </a>
       </div>
     );
   }
