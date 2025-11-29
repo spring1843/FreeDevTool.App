@@ -370,7 +370,6 @@ export default function LoremGenerator() {
               <Label htmlFor="start-with-lorem">Start with "Lorem ipsum"</Label>
             </div>
           </div>
-
         </CardContent>
       </Card>
 

@@ -348,7 +348,6 @@ export default function BarcodeGenerator() {
               />
               <Label htmlFor="display-value">Display text below barcode</Label>
             </div>
-
           </CardContent>
         </Card>
 

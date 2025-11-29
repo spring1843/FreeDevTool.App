@@ -25,7 +25,6 @@ import {
   ToolButton,
   ToolButtonGroup,
   ActionButtonGroup,
-  DataButtonGroup,
 } from "@/components/ui/tool-button";
 
 interface ToneSchedule {
@@ -434,7 +433,6 @@ export default function Metronome() {
           </p>
         </CardHeader>
         <CardContent className="space-y-6">
-
           {toneSchedules.filter(s => s.enabled).length === 0 && (
             <Alert>
               <AlertDescription>

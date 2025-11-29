@@ -311,9 +311,7 @@ export default function PasswordGenerator() {
             icon={<RefreshCw className="w-4 h-4 mr-2" />}
           >
             Generate{" "}
-            {passwordCount === 1
-              ? "Password"
-              : `${passwordCount} Passwords`}
+            {passwordCount === 1 ? "Password" : `${passwordCount} Passwords`}
           </ToolButton>
         </ActionButtonGroup>
         <DataButtonGroup>

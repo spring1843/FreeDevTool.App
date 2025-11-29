@@ -25,7 +25,6 @@ import {
   Download,
   RefreshCw,
   Shuffle,
-  Share,
 } from "lucide-react";
 import {
   ResetButton,

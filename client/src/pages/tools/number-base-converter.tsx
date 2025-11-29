@@ -457,7 +457,6 @@ export default function NumberBaseConverter() {
                   Decimal Example
                 </Button>
               </div>
-
             </CardContent>
           </Card>
 

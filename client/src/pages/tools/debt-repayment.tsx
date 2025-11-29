@@ -190,7 +190,9 @@ export default function DebtRepaymentCalculator() {
             onClick={handleClear}
             tooltip="Clear all inputs"
             hasModifiedData={hasModifiedData}
-            disabled={principal === 0 && annualRate === 0 && monthlyPayment === 0}
+            disabled={
+              principal === 0 && annualRate === 0 && monthlyPayment === 0
+            }
           />
         </DataButtonGroup>
       </ToolButtonGroup>

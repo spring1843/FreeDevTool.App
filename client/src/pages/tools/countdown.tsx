@@ -474,7 +474,6 @@ export default function Countdown() {
               </Label>
             </div>
           </div>
-
         </CardContent>
       </Card>
 
