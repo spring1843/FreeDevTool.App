@@ -40,4 +40,31 @@ test.describe("JWT Decoder Tool", () => {
 
     await expectNoErrors(page);
   });
+
+  test("should reset to default JWT after modification", async ({ page }) => {
+    await expect(page.locator("main")).toBeVisible();
+
+    // Type invalid token to modify the input
+    const inputEditor = page.locator("#input .cm-content");
+    await inputEditor.click();
+    await page.keyboard.press("Control+a");
+    await page.keyboard.type("invalid.token.here");
+
+    // Wait for error to appear (confirms input was processed)
+    const errorAlert = page.locator(".border-red-200");
+    await expect(errorAlert).toBeVisible();
+
+    // Click reset button
+    const resetButton = page.getByRole("button", { name: /reset/i });
+    await expect(resetButton).toBeEnabled();
+    await resetButton.click();
+
+    // Click confirm in the dialog
+    const confirmButton = page.getByRole("button", { name: /confirm/i });
+    await confirmButton.click();
+
+    // Error should not be visible after reset
+    await expect(errorAlert).not.toBeVisible();
+    await expectNoErrors(page);
+  });
 });
