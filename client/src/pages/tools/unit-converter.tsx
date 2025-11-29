@@ -392,7 +392,7 @@ export default function UnitConverter() {
         </div>
       </div>
 
-      <ToolButtonGroup className="mb-6">
+      <ToolButtonGroup className="mb-6 justify-end">
         <DataButtonGroup>
           <ResetButton
             onClick={handleReset}
