@@ -86,6 +86,33 @@ export default function JSONCFormatter() {
         </div>
       </div>
 
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={formatCode}
+            icon={<Code className="w-4 h-4 mr-2" />}
+            tooltip="Format and beautify JSONC code"
+          >
+            Format JSONC
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={input.trim() === "" && output.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       {error ? (
         <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
           <AlertDescription className="text-red-800 dark:text-red-200">
@@ -103,33 +130,6 @@ export default function JSONCFormatter() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <ToolButtonGroup>
-              <ActionButtonGroup>
-                <ToolButton
-                  variant="custom"
-                  onClick={formatCode}
-                  icon={<Code className="w-4 h-4 mr-2" />}
-                  tooltip="Format and beautify JSONC code"
-                  className="flex-1 sm:flex-none"
-                >
-                  Format JSONC
-                </ToolButton>
-              </ActionButtonGroup>
-              <DataButtonGroup>
-                <ResetButton
-                  onClick={handleReset}
-                  tooltip="Reset to default example"
-                  hasModifiedData={hasModifiedData}
-                  disabled={isAtDefault}
-                />
-                <ClearButton
-                  onClick={handleClear}
-                  tooltip="Clear all inputs"
-                  hasModifiedData={hasModifiedData}
-                  disabled={input.trim() === "" && output.trim() === ""}
-                />
-              </DataButtonGroup>
-            </ToolButtonGroup>
             <TextArea
               id="input"
               data-testid="jsonc-input"

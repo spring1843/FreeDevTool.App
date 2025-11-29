@@ -173,7 +173,7 @@ export default function Home() {
           </div>
           <div className="text-center">
             <div className="font-medium text-purple-700 dark:text-purple-400 mb-2">
-              Open Source & Transparent
+              Free & Open Source
             </div>
             <p className="text-slate-600 dark:text-slate-400 mb-3">
               Designed for ultimate privacy and security. Inspect the code
