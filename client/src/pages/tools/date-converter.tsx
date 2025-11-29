@@ -352,26 +352,28 @@ export default function DateConverter() {
             </p>
           </div>
 
-          <DataButtonGroup>
-            <NowButton
-              onClick={handleCurrentTime}
-              tooltip="Set to current time"
-              toastTitle="Time updated"
-              toastDescription="Set to current timestamp"
-            />
-            <ResetButton
-              onClick={handleReset}
-              tooltip="Reset to default example"
-              hasModifiedData={hasModifiedData}
-              disabled={isAtDefault}
-            />
-            <ClearButton
-              onClick={handleClear}
-              tooltip="Clear date input"
-              hasModifiedData={hasModifiedData}
-              disabled={inputDate.trim() === ""}
-            />
-          </DataButtonGroup>
+          <div className="flex justify-end">
+            <DataButtonGroup>
+              <NowButton
+                onClick={handleCurrentTime}
+                tooltip="Set to current time"
+                toastTitle="Time updated"
+                toastDescription="Set to current timestamp"
+              />
+              <ResetButton
+                onClick={handleReset}
+                tooltip="Reset to default example"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={handleClear}
+                tooltip="Clear date input"
+                hasModifiedData={hasModifiedData}
+                disabled={inputDate.trim() === ""}
+              />
+            </DataButtonGroup>
+          </div>
         </CardContent>
       </Card>
 
