@@ -117,6 +117,36 @@ export default function URLToJSON() {
         </p>
       </div>
 
+      {error ? (
+        <div className="mb-6 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+          <p className="text-sm text-red-700 dark:text-red-400">{error}</p>
+        </div>
+      ) : null}
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="share"
+            onClick={shareConverter}
+            tooltip="Copy shareable URL to clipboard"
+          />
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default URL"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={clearInput}
+            tooltip="Clear URL input"
+            hasModifiedData={hasModifiedData}
+            disabled={inputUrl.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       {/* Main Content */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {/* Input Section */}
@@ -142,38 +172,6 @@ export default function URLToJSON() {
                   data-default-input="true"
                 />
               </div>
-
-              {error ? (
-                <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                  <p className="text-sm text-red-700 dark:text-red-400">
-                    {error}
-                  </p>
-                </div>
-              ) : null}
-
-              <ToolButtonGroup>
-                <ActionButtonGroup>
-                  <ToolButton
-                    variant="share"
-                    onClick={shareConverter}
-                    tooltip="Copy shareable URL to clipboard"
-                  />
-                </ActionButtonGroup>
-                <DataButtonGroup>
-                  <ResetButton
-                    onClick={handleReset}
-                    tooltip="Reset to default URL"
-                    hasModifiedData={hasModifiedData}
-                    disabled={isAtDefault}
-                  />
-                  <ClearButton
-                    onClick={clearInput}
-                    tooltip="Clear URL input"
-                    hasModifiedData={hasModifiedData}
-                    disabled={inputUrl.trim() === ""}
-                  />
-                </DataButtonGroup>
-              </ToolButtonGroup>
             </CardContent>
           </Card>
         </div>
