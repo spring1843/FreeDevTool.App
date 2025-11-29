@@ -179,7 +179,7 @@ export default function URLEncoder() {
               rows={20}
               autoFocus={true}
               minHeight="400px"
-              lang="text"
+              lang="plaintext"
               fileExtension="txt"
               theme={theme}
               lineWrapping={true}
@@ -203,7 +203,7 @@ export default function URLEncoder() {
               className="min-h-[400px] font-mono text-sm"
               rows={20}
               minHeight="400px"
-              lang="text"
+              lang="plaintext"
               fileExtension="txt"
               theme={theme}
               lineWrapping={true}

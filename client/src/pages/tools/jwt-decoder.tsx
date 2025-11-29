@@ -194,7 +194,7 @@ export default function JWTDecoder() {
             rows={5}
             data-default-input="true"
             autoFocus={true}
-            lang="text"
+            lang="plaintext"
             fileExtension="txt"
             theme={theme}
             lineWrapping={true}
