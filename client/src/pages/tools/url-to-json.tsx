@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Label } from "@/components/ui/label";
-import { Link, Globe, Hash } from "lucide-react";
+import { Link, Hash, Globe } from "lucide-react";
 import {
   ResetButton,
   ClearButton,
@@ -99,12 +99,6 @@ export default function URLToJSON() {
     setError("");
   };
 
-  const loadExample = () => {
-    setInputUrl(
-      "https://api.example.com:8080/v1/users/123?include=profile,settings&format=json&sort=name#results"
-    );
-  };
-
   const hasModifiedData =
     inputUrl !== DEFAULT_URL_TO_JSON && inputUrl.trim() !== "";
   const isAtDefault = inputUrl === DEFAULT_URL_TO_JSON;
@@ -160,25 +154,10 @@ export default function URLToJSON() {
               <ToolButtonGroup>
                 <ActionButtonGroup>
                   <ToolButton
-                    variant="custom"
-                    onClick={handleParseURL}
-                    tooltip="Parse URL into JSON components"
-                    icon={<Globe className="w-4 h-4 mr-2" />}
-                  >
-                    Parse URL
-                  </ToolButton>
-                  <ToolButton
                     variant="share"
                     onClick={shareConverter}
                     tooltip="Copy shareable URL to clipboard"
                   />
-                  <ToolButton
-                    variant="custom"
-                    onClick={loadExample}
-                    tooltip="Load a complex example URL"
-                  >
-                    Load Example
-                  </ToolButton>
                 </ActionButtonGroup>
                 <DataButtonGroup>
                   <ResetButton
