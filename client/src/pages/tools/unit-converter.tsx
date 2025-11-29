@@ -554,8 +554,6 @@ export default function UnitConverter() {
           </div>
         </CardContent>
       </Card>
-      In the CSS
-      <div className="flex justify-center mt-8" />
       <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
