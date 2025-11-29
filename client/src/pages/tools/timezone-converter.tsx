@@ -343,6 +343,38 @@ export default function TimezoneConverter() {
         </div>
       </div>
 
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            onClick={convertTimezones}
+            icon={<RefreshCw className="w-4 h-4 mr-2" />}
+            tooltip="Convert source time to all target timezones"
+            data-testid="convert-timezones-button"
+          >
+            Convert Timezones
+          </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={shareConverter}
+            tooltip="Copy shareable URL with current settings"
+          />
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to current time and defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={sourceDate.trim() === "" && sourceTime.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       {/* Source Time Input */}
       <Card className="mb-6">
         <CardHeader>
@@ -395,38 +427,6 @@ export default function TimezoneConverter() {
               />
             </div>
           </div>
-
-          <ToolButtonGroup className="pt-4">
-            <ActionButtonGroup>
-              <ToolButton
-                onClick={convertTimezones}
-                icon={<RefreshCw className="w-4 h-4 mr-2" />}
-                tooltip="Convert source time to all target timezones"
-                data-testid="convert-timezones-button"
-              >
-                Convert Timezones
-              </ToolButton>
-              <ToolButton
-                variant="share"
-                onClick={shareConverter}
-                tooltip="Copy shareable URL with current settings"
-              />
-            </ActionButtonGroup>
-            <DataButtonGroup>
-              <ResetButton
-                onClick={handleReset}
-                tooltip="Reset to current time and defaults"
-                hasModifiedData={hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={handleClear}
-                tooltip="Clear all inputs"
-                hasModifiedData={hasModifiedData}
-                disabled={sourceDate.trim() === "" && sourceTime.trim() === ""}
-              />
-            </DataButtonGroup>
-          </ToolButtonGroup>
         </CardContent>
       </Card>
 
