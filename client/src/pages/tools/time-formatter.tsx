@@ -311,6 +311,29 @@ export default function TimeFormatter() {
         </div>
       </div>
 
+      <ToolButtonGroup className="mb-6">
+        <DataButtonGroup>
+          <NowButton
+            onClick={setCurrentDateTime}
+            tooltip="Set to current date and time"
+            toastTitle="Time updated"
+            toastDescription="Set to current date and time"
+          />
+          <ResetButton
+            onClick={setCurrentDateTime}
+            tooltip="Reset to current time"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={inputDate.trim() === "" && inputTime.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       {/* Input Section */}
       <Card className="mb-6">
         <CardHeader>
@@ -320,7 +343,7 @@ export default function TimeFormatter() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <Label htmlFor="input-date">Date</Label>
               <Input
@@ -352,32 +375,6 @@ export default function TimeFormatter() {
                 placeholder="Select timezone..."
                 data-testid="input-timezone-select"
               />
-            </div>
-            <div className="flex items-end">
-              <ToolButtonGroup>
-                <DataButtonGroup>
-                  <NowButton
-                    onClick={setCurrentDateTime}
-                    tooltip="Set to current date and time"
-                    toastTitle="Time updated"
-                    toastDescription="Set to current date and time"
-                  />
-                  <ResetButton
-                    onClick={setCurrentDateTime}
-                    tooltip="Reset to current time"
-                    hasModifiedData={hasModifiedData}
-                    disabled={isAtDefault}
-                  />
-                  <ClearButton
-                    onClick={handleClear}
-                    tooltip="Clear all inputs"
-                    hasModifiedData={hasModifiedData}
-                    disabled={
-                      inputDate.trim() === "" && inputTime.trim() === ""
-                    }
-                  />
-                </DataButtonGroup>
-              </ToolButtonGroup>
             </div>
           </div>
         </CardContent>
