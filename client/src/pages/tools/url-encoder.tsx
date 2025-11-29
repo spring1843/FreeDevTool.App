@@ -98,9 +98,8 @@ export default function URLEncoder() {
   };
 
   const hasModifiedData =
-    (plainText !== DEFAULT_URL_ENCODER && plainText.trim() !== "") ||
-    encodedText.trim() !== "";
-  const isAtDefault = plainText === DEFAULT_URL_ENCODER && encodedText === "";
+    plainText !== DEFAULT_URL_ENCODER && plainText.trim() !== "";
+  const isAtDefault = plainText === DEFAULT_URL_ENCODER;
 
   useEffect(() => {
     encodeURL();
@@ -180,6 +179,7 @@ export default function URLEncoder() {
               rows={20}
               autoFocus={true}
               minHeight="400px"
+              lang="text"
               fileExtension="txt"
               theme={theme}
               lineWrapping={true}
@@ -203,6 +203,8 @@ export default function URLEncoder() {
               className="min-h-[400px] font-mono text-sm"
               rows={20}
               minHeight="400px"
+              lang="text"
+              fileExtension="txt"
               theme={theme}
               lineWrapping={true}
             />
