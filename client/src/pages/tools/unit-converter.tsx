@@ -382,7 +382,6 @@ export default function UnitConverter() {
           pressure, and more
         </p>
       </div>
-
       {/* Category Selection */}
       <Card className="mb-6">
         <CardHeader>
@@ -422,7 +421,6 @@ export default function UnitConverter() {
           </div>
         </CardContent>
       </Card>
-
       {/* Conversion Interface */}
       <Card className="mb-6">
         <CardHeader>
@@ -532,9 +530,7 @@ export default function UnitConverter() {
           ) : null}
         </CardContent>
       </Card>
-
       <div className="flex justify-center my-8" />
-
       {/* Quick Conversion Reference */}
       <Card className="mb-8">
         <CardHeader>
@@ -558,9 +554,7 @@ export default function UnitConverter() {
           </div>
         </CardContent>
       </Card>
-
-In the CSS 
-
+      In the CSS
       <div className="flex justify-center mt-8" />
       <ToolExplanations explanations={tool?.explanations} />
     </div>

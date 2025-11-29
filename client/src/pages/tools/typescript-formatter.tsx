@@ -64,8 +64,7 @@ export default function TypeScriptFormatter() {
     setError(null);
   };
 
-  const hasModifiedData =
-    input !== DEFAULT_TYPESCRIPT && input.trim() !== "";
+  const hasModifiedData = input !== DEFAULT_TYPESCRIPT && input.trim() !== "";
   const isAtDefault = input === DEFAULT_TYPESCRIPT;
 
   useEffect(() => {

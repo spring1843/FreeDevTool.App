@@ -73,8 +73,7 @@ export default function JSONYAMLConverter() {
     (jsonText !== DEFAULT_JSON && jsonText.trim() !== "") ||
     (yamlText !== DEFAULT_YAML && yamlText.trim() !== "");
   const isAtDefault =
-    jsonText === DEFAULT_JSON &&
-    (yamlText === "" || yamlText === DEFAULT_YAML);
+    jsonText === DEFAULT_JSON && (yamlText === "" || yamlText === DEFAULT_YAML);
 
   return (
     <div className="max-w-6xl mx-auto">

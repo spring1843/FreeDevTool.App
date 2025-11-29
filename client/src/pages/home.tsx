@@ -10,6 +10,8 @@ import {
   Pause,
   ChevronDown,
   ChevronRight,
+  Github,
+  Shield,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -153,30 +155,49 @@ export default function Home() {
         <div className="grid md:grid-cols-3 gap-4 text-sm">
           <div className="text-center">
             <div className="font-medium text-green-700 dark:text-green-400 mb-2">
-              Content Security Policy
+              Your Data Never Leaves Your Device
             </div>
             <p className="text-slate-600 dark:text-slate-400">
-              Implemented with CSP headers designed to block external
-              connections and prevent unintended data transmission.
+              No backend required. All processing happens entirely in your
+              browser. Your data is never sent to any server.
             </p>
           </div>
           <div className="text-center">
             <div className="font-medium text-blue-700 dark:text-blue-400 mb-2">
-              Local Processing Design
+              No Cookies, No Tracking, No Ads
             </div>
             <p className="text-slate-600 dark:text-slate-400">
-              Built to handle all computations in your browser using
-              JavaScript, avoiding server-side processing.
+              We don't use cookies, tracking pixels, or ads. Only browser local
+              storage for your preferences. No external dependencies.
             </p>
           </div>
           <div className="text-center">
             <div className="font-medium text-purple-700 dark:text-purple-400 mb-2">
-              No External Dependencies
+              Open Source & Transparent
             </div>
-            <p className="text-slate-600 dark:text-slate-400">
-              Designed with minimal external dependencies to reduce potential
-              network requests and data sharing.
+            <p className="text-slate-600 dark:text-slate-400 mb-3">
+              Designed for ultimate privacy and security. Inspect the code yourself.
             </p>
+            <div className="flex flex-col sm:flex-row gap-2 justify-center">
+              <a
+                href="https://github.com/spring1843/FreeDevTool.App"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-slate-800 dark:bg-slate-700 text-white rounded-md hover:bg-slate-700 dark:hover:bg-slate-600 transition-colors text-xs font-medium"
+              >
+                <Github className="w-3.5 h-3.5" />
+                View on GitHub
+              </a>
+              <a
+                href="https://github.com/spring1843/FreeDevTool.App/blob/main/SECURITY.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-green-600 dark:bg-green-700 text-white rounded-md hover:bg-green-700 dark:hover:bg-green-600 transition-colors text-xs font-medium"
+              >
+                <Shield className="w-3.5 h-3.5" />
+                Security Policy
+              </a>
+            </div>
           </div>
         </div>
       </div>

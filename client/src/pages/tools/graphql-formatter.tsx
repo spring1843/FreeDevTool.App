@@ -58,8 +58,7 @@ export default function GraphQLFormatter() {
     setError(null);
   };
 
-  const hasModifiedData =
-    input !== DEFAULT_GRAPHQL && input.trim() !== "";
+  const hasModifiedData = input !== DEFAULT_GRAPHQL && input.trim() !== "";
   const isAtDefault = input === DEFAULT_GRAPHQL;
 
   useEffect(() => {

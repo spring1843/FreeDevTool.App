@@ -1,6 +1,5 @@
 import { test, expect } from "@playwright/test";
 import { setupJSErrorCollection, expectNoErrors } from "./utils";
-import { DEFAULT_JSON } from "../../../client/src/data/defaults";
 
 test.describe("JSON ↔ YAML Converter Tool", () => {
   test.beforeEach(async ({ page }) => {
@@ -50,7 +49,9 @@ test.describe("JSON ↔ YAML Converter Tool", () => {
     await page.click('button:has-text("JSON → YAML")');
 
     // Now YAML should have converted content
-    const yamlAfterClick = await yamlOutput.locator(".cm-content").textContent();
+    const yamlAfterClick = await yamlOutput
+      .locator(".cm-content")
+      .textContent();
     expect(yamlAfterClick).toContain("test");
     expect(yamlAfterClick).toContain("value");
 
@@ -70,7 +71,9 @@ test.describe("JSON ↔ YAML Converter Tool", () => {
 
     // JSON should still be empty (no auto-convert)
     const jsonInput = page.locator('[data-testid="json-input"]');
-    const jsonBeforeClick = await jsonInput.locator(".cm-content").textContent();
+    const jsonBeforeClick = await jsonInput
+      .locator(".cm-content")
+      .textContent();
     expect(jsonBeforeClick?.trim()).toBe("");
 
     // Click YAML → JSON button

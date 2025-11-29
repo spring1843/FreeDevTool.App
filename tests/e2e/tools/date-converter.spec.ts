@@ -62,9 +62,7 @@ test.describe("Date Converter Tool", () => {
     await expectNoErrors(page);
   });
 
-  test("should display formats in two columns on desktop", async ({
-    page,
-  }) => {
+  test("should display formats in two columns on desktop", async ({ page }) => {
     // Set viewport to desktop size
     await page.setViewportSize({ width: 1280, height: 800 });
 

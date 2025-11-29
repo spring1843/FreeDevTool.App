@@ -572,7 +572,9 @@ export default function BrowserInfo() {
             <div className="space-y-2 text-sm">
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">Hostname:</span>
-                <span className="font-mono break-all">{browserInfo.hostname}</span>
+                <span className="font-mono break-all">
+                  {browserInfo.hostname}
+                </span>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">Protocol:</span>

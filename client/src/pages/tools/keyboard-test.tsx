@@ -160,9 +160,7 @@ export default function KeyboardTest() {
               variant="custom"
               onClick={toggleTesting}
               tooltip={
-                isActive
-                  ? "Stop keyboard testing"
-                  : "Start keyboard testing"
+                isActive ? "Stop keyboard testing" : "Start keyboard testing"
               }
               icon={
                 isActive ? (
