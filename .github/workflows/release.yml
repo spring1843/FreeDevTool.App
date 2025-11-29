@@ -155,5 +155,4 @@ jobs:
           make warm-cache-production
 
       - name: Run E2E Tests Against Production
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: TARGET=https://freedevtool.app make e2e-test
