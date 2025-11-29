@@ -314,12 +314,22 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
 
     // Download handler
     const handleDownload = () => {
+      // Prevent downloading empty content
+      if (!value || value.trim() === "") {
+        toast({
+          title: "Nothing to download",
+          description: "Generate some content first before downloading.",
+          variant: "destructive",
+          duration: 2500,
+        });
+        return;
+      }
       const extension = props.fileExtension
         ? props.fileExtension.replace(/^\./, "")
         : "txt";
       const randomName = `file_${Math.random().toString(36).slice(2, 10)}.${extension}`;
       try {
-        const blob = new Blob([value || ""], { type: "text/plain" });
+        const blob = new Blob([value], { type: "text/plain" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
