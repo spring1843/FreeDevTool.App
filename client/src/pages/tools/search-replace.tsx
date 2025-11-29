@@ -268,6 +268,7 @@ export default function SearchReplace() {
               rows={20}
               autoFocus={true}
               minHeight="400px"
+              lang="plaintext"
               fileExtension="txt"
               theme={theme}
             />
@@ -288,6 +289,8 @@ export default function SearchReplace() {
               className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               minHeight="400px"
               rows={20}
+              lang="plaintext"
+              fileExtension="txt"
               theme={theme}
             />
           </CardContent>
