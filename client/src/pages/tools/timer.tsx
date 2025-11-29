@@ -424,36 +424,34 @@ export default function Timer() {
             and Escape for quick control.
           </p>
         </div>
-        <ToolButtonGroup>
-          <ActionButtonGroup>
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <Button
+            onClick={() => setShowAddTimer(!showAddTimer)}
+            data-testid="add-timer-toggle"
+            size="sm"
+          >
+            <Plus className="w-4 h-4 mr-1" />
+            Add
+          </Button>
+          {timers.length > 0 && (
             <Button
-              onClick={() => setShowAddTimer(!showAddTimer)}
-              data-testid="add-timer-toggle"
+              onClick={stopAllTimers}
+              variant="outline"
+              data-testid="stop-all-timers"
+              size="sm"
             >
-              <Plus className="w-4 h-4 mr-2" />
-              Add Timer
+              <Square className="w-4 h-4 mr-1" />
+              Stop All
             </Button>
-            {timers.length > 0 && (
-              <Button
-                onClick={stopAllTimers}
-                variant="outline"
-                data-testid="stop-all-timers"
-              >
-                <Square className="w-4 h-4 mr-2" />
-                Stop All
-              </Button>
-            )}
-          </ActionButtonGroup>
-          <DataButtonGroup>
-            <ToolButton
-              variant="custom"
-              onClick={copyShareURL}
-              tooltip="Copy shareable timer URL"
-              icon={<Share2 className="w-4 h-4" />}
-              size="icon"
-            />
-          </DataButtonGroup>
-        </ToolButtonGroup>
+          )}
+          <ToolButton
+            variant="custom"
+            onClick={copyShareURL}
+            tooltip="Copy shareable timer URL"
+            icon={<Share2 className="w-4 h-4" />}
+            size="icon"
+          />
+        </div>
       </div>
 
       {/* Add Timer Form */}
