@@ -84,19 +84,6 @@ export default function TextSplit() {
     splitText();
   }, [splitText]);
 
-  const getDelimiterDisplay = (delim: string) => {
-    switch (delim) {
-      case "\\n":
-        return "New Line";
-      case "\\t":
-        return "Tab";
-      case " ":
-        return "Space";
-      default:
-        return delim;
-    }
-  };
-
   return (
     <div className="max-w-6xl mx-auto">
       <div className="mb-6">
@@ -127,12 +114,6 @@ export default function TextSplit() {
           >
             Split Text
           </ToolButton>
-          <Badge
-            variant="outline"
-            className="bg-orange-50 text-orange-700 border-orange-200"
-          >
-            Delimiter: {getDelimiterDisplay(delimiter)}
-          </Badge>
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

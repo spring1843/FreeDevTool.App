@@ -157,12 +157,6 @@ export default function SearchReplace() {
           >
             Search & Replace
           </ToolButton>
-          <Badge
-            variant="outline"
-            className="bg-blue-50 text-blue-700 border-blue-200"
-          >
-            {matchCount} matches found
-          </Badge>
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton
@@ -291,6 +285,14 @@ export default function SearchReplace() {
               fileExtension="txt"
               theme={theme}
             />
+            <div className="mt-3">
+              <Badge
+                variant="outline"
+                className="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800"
+              >
+                {matchCount} match{matchCount !== 1 ? "es" : ""} found
+              </Badge>
+            </div>
           </CardContent>
         </Card>
       </div>

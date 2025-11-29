@@ -162,10 +162,6 @@ export default function UUIDGenerator() {
           >
             Generate UUIDs
           </ToolButton>
-          <div className="flex items-center gap-2">
-            <Badge variant="outline">Version {version}</Badge>
-            <Badge variant="outline">{getFormatDescription(format)}</Badge>
-          </div>
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton
@@ -250,7 +246,11 @@ export default function UUIDGenerator() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
-              Generated UUIDs
+              <div className="flex items-center gap-2">
+                Generated UUIDs
+                <Badge variant="outline">Version {version}</Badge>
+                <Badge variant="outline">{getFormatDescription(format)}</Badge>
+              </div>
               <div className="flex gap-2">
                 <Badge variant="outline">
                   {uuids.length} UUID{uuids.length > 1 ? "s" : ""}
