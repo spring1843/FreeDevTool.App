@@ -448,7 +448,6 @@ export default function QRGenerator() {
                   </AlertDescription>
                 </Alert>
               ) : null}
-
             </CardContent>
           </Card>
 

@@ -243,7 +243,6 @@ export default function UUIDGenerator() {
               </Select>
             </div>
           </div>
-
         </CardContent>
       </Card>
 

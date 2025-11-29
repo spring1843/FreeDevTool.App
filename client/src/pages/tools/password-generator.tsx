@@ -472,7 +472,6 @@ export default function PasswordGenerator() {
               </div>
             </div>
           </div>
-
         </CardContent>
       </Card>
 

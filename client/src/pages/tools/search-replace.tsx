@@ -246,7 +246,6 @@ export default function SearchReplace() {
               </div>
             </div>
           ) : null}
-
         </CardContent>
       </Card>
 

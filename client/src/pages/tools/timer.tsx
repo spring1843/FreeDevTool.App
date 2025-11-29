@@ -23,7 +23,6 @@ import {
   X,
   Timer as TimerIcon,
   VolumeX,
-  Share2,
 } from "lucide-react";
 import {
   formatTimerTime,

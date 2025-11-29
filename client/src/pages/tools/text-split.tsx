@@ -187,7 +187,6 @@ export default function TextSplit() {
               <Label htmlFor="trim-whitespace">Trim Whitespace</Label>
             </div>
           </div>
-
         </CardContent>
       </Card>
 
