@@ -196,88 +196,8 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Key Advantages Section */}
+      {/* Technical Details Section */}
       <div className="mt-16">
-        {/* Why Choose Us - Prominent Section */}
-        <Card className="border-2 border-blue-200 dark:border-blue-800 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950 mb-8">
-          <CardHeader className="text-center pb-4">
-            <CardTitle className="text-2xl text-slate-900 dark:text-slate-100 mb-2">
-              Why FreeDevTool.App is Different
-            </CardTitle>
-            <p className="text-slate-600 dark:text-slate-400">
-              Built by developers, for developers. Designed with privacy,
-              security, and transparency as core values.
-            </p>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="text-center group">
-                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                  <span className="text-2xl">🌟</span>
-                </div>
-                <h4 className="font-semibold text-blue-700 dark:text-blue-400 mb-2">
-                  Open Source
-                </h4>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Community-driven development with transparent code. You can
-                  audit, contribute, and trust every line of code.
-                </p>
-              </div>
-
-              <div className="text-center group">
-                <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                  <span className="text-2xl">💰</span>
-                </div>
-                <h4 className="font-semibold text-green-700 dark:text-green-400 mb-2">
-                  Free Core Features
-                </h4>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Current tools are free since computation happens in your
-                  browser for enhanced security.
-                </p>
-              </div>
-
-              <div className="text-center group">
-                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                  <span className="text-2xl">🔒</span>
-                </div>
-                <h4 className="font-semibold text-purple-700 dark:text-purple-400 mb-2">
-                  Zero Data Transmission
-                </h4>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Your data stays in your browser. All processing happens
-                  locally for enhanced security.
-                </p>
-              </div>
-
-              <div className="text-center group">
-                <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                  <span className="text-2xl">✈️</span>
-                </div>
-                <h4 className="font-semibold text-amber-700 dark:text-amber-400 mb-2">
-                  Offline Design
-                </h4>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Built to function without internet connectivity. Designed for
-                  environments where network access is limited or restricted.
-                </p>
-              </div>
-            </div>
-
-            {/* Call to Action */}
-            <div className="mt-8 text-center">
-              <div className="inline-flex items-center bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-3 shadow-sm">
-                <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse" />
-                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                  Ready to use right now • No signup required • Privacy-focused
-                  design
-                </span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Technical Details */}
         <div
           id="security"
           className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 mb-8"
