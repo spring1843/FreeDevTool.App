@@ -27,7 +27,7 @@ test.describe("URL to JSON Tool", () => {
 
     // Enter a URL without a valid TLD (e.g., "google" becomes "https://google")
     await urlInput.fill("google");
-    await page.getByTestId("parse-button").click();
+    // Parsing occurs automatically on input change; wait for output update
 
     // The output should NOT show "google" as the TLD
     const jsonOutput = page.locator("#output .cm-content");
@@ -45,7 +45,6 @@ test.describe("URL to JSON Tool", () => {
 
     // Enter a URL with a valid TLD
     await urlInput.fill("https://example.com");
-    await page.getByTestId("parse-button").click();
 
     const jsonOutput = page.locator("#output .cm-content");
     await expect(jsonOutput).toBeVisible();
@@ -136,7 +135,6 @@ test.describe("URL to JSON Tool", () => {
 
     // Enter a URL with an unknown TLD
     await urlInput.fill("https://example.invalidtld123");
-    await page.getByTestId("parse-button").click();
 
     // Check that the warning message is displayed
     const warningText = page.locator("text=This TLD is not recognized");
@@ -149,7 +147,6 @@ test.describe("URL to JSON Tool", () => {
 
     // Enter a URL with a known TLD
     await urlInput.fill("https://example.com");
-    await page.getByTestId("parse-button").click();
 
     // Check that the warning message is NOT displayed
     const warningText = page.locator("text=This TLD is not recognized");
@@ -161,7 +158,6 @@ test.describe("URL to JSON Tool", () => {
     const urlInput = page.getByTestId("url-input");
 
     await urlInput.fill("ftp://ftp.example.com/pub/files");
-    await page.getByTestId("parse-button").click();
 
     const jsonOutput = page.locator("#output .cm-content");
     await expect(jsonOutput).toBeVisible();
@@ -180,7 +176,6 @@ test.describe("URL to JSON Tool", () => {
     const urlInput = page.getByTestId("url-input");
 
     await urlInput.fill("file:///home/user/documents/file.txt");
-    await page.getByTestId("parse-button").click();
 
     const jsonOutput = page.locator("#output .cm-content");
     await expect(jsonOutput).toBeVisible();
@@ -196,7 +191,6 @@ test.describe("URL to JSON Tool", () => {
     const urlInput = page.getByTestId("url-input");
 
     await urlInput.fill("mailto:user@example.com?subject=Hello");
-    await page.getByTestId("parse-button").click();
 
     const jsonOutput = page.locator("#output .cm-content");
     await expect(jsonOutput).toBeVisible();
@@ -211,7 +205,6 @@ test.describe("URL to JSON Tool", () => {
     const urlInput = page.getByTestId("url-input");
 
     await urlInput.fill("tel:+1-555-123-4567");
-    await page.getByTestId("parse-button").click();
 
     const jsonOutput = page.locator("#output .cm-content");
     await expect(jsonOutput).toBeVisible();
@@ -226,7 +219,6 @@ test.describe("URL to JSON Tool", () => {
     const urlInput = page.getByTestId("url-input");
 
     await urlInput.fill("irc://irc.freenode.net/channel");
-    await page.getByTestId("parse-button").click();
 
     const jsonOutput = page.locator("#output .cm-content");
     await expect(jsonOutput).toBeVisible();
@@ -242,7 +234,6 @@ test.describe("URL to JSON Tool", () => {
     const urlInput = page.getByTestId("url-input");
 
     await urlInput.fill("ssh://user@server.example.com:22/path");
-    await page.getByTestId("parse-button").click();
 
     const jsonOutput = page.locator("#output .cm-content");
     await expect(jsonOutput).toBeVisible();
@@ -259,7 +250,6 @@ test.describe("URL to JSON Tool", () => {
     const urlInput = page.getByTestId("url-input");
 
     await urlInput.fill("wss://socket.example.com/ws");
-    await page.getByTestId("parse-button").click();
 
     const jsonOutput = page.locator("#output .cm-content");
     await expect(jsonOutput).toBeVisible();
@@ -276,7 +266,6 @@ test.describe("URL to JSON Tool", () => {
     const urlInput = page.getByTestId("url-input");
 
     await urlInput.fill("https://secure.example.com:443/api/v1");
-    await page.getByTestId("parse-button").click();
 
     const jsonOutput = page.locator("#output .cm-content");
     await expect(jsonOutput).toBeVisible();
@@ -293,7 +282,6 @@ test.describe("URL to JSON Tool", () => {
     const urlInput = page.getByTestId("url-input");
 
     await urlInput.fill("http://www.example.com/page?id=123");
-    await page.getByTestId("parse-button").click();
 
     const jsonOutput = page.locator("#output .cm-content");
     await expect(jsonOutput).toBeVisible();

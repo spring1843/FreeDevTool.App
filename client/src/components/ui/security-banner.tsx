@@ -15,22 +15,13 @@ export function SecurityBanner({
     return (
       <div className={`inline-flex items-center gap-2 ${className}`}>
         <a
-          href="https://github.com/spring1843/FreeDevTool.App"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-slate-800 dark:bg-slate-700 text-white rounded-md hover:bg-slate-700 dark:hover:bg-slate-600 transition-colors text-xs font-medium"
-        >
-          <Github className="w-3.5 h-3.5" />
-          Open Source
-        </a>
-        <a
           href="https://github.com/spring1843/FreeDevTool.App/blob/main/SECURITY.md"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-green-600 dark:bg-green-700 text-white rounded-md hover:bg-green-700 dark:hover:bg-green-600 transition-colors text-xs font-medium"
         >
           <Shield className="w-3.5 h-3.5" />
-          Safety and Security
+          Security Principles
         </a>
       </div>
     );
