@@ -146,9 +146,8 @@ export default function CSSFormatter() {
   };
 
   const hasModifiedData =
-    (input !== getDefaultForFormat() && input.trim() !== "") ||
-    output.trim() !== "";
-  const isAtDefault = input === getDefaultForFormat() && output === "";
+    input !== getDefaultForFormat() && input.trim() !== "";
+  const isAtDefault = input === getDefaultForFormat();
 
   useEffect(() => {
     formatCode(false); // Beautify by default

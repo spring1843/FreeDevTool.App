@@ -559,35 +559,7 @@ export default function UnitConverter() {
         </CardContent>
       </Card>
 
-      {/* Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle>About Unit Converter</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-            <div>
-              <h4 className="font-semibold mb-2">Supported Categories:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• Weight/Mass (mg, g, kg, oz, lb, stone, ton)</li>
-                <li>• Distance/Length (mm, cm, m, km, in, ft, yd, mi)</li>
-                <li>• Area (mm², cm², m², km², in², ft², acre, hectare)</li>
-                <li>• Volume (ml, l, m³, fl oz, cup, pint, quart, gallon)</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-2">Advanced Categories:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• Pressure (Pa, bar, atm, psi, torr, mmHg)</li>
-                <li>• Temperature (°C, °F, K, °R)</li>
-                <li>• Energy (J, cal, Wh, BTU, eV)</li>
-                <li>• Power (W, kW, hp, BTU/h)</li>
-                <li>• Speed (m/s, km/h, mph, knot, Mach)</li>
-              </ul>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+In the CSS 
 
       <div className="flex justify-center mt-8" />
       <ToolExplanations explanations={tool?.explanations} />
