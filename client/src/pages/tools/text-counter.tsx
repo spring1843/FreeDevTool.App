@@ -114,6 +114,7 @@ export default function TextCounter() {
               data-default-input="true"
               rows={20}
               minHeight="400px"
+              lang="plaintext"
               fileExtension="txt"
               theme={theme}
             />
