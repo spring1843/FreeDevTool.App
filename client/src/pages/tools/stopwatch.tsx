@@ -8,7 +8,6 @@ import {
   ActionButtonGroup,
   DataButtonGroup,
   ResetButton,
-  ClearButton,
 } from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
@@ -75,11 +74,6 @@ export default function Stopwatch() {
   // Reset: Stop and zero everything
   const handleReset = () => {
     stopStopwatch();
-  };
-
-  // Clear: Only clear laps (keep time running if active)
-  const clearLaps = () => {
-    setLaps([]);
   };
 
   // Check if at default state
@@ -266,12 +260,6 @@ export default function Stopwatch() {
             tooltip="Reset stopwatch to zero"
             hasModifiedData={hasModifiedData}
             disabled={isAtDefault}
-          />
-          <ClearButton
-            onClick={clearLaps}
-            tooltip="Clear recorded laps"
-            hasModifiedData={hasModifiedData}
-            disabled={laps.length === 0}
           />
         </DataButtonGroup>
       </ToolButtonGroup>
