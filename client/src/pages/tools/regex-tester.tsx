@@ -6,6 +6,12 @@ import { useTheme } from "@/providers/theme-provider";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Search, CheckCircle, XCircle } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useState, useEffect, useCallback } from "react";
 import {
   ResetButton,
@@ -203,30 +209,57 @@ export default function RegexTester() {
           </div>
 
           <div className="flex flex-wrap gap-4">
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="global-flag"
-                checked={globalFlag}
-                onCheckedChange={setGlobalFlag}
-              />
-              <Label htmlFor="global-flag">Global (g)</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="case-insensitive"
-                checked={caseInsensitiveFlag}
-                onCheckedChange={setCaseInsensitiveFlag}
-              />
-              <Label htmlFor="case-insensitive">Ignore Case (i)</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="multiline"
-                checked={multilineFlag}
-                onCheckedChange={setMultilineFlag}
-              />
-              <Label htmlFor="multiline">Multiline (m)</Label>
-            </div>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="global-flag"
+                      checked={globalFlag}
+                      onCheckedChange={setGlobalFlag}
+                    />
+                    <Label htmlFor="global-flag">Global (g)</Label>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Find all matches instead of stopping after the first</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="case-insensitive"
+                      checked={caseInsensitiveFlag}
+                      onCheckedChange={setCaseInsensitiveFlag}
+                    />
+                    <Label htmlFor="case-insensitive">Ignore Case (i)</Label>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Match letters regardless of uppercase or lowercase</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="multiline"
+                      checked={multilineFlag}
+                      onCheckedChange={setMultilineFlag}
+                    />
+                    <Label htmlFor="multiline">Multiline (m)</Label>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Make ^ and $ match start/end of each line</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
 
           <ToolButtonGroup>
@@ -283,6 +316,7 @@ export default function RegexTester() {
               rows={15}
               autoFocus={true}
               minHeight="300px"
+              lang="plaintext"
               fileExtension="txt"
               theme={theme}
             />
