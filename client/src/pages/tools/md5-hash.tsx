@@ -159,6 +159,38 @@ export default function MD5Hash() {
         </div>
       </div>
 
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={generateHash}
+            disabled={isLoading || !inputText.trim()}
+            icon={<Hash className="w-4 h-4 mr-2" />}
+            tooltip="Generate MD5 hash from input"
+          >
+            {isLoading ? "Generating..." : "Generate Hash"}
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={
+              inputText.trim() === "" &&
+              compareHash.trim() === "" &&
+              hashResult.trim() === ""
+            }
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <Card>
           <CardHeader>
@@ -297,37 +329,6 @@ export default function MD5Hash() {
         <CardHeader>
           <CardTitle>Hash Details</CardTitle>
         </CardHeader>
-        <ToolButtonGroup className="px-6 pb-4">
-          <ActionButtonGroup>
-            <ToolButton
-              variant="custom"
-              onClick={generateHash}
-              disabled={isLoading || !inputText.trim()}
-              icon={<Hash className="w-4 h-4 mr-2" />}
-              tooltip="Generate MD5 hash from input"
-            >
-              {isLoading ? "Generating..." : "Generate Hash"}
-            </ToolButton>
-          </ActionButtonGroup>
-          <DataButtonGroup>
-            <ResetButton
-              onClick={handleReset}
-              tooltip="Reset to default example"
-              hasModifiedData={hasModifiedData}
-              disabled={isAtDefault}
-            />
-            <ClearButton
-              onClick={handleClear}
-              tooltip="Clear all inputs"
-              hasModifiedData={hasModifiedData}
-              disabled={
-                inputText.trim() === "" &&
-                compareHash.trim() === "" &&
-                hashResult.trim() === ""
-              }
-            />
-          </DataButtonGroup>
-        </ToolButtonGroup>
         <CardContent>
           <TextArea
             id="output"
