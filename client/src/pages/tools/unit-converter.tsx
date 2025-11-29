@@ -530,9 +530,8 @@ export default function UnitConverter() {
           ) : null}
         </CardContent>
       </Card>
-      <div className="flex justify-center my-8" />
       {/* Quick Conversion Reference */}
-      <Card className="mb-8">
+      <Card className="mb-6 mt-6">
         <CardHeader>
           <CardTitle>Common {currentCategory.name} Conversions</CardTitle>
         </CardHeader>
