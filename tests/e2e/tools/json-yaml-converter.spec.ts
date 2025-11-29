@@ -93,7 +93,7 @@ test.describe("JSON ↔ YAML Converter Tool", () => {
 
     // Both should be empty
     const jsonInput = page.locator('[data-testid="json-input"]');
-    const yamlOutput = page.locator('[data-testid="yaml-output"]');
+    const _yamlOutput = page.locator('[data-testid="yaml-output"]');
 
     const jsonEmpty = await jsonInput.locator(".cm-content").textContent();
     expect(jsonEmpty?.trim()).toBe("");

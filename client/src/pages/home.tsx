@@ -167,8 +167,8 @@ export default function Home() {
               No Cookies, No Tracking, No Ads
             </div>
             <p className="text-slate-600 dark:text-slate-400">
-              We don't use cookies, tracking pixels, or ads. Only browser local
-              storage for your preferences. No external dependencies.
+              No cookies, tracking pixels, or ads. Only browser local storage
+              for your preferences. No external dependencies.
             </p>
           </div>
           <div className="text-center">

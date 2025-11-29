@@ -347,13 +347,16 @@ export default function BrowserInfo() {
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Browser Information
-              {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
               <span className="text-sm bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 px-2 py-1 rounded font-medium">
                 EXPERIMENTAL
               </span>
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
-              Comprehensive browser and system information available to JavaScript
+              Comprehensive browser and system information available to
+              JavaScript
             </p>
           </div>
           <SecurityBanner variant="compact" className="shrink-0" />

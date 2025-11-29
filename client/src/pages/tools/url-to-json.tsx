@@ -112,11 +112,13 @@ export default function URLToJSON() {
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               URL to JSON Converter
-              {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
-              Break down URLs into their components including protocol, hostname,
-              TLD, and query parameters
+              Break down URLs into their components including protocol,
+              hostname, TLD, and query parameters
             </p>
           </div>
           <SecurityBanner variant="compact" className="shrink-0" />

@@ -265,7 +265,9 @@ Jane Smith      jane@example.com        25      Marketing`,
             <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
               <FileSpreadsheet className="h-8 w-8 text-blue-600" />
               CSV to JSON Converter
-              {tool?.shortcut ? <ShortcutBadge shortcut={tool.shortcut} /> : null}
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h1>
             <p className="text-gray-600 dark:text-gray-400">
               Convert CSV data to JSON format with customizable delimiters and
