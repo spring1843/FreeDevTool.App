@@ -15,6 +15,7 @@ import {
   ToolButton,
   ResetButton,
   ClearButton,
+  ToolButtonGroup,
   DataButtonGroup,
 } from "@/components/ui/tool-button";
 import {
@@ -390,6 +391,24 @@ export default function UnitConverter() {
           <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default settings"
+            hasModifiedData={isAtDefault ? false : hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear input value"
+            hasModifiedData={hasModifiedData}
+            disabled={inputValue.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       {/* Category Selection */}
       <Card className="mb-6">
         <CardHeader>
@@ -398,7 +417,7 @@ export default function UnitConverter() {
             Select Category
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent>
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
             <SelectTrigger data-testid="category-select">
               <SelectValue />
@@ -411,22 +430,6 @@ export default function UnitConverter() {
               ))}
             </SelectContent>
           </Select>
-          <div className="flex justify-end">
-            <DataButtonGroup>
-              <ResetButton
-                onClick={handleReset}
-                tooltip="Reset to default settings"
-                hasModifiedData={isAtDefault ? false : hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={handleClear}
-                tooltip="Clear input value"
-                hasModifiedData={hasModifiedData}
-                disabled={inputValue.trim() === ""}
-              />
-            </DataButtonGroup>
-          </div>
         </CardContent>
       </Card>
       {/* Conversion Interface */}
