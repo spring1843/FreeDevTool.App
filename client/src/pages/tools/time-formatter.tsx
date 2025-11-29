@@ -297,7 +297,7 @@ export default function TimeFormatter() {
   const isAtDefault = false; // Time formatter always starts with current time
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">

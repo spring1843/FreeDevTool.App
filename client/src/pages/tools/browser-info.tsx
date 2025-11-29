@@ -329,7 +329,7 @@ export default function BrowserInfo() {
 
   if (!browserInfo) {
     return (
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
         <div className="flex items-center justify-center h-64">
           <p className="text-slate-500 dark:text-slate-400">
             Loading browser information...
@@ -340,7 +340,7 @@ export default function BrowserInfo() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container mx-auto px-4 py-8 max-w-6xl">
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
