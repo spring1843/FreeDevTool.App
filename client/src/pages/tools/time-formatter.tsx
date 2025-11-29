@@ -311,7 +311,7 @@ export default function TimeFormatter() {
         </div>
       </div>
 
-      <ToolButtonGroup className="mb-6">
+      <ToolButtonGroup className="mb-6 justify-end">
         <DataButtonGroup>
           <NowButton
             onClick={setCurrentDateTime}
