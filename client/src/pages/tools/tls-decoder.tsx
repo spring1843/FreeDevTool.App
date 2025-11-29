@@ -239,6 +239,7 @@ export default function TLSDecoder() {
             rows={10}
             autoFocus={true}
             minHeight="200px"
+            lang="text"
             fileExtension="txt"
             theme={theme}
             data-default-input="true"
