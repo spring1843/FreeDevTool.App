@@ -6,9 +6,9 @@ import { SecurityBanner } from "@/components/ui/security-banner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Keyboard, RotateCcw, Info, Square } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { Keyboard, Info, Play, Square } from "lucide-react";
+import { ToolButton } from "@/components/ui/tool-button";
 
 interface KeyPress {
   key: string;
