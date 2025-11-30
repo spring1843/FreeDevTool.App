@@ -163,6 +163,7 @@ function generateSitemap(dist: string) {
   const baseUrl = (
     process.env.SITE_BASE_URL || "https://freedevtool.app"
   ).replace(/\/+$/, "");
+  // Use build time as lastmod for all routes, since all routes are statically generated at build time.
   const now = new Date().toISOString();
   const routes = Object.keys(toolsMetadata);
 
