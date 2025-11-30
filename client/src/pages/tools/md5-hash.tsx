@@ -2,18 +2,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { TextArea } from "@/components/ui/textarea";
-import { useTheme } from "@/providers/theme-provider";
-import {
-  Hash,
-  Copy,
-  CheckCircle,
-  XCircle,
-  Eye,
-  EyeOff,
-  RotateCcw,
-} from "lucide-react";
+import { Hash, Copy, CheckCircle, XCircle, Eye, EyeOff } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -50,15 +48,18 @@ const simpleMD5 = (input: string): string => {
 };
 
 import { DEFAULT_MD5 } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function MD5Hash() {
+  const tool = getToolByPath("/tools/md5-hash");
   const [inputText, setInputText] = useState(DEFAULT_MD5);
   const [compareHash, setCompareHash] = useState("");
   const [hashResult, setHashResult] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isMatch, setIsMatch] = useState<boolean | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const { theme } = useTheme();
 
   const generateHash = useCallback(async () => {
     if (!inputText.trim()) {
@@ -113,6 +114,21 @@ export default function MD5Hash() {
     setShowPassword(false);
   };
 
+  const handleClear = () => {
+    setInputText("");
+    setCompareHash("");
+    setHashResult("");
+    setIsMatch(null);
+    setShowPassword(false);
+  };
+
+  const hasModifiedData =
+    (inputText !== DEFAULT_MD5 && inputText.trim() !== "") ||
+    compareHash.trim() !== "" ||
+    hashResult.trim() !== "";
+  const isAtDefault =
+    inputText === DEFAULT_MD5 && compareHash === "" && hashResult === "";
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -126,8 +142,11 @@ export default function MD5Hash() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               MD5 Hash Generator
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Generate MD5-like hashes and compare for verification
@@ -136,6 +155,38 @@ export default function MD5Hash() {
           <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={generateHash}
+            disabled={isLoading || !inputText.trim()}
+            icon={<Hash className="w-4 h-4 mr-2" />}
+            tooltip="Generate MD5 hash from input"
+          >
+            {isLoading ? "Generating..." : "Generate Hash"}
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={
+              inputText.trim() === "" &&
+              compareHash.trim() === "" &&
+              hashResult.trim() === ""
+            }
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <Card>
@@ -175,15 +226,6 @@ export default function MD5Hash() {
                 </Button>
               </div>
             </div>
-
-            <Button
-              onClick={generateHash}
-              disabled={isLoading || !inputText.trim()}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
-            >
-              <Hash className="w-4 h-4 mr-2" />
-              {isLoading ? "Generating..." : "Generate MD5 Hash"}
-            </Button>
 
             {hashResult ? (
               <div className="mt-4">
@@ -271,55 +313,7 @@ export default function MD5Hash() {
         </Card>
       </div>
 
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            Hash Details
-            <Button onClick={handleReset} variant="outline" size="sm">
-              <RotateCcw className="w-4 h-4 mr-1" />
-              Reset
-            </Button>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <TextArea
-            id="output"
-            value={hashResult || "Hash will appear here after generation..."}
-            readOnly={true}
-            data-testid="hash-output"
-            className="min-h-[100px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
-            rows={5}
-            fileExtension="txt"
-            theme={theme}
-          />
-        </CardContent>
-      </Card>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-          <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-            MD5 Features:
-          </h3>
-          <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-            <li>• Fast hash generation for integrity checking</li>
-            <li>• Fixed 32-character hexadecimal output</li>
-            <li>• Deterministic - same input always produces same hash</li>
-            <li>• Commonly used for file checksums and verification</li>
-          </ul>
-        </div>
-
-        <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-          <h3 className="font-semibold text-yellow-800 dark:text-yellow-200 mb-2">
-            Security Notice:
-          </h3>
-          <ul className="text-sm text-yellow-700 dark:text-yellow-300 space-y-1">
-            <li>• MD5 is not cryptographically secure for passwords</li>
-            <li>• Use for data integrity, not password storage</li>
-            <li>• Consider SHA-256 or bcrypt for security purposes</li>
-            <li>• This tool uses SHA-256 truncated to MD5 length</li>
-          </ul>
-        </div>
-      </div>
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

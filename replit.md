@@ -4,6 +4,12 @@
 
 is a web-based collection of 49+ open-source, free, and completely offline developer tools. It offers a wide range of utilities including converters, formatters, encoders, text tools, timing utilities, financial calculators, hardware tests, and generators. Designed with privacy in mind, all processing occurs locally without network dependencies, making it suitable for sensitive business environments and air-gapped systems.
 
+## Recent Changes
+
+- **November 28, 2025**: Implemented consistent button layout across all 47 tools with tooltips and toast notifications. Action buttons (Format, Convert, Generate, etc.) are now grouped on the left, while data manipulation buttons (Reset, Clear, Now) are grouped on the right with distinct colors: Reset (amber), Clear (rose), Now (sky). All buttons have tooltips. ResetButton/ClearButton/NowButton components now show toast notifications when clicked. Added ToolButtonGroup, ActionButtonGroup, and DataButtonGroup wrapper components for consistent layout.
+
+- **November 27, 2025**: Fixed mobile performance/focus lock issue on CodeMirror TextArea. Root cause: Full CodeMirror stack with expensive extensions (foldGutter, autocompletion, highlightActiveLine, etc.) plus onUpdate cursor tracking saturated iOS main thread during touch events, blocking navbar taps. Fix: Mobile-optimized CodeMirror configuration that (1) disables expensive extensions (foldGutter, highlightActiveLine, closeBrackets, autocompletion, etc.), (2) adds custom theme extension with touch-action: manipulation CSS, (3) adds DOM event handler to release pointer capture on touchend/pointerup, and (4) disables onUpdate cursor tracking on mobile. Syntax highlighting preserved while maintaining responsive UI.
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
@@ -37,7 +43,7 @@ The application is designed as a fully static site that can be deployed to any s
 **Key Deployment Decisions:**
 
 - **Static Site Generation**: Custom build script (`scripts/generate-static-routes.ts`) generates SEO-optimized HTML files for all 47 routes (homepage + 46 tools).
-- **Production Build**: `npm run build:static` creates a complete static site in `dist/public/` with proper directory structure for each tool.
+- **Production Build**: `make build` creates a complete static site in `dist/public/` with proper directory structure for each tool.
 - **Development Server**: Express.js with Vite integration for HMR during development only.
 - **No Backend Required**: All application logic runs client-side, enabling deployment to simple object storage or CDN.
 

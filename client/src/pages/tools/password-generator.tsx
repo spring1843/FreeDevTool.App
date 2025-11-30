@@ -5,19 +5,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
-import {
-  Copy,
-  Check,
-  RefreshCw,
-  Shield,
-  Eye,
-  EyeOff,
-  RotateCcw,
-} from "lucide-react";
+import { Copy, Check, RefreshCw, Shield, Eye, EyeOff } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { useToolDefault } from "@/hooks/use-tool-default";
 import { usePersistentForm } from "@/hooks/use-persistent-state";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
 
 interface PasswordStrength {
   score: number;
@@ -27,6 +31,7 @@ interface PasswordStrength {
 }
 
 export default function PasswordGenerator() {
+  const tool = getToolByPath("/tools/password-generator");
   const { fields, updateField, resetFields } = usePersistentForm(
     "password-generator",
     {
@@ -140,6 +145,37 @@ export default function PasswordGenerator() {
     setVisiblePasswords(new Set());
   };
 
+  const handleClear = () => {
+    updateField("passwords", []);
+    setVisiblePasswords(new Set());
+  };
+
+  const hasModifiedData = passwords.length > 0;
+
+  const defaultSettings = {
+    passwordCount: 1,
+    length: [16],
+    includeUppercase: true,
+    includeLowercase: true,
+    includeNumbers: true,
+    includeSymbols: true,
+    excludeSimilar: false,
+    excludeAmbiguous: false,
+    showStrength: true,
+  };
+
+  const isAtDefault =
+    passwords.length === 0 &&
+    passwordCount === defaultSettings.passwordCount &&
+    length[0] === defaultSettings.length[0] &&
+    includeUppercase === defaultSettings.includeUppercase &&
+    includeLowercase === defaultSettings.includeLowercase &&
+    includeNumbers === defaultSettings.includeNumbers &&
+    includeSymbols === defaultSettings.includeSymbols &&
+    excludeSimilar === defaultSettings.excludeSimilar &&
+    excludeAmbiguous === defaultSettings.excludeAmbiguous &&
+    showStrength === defaultSettings.showStrength;
+
   // Generate passwords with default settings on component mount
   useToolDefault(() => {
     generatePasswords();
@@ -240,17 +276,59 @@ export default function PasswordGenerator() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
-          Password Generator
-        </h2>
-        <p className="text-slate-600 dark:text-slate-400">
-          Generate secure passwords with customizable options and strength
-          analysis
-        </p>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              Password Generator
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Generate secure passwords with customizable options and strength
+              analysis
+            </p>
+          </div>
+          <SecurityBanner variant="compact" />
+        </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={generatePasswords}
+            disabled={
+              !includeUppercase &&
+              !includeLowercase &&
+              !includeNumbers &&
+              !includeSymbols
+            }
+            tooltip="Generate new passwords"
+            icon={<RefreshCw className="w-4 h-4 mr-2" />}
+          >
+            Generate{" "}
+            {passwordCount === 1 ? "Password" : `${passwordCount} Passwords`}
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset all settings to defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear generated passwords"
+            hasModifiedData={hasModifiedData}
+            disabled={passwords.length === 0}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       {/* Configuration */}
       <Card className="mb-6">
@@ -394,33 +472,6 @@ export default function PasswordGenerator() {
               </div>
             </div>
           </div>
-
-          {/* Generate and Reset Buttons */}
-          <div className="pt-4 flex gap-3">
-            <Button
-              onClick={generatePasswords}
-              disabled={
-                !includeUppercase &&
-                !includeLowercase &&
-                !includeNumbers &&
-                !includeSymbols
-              }
-              className="flex-1"
-              data-testid="generate-button"
-            >
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Generate{" "}
-              {passwordCount === 1 ? "Password" : `${passwordCount} Passwords`}
-            </Button>
-            <Button
-              onClick={handleReset}
-              variant="outline"
-              data-testid="reset-button"
-            >
-              <RotateCcw className="w-4 h-4 mr-2" />
-              Reset
-            </Button>
-          </div>
         </CardContent>
       </Card>
 
@@ -508,7 +559,7 @@ export default function PasswordGenerator() {
                       </div>
                     </div>
 
-                    <div className="font-mono text-sm bg-slate-50 dark:bg-slate-800 p-3 rounded border">
+                    <div className="font-mono text-sm bg-slate-50 dark:bg-slate-800 p-3 rounded border overflow-x-auto break-all min-w-0">
                       {isVisible ? password : "•".repeat(password.length)}
                     </div>
 
@@ -542,6 +593,7 @@ export default function PasswordGenerator() {
           </CardContent>
         </Card>
       )}
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

@@ -2,25 +2,27 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { countTextStats } from "@/lib/text-tools";
-import {
-  FileText,
-  Hash,
-  Type,
-  List,
-  FileIcon,
-  BarChart3,
-  RotateCcw,
-} from "lucide-react";
+import { FileText, Hash, Type, List, FileIcon, BarChart3 } from "lucide-react";
 import { usePersistentForm } from "@/hooks/use-persistent-state";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import { DEFAULT_TEXT_COUNTER } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
 
 const defaultFields = {
   text: DEFAULT_TEXT_COUNTER,
 };
 
 export default function TextCounter() {
+  const tool = getToolByPath("/tools/text-counter");
   const { fields, updateField, resetFields } = usePersistentForm(
     "text-counter",
     defaultFields
@@ -28,6 +30,14 @@ export default function TextCounter() {
 
   const stats = countTextStats(fields.text);
   const { theme } = useTheme();
+
+  const handleClear = () => {
+    updateField("text", "");
+  };
+
+  const hasModifiedData =
+    fields.text !== DEFAULT_TEXT_COUNTER && fields.text.trim() !== "";
+  const isAtDefault = fields.text === DEFAULT_TEXT_COUNTER;
 
   const statItems = [
     {
@@ -78,13 +88,38 @@ export default function TextCounter() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
-          Text Counter
-        </h2>
-        <p className="text-slate-600 dark:text-slate-400">
-          Count words, characters, sentences, paragraphs and more
-        </p>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              Text Counter
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Count words, characters, sentences, paragraphs and more
+            </p>
+          </div>
+          <SecurityBanner variant="compact" />
+        </div>
       </div>
+
+      <ToolButtonGroup className="mb-6 justify-end">
+        <DataButtonGroup>
+          <ResetButton
+            onClick={resetFields}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear text input"
+            hasModifiedData={hasModifiedData}
+            disabled={fields.text.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Text Input */}
@@ -104,20 +139,10 @@ export default function TextCounter() {
               data-default-input="true"
               rows={20}
               minHeight="400px"
+              lang="plaintext"
               fileExtension="txt"
               theme={theme}
             />
-            <div className="mt-4 flex justify-end">
-              <Button
-                onClick={resetFields}
-                variant="outline"
-                size="sm"
-                data-testid="reset-button"
-              >
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Reset
-              </Button>
-            </div>
           </CardContent>
         </Card>
 
@@ -232,6 +257,7 @@ export default function TextCounter() {
           </CardContent>
         </Card>
       </div>
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }
