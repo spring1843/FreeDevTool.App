@@ -38,7 +38,7 @@ jobs:
         run: make deps
 
       - name: Build application
-        run: make build
+        run: make build-prod
 
       - name: Create dist archive
         run: |
