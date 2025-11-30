@@ -8,12 +8,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { Mic, Play, Square, Download, Pause } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
