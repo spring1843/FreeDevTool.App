@@ -1,4 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -9,15 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Play,
-  Square,
-  Music,
-  Plus,
-  Trash2,
-  Volume2,
-  Share,
-} from "lucide-react";
+import { Play, Square, Music, Plus, Trash2, Volume2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
@@ -26,6 +21,11 @@ import { Separator } from "@/components/ui/separator";
 import { getParam, copyShareableURL } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
 import { SecurityBanner } from "@/components/ui/security-banner";
+import {
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+} from "@/components/ui/tool-button";
 
 interface ToneSchedule {
   id: string;
@@ -58,6 +58,7 @@ const NOTES = {
 };
 
 export default function Metronome() {
+  const tool = getToolByPath("/tools/metronome");
   const [toneSchedules, setToneSchedules] = useState<ToneSchedule[]>([
     {
       id: "1",
@@ -159,10 +160,14 @@ export default function Metronome() {
 
     // Capture ref values at effect time to avoid stale closures
     const currentTimeouts = toneTimeoutsRef.current;
+    const audioContext = audioContextRef.current;
 
     return () => {
-      if (audioContextRef.current) {
-        audioContextRef.current.close();
+      // Only close if not already closed
+      if (audioContext && audioContext.state !== "closed") {
+        audioContext.close().catch(() => {
+          // Ignore errors when closing - context may already be closed
+        });
       }
       // Clear all timeouts using captured value
       currentTimeouts.forEach((timeout: NodeJS.Timeout) =>
@@ -353,8 +358,11 @@ export default function Metronome() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Multi-Tone Metronome
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Create custom rhythm patterns with multiple musical notes at
@@ -367,6 +375,40 @@ export default function Metronome() {
           <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          {!isRunning ? (
+            <Button
+              onClick={startMetronome}
+              disabled={toneSchedules.filter(s => s.enabled).length === 0}
+              size="lg"
+              className="flex items-center space-x-2"
+              data-testid="start-button"
+            >
+              <Play className="w-5 h-5 mr-2" />
+              <span>Start (Enter)</span>
+            </Button>
+          ) : (
+            <Button
+              onClick={stopMetronome}
+              variant="destructive"
+              size="lg"
+              className="flex items-center space-x-2"
+              data-testid="stop-button"
+            >
+              <Square className="w-5 h-5 mr-2" />
+              <span>Stop (Space/Esc)</span>
+            </Button>
+          )}
+          <ToolButton
+            variant="share"
+            onClick={shareMetronome}
+            tooltip="Copy shareable metronome URL"
+            size="lg"
+          />
+        </ActionButtonGroup>
+      </ToolButtonGroup>
 
       {/* Unified Metronome Interface */}
       <Card className="mb-6">
@@ -391,43 +433,6 @@ export default function Metronome() {
           </p>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Main Controls */}
-          <div className="flex gap-4 items-center justify-center p-4 bg-slate-50 dark:bg-slate-900 rounded-lg">
-            {!isRunning ? (
-              <Button
-                onClick={startMetronome}
-                disabled={toneSchedules.filter(s => s.enabled).length === 0}
-                size="lg"
-                className="flex items-center space-x-2"
-                data-testid="start-button"
-              >
-                <Play className="w-5 h-5" />
-                <span>Start (Enter)</span>
-              </Button>
-            ) : (
-              <Button
-                onClick={stopMetronome}
-                variant="destructive"
-                size="lg"
-                className="flex items-center space-x-2"
-                data-testid="stop-button"
-              >
-                <Square className="w-5 h-5" />
-                <span>Stop (Space/Esc)</span>
-              </Button>
-            )}
-
-            <Button
-              onClick={shareMetronome}
-              variant="outline"
-              className="flex items-center space-x-2"
-              data-testid="share-metronome-button"
-            >
-              <Share className="w-4 h-4" />
-              <span>Share</span>
-            </Button>
-          </div>
-
           {toneSchedules.filter(s => s.enabled).length === 0 && (
             <Alert>
               <AlertDescription>
@@ -624,176 +629,7 @@ export default function Metronome() {
         </CardContent>
       </Card>
 
-      {/* Quick Start & Examples */}
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle>Quick Start & Rhythm Examples</CardTitle>
-          <p className="text-sm text-slate-600 dark:text-slate-400">
-            Load pre-configured rhythm patterns or learn how to create your own
-          </p>
-        </CardHeader>
-        <CardContent>
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Example Patterns */}
-            <div>
-              <h4 className="font-semibold text-slate-900 dark:text-slate-100 mb-3">
-                Example Patterns
-              </h4>
-              <div className="space-y-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setToneSchedules([
-                      {
-                        id: "1",
-                        note: "C5",
-                        frequency: NOTES["C5"],
-                        intervalSeconds: 1,
-                        enabled: true,
-                      },
-                      {
-                        id: "2",
-                        note: "G4",
-                        frequency: NOTES["G4"],
-                        intervalSeconds: 2,
-                        enabled: true,
-                      },
-                    ]);
-                  }}
-                  className="w-full justify-start"
-                >
-                  <Music className="w-4 h-4 mr-2" />
-                  Basic Beat (C5 + G4)
-                </Button>
-
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setToneSchedules([
-                      {
-                        id: "1",
-                        note: "A4",
-                        frequency: NOTES["A4"],
-                        intervalSeconds: 0.5,
-                        enabled: true,
-                      },
-                      {
-                        id: "2",
-                        note: "E4",
-                        frequency: NOTES["E4"],
-                        intervalSeconds: 2,
-                        enabled: true,
-                      },
-                      {
-                        id: "3",
-                        note: "A5",
-                        frequency: NOTES["A5"],
-                        intervalSeconds: 4,
-                        enabled: true,
-                      },
-                    ]);
-                  }}
-                  className="w-full justify-start"
-                >
-                  <Music className="w-4 h-4 mr-2" />
-                  Complex Rhythm (3 Tones)
-                </Button>
-
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setToneSchedules([
-                      {
-                        id: "1",
-                        note: "C4",
-                        frequency: NOTES["C4"],
-                        intervalSeconds: 1,
-                        enabled: true,
-                      },
-                      {
-                        id: "2",
-                        note: "E4",
-                        frequency: NOTES["E4"],
-                        intervalSeconds: 1.5,
-                        enabled: true,
-                      },
-                      {
-                        id: "3",
-                        note: "G4",
-                        frequency: NOTES["G4"],
-                        intervalSeconds: 2,
-                        enabled: true,
-                      },
-                      {
-                        id: "4",
-                        note: "C5",
-                        frequency: NOTES["C5"],
-                        intervalSeconds: 3,
-                        enabled: true,
-                      },
-                    ]);
-                  }}
-                  className="w-full justify-start"
-                >
-                  <Music className="w-4 h-4 mr-2" />C Major Chord Progression
-                </Button>
-              </div>
-            </div>
-
-            {/* Instructions */}
-            <div>
-              <h4 className="font-semibold text-slate-900 dark:text-slate-100 mb-3">
-                How to Use
-              </h4>
-              <div className="text-sm text-slate-600 dark:text-slate-400 space-y-2">
-                <div className="flex items-start space-x-2">
-                  <span className="w-5 h-5 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">
-                    1
-                  </span>
-                  <p>Click "Test" to preview each tone before starting</p>
-                </div>
-                <div className="flex items-start space-x-2">
-                  <span className="w-5 h-5 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">
-                    2
-                  </span>
-                  <p>Configure notes and intervals using the controls below</p>
-                </div>
-                <div className="flex items-start space-x-2">
-                  <span className="w-5 h-5 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">
-                    3
-                  </span>
-                  <p>Toggle tones on/off using the switches</p>
-                </div>
-                <div className="flex items-start space-x-2">
-                  <span className="w-5 h-5 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">
-                    4
-                  </span>
-                  <p>Click "Start Metronome" - first tones play immediately</p>
-                </div>
-                <div className="flex items-start space-x-2">
-                  <span className="w-5 h-5 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">
-                    5
-                  </span>
-                  <p>Add multiple tones for complex rhythm patterns</p>
-                </div>
-              </div>
-
-              <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded">
-                <p className="text-sm text-green-700 dark:text-green-300 font-medium mb-1">
-                  💡 Pro Tip:
-                </p>
-                <p className="text-sm text-green-600 dark:text-green-400">
-                  Use different interval combinations like 0.5s, 1.5s, and 3s to
-                  create polyrhythmic patterns that repeat every 6 seconds.
-                </p>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

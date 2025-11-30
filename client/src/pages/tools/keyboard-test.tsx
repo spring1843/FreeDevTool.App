@@ -1,10 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Keyboard, RotateCcw, Info } from "lucide-react";
+import { Keyboard, RotateCcw, Info, Square } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { Keyboard, Info, Play, Square } from "lucide-react";
 
 interface KeyPress {
   key: string;
@@ -14,6 +18,7 @@ interface KeyPress {
 }
 
 export default function KeyboardTest() {
+  const tool = getToolByPath("/tools/keyboard-test");
   const [pressedKeys, setPressedKeys] = useState<Set<string>>(new Set());
   const [keyHistory, setKeyHistory] = useState<KeyPress[]>([]);
   const [isActive, setIsActive] = useState(true);
@@ -61,11 +66,6 @@ export default function KeyboardTest() {
       window.removeEventListener("keyup", handleKeyUp);
     };
   }, [handleKeyDown, handleKeyUp, isActive]);
-
-  const clearHistory = () => {
-    setKeyHistory([]);
-    setPressedKeys(new Set());
-  };
 
   const toggleTesting = () => {
     setIsActive(!isActive);
@@ -144,13 +144,21 @@ export default function KeyboardTest() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
-          Keyboard Test
-        </h2>
-        <p className="text-slate-600 dark:text-slate-400">
-          Test your keyboard keys and see which buttons you're pressing in
-          real-time
-        </p>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              Keyboard Test
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Test your keyboard keys and see which buttons you're pressing in
+              real-time
+            </p>
+          </div>
+          <SecurityBanner variant="compact" />
+        </div>
       </div>
 
       {/* Controls */}
@@ -161,25 +169,28 @@ export default function KeyboardTest() {
               <Keyboard className="w-5 h-5 mr-2" />
               Keyboard Testing
             </div>
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={clearHistory}
-                data-testid="clear-history"
-              >
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Clear History
-              </Button>
-              <Button
-                variant={isActive ? "destructive" : "default"}
-                size="sm"
-                onClick={toggleTesting}
-                data-testid="toggle-testing"
-              >
-                {isActive ? "Stop Testing" : "Start Testing"}
-              </Button>
-            </div>
+            <ToolButton
+              variant="custom"
+              onClick={toggleTesting}
+              tooltip={
+                isActive ? "Stop keyboard testing" : "Start keyboard testing"
+              }
+              icon={
+                isActive ? (
+                  <Square className="w-4 h-4 mr-2" />
+                ) : (
+                  <Play className="w-4 h-4 mr-2" />
+                )
+              }
+              className={
+                isActive
+                  ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  : ""
+              }
+              size="sm"
+            >
+              {isActive ? "Stop Testing" : "Start Testing"}
+            </ToolButton>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -348,53 +359,7 @@ export default function KeyboardTest() {
         </CardContent>
       </Card>
 
-      {/* Information */}
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>How to Use</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-            <div>
-              <h4 className="font-semibold mb-2">Testing Your Keyboard:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• Make sure this browser tab has focus</li>
-                <li>• Press any key to see it light up</li>
-                <li>• Hold multiple keys to test combinations</li>
-                <li>• Check if all keys register properly</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-2">Key Categories:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>
-                  • <span className="inline-block w-3 h-3 bg-blue-500 mr-2" />
-                  Letters (A-Z)
-                </li>
-                <li>
-                  • <span className="inline-block w-3 h-3 bg-green-500 mr-2" />
-                  Numbers (0-9)
-                </li>
-                <li>
-                  • <span className="inline-block w-3 h-3 bg-purple-500 mr-2" />
-                  Arrow keys
-                </li>
-                <li>
-                  • <span className="inline-block w-3 h-3 bg-orange-500 mr-2" />
-                  Modifiers (Ctrl, Alt, etc.)
-                </li>
-              </ul>
-            </div>
-          </div>
-          <Alert>
-            <AlertDescription className="text-sm">
-              <strong>Note:</strong> This tool works entirely in your browser
-              and doesn't send any data to servers. Some special keys may not be
-              captured due to browser security restrictions.
-            </AlertDescription>
-          </Alert>
-        </CardContent>
-      </Card>
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

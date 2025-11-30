@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -10,10 +9,21 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Calculator, RotateCcw, TrendingUp, BarChart3 } from "lucide-react";
+import { Calculator, TrendingUp, BarChart3 } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 import {
   DEFAULT_COMPOUND_PRINCIPAL,
   DEFAULT_COMPOUND_ANNUAL_RATE,
@@ -44,6 +54,7 @@ interface CompoundInterestResult {
 }
 
 export default function CompoundInterestCalculator() {
+  const tool = getToolByPath("/tools/compound-interest");
   const [principal, setPrincipal] = useState(DEFAULT_COMPOUND_PRINCIPAL);
   const [annualRate, setAnnualRate] = useState(DEFAULT_COMPOUND_ANNUAL_RATE);
   const [years, setYears] = useState(DEFAULT_COMPOUND_YEARS);
@@ -145,6 +156,27 @@ export default function CompoundInterestCalculator() {
     setResult(null);
   };
 
+  const handleClear = () => {
+    setPrincipal(0);
+    setAnnualRate(0);
+    setYears(0);
+    setMonthlyContribution(0);
+    setResult(null);
+  };
+
+  const hasModifiedData =
+    principal !== DEFAULT_COMPOUND_PRINCIPAL ||
+    annualRate !== DEFAULT_COMPOUND_ANNUAL_RATE ||
+    years !== DEFAULT_COMPOUND_YEARS ||
+    monthlyContribution !== DEFAULT_COMPOUND_MONTHLY_CONTRIBUTION;
+  const isAtDefault =
+    principal === DEFAULT_COMPOUND_PRINCIPAL &&
+    annualRate === DEFAULT_COMPOUND_ANNUAL_RATE &&
+    years === DEFAULT_COMPOUND_YEARS &&
+    monthlyContribution === DEFAULT_COMPOUND_MONTHLY_CONTRIBUTION &&
+    contributionFrequency === "monthly" &&
+    interestFrequency === "yearly";
+
   useEffect(() => {
     calculateCompoundInterest();
   }, [calculateCompoundInterest]);
@@ -218,8 +250,11 @@ export default function CompoundInterestCalculator() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Compound Interest Calculator
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Calculate compound interest with regular contributions
@@ -228,6 +263,39 @@ export default function CompoundInterestCalculator() {
           <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={calculateCompoundInterest}
+            tooltip="Calculate compound interest with current values"
+            icon={<Calculator className="w-4 h-4 mr-2" />}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Calculate
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset all values to defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={
+              principal === 0 &&
+              annualRate === 0 &&
+              years === 0 &&
+              monthlyContribution === 0
+            }
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <Card>
@@ -317,20 +385,6 @@ export default function CompoundInterestCalculator() {
                 </SelectContent>
               </Select>
             </div>
-
-            <div className="flex gap-3 pt-4">
-              <Button
-                onClick={calculateCompoundInterest}
-                className="bg-green-600 hover:bg-green-700 text-white"
-              >
-                <Calculator className="w-4 h-4 mr-2" />
-                Calculate
-              </Button>
-              <Button onClick={handleReset} variant="outline">
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Reset
-              </Button>
-            </div>
           </CardContent>
         </Card>
 
@@ -345,7 +399,7 @@ export default function CompoundInterestCalculator() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                  <div className="text-2xl font-bold text-green-600 dark:text-green-400 break-words min-w-0 overflow-x-auto">
                     {formatCurrency(result.finalAmount)}
                   </div>
                   <div className="text-sm text-green-700 dark:text-green-300">
@@ -353,7 +407,7 @@ export default function CompoundInterestCalculator() {
                   </div>
                 </div>
                 <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 break-words min-w-0 overflow-x-auto">
                     {formatCurrency(result.totalInterest)}
                   </div>
                   <div className="text-sm text-blue-700 dark:text-blue-300">
@@ -363,21 +417,30 @@ export default function CompoundInterestCalculator() {
               </div>
 
               <div className="space-y-2">
-                <Badge variant="outline" className="w-full justify-between p-2">
+                <Badge
+                  variant="outline"
+                  className="w-full justify-between p-2 flex-wrap"
+                >
                   <span>Initial Investment:</span>
-                  <span className="font-semibold">
+                  <span className="font-semibold break-words min-w-0">
                     {formatCurrency(principal)}
                   </span>
                 </Badge>
-                <Badge variant="outline" className="w-full justify-between p-2">
+                <Badge
+                  variant="outline"
+                  className="w-full justify-between p-2 flex-wrap"
+                >
                   <span>Total Contributions:</span>
-                  <span className="font-semibold">
+                  <span className="font-semibold break-words min-w-0">
                     {formatCurrency(result.totalContributions)}
                   </span>
                 </Badge>
-                <Badge variant="outline" className="w-full justify-between p-2">
+                <Badge
+                  variant="outline"
+                  className="w-full justify-between p-2 flex-wrap"
+                >
                   <span>Interest Earned:</span>
-                  <span className="font-semibold">
+                  <span className="font-semibold break-words min-w-0">
                     {formatCurrency(result.totalInterest)}
                   </span>
                 </Badge>
@@ -574,15 +637,15 @@ export default function CompoundInterestCalculator() {
                               variant="outline"
                               className="text-green-600 border-green-300"
                             >
-                              Reached
+                              Achieved
                             </Badge>
                           )
                         ) : (
                           <Badge
                             variant="outline"
-                            className="text-red-500 border-red-300"
+                            className="text-red-600 border-red-300"
                           >
-                            Beyond 100y
+                            Not Reached
                           </Badge>
                         )}
                       </td>
@@ -591,29 +654,11 @@ export default function CompoundInterestCalculator() {
                 </tbody>
               </table>
             </div>
-            <div className="mt-4 text-xs text-slate-500 dark:text-slate-400 space-y-1">
-              <div>
-                •{" "}
-                <span className="text-green-600 dark:text-green-400 font-medium">
-                  Reached
-                </span>
-                : Milestone achieved within your {years}-year investment period
-              </div>
-              <div>
-                •{" "}
-                <span className="text-orange-600 dark:text-orange-400 font-medium">
-                  Projected
-                </span>
-                : Estimated timeline beyond your current investment period
-              </div>
-              <div>
-                • <span className="text-red-500 font-medium">Beyond 100y</span>:
-                Milestone would take more than 100 years to reach
-              </div>
-            </div>
           </CardContent>
         </Card>
       ) : null}
+
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }
