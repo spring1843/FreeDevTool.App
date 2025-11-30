@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Mic, Play, Square, Download } from "lucide-react";
+import { Mic, Play, Square, Download, Pause } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
@@ -469,7 +469,13 @@ export default function MicrophoneTest() {
                   tooltip={
                     isPlaying ? "Stop playback" : "Play the recorded audio"
                   }
-                  icon={<Play className="w-4 h-4 mr-2" />}
+                  icon={
+                    isPlaying ? (
+                      <Pause className="w-4 h-4 mr-2" />
+                    ) : (
+                      <Play className="w-4 h-4 mr-2" />
+                    )
+                  }
                   className="flex-1"
                 >
                   {isPlaying ? "Stop Playback" : "Play Recording"}
