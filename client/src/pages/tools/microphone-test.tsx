@@ -15,7 +15,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Mic, Play, Square, Download } from "lucide-react";
+import { Mic, Play, Square, Download, Pause } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
@@ -461,7 +461,11 @@ export default function MicrophoneTest() {
                   className="flex-1"
                   data-testid="play-recording"
                 >
-                  <Play className="w-4 h-4 mr-2" />
+                  {isPlaying ? (
+                    <Pause className="w-4 h-4 mr-2" />
+                  ) : (
+                    <Play className="w-4 h-4 mr-2" />
+                  )}
                   {isPlaying ? "Stop Playback" : "Play Recording"}
                 </Button>
                 <TooltipProvider>
