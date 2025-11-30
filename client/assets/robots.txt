@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-Crawl-delay: 5
 Sitemap: https://freedevtool.app/sitemap.xml

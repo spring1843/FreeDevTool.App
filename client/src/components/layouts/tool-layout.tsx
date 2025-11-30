@@ -13,6 +13,7 @@ interface ToolLayoutProps {
   showSecurityBanner?: boolean;
   showTopAd?: boolean;
   maxWidth?: string;
+  shortcut?: string;
 }
 
 export function ToolLayout({
@@ -24,6 +25,7 @@ export function ToolLayout({
   experimental = false,
   showSecurityBanner = false,
   maxWidth = "max-w-6xl",
+  shortcut,
 }: ToolLayoutProps) {
   return (
     <div className={`${maxWidth} mx-auto`}>
@@ -32,6 +34,7 @@ export function ToolLayout({
         description={description}
         experimental={experimental}
         showSecurityBanner={showSecurityBanner}
+        shortcut={shortcut}
       />
 
       <ErrorAlert error={error || null} warnings={warnings} />

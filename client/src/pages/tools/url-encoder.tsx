@@ -1,15 +1,26 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
-import { Link, Unlink, RotateCcw } from "lucide-react";
+import { Link, Unlink } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_URL_ENCODER } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function URLEncoder() {
+  const tool = getToolByPath("/tools/url-encoder");
   const [plainText, setPlainText] = useState(DEFAULT_URL_ENCODER);
   const [encodedText, setEncodedText] = useState("");
   const { theme } = useTheme();
@@ -81,6 +92,15 @@ export default function URLEncoder() {
     setEncodedText("");
   };
 
+  const handleClear = () => {
+    setPlainText("");
+    setEncodedText("");
+  };
+
+  const hasModifiedData =
+    plainText !== DEFAULT_URL_ENCODER && plainText.trim() !== "";
+  const isAtDefault = plainText === DEFAULT_URL_ENCODER;
+
   useEffect(() => {
     encodeURL();
   }, [encodeURL]);
@@ -90,8 +110,11 @@ export default function URLEncoder() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               URL Encoder/Decoder
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               URL encode and decode strings for safe URL transmission
@@ -101,26 +124,42 @@ export default function URLEncoder() {
         </div>
       </div>
 
-      <div className="mb-6 flex gap-3">
-        <Button
-          onClick={handleEncodeClick}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
-        >
-          <Link className="w-4 h-4 mr-2" />
-          Encode URL
-        </Button>
-        <Button
-          onClick={decodeURL}
-          className="bg-green-600 hover:bg-green-700 text-white"
-        >
-          <Unlink className="w-4 h-4 mr-2" />
-          Decode URL
-        </Button>
-        <Button onClick={handleReset} variant="outline">
-          <RotateCcw className="w-4 h-4 mr-2" />
-          Reset
-        </Button>
-      </div>
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={handleEncodeClick}
+            icon={<Link className="w-4 h-4 mr-2" />}
+            tooltip="Encode plain text to URL-safe format"
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Encode URL
+          </ToolButton>
+          <ToolButton
+            variant="custom"
+            onClick={decodeURL}
+            icon={<Unlink className="w-4 h-4 mr-2" />}
+            tooltip="Decode URL-encoded text back to plain text"
+            className="bg-green-600 hover:bg-green-700 text-white"
+          >
+            Decode URL
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={plainText.trim() === "" && encodedText.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
@@ -140,8 +179,10 @@ export default function URLEncoder() {
               rows={20}
               autoFocus={true}
               minHeight="400px"
+              lang="plaintext"
               fileExtension="txt"
               theme={theme}
+              lineWrapping={true}
             />
           </CardContent>
         </Card>
@@ -162,55 +203,16 @@ export default function URLEncoder() {
               className="min-h-[400px] font-mono text-sm"
               rows={20}
               minHeight="400px"
+              lang="plaintext"
+              fileExtension="txt"
               theme={theme}
+              lineWrapping={true}
             />
           </CardContent>
         </Card>
       </div>
 
-      <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-          URL Encoding Examples:
-        </h3>
-        <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              Space
-            </span>{" "}
-            →{" "}
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              %20
-            </span>
-          </div>
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              @
-            </span>{" "}
-            →{" "}
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              %40
-            </span>
-          </div>
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              &
-            </span>{" "}
-            →{" "}
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              %26
-            </span>
-          </div>
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              =
-            </span>{" "}
-            →{" "}
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              %3D
-            </span>
-          </div>
-        </div>
-      </div>
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

@@ -1,8 +1,16 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Copy, Monitor, Globe, HardDrive, Cpu, RefreshCw } from "lucide-react";
+import { Monitor, Globe, HardDrive, Cpu, RefreshCw, Copy } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
+import {
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+} from "@/components/ui/tool-button";
 
 interface BrowserInfo {
   // Navigator properties
@@ -94,6 +102,7 @@ interface BrowserInfo {
 }
 
 export default function BrowserInfo() {
+  const tool = getToolByPath("/tools/browser-info");
   const [browserInfo, setBrowserInfo] = useState<BrowserInfo | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [refreshCount, setRefreshCount] = useState<number>(0);
@@ -320,7 +329,7 @@ export default function BrowserInfo() {
 
   if (!browserInfo) {
     return (
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
         <div className="flex items-center justify-center h-64">
           <p className="text-slate-500 dark:text-slate-400">
             Loading browser information...
@@ -331,49 +340,56 @@ export default function BrowserInfo() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container mx-auto px-4 py-8 max-w-6xl">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
-          Browser Information
-          <span className="text-sm bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 px-2 py-1 rounded font-medium">
-            EXPERIMENTAL
-          </span>
-        </h2>
-        <p className="text-slate-600 dark:text-slate-400">
-          Comprehensive browser and system information available to JavaScript
-        </p>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              Browser Information
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+              <span className="text-sm bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 px-2 py-1 rounded font-medium">
+                EXPERIMENTAL
+              </span>
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Comprehensive browser and system information available to
+              JavaScript
+            </p>
+          </div>
+          <SecurityBanner variant="compact" />
+        </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={refreshInfo}
+            tooltip="Refresh browser information"
+            icon={<RefreshCw className="w-4 h-4 mr-2" />}
+          >
+            Refresh
+          </ToolButton>
+          <ToolButton
+            variant="custom"
+            onClick={copyAllInfo}
+            tooltip="Copy all browser information to clipboard"
+            icon={<Copy className="w-4 h-4 mr-2" />}
+          >
+            Copy All
+          </ToolButton>
+        </ActionButtonGroup>
+      </ToolButtonGroup>
 
       {/* Controls */}
       <Card className="mb-6">
         <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center">
-              <Globe className="w-5 h-5 mr-2" />
-              Browser Data
-            </div>
-            <div className="flex gap-2">
-              <Button
-                onClick={refreshInfo}
-                size="sm"
-                variant="outline"
-                className="flex items-center space-x-1"
-                data-testid="refresh-button"
-              >
-                <RefreshCw className="w-4 h-4" />
-                <span>Refresh</span>
-              </Button>
-              <Button
-                onClick={copyAllInfo}
-                size="sm"
-                className="flex items-center space-x-1"
-                data-testid="copy-all-button"
-              >
-                <Copy className="w-4 h-4" />
-                <span>Copy All</span>
-              </Button>
-            </div>
+          <CardTitle className="flex items-center">
+            <Globe className="w-5 h-5 mr-2" />
+            Browser Data
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -562,7 +578,9 @@ export default function BrowserInfo() {
             <div className="space-y-2 text-sm">
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">Hostname:</span>
-                <span className="font-mono">{browserInfo.hostname}</span>
+                <span className="font-mono break-all">
+                  {browserInfo.hostname}
+                </span>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">Protocol:</span>
@@ -640,88 +658,67 @@ export default function BrowserInfo() {
       <div className="flex justify-center my-8" />
 
       {/* Browser Features */}
-      <Card className="mb-8">
+      <Card className="mb-6">
         <CardHeader>
           <CardTitle className="flex items-center">
             <HardDrive className="w-5 h-5 mr-2" />
-            Browser Features & Capabilities
+            Browser Features
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 text-sm">
-            {Object.entries({
-              "Local Storage": browserInfo.localStorage,
-              "Session Storage": browserInfo.sessionStorage,
-              IndexedDB: browserInfo.indexedDB,
-              WebGL: browserInfo.webGL,
-              "WebGL 2": browserInfo.webGL2,
-              Canvas: browserInfo.canvas,
-              WebRTC: browserInfo.webRTC,
-              "Web Audio": browserInfo.webAudio,
-              "Web Workers": browserInfo.webWorkers,
-              "Service Workers": browserInfo.serviceWorkers,
-              Geolocation: browserInfo.geolocation,
-              Notifications: browserInfo.notifications,
-              "Device Motion": browserInfo.deviceMotion,
-              "Device Orientation": browserInfo.deviceOrientation,
-              Gamepad: browserInfo.gamepad,
-              "Media Devices": browserInfo.mediaDevices,
-              "Media Recorder": browserInfo.mediaRecorder,
-              "Speech Recognition": browserInfo.speechRecognition,
-              "Speech Synthesis": browserInfo.speechSynthesis,
-            }).map(([feature, supported]) => (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-sm">
+            {[
+              { name: "Local Storage", value: browserInfo.localStorage },
+              { name: "Session Storage", value: browserInfo.sessionStorage },
+              { name: "IndexedDB", value: browserInfo.indexedDB },
+              { name: "WebGL", value: browserInfo.webGL },
+              { name: "WebGL 2", value: browserInfo.webGL2 },
+              { name: "Canvas", value: browserInfo.canvas },
+              { name: "WebRTC", value: browserInfo.webRTC },
+              { name: "Web Audio", value: browserInfo.webAudio },
+              { name: "Web Workers", value: browserInfo.webWorkers },
+              { name: "Service Workers", value: browserInfo.serviceWorkers },
+              { name: "Geolocation", value: browserInfo.geolocation },
+              { name: "Notifications", value: browserInfo.notifications },
+              { name: "Device Motion", value: browserInfo.deviceMotion },
+              {
+                name: "Device Orientation",
+                value: browserInfo.deviceOrientation,
+              },
+              { name: "Gamepad API", value: browserInfo.gamepad },
+              { name: "Media Devices", value: browserInfo.mediaDevices },
+              { name: "Media Recorder", value: browserInfo.mediaRecorder },
+              {
+                name: "Speech Recognition",
+                value: browserInfo.speechRecognition,
+              },
+              { name: "Speech Synthesis", value: browserInfo.speechSynthesis },
+            ].map(feature => (
               <div
-                key={feature}
-                className="flex items-center justify-between p-2 border border-slate-200 dark:border-slate-700 rounded"
+                key={feature.name}
+                className={`p-2 rounded border ${
+                  feature.value
+                    ? "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20"
+                    : "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
+                }`}
               >
-                <span>{feature}</span>
-                <span
-                  className={`font-bold ${supported ? "text-green-600" : "text-red-600"}`}
-                >
-                  {supported ? "✓" : "✗"}
-                </span>
+                <div className="flex items-center justify-between">
+                  <span className="font-medium">{feature.name}</span>
+                  <span
+                    className={
+                      feature.value ? "text-green-600" : "text-red-600"
+                    }
+                  >
+                    {feature.value ? "✓" : "✗"}
+                  </span>
+                </div>
               </div>
             ))}
           </div>
         </CardContent>
       </Card>
 
-      {/* Connection Info */}
-      {browserInfo.connectionType || browserInfo.connectionEffectiveType ? (
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>Network Connection</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2 text-sm">
-              {browserInfo.connectionType ? (
-                <div className="grid grid-cols-2 gap-2">
-                  <span className="font-medium">Connection Type:</span>
-                  <span>{browserInfo.connectionType}</span>
-                </div>
-              ) : null}
-              {browserInfo.connectionEffectiveType ? (
-                <div className="grid grid-cols-2 gap-2">
-                  <span className="font-medium">Effective Type:</span>
-                  <span>{browserInfo.connectionEffectiveType}</span>
-                </div>
-              ) : null}
-              {browserInfo.connectionDownlink ? (
-                <div className="grid grid-cols-2 gap-2">
-                  <span className="font-medium">Downlink:</span>
-                  <span>{browserInfo.connectionDownlink} Mbps</span>
-                </div>
-              ) : null}
-              {browserInfo.connectionRtt ? (
-                <div className="grid grid-cols-2 gap-2">
-                  <span className="font-medium">RTT:</span>
-                  <span>{browserInfo.connectionRtt} ms</span>
-                </div>
-              ) : null}
-            </div>
-          </CardContent>
-        </Card>
-      ) : null}
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

@@ -2,7 +2,9 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { getAllTools } from "../client/src/data/tools.js";
+import { getAllTools, getToolByPath } from "../client/src/data/tools.js";
+import { renderExplanationsHtml } from "./render-explanations.js";
+import { HOMEPAGE_TITLE, getToolPageTitle } from "../shared/page-title.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,8 +20,7 @@ function buildToolsMetadata(): Record<
   > = {
     // Homepage metadata
     "/": {
-      title:
-        "FreeDevTool.App - Free, Secure, Open Source, and Offline Developer Tools",
+      title: HOMEPAGE_TITLE,
       description:
         "Open source offline developer tools designed for privacy. Free utilities including converters, formatters, encoders, text tools, and hardware testing - built to work without network requests.",
       keywords:
@@ -31,7 +32,7 @@ function buildToolsMetadata(): Record<
   const allTools = getAllTools();
   allTools.forEach(tool => {
     metadata[tool.path] = {
-      title: `${tool.metadata.title} | FreeDevTool.App`,
+      title: getToolPageTitle(tool),
       description: tool.metadata.description,
       keywords: tool.metadata.keywords.join(", "),
     };
@@ -73,6 +74,14 @@ function generateRouteHTML(
 ) {
   const metadata = toolsMetadata[route] || toolsMetadata["/"];
 
+  let ssrExplanations = "";
+  if (route.startsWith("/tools/")) {
+    const tool = getToolByPath(route);
+    if (tool?.explanations) {
+      ssrExplanations = renderExplanationsHtml(tool.explanations, route);
+    }
+  }
+
   const html = `<!doctype html>
 <html lang="en">
   <head>
@@ -109,7 +118,7 @@ function generateRouteHTML(
     <link rel="stylesheet" crossorigin href="${assets.cssFile}">
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"></div>${ssrExplanations ? `\n    ${ssrExplanations}` : ""}
   </body>
 </html>`;
 

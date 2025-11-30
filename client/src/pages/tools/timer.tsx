@@ -1,4 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,7 +23,6 @@ import {
   X,
   Timer as TimerIcon,
   VolumeX,
-  Share,
 } from "lucide-react";
 import {
   formatTimerTime,
@@ -28,6 +31,14 @@ import {
 } from "@/lib/time-tools";
 import { getParam, updateURL, copyShareableURL } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 interface TimerInstance {
   id: string;
@@ -41,6 +52,7 @@ interface TimerInstance {
 }
 
 export default function Timer() {
+  const tool = getToolByPath("/tools/timer");
   // Default timer setup - 5 minutes as per STYLE.md requirement
   const [newTimerHours, setNewTimerHours] = useState(0);
   const [newTimerMinutes, setNewTimerMinutes] = useState(5);
@@ -400,26 +412,71 @@ export default function Timer() {
     setShowAddTimer(true);
   };
 
+  // Reset to default add-timer form values
+  const handleReset = () => {
+    setNewTimerHours(0);
+    setNewTimerMinutes(5);
+    setNewTimerSeconds(0);
+    setNewTimerName("");
+    setNewTimerAlarmCount(3);
+    setShowAddTimer(false);
+    toast({
+      title: "Reset",
+      description: "Timer form reset to defaults",
+    });
+  };
+
+  // Clear all timers
+  const handleClear = () => {
+    stopAllTimers();
+    setTimers([]);
+    toast({
+      title: "Cleared",
+      description: "All timers have been removed",
+    });
+  };
+
+  // Check if form is at default values
+  const isAtDefault =
+    newTimerHours === 0 &&
+    newTimerMinutes === 5 &&
+    newTimerSeconds === 0 &&
+    newTimerName === "" &&
+    newTimerAlarmCount === 3 &&
+    !showAddTimer;
+
+  // Check if there's modified data
+  const hasModifiedData = timers.length > 0 || showAddTimer;
+
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       {/* Header */}
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
-            Timer
-          </h2>
-          <p className="text-slate-600 dark:text-slate-400">
-            Create multiple timers with customizable alarms. Use Enter, Space,
-            and Escape for quick control.
-          </p>
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              Timer
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Create multiple timers with customizable alarms. Use Enter, Space,
+              and Escape for quick control.
+            </p>
+          </div>
+          <SecurityBanner variant="compact" />
         </div>
-        <div className="flex gap-2">
+      </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
           <Button
             onClick={() => setShowAddTimer(!showAddTimer)}
             data-testid="add-timer-toggle"
           >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Timer
+            <Plus className="w-4 h-4 mr-1" />
+            Add
           </Button>
           {timers.length > 0 && (
             <Button
@@ -427,20 +484,31 @@ export default function Timer() {
               variant="outline"
               data-testid="stop-all-timers"
             >
-              <Square className="w-4 h-4 mr-2" />
+              <Square className="w-4 h-4 mr-1" />
               Stop All
             </Button>
           )}
-          <Button
+          <ToolButton
+            variant="share"
             onClick={copyShareURL}
-            variant="outline"
-            size="icon"
-            data-testid="share-timer"
-          >
-            <Share className="w-4 h-4" />
-          </Button>
-        </div>
-      </div>
+            tooltip="Copy shareable timer URL"
+          />
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset timer form to defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Remove all timers"
+            hasModifiedData={hasModifiedData}
+            disabled={timers.length === 0}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       {/* Add Timer Form */}
       {showAddTimer ? (
@@ -691,34 +759,7 @@ export default function Timer() {
         </CardContent>
       </Card>
 
-      {/* Keyboard Shortcuts Info */}
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>Keyboard Shortcuts</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-            <div className="flex items-center gap-2">
-              <kbd className="px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded text-xs">
-                Enter
-              </kbd>
-              <span>Add new timer</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <kbd className="px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded text-xs">
-                Space
-              </kbd>
-              <span>Start/Pause first timer</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <kbd className="px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded text-xs">
-                Escape
-              </kbd>
-              <span>Stop all timers</span>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }
