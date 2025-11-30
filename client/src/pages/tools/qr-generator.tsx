@@ -434,7 +434,6 @@ export default function QRGenerator() {
                   id="qr-text-input"
                   placeholder={currentPreset.placeholder}
                   value={inputText}
-                  placeholder={currentPreset.placeholder}
                   onChange={e => setInputText(e.target.value)}
                   rows={4}
                   data-testid="qr-input"
