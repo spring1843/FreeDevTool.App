@@ -19,6 +19,7 @@ export interface TextAreaProps {
   readOnly?: boolean;
   autoFocus?: boolean;
   rows?: number;
+  maxHeight?: string;
   placeholder?: string;
   id?: string;
   minHeight?: string;
@@ -27,7 +28,14 @@ export interface TextAreaProps {
 }
 
 const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
-  ({ className, value, onChange, theme = "light", ...props }) => {
+  ({
+    className,
+    value,
+    onChange,
+    theme = "light",
+    maxHeight = "500px",
+    ...props
+  }) => {
     const baseClassName = cn(
       "w-full rounded-md border border-input bg-background text-sm",
       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
@@ -245,6 +253,7 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
             if (onChange) onChange(createSyntheticChangeEvent(val));
           }}
           minHeight={props.minHeight}
+          maxHeight={maxHeight}
           lang={props.lang}
           placeholder={props.placeholder}
           readOnly={props.readOnly}
