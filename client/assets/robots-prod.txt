@@ -1,0 +1,6 @@
+# prod
+
+User-agent: *
+Allow: /
+Disallow:
+Sitemap: https://freedevtool.app/sitemap.xml

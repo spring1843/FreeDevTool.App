@@ -261,7 +261,8 @@ export default function WebcamTest() {
 
           <ToolButtonGroup>
             <ActionButtonGroup>
-              {!hasPermission ? (
+              {!hasPermission &&
+              !(devices.length > 0 && devices.some(device => device.label)) ? (
                 <ToolButton
                   variant="custom"
                   onClick={requestPermission}
