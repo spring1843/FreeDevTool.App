@@ -10,15 +10,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CopyButton } from "@/components/ui/copy-button";
+import { FileSpreadsheet, Code2, RefreshCw } from "lucide-react";
 import {
-  FileSpreadsheet,
-  Code2,
-  Upload,
-  Share,
-  Download,
-  RefreshCw,
-} from "lucide-react";
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import {
   updateURL,
   copyShareableURL,
@@ -41,8 +41,13 @@ const delimiters = [
 ];
 
 import { DEFAULT_CSV_TO_JSON } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
 
 export default function CSVToJSON() {
+  const tool = getToolByPath("/tools/csv-to-json");
   const [csvInput, setCsvInput] = useState(DEFAULT_CSV_TO_JSON);
   const [selectedDelimiter, setSelectedDelimiter] = useState(",");
   const [jsonOutput, setJsonOutput] = useState("");
@@ -236,44 +241,76 @@ Jane Smith      jane@example.com        25      Marketing`,
     setError("");
   };
 
-  const downloadJSON = () => {
-    if (!jsonOutput) return;
-
-    const blob = new Blob([jsonOutput], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "data.json";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+  const handleReset = () => {
+    setCsvInput(DEFAULT_CSV_TO_JSON);
+    setSelectedDelimiter(",");
+    setParsedData([]);
+    setJsonOutput("");
+    setHeaders([]);
+    setRowCount(0);
+    setError("");
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = e => {
-      const content = e.target?.result as string;
-      setCsvInput(content);
-    };
-    reader.readAsText(file);
-  };
+  const hasModifiedData =
+    csvInput !== DEFAULT_CSV_TO_JSON && csvInput.trim() !== "";
+  const isAtDefault =
+    csvInput === DEFAULT_CSV_TO_JSON && selectedDelimiter === ",";
 
   return (
-    <div className="container mx-auto p-6 max-w-7xl">
+    <div className="max-w-6xl mx-auto">
+      {/* Header */}
       <div className="mb-6">
-        <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-          <FileSpreadsheet className="h-8 w-8 text-blue-600" />
-          CSV to JSON Converter
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          Convert CSV data to JSON format with customizable delimiters and
-          formatting options.
-        </p>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+              <FileSpreadsheet className="h-8 w-8 text-blue-600" />
+              CSV to JSON Converter
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Convert CSV data to JSON format with customizable delimiters and
+              formatting options.
+            </p>
+          </div>
+          <SecurityBanner variant="compact" />
+        </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={convertCSV}
+            icon={<RefreshCw className="w-4 h-4 mr-2" />}
+            tooltip="Convert CSV to JSON"
+            data-testid="convert-button"
+          >
+            Convert
+          </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={shareConverter}
+            tooltip="Copy shareable URL to clipboard"
+            data-testid="share-converter-button"
+          />
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={clearAll}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={csvInput.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
@@ -284,14 +321,14 @@ Jane Smith      jane@example.com        25      Marketing`,
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex flex-wrap gap-2 items-center">
+            <div className="flex items-center gap-2">
               <Label htmlFor="delimiter-select">Delimiter:</Label>
               <Select
                 value={selectedDelimiter}
                 onValueChange={setSelectedDelimiter}
                 data-testid="delimiter-select"
               >
-                <SelectTrigger className="w-48">
+                <SelectTrigger className="w-40">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -302,33 +339,6 @@ Jane Smith      jane@example.com        25      Marketing`,
                   ))}
                 </SelectContent>
               </Select>
-
-              <div className="flex gap-2 ml-auto">
-                <Button
-                  onClick={clearAll}
-                  variant="outline"
-                  size="sm"
-                  data-testid="clear-button"
-                >
-                  Clear
-                </Button>
-                <Button
-                  onClick={() => document.getElementById("file-input")?.click()}
-                  variant="outline"
-                  size="sm"
-                  data-testid="upload-file-button"
-                >
-                  <Upload className="w-4 h-4 mr-1" />
-                  Upload
-                </Button>
-                <input
-                  id="file-input"
-                  type="file"
-                  accept=".csv"
-                  onChange={handleFileUpload}
-                  className="hidden"
-                />
-              </div>
             </div>
 
             <TextArea
@@ -355,26 +365,6 @@ Jane Smith,jane@example.com,25"
                 </p>
               </div>
             ) : null}
-
-            <div className="flex gap-2">
-              <Button
-                onClick={convertCSV}
-                className="flex-1"
-                data-testid="convert-button"
-              >
-                <RefreshCw className="w-4 h-4 mr-2" />
-                Convert
-              </Button>
-
-              <Button
-                onClick={shareConverter}
-                variant="outline"
-                data-testid="share-converter-button"
-              >
-                <Share className="w-4 h-4 mr-2" />
-                Share
-              </Button>
-            </div>
 
             <div className="grid grid-cols-2 gap-2">
               <Button
@@ -426,23 +416,6 @@ Jane Smith,jane@example.com,25"
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex gap-2">
-              <CopyButton
-                text={jsonOutput}
-                className="flex-1"
-                data-testid="copy-json-button"
-              />
-              <Button
-                onClick={downloadJSON}
-                variant="outline"
-                disabled={!jsonOutput}
-                data-testid="download-json-button"
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Download
-              </Button>
-            </div>
-
             <TextArea
               id="output"
               value={jsonOutput}
@@ -451,7 +424,8 @@ Jane Smith,jane@example.com,25"
               className="min-h-[200px] font-mono text-sm"
               data-testid="json-output"
               rows={10}
-              lang="javascript"
+              lang="json"
+              fileExtension="json"
               minHeight="200px"
               theme={resolvedTheme}
             />
@@ -469,6 +443,7 @@ Jane Smith,jane@example.com,25"
           </CardContent>
         </Card>
       </div>
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

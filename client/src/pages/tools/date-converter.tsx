@@ -3,11 +3,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, RotateCcw, Clock, Copy } from "lucide-react";
+import { Copy, Clock } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import {
+  ResetButton,
+  ClearButton,
+  NowButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useToast } from "@/hooks/use-toast";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 interface DateFormat {
   name: string;
@@ -154,6 +165,7 @@ const DATE_FORMATS = [
 ];
 
 export default function DateConverter() {
+  const tool = getToolByPath("/tools/date-converter");
   const [inputDate, setInputDate] = useState("1699123456");
   const [formats, setFormats] = useState<DateFormat[]>([]);
   const { toast } = useToast();
@@ -264,6 +276,15 @@ export default function DateConverter() {
     setFormats([]);
   };
 
+  const handleClear = () => {
+    setInputDate("");
+    setFormats([]);
+  };
+
+  const DEFAULT_DATE = "1699123456";
+  const hasModifiedData = inputDate !== DEFAULT_DATE && inputDate.trim() !== "";
+  const isAtDefault = inputDate === DEFAULT_DATE;
+
   const handleCurrentTime = () => {
     const now = new Date();
     // Use the user's timezone for current time display
@@ -295,8 +316,11 @@ export default function DateConverter() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Date Converter
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Convert between 20 essential date formats: Unix timestamps, ISO
@@ -306,6 +330,31 @@ export default function DateConverter() {
           <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <NowButton
+            onClick={handleCurrentTime}
+            tooltip="Set to current time"
+            toastTitle="Time updated"
+            toastDescription="Set to current timestamp"
+          />
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear date input"
+            hasModifiedData={hasModifiedData}
+            disabled={inputDate.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <Card className="mb-6">
         <CardHeader>
@@ -328,25 +377,6 @@ export default function DateConverter() {
               Supports: Unix timestamps (seconds/milliseconds), ISO 8601, RFC
               formats, human-readable dates
             </p>
-          </div>
-
-          <div className="flex gap-3">
-            <Button
-              onClick={convertDate}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-              data-testid="convert-button"
-            >
-              <Calendar className="w-4 h-4 mr-2" />
-              Convert Date
-            </Button>
-            <Button onClick={handleCurrentTime} variant="outline">
-              <Clock className="w-4 h-4 mr-2" />
-              Use Current Time
-            </Button>
-            <Button onClick={handleReset} variant="outline">
-              <RotateCcw className="w-4 h-4 mr-2" />
-              Reset
-            </Button>
           </div>
         </CardContent>
       </Card>
@@ -380,7 +410,7 @@ export default function DateConverter() {
                   <h3 className="text-lg font-medium mb-3 text-blue-600 dark:text-blue-400">
                     {category}
                   </h3>
-                  <div className="grid gap-3">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                     {categoryFormats.map((format, index) => (
                       <div
                         key={index}
@@ -437,83 +467,7 @@ export default function DateConverter() {
         </Card>
       )}
 
-      {/* Input Examples Documentation */}
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>Input Examples</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-            <div>
-              <h4 className="font-semibold mb-3 text-blue-600 dark:text-blue-400">
-                Timestamp Formats
-              </h4>
-              <ul className="space-y-2 text-xs">
-                <li>
-                  <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
-                    1699123456
-                  </code>{" "}
-                  - Unix timestamp (seconds)
-                </li>
-                <li>
-                  <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
-                    1699123456000
-                  </code>{" "}
-                  - Unix milliseconds
-                </li>
-                <li>
-                  <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
-                    2024-01-15T14:30:45Z
-                  </code>{" "}
-                  - ISO 8601
-                </li>
-                <li>
-                  <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
-                    Jan 15, 2024
-                  </code>{" "}
-                  - Human readable
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-3 text-green-600 dark:text-green-400">
-                Output Categories
-              </h4>
-              <ul className="space-y-2 text-xs">
-                <li>
-                  <strong>Timestamps:</strong> Unix seconds & milliseconds
-                </li>
-                <li>
-                  <strong>ISO Standards:</strong> ISO 8601 full, date-only,
-                  time-only
-                </li>
-                <li>
-                  <strong>RFC Standards:</strong> RFC 2822, RFC 3339
-                </li>
-                <li>
-                  <strong>Regional:</strong> US, European, ISO numeric formats
-                </li>
-                <li>
-                  <strong>Database:</strong> SQL datetime, MongoDB ObjectId
-                </li>
-                <li>
-                  <strong>Human Readable:</strong> Full text, short text, 12/24h
-                  time
-                </li>
-                <li>
-                  <strong>Web/API:</strong> HTTP headers, JSON, cookies
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="text-xs text-gray-600 dark:text-gray-400 mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
-            <strong>Auto-detection:</strong> Simply paste any timestamp, ISO
-            date, or human-readable date. The converter automatically detects
-            the format and converts to all {DATE_FORMATS.length} essential
-            formats.
-          </div>
-        </CardContent>
-      </Card>
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

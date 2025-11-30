@@ -272,11 +272,19 @@ export function countTextStats(text: string): TextStats {
     .split(/\s+/)
     .filter(word => word.length > 0).length;
 
-  // Count sentences (split by sentence endings)
-  const sentences = text
-    .split(/[.!?]+/)
-    .filter(sentence => sentence.trim().length > 0).length;
-
+  // Count sentences (match sentence endings, handle trailing fragments)
+  const trimmed = text.trimEnd();
+  const matches = Array.from(trimmed.matchAll(/[.!?]+/g));
+  let sentences = matches.length;
+  if (
+    trimmed.length > 0 &&
+    (matches.length === 0 ||
+      matches[matches.length - 1].index! +
+        matches[matches.length - 1][0].length <
+        trimmed.length)
+  ) {
+    sentences += 1;
+  }
   // Count paragraphs (split by double newlines or more)
   const paragraphs = text
     .split(/\n\s*\n/)

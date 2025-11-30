@@ -11,11 +11,23 @@ import {
 } from "@/components/ui/select";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
-import { Badge } from "@/components/ui/badge";
-import { FileText, Copy, RotateCcw } from "lucide-react";
+import { FileText, Copy } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useToast } from "@/hooks/use-toast";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+
+const MAX_WORDS_LIMIT = 1000;
 
 const loremWords = [
   "lorem",
@@ -100,6 +112,7 @@ const loremWords = [
 ];
 
 export default function LoremGenerator() {
+  const tool = getToolByPath("/tools/lorem-generator");
   const [type, setType] = useState<"words" | "sentences" | "paragraphs">(
     "paragraphs"
   );
@@ -218,6 +231,17 @@ export default function LoremGenerator() {
     setGenerated("");
   };
 
+  const handleClear = () => {
+    setGenerated("");
+  };
+
+  const hasModifiedData = generated.trim() !== "";
+  const isAtDefault =
+    generated === "" &&
+    type === "paragraphs" &&
+    count === 3 &&
+    startWithLorem === true;
+
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(generated);
@@ -240,12 +264,15 @@ export default function LoremGenerator() {
   }, [generateLorem]);
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Lorem Ipsum Generator
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Generate placeholder text for design and development
@@ -254,6 +281,34 @@ export default function LoremGenerator() {
           <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={generateLorem}
+            tooltip="Generate Lorem Ipsum text"
+            className="bg-purple-600 hover:bg-purple-700 text-white"
+            icon={<FileText className="w-4 h-4 mr-2" />}
+          >
+            Generate Lorem
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset all settings to defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear generated text"
+            hasModifiedData={hasModifiedData}
+            disabled={generated.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <Card className="mb-6">
         <CardHeader>
@@ -284,11 +339,14 @@ export default function LoremGenerator() {
                 id="count"
                 type="number"
                 min="1"
-                max="100"
+                max={MAX_WORDS_LIMIT}
                 value={count}
                 onChange={e =>
                   setCount(
-                    Math.max(1, Math.min(100, parseInt(e.target.value) || 1))
+                    Math.max(
+                      1,
+                      Math.min(MAX_WORDS_LIMIT, parseInt(e.target.value) || 1)
+                    )
                   )
                 }
                 data-testid="count-input"
@@ -307,25 +365,6 @@ export default function LoremGenerator() {
               />
               <Label htmlFor="start-with-lorem">Start with "Lorem ipsum"</Label>
             </div>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="flex gap-3">
-              <Button
-                onClick={generateLorem}
-                className="bg-purple-600 hover:bg-purple-700 text-white"
-              >
-                <FileText className="w-4 h-4 mr-2" />
-                Generate Lorem
-              </Button>
-              <Button onClick={handleReset} variant="outline">
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Reset
-              </Button>
-            </div>
-            <Badge variant="outline">
-              {count} {type}
-            </Badge>
           </div>
         </CardContent>
       </Card>
@@ -364,19 +403,7 @@ export default function LoremGenerator() {
         </Card>
       ) : null}
 
-      <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-          About Lorem Ipsum:
-        </h3>
-        <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-          <div>• Industry standard placeholder text since the 1500s</div>
-          <div>• Based on a work by Cicero from 45 BC</div>
-          <div>• Scrambled Latin text that's readable but meaningless</div>
-          <div>
-            • Perfect for focusing on design without content distraction
-          </div>
-        </div>
-      </div>
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

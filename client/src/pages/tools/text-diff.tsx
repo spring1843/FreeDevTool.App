@@ -1,13 +1,23 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Badge } from "@/components/ui/badge";
-import { GitCompare, RotateCcw } from "lucide-react";
+import { GitCompare } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_TEXT_DIFF_1, DEFAULT_TEXT_DIFF_2 } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 interface DiffLine {
   type: "added" | "removed" | "unchanged" | "modified";
@@ -18,6 +28,7 @@ interface DiffLine {
 }
 
 export default function TextDiff() {
+  const tool = getToolByPath("/tools/text-diff");
   const [text1, setText1] = useState(DEFAULT_TEXT_DIFF_1);
   const [text2, setText2] = useState(DEFAULT_TEXT_DIFF_2);
   const [diffResult, setDiffResult] = useState<DiffLine[]>([]);
@@ -103,6 +114,19 @@ export default function TextDiff() {
     setDiffStats(null);
   };
 
+  const handleClear = () => {
+    setText1("");
+    setText2("");
+    setDiffResult([]);
+    setDiffStats(null);
+  };
+
+  const hasModifiedData =
+    (text1 !== DEFAULT_TEXT_DIFF_1 && text1.trim() !== "") ||
+    (text2 !== DEFAULT_TEXT_DIFF_2 && text2.trim() !== "");
+  const isAtDefault =
+    text1 === DEFAULT_TEXT_DIFF_1 && text2 === DEFAULT_TEXT_DIFF_2;
+
   useEffect(() => {
     calculateDiff();
   }, [calculateDiff]);
@@ -146,8 +170,11 @@ export default function TextDiff() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Text Diff
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Compare text differences side by side with detailed statistics
@@ -156,6 +183,103 @@ export default function TextDiff() {
           <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={calculateDiff}
+            tooltip="Compare both text inputs"
+            icon={<GitCompare className="w-4 h-4 mr-2" />}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Compare Text
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default examples"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all text"
+            hasModifiedData={hasModifiedData}
+            disabled={text1.trim() === "" && text2.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-red-600 dark:text-red-400">
+              Text 1 (Original)
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TextArea
+              id="input1"
+              value={text1}
+              onChange={e => setText1(e.target.value)}
+              placeholder="Enter original text here..."
+              data-testid="text1-input"
+              className="min-h-[300px] font-mono text-sm"
+              rows={15}
+              autoFocus={true}
+              minHeight="300px"
+              lang="plaintext"
+              fileExtension="txt"
+              theme={theme}
+              data-default-input="true"
+            />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-green-600 dark:text-green-400">
+              Text 2 (Modified)
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TextArea
+              id="input2"
+              value={text2}
+              onChange={e => setText2(e.target.value)}
+              placeholder="Enter modified text here..."
+              data-testid="text2-input"
+              className="min-h-[300px] font-mono text-sm"
+              rows={15}
+              minHeight="300px"
+              lang="plaintext"
+              fileExtension="txt"
+              theme={theme}
+            />
+          </CardContent>
+        </Card>
+      </div>
+
+      {diffResult.length > 0 && (
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Diff Results</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="border rounded-lg overflow-hidden">
+              <div className="grid grid-cols-2 gap-4 p-3 bg-gray-100 dark:bg-gray-800 border-b font-semibold text-sm">
+                <div>Original (Text 1)</div>
+                <div>Modified (Text 2)</div>
+              </div>
+              <div className="max-h-96 overflow-y-auto">
+                {diffResult.map((diff, index) => renderDiffLine(diff, index))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {diffStats ? (
         <Card className="mb-6">
@@ -196,86 +320,7 @@ export default function TextDiff() {
         </Card>
       ) : null}
 
-      <div className="mb-6 flex gap-3">
-        <Button
-          onClick={calculateDiff}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
-        >
-          <GitCompare className="w-4 h-4 mr-2" />
-          Compare Text
-        </Button>
-        <Button onClick={handleReset} variant="outline">
-          <RotateCcw className="w-4 h-4 mr-2" />
-          Reset
-        </Button>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-red-600 dark:text-red-400">
-              Text 1 (Original)
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <TextArea
-              id="input1"
-              value={text1}
-              onChange={e => setText1(e.target.value)}
-              placeholder="Enter original text here..."
-              data-testid="text1-input"
-              className="min-h-[300px] font-mono text-sm"
-              rows={15}
-              autoFocus={true}
-              minHeight="300px"
-              fileExtension="txt"
-              theme={theme}
-              data-default-input="true"
-            />
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-green-600 dark:text-green-400">
-              Text 2 (Modified)
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <TextArea
-              id="input2"
-              value={text2}
-              onChange={e => setText2(e.target.value)}
-              placeholder="Enter modified text here..."
-              data-testid="text2-input"
-              className="min-h-[300px] font-mono text-sm"
-              rows={15}
-              minHeight="300px"
-              fileExtension="txt"
-              theme={theme}
-            />
-          </CardContent>
-        </Card>
-      </div>
-
-      {diffResult.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Diff Results</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="border rounded-lg overflow-hidden">
-              <div className="grid grid-cols-2 gap-4 p-3 bg-gray-100 dark:bg-gray-800 border-b font-semibold text-sm">
-                <div>Original (Text 1)</div>
-                <div>Modified (Text 2)</div>
-              </div>
-              <div className="max-h-96 overflow-y-auto">
-                {diffResult.map((diff, index) => renderDiffLine(diff, index))}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

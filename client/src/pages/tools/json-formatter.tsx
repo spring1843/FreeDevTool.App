@@ -7,11 +7,22 @@ import { Code, Lightbulb } from "lucide-react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useState, useEffect, useCallback } from "react";
-import { ToolButton, ResetButton } from "@/components/ui/tool-button";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { DEFAULT_JSON } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function JsonFormatter() {
+  const tool = getToolByPath("/tools/json-formatter");
   const [input, setInput] = useState(DEFAULT_JSON);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -64,6 +75,15 @@ export default function JsonFormatter() {
     setError(null);
   };
 
+  const handleClear = () => {
+    setInput("");
+    setOutput("");
+    setError(null);
+  };
+
+  const hasModifiedData = input !== DEFAULT_JSON && input.trim() !== "";
+  const isAtDefault = input === DEFAULT_JSON;
+
   // Execute formatting with default value on component mount
   useEffect(() => {
     formatCode();
@@ -75,8 +95,11 @@ export default function JsonFormatter() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               JSON Formatter
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Format, validate, and minify JSON with syntax highlighting for
@@ -96,35 +119,47 @@ export default function JsonFormatter() {
       ) : null}
 
       {/* Controls */}
-      <div className="mb-6 flex flex-wrap gap-3">
-        <ToolButton
-          variant="custom"
-          onClick={formatCode}
-          icon={<Code className="w-4 h-4 mr-2" />}
-          tooltip="Format and beautify JSON code"
-        >
-          Format
-        </ToolButton>
-        <ToolButton
-          variant="custom"
-          onClick={minifyCode}
-          tooltip="Minify JSON to single line"
-        >
-          Minify
-        </ToolButton>
-        <ToolButton
-          variant="custom"
-          onClick={validateCode}
-          icon={<Lightbulb className="w-4 h-4 mr-2" />}
-          tooltip="Validate JSON syntax"
-        >
-          Validate
-        </ToolButton>
-        <ResetButton
-          onClick={handleReset}
-          tooltip="Reset to default JSON example"
-        />
-      </div>
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={formatCode}
+            icon={<Code className="w-4 h-4 mr-2" />}
+            tooltip="Format and beautify JSON code"
+          >
+            Format
+          </ToolButton>
+          <ToolButton
+            variant="custom"
+            onClick={minifyCode}
+            tooltip="Minify JSON to single line"
+          >
+            Minify
+          </ToolButton>
+          <ToolButton
+            variant="custom"
+            onClick={validateCode}
+            icon={<Lightbulb className="w-4 h-4 mr-2" />}
+            tooltip="Validate JSON syntax"
+          >
+            Validate
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default JSON example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={input.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       {/* Editor Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -170,29 +205,7 @@ export default function JsonFormatter() {
         </Card>
       </div>
 
-      {/* Pro Tips */}
-      <div className="mt-8">
-        <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
-          <CardContent className="p-6">
-            <div className="flex items-start space-x-3">
-              <Lightbulb className="text-blue-600 dark:text-blue-400 mt-1 h-5 w-5" />
-              <div>
-                <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">
-                  Pro Tips
-                </h4>
-                <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-                  <li>• Use Ctrl+A to select all text quickly</li>
-                  <li>
-                    • The formatter will auto-detect and fix common JSON issues
-                  </li>
-                  <li>• Validation shows specific error locations</li>
-                  <li>• Minified JSON is optimized for data transmission</li>
-                </ul>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

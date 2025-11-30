@@ -10,13 +10,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowLeftRight, Copy, Check, Calculator, Share } from "lucide-react";
+import { ArrowLeftRight, Copy, Check, Calculator } from "lucide-react";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import {
   updateURL,
   copyShareableURL,
   getValidatedParam,
 } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
+import { getToolByPath } from "@/data/tools";
+import { DEFAULT_UNIT_CONVERTER } from "@/data/defaults";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
 
 interface UnitGroup {
   name: string;
@@ -155,10 +167,12 @@ const unitGroups: { [key: string]: UnitGroup } = {
 };
 
 export default function UnitConverter() {
+  const tool = getToolByPath("/tools/unit-converter");
   const [selectedCategory, setSelectedCategory] = useState("weight");
   const [fromUnit, setFromUnit] = useState("");
   const [toUnit, setToUnit] = useState("");
-  const [inputValue, setInputValue] = useState("1");
+  // Default value aligns with test expectation of 100
+  const [inputValue, setInputValue] = useState(DEFAULT_UNIT_CONVERTER);
   const [result, setResult] = useState("");
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
@@ -182,7 +196,7 @@ export default function UnitConverter() {
       type: "enum",
       allowedValues: categoryUnits,
     });
-    const urlValue = getValidatedParam("val", "1", {
+    const urlValue = getValidatedParam("val", DEFAULT_UNIT_CONVERTER, {
       type: "string",
       pattern: /^-?\d*\.?\d*$/,
       maxLength: 20,
@@ -306,6 +320,26 @@ export default function UnitConverter() {
     setToUnit(temp);
   };
 
+  const handleReset = () => {
+    setSelectedCategory("weight");
+    setInputValue(DEFAULT_UNIT_CONVERTER);
+    const weightUnits = Object.keys(unitGroups["weight"].units);
+    setFromUnit(weightUnits[0]);
+    setToUnit(weightUnits[1] || weightUnits[0]);
+    setResult("");
+  };
+
+  const handleClear = () => {
+    // Clear sets numeric default minimal value per tests (expect "0" after clear confirmation)
+    setInputValue("0");
+    setResult("");
+  };
+
+  const hasModifiedData =
+    inputValue !== DEFAULT_UNIT_CONVERTER && inputValue.trim() !== "";
+  const isAtDefault =
+    inputValue === DEFAULT_UNIT_CONVERTER && selectedCategory === "weight";
+
   const copyResult = async () => {
     if (result) {
       try {
@@ -338,17 +372,42 @@ export default function UnitConverter() {
   const unitOptions = Object.entries(currentCategory.units);
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
-          Unit Converter
-        </h2>
-        <p className="text-slate-600 dark:text-slate-400">
-          Convert between various units of weight, distance, area, volume,
-          pressure, and more
-        </p>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              Unit Converter
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Convert between various units of weight, distance, area, volume,
+              pressure, and more
+            </p>
+          </div>
+          <SecurityBanner variant="compact" />
+        </div>
       </div>
+
+      <ToolButtonGroup className="mb-6 justify-end">
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default settings"
+            hasModifiedData={isAtDefault ? false : hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear input value"
+            hasModifiedData={hasModifiedData}
+            disabled={inputValue.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       {/* Category Selection */}
       <Card className="mb-6">
@@ -373,7 +432,6 @@ export default function UnitConverter() {
           </Select>
         </CardContent>
       </Card>
-
       {/* Conversion Interface */}
       <Card className="mb-6">
         <CardHeader>
@@ -468,26 +526,23 @@ export default function UnitConverter() {
               </div>
 
               <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700">
-                <Button
+                <ToolButton
+                  variant="share"
                   onClick={shareConversion}
-                  variant="outline"
                   size="sm"
                   className="w-full flex items-center justify-center space-x-2"
+                  tooltip="Copy shareable URL to clipboard"
                   data-testid="share-conversion-button"
                 >
-                  <Share className="w-4 h-4" />
-                  <span>Share Conversion</span>
-                </Button>
+                  Share Conversion
+                </ToolButton>
               </div>
             </div>
           ) : null}
         </CardContent>
       </Card>
-
-      <div className="flex justify-center my-8" />
-
       {/* Quick Conversion Reference */}
-      <Card className="mb-8">
+      <Card className="mb-6 mt-6">
         <CardHeader>
           <CardTitle>Common {currentCategory.name} Conversions</CardTitle>
         </CardHeader>
@@ -509,38 +564,7 @@ export default function UnitConverter() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle>About Unit Converter</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-            <div>
-              <h4 className="font-semibold mb-2">Supported Categories:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• Weight/Mass (mg, g, kg, oz, lb, stone, ton)</li>
-                <li>• Distance/Length (mm, cm, m, km, in, ft, yd, mi)</li>
-                <li>• Area (mm², cm², m², km², in², ft², acre, hectare)</li>
-                <li>• Volume (ml, l, m³, fl oz, cup, pint, quart, gallon)</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-2">Advanced Categories:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• Pressure (Pa, bar, atm, psi, torr, mmHg)</li>
-                <li>• Temperature (°C, °F, K, °R)</li>
-                <li>• Energy (J, cal, Wh, BTU, eV)</li>
-                <li>• Power (W, kW, hp, BTU/h)</li>
-                <li>• Speed (m/s, km/h, mph, knot, Mach)</li>
-              </ul>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="flex justify-center mt-8" />
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }
