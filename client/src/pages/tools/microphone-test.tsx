@@ -469,7 +469,13 @@ export default function MicrophoneTest() {
                   tooltip={
                     isPlaying ? "Stop playback" : "Play the recorded audio"
                   }
-                  icon={isPlaying ? <Pause className="w-4 h-4 mr-2" /> : <Play className="w-4 h-4 mr-2" />}
+                  icon={
+                    isPlaying ? (
+                      <Pause className="w-4 h-4 mr-2" />
+                    ) : (
+                      <Play className="w-4 h-4 mr-2" />
+                    )
+                  }
                   className="flex-1"
                 >
                   {isPlaying ? "Stop Playback" : "Play Recording"}
