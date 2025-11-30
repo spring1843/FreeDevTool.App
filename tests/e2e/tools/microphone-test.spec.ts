@@ -25,7 +25,9 @@ test.describe("Microphone Test Tool", () => {
     await expect(dropdown).not.toBeVisible();
 
     // The request permission button should be visible and enabled
-    const requestButton = page.getByTestId("request-microphone-permission");
+    const requestButton = page.getByRole("button", {
+      name: "Request Microphone Permission",
+    });
     await expect(requestButton).toBeVisible();
     await expect(requestButton).toBeEnabled();
 

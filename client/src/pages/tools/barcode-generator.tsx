@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -11,14 +10,26 @@ import {
 } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { BarChart3, Download, RotateCcw } from "lucide-react";
+import { BarChart3 } from "lucide-react";
 import { useState, useRef, useEffect, useCallback } from "react";
 import JsBarcode from "jsbarcode";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_BARCODE_GENERATOR } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function BarcodeGenerator() {
+  const tool = getToolByPath("/tools/barcode-generator");
   const [text, setText] = useState(DEFAULT_BARCODE_GENERATOR);
   const [format, setFormat] = useState("CODE128");
   const [width, setWidth] = useState(2);
@@ -127,6 +138,20 @@ export default function BarcodeGenerator() {
     setError(null);
   };
 
+  const handleClear = () => {
+    setText("");
+    setError(null);
+  };
+
+  const hasModifiedData =
+    text !== DEFAULT_BARCODE_GENERATOR && text.trim() !== "";
+  const isAtDefault =
+    text === DEFAULT_BARCODE_GENERATOR &&
+    format === "CODE128" &&
+    width === 2 &&
+    height === 100 &&
+    displayValue === true;
+
   const getFormatInfo = (formatValue: string) =>
     barcodeFormats.find(f => f.value === formatValue);
 
@@ -177,8 +202,11 @@ export default function BarcodeGenerator() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Barcode Generator
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Generate various barcode formats for products and inventory
@@ -187,6 +215,41 @@ export default function BarcodeGenerator() {
           <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={generateBarcode}
+            disabled={!text.trim() || !!inputError}
+            tooltip="Generate barcode with current settings"
+            className="bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
+            icon={<BarChart3 className="w-4 h-4 mr-2" />}
+          >
+            Generate Barcode
+          </ToolButton>
+          <ToolButton
+            variant="download"
+            onClick={downloadBarcode}
+            disabled={!!error || !!inputError}
+            tooltip="Download barcode as PNG"
+          />
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset all settings to defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear text input"
+            hasModifiedData={hasModifiedData}
+            disabled={text.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       {error || inputError ? (
         <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
@@ -222,7 +285,7 @@ export default function BarcodeGenerator() {
             <div>
               <Label htmlFor="format">Barcode Format</Label>
               <Select value={format} onValueChange={setFormat}>
-                <SelectTrigger>
+                <SelectTrigger data-testid="format-select">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -285,39 +348,6 @@ export default function BarcodeGenerator() {
               />
               <Label htmlFor="display-value">Display text below barcode</Label>
             </div>
-
-            <div className="flex gap-3">
-              <Button
-                onClick={generateBarcode}
-                disabled={!text.trim() || !!inputError}
-                className="bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
-                title="Generate the barcode with the current settings"
-                id="generate"
-              >
-                <BarChart3 className="w-4 h-4 mr-2" />
-                Generate Barcode
-              </Button>
-              <Button
-                onClick={downloadBarcode}
-                variant="outline"
-                disabled={!!error || !!inputError}
-                title="Download barcode as a PNG file."
-                id="download"
-              >
-                <Download className="w-4 h-4  mr-2" />
-                Download
-              </Button>
-              <Button
-                onClick={handleReset}
-                variant="outline"
-                disabled={text === DEFAULT_BARCODE_GENERATOR}
-                id="reset"
-                title="Reset to default value"
-              >
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Reset
-              </Button>
-            </div>
           </CardContent>
         </Card>
 
@@ -339,39 +369,7 @@ export default function BarcodeGenerator() {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-          <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-            Common Use Cases:
-          </h3>
-          <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-            <li>
-              • <strong>EAN-13/UPC:</strong> Retail products
-            </li>
-            <li>
-              • <strong>CODE 128:</strong> Shipping and logistics
-            </li>
-            <li>
-              • <strong>CODE 39:</strong> Industrial applications
-            </li>
-            <li>
-              • <strong>ITF-14:</strong> Packaging and cases
-            </li>
-          </ul>
-        </div>
-
-        <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-          <h3 className="font-semibold text-green-800 dark:text-green-200 mb-2">
-            Tips:
-          </h3>
-          <ul className="text-sm text-green-700 dark:text-green-300 space-y-1">
-            <li>• Use CODE 128 for maximum compatibility</li>
-            <li>• EAN/UPC codes need specific lengths</li>
-            <li>• Test with your barcode scanner</li>
-            <li>• Consider printing size and resolution</li>
-          </ul>
-        </div>
-      </div>
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

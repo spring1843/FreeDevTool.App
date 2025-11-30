@@ -1,16 +1,27 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { formatMarkdown } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { FileText, RotateCcw } from "lucide-react";
+import { FileText } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_MARKDOWN } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function MarkdownFormatter() {
+  const tool = getToolByPath("/tools/markdown-formatter");
   const [input, setInput] = useState(DEFAULT_MARKDOWN);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -41,6 +52,15 @@ export default function MarkdownFormatter() {
     setError(null);
   };
 
+  const handleClear = () => {
+    setInput("");
+    setOutput("");
+    setError(null);
+  };
+
+  const hasModifiedData = input !== DEFAULT_MARKDOWN && input.trim() !== "";
+  const isAtDefault = input === DEFAULT_MARKDOWN;
+
   useEffect(() => {
     formatCode();
   }, [formatCode]);
@@ -50,8 +70,11 @@ export default function MarkdownFormatter() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Markdown Formatter
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Format and beautify Markdown documents
@@ -69,19 +92,33 @@ export default function MarkdownFormatter() {
         </Alert>
       ) : null}
 
-      <div className="mb-6 flex gap-4">
-        <Button
-          onClick={formatCode}
-          className="bg-purple-600 hover:bg-purple-700 text-white"
-        >
-          <FileText className="w-4 h-4 mr-2" />
-          Format Markdown
-        </Button>
-        <Button onClick={handleReset} variant="outline">
-          <RotateCcw className="w-4 h-4 mr-2" />
-          Reset
-        </Button>
-      </div>
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={formatCode}
+            icon={<FileText className="w-4 h-4 mr-2" />}
+            tooltip="Format and beautify Markdown"
+            className="bg-purple-600 hover:bg-purple-700 text-white"
+          >
+            Format Markdown
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={input.trim() === "" && output.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
@@ -126,57 +163,7 @@ export default function MarkdownFormatter() {
         </Card>
       </div>
 
-      <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-          Markdown Syntax:
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-blue-700 dark:text-blue-300">
-          <div>
-            <div>
-              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-                # Header 1
-              </span>
-            </div>
-            <div>
-              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-                ## Header 2
-              </span>
-            </div>
-            <div>
-              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-                **bold**
-              </span>
-            </div>
-            <div>
-              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-                *italic*
-              </span>
-            </div>
-          </div>
-          <div>
-            <div>
-              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-                - List item
-              </span>
-            </div>
-            <div>
-              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-                1. Numbered
-              </span>
-            </div>
-            <div>
-              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-                [Link](url)
-              </span>
-            </div>
-            <div>
-              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-                `code`
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

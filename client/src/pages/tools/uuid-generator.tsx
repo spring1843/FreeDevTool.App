@@ -12,12 +12,24 @@ import {
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Badge } from "@/components/ui/badge";
-import { RefreshCw, Copy, RotateCcw } from "lucide-react";
+import { RefreshCw, Copy } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function UUIDGenerator() {
+  const tool = getToolByPath("/tools/uuid-generator");
   const [uuids, setUuids] = useState<string[]>([]);
   const [version, setVersion] = useState<1 | 4>(4);
   const [count, setCount] = useState(1);
@@ -79,6 +91,13 @@ export default function UUIDGenerator() {
     setFormat("standard");
   };
 
+  const handleClear = () => {
+    setUuids([]);
+  };
+
+  const hasModifiedData = uuids.length > 0;
+  const isAtDefault = version === 4 && count === 1 && format === "standard";
+
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -114,12 +133,15 @@ export default function UUIDGenerator() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               UUID Generator
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Generate UUIDs (v1, v4) for unique identifiers
@@ -128,6 +150,34 @@ export default function UUIDGenerator() {
           <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={generateUUID}
+            tooltip="Generate new UUIDs"
+            className="bg-purple-600 hover:bg-purple-700 text-white"
+            icon={<RefreshCw className="w-4 h-4 mr-2" />}
+          >
+            Generate UUIDs
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset all settings to defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear generated UUIDs"
+            hasModifiedData={hasModifiedData}
+            disabled={uuids.length === 0}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <Card className="mb-6">
         <CardHeader>
@@ -189,26 +239,6 @@ export default function UUIDGenerator() {
               </Select>
             </div>
           </div>
-
-          <div className="flex items-center justify-between">
-            <div className="flex gap-3">
-              <Button
-                onClick={generateUUID}
-                className="bg-purple-600 hover:bg-purple-700 text-white"
-              >
-                <RefreshCw className="w-4 h-4 mr-2" />
-                Generate UUIDs
-              </Button>
-              <Button onClick={handleReset} variant="outline">
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Reset
-              </Button>
-            </div>
-            <div className="flex items-center gap-2">
-              <Badge variant="outline">Version {version}</Badge>
-              <Badge variant="outline">{getFormatDescription(format)}</Badge>
-            </div>
-          </div>
         </CardContent>
       </Card>
 
@@ -216,7 +246,11 @@ export default function UUIDGenerator() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
-              Generated UUIDs
+              <div className="flex items-center gap-2">
+                Generated UUIDs
+                <Badge variant="outline">Version {version}</Badge>
+                <Badge variant="outline">{getFormatDescription(format)}</Badge>
+              </div>
               <div className="flex gap-2">
                 <Badge variant="outline">
                   {uuids.length} UUID{uuids.length > 1 ? "s" : ""}
@@ -275,27 +309,7 @@ export default function UUIDGenerator() {
         </Card>
       )}
 
-      <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-          UUID Information:
-        </h3>
-        <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-          <div>
-            <strong>Version 1:</strong> Timestamp-based, includes MAC address
-            (or random node)
-          </div>
-          <div>
-            <strong>Version 4:</strong> Randomly generated, most commonly used
-          </div>
-          <div>
-            <strong>Format:</strong> 8-4-4-4-12 hexadecimal digits (32 total)
-          </div>
-          <div>
-            <strong>Use cases:</strong> Database keys, session IDs, file names,
-            API tokens
-          </div>
-        </div>
-      </div>
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

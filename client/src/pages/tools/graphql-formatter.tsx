@@ -1,16 +1,27 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { formatGraphQL } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Code, RotateCcw } from "lucide-react";
+import { Code } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_GRAPHQL } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function GraphQLFormatter() {
+  const tool = getToolByPath("/tools/graphql-formatter");
   const [input, setInput] = useState(DEFAULT_GRAPHQL);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -41,6 +52,15 @@ export default function GraphQLFormatter() {
     setError(null);
   };
 
+  const handleClear = () => {
+    setInput("");
+    setOutput("");
+    setError(null);
+  };
+
+  const hasModifiedData = input !== DEFAULT_GRAPHQL && input.trim() !== "";
+  const isAtDefault = input === DEFAULT_GRAPHQL;
+
   useEffect(() => {
     document.title = "GraphQL Formatter - FreeDevTool.App";
     formatCode();
@@ -51,8 +71,11 @@ export default function GraphQLFormatter() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               GraphQL Formatter
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Format and beautify GraphQL schemas, queries, and mutations using
@@ -71,19 +94,33 @@ export default function GraphQLFormatter() {
         </Alert>
       ) : null}
 
-      <div className="mb-6 flex gap-4">
-        <Button
-          onClick={formatCode}
-          className="bg-green-600 hover:bg-green-700 text-white"
-        >
-          <Code className="w-4 h-4 mr-2" />
-          Format GraphQL
-        </Button>
-        <Button onClick={handleReset} variant="outline">
-          <RotateCcw className="w-4 h-4 mr-2" />
-          Reset
-        </Button>
-      </div>
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={formatCode}
+            icon={<Code className="w-4 h-4 mr-2" />}
+            tooltip="Format and beautify GraphQL code"
+            className="bg-green-600 hover:bg-green-700 text-white"
+          >
+            Format GraphQL
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={input.trim() === "" && output.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
@@ -128,44 +165,7 @@ export default function GraphQLFormatter() {
         </Card>
       </div>
 
-      <div className="mt-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center text-slate-700 dark:text-slate-300">
-              <Code className="w-5 h-5 mr-2" />
-              GraphQL Formatting Features
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  Supported GraphQL Elements:
-                </h4>
-                <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
-                  <li>• Type definitions and interfaces</li>
-                  <li>• Queries, mutations, and subscriptions</li>
-                  <li>• Input types and enums</li>
-                  <li>• Schema definitions</li>
-                  <li>• Directive declarations</li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  Formatting Benefits:
-                </h4>
-                <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
-                  <li>• Consistent field alignment</li>
-                  <li>• Proper indentation for nested types</li>
-                  <li>• Clean argument formatting</li>
-                  <li>• Readable schema structure</li>
-                  <li>• Industry-standard formatting</li>
-                </ul>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

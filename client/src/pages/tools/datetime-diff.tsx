@@ -1,16 +1,20 @@
 import { useState, useMemo } from "react";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { CalendarDays, Calculator, Copy, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
-  CalendarDays,
-  Clock,
-  Calculator,
-  Copy,
-  Check,
-  RotateCcw,
-} from "lucide-react";
+  ResetButton,
+  ClearButton,
+  NowButton,
+  ToolButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import { useToast } from "@/hooks/use-toast";
 import { usePersistentForm } from "@/hooks/use-persistent-state";
 import { getUserTimezone } from "@/lib/time-tools";
@@ -36,22 +40,36 @@ interface DateTimeDifference {
 }
 
 export default function DateTimeDiff() {
+  const tool = getToolByPath("/tools/datetime-diff");
+  const formatCurrentDateTime = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    const date = `${year}-${month}-${day}`;
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const time = `${hours}:${minutes}`;
+    return { date, time };
+  };
+
   // Set interesting default values
   const getDefaultValues = () => {
-    const now = new Date();
-    const oneYearAgo = new Date(now);
-    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
-
+    const { date, time } = formatCurrentDateTime();
+    // end time is 1 hour after time
+    const endTime = new Date(new Date().setHours(new Date().getHours() + 1))
+      .toTimeString()
+      .slice(0, 5);
     return {
-      startDate: oneYearAgo.toISOString().split("T")[0],
-      startTime: "00:00",
-      endDate: now.toISOString().split("T")[0],
-      endTime: now.toTimeString().slice(0, 5),
+      startDate: date,
+      startTime: time,
+      endDate: date,
+      endTime,
       timezone: getUserTimezone(),
     };
   };
 
-  const { fields, updateField, resetFields } = usePersistentForm(
+  const { fields, updateField, updateFields } = usePersistentForm(
     "datetime-diff",
     getDefaultValues()
   );
@@ -254,16 +272,17 @@ export default function DateTimeDiff() {
 
   // Set current date/time
   const setCurrentDateTime = (field: "start" | "end") => {
-    const now = new Date();
-    const date = now.toISOString().split("T")[0];
-    const time = now.toTimeString().split(" ")[0].substring(0, 5);
-
+    const { date, time } = formatCurrentDateTime();
     if (field === "start") {
-      updateField("startDate", date);
-      updateField("startTime", time);
+      updateFields({
+        startDate: date,
+        startTime: time,
+      });
     } else {
-      updateField("endDate", date);
-      updateField("endTime", time);
+      updateFields({
+        endDate: date,
+        endTime: time,
+      });
     }
   };
 
@@ -287,10 +306,28 @@ export default function DateTimeDiff() {
     }
   };
 
-  // Clear all inputs
+  // Clear all inputs – for this tool "Clear" means make date inputs empty so users start fresh
   const clearAll = () => {
-    resetFields();
+    updateFields({
+      startDate: "",
+      startTime: "",
+      endDate: "",
+      endTime: "",
+    });
   };
+
+  // Modified if any date field has content; clear sets them empty which should disable Clear button per tests
+  const hasModifiedData =
+    fields.startDate.trim() !== "" ||
+    fields.endDate.trim() !== "" ||
+    fields.startTime.trim() !== "" ||
+    fields.endTime.trim() !== "";
+  // Reset should be disabled when we're already at initial defaults (all fields equal their mount-time defaults)
+  const isAtDefault =
+    fields.startDate === getDefaultValues().startDate &&
+    fields.startTime === getDefaultValues().startTime &&
+    fields.endDate === getDefaultValues().endDate &&
+    fields.endTime === getDefaultValues().endTime;
 
   // Format large numbers with commas
   const formatNumber = (num: number): string =>
@@ -326,14 +363,22 @@ export default function DateTimeDiff() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
-          Date & Time Difference Calculator
-        </h2>
-        <p className="text-slate-600 dark:text-slate-400">
-          Calculate the precise difference between two dates and times with
-          detailed breakdowns. Explore fascinating time spans from historical
-          dates to far future dates.
-        </p>
+        <div className="flex items-start justify-between gap-6 mb-4">
+          <div className="flex-1">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              Date & Time Difference Calculator
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Calculate the precise difference between two dates and times with
+              detailed breakdowns. Explore fascinating time spans from
+              historical dates to far future dates.
+            </p>
+          </div>
+          <SecurityBanner variant="compact" className="flex-shrink-0" />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -347,15 +392,13 @@ export default function DateTimeDiff() {
                   <CalendarDays className="w-5 h-5 mr-2" />
                   Start Date & Time
                 </div>
-                <Button
-                  size="sm"
-                  variant="outline"
+                <NowButton
                   onClick={() => setCurrentDateTime("start")}
-                  data-testid="set-current-start"
-                >
-                  <Clock className="w-3 h-3 mr-1" />
-                  Now
-                </Button>
+                  tooltip="Set start to current time"
+                  toastTitle="Start time updated"
+                  toastDescription="Set to current date and time"
+                  iconOnly
+                />
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -395,15 +438,13 @@ export default function DateTimeDiff() {
                   <CalendarDays className="w-5 h-5 mr-2" />
                   End Date & Time
                 </div>
-                <Button
-                  size="sm"
-                  variant="outline"
+                <NowButton
                   onClick={() => setCurrentDateTime("end")}
-                  data-testid="set-current-end"
-                >
-                  <Clock className="w-3 h-3 mr-1" />
-                  Now
-                </Button>
+                  tooltip="Set end to current time"
+                  toastTitle="End time updated"
+                  toastDescription="Set to current date and time"
+                  iconOnly
+                />
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -523,17 +564,22 @@ export default function DateTimeDiff() {
           </Card>
 
           {/* Controls */}
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={clearAll}
-              className="flex-1"
-              data-testid="clear-all-button"
-            >
-              <RotateCcw className="w-4 h-4 mr-2" />
-              Clear All
-            </Button>
-          </div>
+          <ToolButtonGroup>
+            <DataButtonGroup>
+              <ResetButton
+                onClick={clearAll}
+                tooltip="Reset to default values"
+                hasModifiedData={hasModifiedData}
+                disabled={isAtDefault}
+              />
+              <ClearButton
+                onClick={clearAll}
+                tooltip="Clear all date inputs"
+                hasModifiedData={hasModifiedData}
+                disabled={!hasModifiedData}
+              />
+            </DataButtonGroup>
+          </ToolButtonGroup>
         </div>
 
         {/* Results Section */}
@@ -702,51 +748,7 @@ export default function DateTimeDiff() {
         </div>
       </div>
 
-      {/* Quick Examples */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Common Use Cases & Examples</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div>
-              <h4 className="font-semibold mb-3 text-purple-700 dark:text-purple-300">
-                Project Planning
-              </h4>
-              <ul className="text-sm space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• Calculate project durations</li>
-                <li>• Track milestone deadlines</li>
-                <li>• Plan resource allocation</li>
-                <li>• Estimate delivery timelines</li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-semibold mb-3 text-green-700 dark:text-green-300">
-                Personal Milestones
-              </h4>
-              <ul className="text-sm space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• Age calculations</li>
-                <li>• Anniversary countdowns</li>
-                <li>• Travel duration planning</li>
-                <li>• Event time remaining</li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-semibold mb-3 text-blue-700 dark:text-blue-300">
-                Business Applications
-              </h4>
-              <ul className="text-sm space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• Contract durations</li>
-                <li>• Service level agreements</li>
-                <li>• Billing periods</li>
-                <li>• Warranty calculations</li>
-              </ul>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }
