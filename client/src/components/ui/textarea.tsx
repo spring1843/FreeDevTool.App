@@ -184,7 +184,7 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
         onDrop={handleDrop}
         data-testid="textarea-drop-area"
       >
-        <div className="absolute top-[-3.1rem] right-1 z-10 flex gap-1">
+        <div className="absolute top-1 right-1 z-10 flex gap-1">
           <Button
             onClick={handleCopy}
             size="sm"
