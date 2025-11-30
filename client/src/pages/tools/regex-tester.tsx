@@ -41,33 +41,26 @@ export default function RegexTester() {
   const testRegex = useCallback(() => {
     try {
       setError("");
-      const regex = new RegExp(pattern, flags);
+      // Validate regex first
+      new RegExp(pattern, flags);
       setIsValidRegex(true);
 
       const foundMatches: RegexMatch[] = [];
-      let match;
 
-      if (globalFlag) {
-        while ((match = regex.exec(text)) !== null) {
-          foundMatches.push({
-            match: match[0],
-            index: match.index,
-            groups: match.slice(1),
-          });
+      // Use matchAll to find all matches - requires 'g' flag
+      // Create a regex with 'g' flag for finding all matches
+      // This ensures Ignore Case works independently of Global flag
+      const searchFlags = flags.includes("g") ? flags : `${flags}g`;
+      const searchRegex = new RegExp(pattern, searchFlags);
+      const allMatches = Array.from(text.matchAll(searchRegex));
 
-          // Prevent infinite loop
-          if (!regex.global) break;
-        }
-      } else {
-        match = regex.exec(text);
-        if (match) {
-          foundMatches.push({
-            match: match[0],
-            index: match.index,
-            groups: match.slice(1),
-          });
-        }
-      }
+      allMatches.forEach(match => {
+        foundMatches.push({
+          match: match[0],
+          index: match.index,
+          groups: match.slice(1),
+        });
+      });
 
       setMatches(foundMatches);
     } catch (err) {
@@ -77,7 +70,7 @@ export default function RegexTester() {
       );
       setMatches([]);
     }
-  }, [pattern, flags, text, globalFlag]);
+  }, [pattern, flags, text]);
 
   const handleReset = () => {
     setPattern(DEFAULT_REGEX_PATTERN);
