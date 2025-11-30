@@ -64,6 +64,10 @@ export default function YAMLFormatter() {
     formatCode();
   }, [formatCode]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="max-w-6xl mx-auto">
       <div className="mb-6">
