@@ -27,7 +27,7 @@ export default defineConfig({
           dest: "",
         },
         {
-          src: "assets/sitemap.xml",
+          src: "assets/robots-prod.txt",
           dest: "",
         },
         {

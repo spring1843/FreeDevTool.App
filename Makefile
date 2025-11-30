@@ -91,7 +91,7 @@ inject-version: ## Inject version information into build artifacts
 build: clean npm-build inject-version ## Build the project
 
 build-prod: build ## Build the project for production
-    mv dist/public/robots-prod.txt dist/public/robots.txt
+	mv dist/public/robots-prod.txt dist/public/robots.txt
 
 build-image: ## Build the Docker image for the app
 	docker build --platform linux/amd64 -t ${IMAGE_TAG} -f infra/images/Dockerfile .
