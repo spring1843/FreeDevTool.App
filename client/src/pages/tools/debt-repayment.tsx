@@ -149,7 +149,7 @@ export default function DebtRepaymentCalculator() {
   const minimumPayment = principal * (annualRate / 100 / 12);
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto overflow-hidden">
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>

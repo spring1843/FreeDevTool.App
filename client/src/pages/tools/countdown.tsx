@@ -50,7 +50,7 @@ export default function Countdown() {
   const defaultDateTime = getDefaultDateTime();
   const [targetDate, setTargetDate] = useState(defaultDateTime.date);
   const [targetTime, setTargetTime] = useState(defaultDateTime.time);
-  const [isActive, setIsActive] = useState(true); // Auto-start
+  const [isActive, setIsActive] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -59,7 +59,6 @@ export default function Countdown() {
   );
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const hasInitialized = useRef(false);
 
   const calculateTimeRemaining = useCallback(() => {
     if (!targetDate || !targetTime) return 0;
@@ -160,21 +159,6 @@ export default function Countdown() {
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isActive, isComplete, pauseCountdown, startCountdown, stopCountdown]);
-
-  // Auto-start on component mount (only once)
-  useEffect(() => {
-    if (hasInitialized.current) return;
-    hasInitialized.current = true;
-
-    const timer = setTimeout(() => {
-      if (targetDate && targetTime) {
-        startCountdown();
-      }
-    }, 500); // Small delay to ensure UI is ready
-
-    return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const formatTime = (milliseconds: number) => {
     if (milliseconds <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
