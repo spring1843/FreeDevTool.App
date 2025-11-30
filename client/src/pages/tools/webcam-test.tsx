@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -10,12 +9,21 @@ import {
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Camera, Square, RotateCcw, Download } from "lucide-react";
+import { Camera, Square, Download, Play } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import {
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+} from "@/components/ui/tool-button";
 
 export default function WebcamTest() {
+  const tool = getToolByPath("/tools/webcam-test");
   const [isActive, setIsActive] = useState(false);
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
   const [selectedDevice, setSelectedDevice] = useState<string | undefined>(
@@ -23,7 +31,6 @@ export default function WebcamTest() {
   );
   const [error, setError] = useState<string | null>(null);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [, setPermissionRequested] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -31,7 +38,6 @@ export default function WebcamTest() {
   const requestPermission = async () => {
     try {
       setError(null);
-      setPermissionRequested(true);
 
       // Request camera permission
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -154,15 +160,6 @@ export default function WebcamTest() {
     });
   };
 
-  const handleReset = () => {
-    stopCamera();
-    setSelectedDevice(undefined);
-    setError(null);
-    setHasPermission(null);
-    setPermissionRequested(false);
-    setDevices([]);
-  };
-
   useEffect(() => {
     // Only get basic device info without permission on mount
     const getBasicDevices = async () => {
@@ -198,12 +195,15 @@ export default function WebcamTest() {
   const permissionStatus = getPermissionStatus();
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Camera Test
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Test your camera functionality and capture photos
@@ -259,48 +259,53 @@ export default function WebcamTest() {
             </div>
           )}
 
-          <div className="flex gap-3">
-            {!hasPermission ? (
-              <Button
-                onClick={requestPermission}
-                className="bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                <Camera className="w-4 h-4 mr-2" />
-                Request Camera Permission
-              </Button>
-            ) : !isActive ? (
-              <Button
-                onClick={startCamera}
-                disabled={devices.length === 0}
-                className="bg-green-600 hover:bg-green-700 text-white disabled:opacity-50"
-              >
-                <Camera className="w-4 h-4 mr-2" />
-                Start Camera
-              </Button>
-            ) : (
-              <Button
-                onClick={stopCamera}
-                className="bg-red-600 hover:bg-red-700 text-white"
-              >
-                <Square className="w-4 h-4 mr-2" />
-                Stop Camera
-              </Button>
-            )}
+          <ToolButtonGroup>
+            <ActionButtonGroup>
+              {!hasPermission ? (
+                <ToolButton
+                  variant="custom"
+                  onClick={requestPermission}
+                  tooltip="Request camera access permission"
+                  icon={<Camera className="w-4 h-4 mr-2" />}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  Request Camera Permission
+                </ToolButton>
+              ) : !isActive ? (
+                <ToolButton
+                  variant="custom"
+                  onClick={startCamera}
+                  disabled={devices.length === 0}
+                  tooltip="Start the camera preview"
+                  icon={<Play className="w-4 h-4 mr-2" />}
+                  className="bg-green-600 hover:bg-green-700 text-white disabled:opacity-50"
+                >
+                  Start Camera
+                </ToolButton>
+              ) : (
+                <ToolButton
+                  variant="custom"
+                  onClick={stopCamera}
+                  tooltip="Stop the camera preview"
+                  icon={<Square className="w-4 h-4 mr-2" />}
+                  className="bg-red-600 hover:bg-red-700 text-white"
+                >
+                  Stop Camera
+                </ToolButton>
+              )}
 
-            <Button
-              onClick={capturePhoto}
-              disabled={!isActive}
-              className="bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
-            >
-              <Download className="w-4 h-4 mr-2" />
-              Capture Photo
-            </Button>
-
-            <Button onClick={handleReset} variant="outline">
-              <RotateCcw className="w-4 h-4 mr-2" />
-              Reset
-            </Button>
-          </div>
+              <ToolButton
+                variant="custom"
+                onClick={capturePhoto}
+                disabled={!isActive}
+                tooltip="Capture and download a photo"
+                icon={<Download className="w-4 h-4 mr-2" />}
+                className="bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
+              >
+                Capture Photo
+              </ToolButton>
+            </ActionButtonGroup>
+          </ToolButtonGroup>
         </CardContent>
       </Card>
 
@@ -358,19 +363,7 @@ export default function WebcamTest() {
         </CardContent>
       </Card>
 
-      <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-          Privacy Notice:
-        </h3>
-        <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-          <div>• All camera processing happens locally in your browser</div>
-          <div>• No video or image data is transmitted to any server</div>
-          <div>• Captured photos are saved directly to your device</div>
-          <div>
-            • Camera access requires explicit permission from your browser
-          </div>
-        </div>
-      </div>
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

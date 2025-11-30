@@ -11,13 +11,25 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CopyButton } from "@/components/ui/copy-button";
-import { Hash, Calculator, Share, RefreshCw, ArrowRight } from "lucide-react";
+import { Hash, Calculator, RefreshCw, ArrowRight } from "lucide-react";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import {
   updateURL,
   copyShareableURL,
   getValidatedParam,
 } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
 
 interface ConversionResult {
   base: number;
@@ -44,6 +56,7 @@ const commonBases = [
 ];
 
 export default function NumberBaseConverter() {
+  const tool = getToolByPath("/tools/number-base-converter");
   const [inputNumber, setInputNumber] = useState("42");
   const [inputBase, setInputBase] = useState(10);
   const [outputBases, setOutputBases] = useState<number[]>([2, 8, 16]);
@@ -291,18 +304,72 @@ export default function NumberBaseConverter() {
     setError("");
   };
 
+  const handleReset = () => {
+    setInputNumber("42");
+    setInputBase(10);
+    setOutputBases([2, 8, 16]);
+    setCustomBase("");
+    setResults([]);
+    setError("");
+  };
+
+  const hasModifiedData = inputNumber !== "42" && inputNumber.trim() !== "";
+  const isAtDefault = inputNumber === "42" && inputBase === 10;
+
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
-          Number Base Converter
-        </h2>
-        <p className="text-slate-600 dark:text-slate-400">
-          Convert numbers between different bases (binary, decimal, hexadecimal,
-          and custom bases)
-        </p>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              Number Base Converter
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Convert numbers between different bases (binary, decimal,
+              hexadecimal, and custom bases)
+            </p>
+          </div>
+          <SecurityBanner variant="compact" />
+        </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={convertNumber}
+            icon={<RefreshCw className="w-4 h-4 mr-2" />}
+            tooltip="Convert number to selected bases"
+            data-testid="convert-button"
+          >
+            Convert
+          </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={shareConverter}
+            tooltip="Copy shareable URL to clipboard"
+            data-testid="share-converter-button"
+          />
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset all settings to defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={clearAll}
+            tooltip="Clear number input"
+            hasModifiedData={hasModifiedData}
+            disabled={inputNumber.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       {/* Main Content */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
@@ -364,26 +431,6 @@ export default function NumberBaseConverter() {
                 </div>
               ) : null}
 
-              <div className="flex gap-2">
-                <Button
-                  onClick={convertNumber}
-                  className="flex-1"
-                  data-testid="convert-button"
-                >
-                  <RefreshCw className="w-4 h-4 mr-2" />
-                  Convert
-                </Button>
-
-                <Button
-                  onClick={shareConverter}
-                  variant="outline"
-                  data-testid="share-converter-button"
-                >
-                  <Share className="w-4 h-4 mr-2" />
-                  Share
-                </Button>
-              </div>
-
               <div className="grid grid-cols-3 gap-2">
                 <Button
                   onClick={() => loadExample("binary")}
@@ -410,16 +457,6 @@ export default function NumberBaseConverter() {
                   Decimal Example
                 </Button>
               </div>
-
-              <Button
-                onClick={clearAll}
-                variant="outline"
-                size="sm"
-                className="w-full"
-                data-testid="clear-button"
-              >
-                Clear All
-              </Button>
             </CardContent>
           </Card>
 
@@ -557,88 +594,7 @@ export default function NumberBaseConverter() {
         </div>
       </div>
 
-      <div className="flex justify-center my-8" />
-
-      {/* Information */}
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>About Number Base Converter</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-            <div>
-              <h4 className="font-semibold mb-2">Supported Bases:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>
-                  • <strong>Binary (Base 2):</strong> 0, 1
-                </li>
-                <li>
-                  • <strong>Octal (Base 8):</strong> 0-7
-                </li>
-                <li>
-                  • <strong>Decimal (Base 10):</strong> 0-9
-                </li>
-                <li>
-                  • <strong>Hexadecimal (Base 16):</strong> 0-9, A-F
-                </li>
-                <li>
-                  • <strong>Base 32:</strong> 0-9, A-V
-                </li>
-                <li>
-                  • <strong>Base 36:</strong> 0-9, A-Z
-                </li>
-                <li>
-                  • <strong>Custom bases:</strong> 2-64
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-2">Features:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• Convert from any base to any other base</li>
-                <li>• Multiple output bases simultaneously</li>
-                <li>• Input validation for each base</li>
-                <li>• Character set display for each base</li>
-                <li>• URL sharing with current settings</li>
-                <li>• Example data for quick testing</li>
-                <li>• Copy individual results to clipboard</li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
-            <h4 className="font-semibold mb-2">Common Use Cases:</h4>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-              <div>
-                <strong>Programming:</strong>
-                <ul className="text-slate-600 dark:text-slate-400 mt-1">
-                  <li>• Binary operations</li>
-                  <li>• Hexadecimal colors</li>
-                  <li>• Memory addresses</li>
-                </ul>
-              </div>
-              <div>
-                <strong>Networking:</strong>
-                <ul className="text-slate-600 dark:text-slate-400 mt-1">
-                  <li>• IP address conversion</li>
-                  <li>• Subnet calculations</li>
-                  <li>• Base64 encoding</li>
-                </ul>
-              </div>
-              <div>
-                <strong>Mathematics:</strong>
-                <ul className="text-slate-600 dark:text-slate-400 mt-1">
-                  <li>• Number theory</li>
-                  <li>• Computer science</li>
-                  <li>• Algorithm design</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="flex justify-center mt-8" />
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

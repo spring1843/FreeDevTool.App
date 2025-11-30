@@ -11,7 +11,7 @@ build = ["sh", "-c", "make build"]
 run = ["sh", "-c", "npm start"]
 
 [env]
-PORT = "9500"
+PORT = "9095"
 
 [workflows]
 runButton = "Project"
@@ -31,9 +31,25 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "npm run dev"
-waitForPort = 9500
+args = "PORT=9095 npm run dev"
+waitForPort = 9095
 
 [[ports]]
 localPort = 3000
+externalPort = 3000
+
+[[ports]]
+localPort = 9095
 externalPort = 80
+
+[[ports]]
+localPort = 33181
+externalPort = 3003
+
+[[ports]]
+localPort = 36717
+externalPort = 3001
+
+[[ports]]
+localPort = 45605
+externalPort = 3002

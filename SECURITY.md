@@ -16,12 +16,13 @@ FreeDevTool.App is designed as a secure, offline tool for everyday development t
 
 We [apply](https://github.com/spring1843/FreeDevTool.App/blob/68053bd519fada6f3d7fca5b5c4533ac0a65bc1a/client/index.html#L11) a strict [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP) in all our pages that ensures at browser level that:
 
-* No external scripts can be loaded
-* No outbound calls can be made
+- No external scripts can be loaded
+- No outbound calls can be made
 
 ## Guarantees for the Future
 
 We commit to maintaining these standards indefinitely. Specifically:
+
 - No external scripts or third-party libraries will be loaded dynamically.
 - No data will ever be transmitted to our servers or any external entities.
 - No cookies or persistent tracking mechanisms will be implemented.

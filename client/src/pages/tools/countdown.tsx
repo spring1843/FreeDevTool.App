@@ -11,18 +11,38 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { Play, Pause, Square, RotateCcw, Clock } from "lucide-react";
+import { Play, Pause, Square, Clock } from "lucide-react";
 import { useState, useEffect, useRef, useCallback } from "react";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function Countdown() {
+  const tool = getToolByPath("/tools/countdown");
+  // Helpers to format local date/time strings consistently
+  const pad2 = (n: number) => String(n).padStart(2, "0");
+  const formatLocalDate = (d: Date) =>
+    `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+  const formatLocalTime = (d: Date, withSeconds = true) =>
+    withSeconds
+      ? `${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}`
+      : `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
   // Set interesting default values (New Year countdown)
   const getDefaultDateTime = () => {
     const now = new Date();
     const nextYear = new Date(now.getFullYear() + 1, 0, 1, 0, 0, 0); // Next New Year
     return {
-      date: nextYear.toISOString().split("T")[0],
+      // Use local date/time formatting to avoid UTC/local mismatches
+      date: formatLocalDate(nextYear),
       time: "00:00",
     };
   };
@@ -30,7 +50,7 @@ export default function Countdown() {
   const defaultDateTime = getDefaultDateTime();
   const [targetDate, setTargetDate] = useState(defaultDateTime.date);
   const [targetTime, setTargetTime] = useState(defaultDateTime.time);
-  const [isActive, setIsActive] = useState(true); // Auto-start
+  const [isActive, setIsActive] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -51,6 +71,12 @@ export default function Countdown() {
 
   const startCountdown = useCallback(() => {
     if (!targetDate || !targetTime) return;
+
+    // Ensure no overlapping intervals are running
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
 
     setIsActive(true);
     setIsComplete(false);
@@ -134,17 +160,6 @@ export default function Countdown() {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isActive, isComplete, pauseCountdown, startCountdown, stopCountdown]);
 
-  // Auto-start on component mount
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (targetDate && targetTime) {
-        startCountdown();
-      }
-    }, 500); // Small delay to ensure UI is ready
-
-    return () => clearTimeout(timer);
-  }, [targetDate, targetTime, startCountdown]);
-
   const formatTime = (milliseconds: number) => {
     if (milliseconds <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
 
@@ -159,11 +174,25 @@ export default function Countdown() {
 
   const handleReset = () => {
     stopCountdown();
-    setTargetDate("");
-    setTargetTime("");
+    const defaultDt = getDefaultDateTime();
+    setTargetDate(defaultDt.date);
+    setTargetTime(defaultDt.time);
     setSoundEnabled(true);
     setTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
   };
+
+  const handleClear = () => {
+    stopCountdown();
+    setTargetDate("");
+    setTargetTime("");
+  };
+
+  const hasModifiedData =
+    targetDate !== defaultDateTime.date || targetTime !== defaultDateTime.time;
+  const isAtDefault =
+    targetDate === defaultDateTime.date &&
+    targetTime === defaultDateTime.time &&
+    soundEnabled === true;
 
   // Preset options for interesting countdowns
   const presets = [
@@ -200,19 +229,50 @@ export default function Countdown() {
   ];
 
   const applyPreset = (preset: (typeof presets)[0]) => {
+    // Stop any existing countdown first
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+
     const { date } = preset;
-    const dateStr = date.toISOString().split("T")[0];
-    const timeStr = preset.time || date.toTimeString().slice(0, 5);
+    // Format both date and time in the same (local) timezone to prevent flicker
+    const dateStr = formatLocalDate(date);
+    const timeStr = preset.time || formatLocalTime(date, true);
 
     setTargetDate(dateStr);
     setTargetTime(timeStr);
-    setIsActive(false);
     setIsComplete(false);
 
-    // Auto-start after setting
-    setTimeout(() => {
-      setIsActive(true);
-    }, 100);
+    // Calculate and set the initial time remaining
+    const targetDateTime = new Date(`${dateStr}T${timeStr}`);
+    const now = new Date();
+    const remaining = Math.max(0, targetDateTime.getTime() - now.getTime());
+    setTimeRemaining(remaining);
+
+    // Start fresh countdown
+    setIsActive(true);
+    intervalRef.current = setInterval(() => {
+      const newRemaining = Math.max(
+        0,
+        targetDateTime.getTime() - new Date().getTime()
+      );
+      setTimeRemaining(newRemaining);
+
+      if (newRemaining <= 0) {
+        setIsActive(false);
+        setIsComplete(true);
+
+        if (soundEnabled && audioRef.current) {
+          audioRef.current.play().catch(console.error);
+        }
+
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
+      }
+    }, 1000);
   };
 
   useEffect(() => {
@@ -248,12 +308,15 @@ export default function Countdown() {
   const status = getCountdownStatus();
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Countdown Timer
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Countdown to a specific date and time
@@ -265,6 +328,54 @@ export default function Countdown() {
           <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          {!isActive ? (
+            <Button
+              onClick={startCountdown}
+              disabled={!targetDate || !targetTime}
+              className="bg-green-600 hover:bg-green-700 text-white disabled:opacity-50"
+              data-testid="button-start"
+            >
+              <Play className="w-4 h-4 mr-2" />
+              Start (Enter)
+            </Button>
+          ) : (
+            <Button
+              onClick={pauseCountdown}
+              className="bg-yellow-600 hover:bg-yellow-700 text-white"
+              data-testid="button-pause"
+            >
+              <Pause className="w-4 h-4 mr-2" />
+              Pause (Space)
+            </Button>
+          )}
+
+          <Button
+            onClick={stopCountdown}
+            variant="outline"
+            data-testid="button-stop"
+          >
+            <Square className="w-4 h-4 mr-2" />
+            Stop (Esc)
+          </Button>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to New Year countdown"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear date and time"
+            hasModifiedData={hasModifiedData}
+            disabled={targetDate === "" && targetTime === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <Card className="mb-6">
         <CardHeader>
@@ -347,106 +458,69 @@ export default function Countdown() {
               </Label>
             </div>
           </div>
-
-          <div className="flex gap-3">
-            {!isActive ? (
-              <Button
-                onClick={startCountdown}
-                disabled={!targetDate || !targetTime}
-                className="bg-green-600 hover:bg-green-700 text-white disabled:opacity-50"
-                data-testid="button-start"
-              >
-                <Play className="w-4 h-4 mr-2" />
-                Start (Enter)
-              </Button>
-            ) : (
-              <Button
-                onClick={pauseCountdown}
-                className="bg-yellow-600 hover:bg-yellow-700 text-white"
-                data-testid="button-pause"
-              >
-                <Pause className="w-4 h-4 mr-2" />
-                Pause (Space)
-              </Button>
-            )}
-
-            <Button
-              onClick={stopCountdown}
-              variant="outline"
-              data-testid="button-stop"
-            >
-              <Square className="w-4 h-4 mr-2" />
-              Stop (Esc)
-            </Button>
-
-            <Button onClick={handleReset} variant="outline">
-              <RotateCcw className="w-4 h-4 mr-2" />
-              Reset
-            </Button>
-          </div>
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center">
-              <Clock className="w-5 h-5 mr-2" />
-              Time Remaining
-            </div>
-            <Badge variant="outline" className={status.color}>
-              {status.text}
-            </Badge>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {isComplete ? (
-            <div className="text-center mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-              <div className="text-2xl font-bold text-red-600 dark:text-red-400 mb-2">
-                🎉 Countdown Complete! 🎉
+      {targetDate && targetTime ? (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <div className="flex items-center">
+                <Clock className="w-5 h-5 mr-2" />
+                Time Remaining
               </div>
-              <div className="text-red-700 dark:text-red-300">
-                Target time has been reached
+              <Badge variant="outline" className={status.color}>
+                {status.text}
+              </Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {isComplete ? (
+              <div className="text-center mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                <div className="text-2xl font-bold text-red-600 dark:text-red-400 mb-2">
+                  🎉 Countdown Complete! 🎉
+                </div>
+                <div className="text-red-700 dark:text-red-300">
+                  Target time has been reached
+                </div>
               </div>
-            </div>
-          ) : null}
+            ) : null}
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
-                {timeComponents.days}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                  {timeComponents.days}
+                </div>
+                <div className="text-sm text-blue-700 dark:text-blue-300">
+                  Days
+                </div>
               </div>
-              <div className="text-sm text-blue-700 dark:text-blue-300">
-                Days
+              <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                <div className="text-3xl font-bold text-green-600 dark:text-green-400">
+                  {timeComponents.hours}
+                </div>
+                <div className="text-sm text-green-700 dark:text-green-300">
+                  Hours
+                </div>
+              </div>
+              <div className="text-center p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                <div className="text-3xl font-bold text-yellow-600 dark:text-yellow-400">
+                  {timeComponents.minutes}
+                </div>
+                <div className="text-sm text-yellow-700 dark:text-yellow-300">
+                  Minutes
+                </div>
+              </div>
+              <div className="text-center p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                <div className="text-3xl font-bold text-red-600 dark:text-red-400">
+                  {timeComponents.seconds}
+                </div>
+                <div className="text-sm text-red-700 dark:text-red-300">
+                  Seconds
+                </div>
               </div>
             </div>
-            <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-              <div className="text-3xl font-bold text-green-600 dark:text-green-400">
-                {timeComponents.hours}
-              </div>
-              <div className="text-sm text-green-700 dark:text-green-300">
-                Hours
-              </div>
-            </div>
-            <div className="text-center p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
-              <div className="text-3xl font-bold text-yellow-600 dark:text-yellow-400">
-                {timeComponents.minutes}
-              </div>
-              <div className="text-sm text-yellow-700 dark:text-yellow-300">
-                Minutes
-              </div>
-            </div>
-            <div className="text-center p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
-              <div className="text-3xl font-bold text-red-600 dark:text-red-400">
-                {timeComponents.seconds}
-              </div>
-              <div className="text-sm text-red-700 dark:text-red-300">
-                Seconds
-              </div>
-            </div>
-          </div>
 
-          {targetDate && targetTime ? (
             <div className="mt-6 text-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
               <div className="text-sm text-gray-600 dark:text-gray-400">
                 Target:
@@ -468,9 +542,11 @@ export default function Countdown() {
               </div>
               <div className="text-xs text-gray-500 mt-1">({timeZone})</div>
             </div>
-          ) : null}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      ) : null}
+
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }
