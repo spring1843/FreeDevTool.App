@@ -72,8 +72,13 @@ export default function KeyboardTest() {
     if (!isActive) {
       setPressedKeys(new Set());
       toast({
-        title: "Testing started",
+        title: "Testing Started",
         description: "Keyboard testing has been started",
+      });
+    } else {
+      toast({
+        title: "Testing Stopped",
+        description: "Keyboard testing has been stopped",
       });
     }
   };
