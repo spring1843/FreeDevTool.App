@@ -306,6 +306,10 @@ export default function Metronome() {
         clearTimeout(timeout);
         toneTimeoutsRef.current.delete(id);
       }
+      toast({
+        title: "Tone Schedule Removed",
+        description: "The tone schedule has been removed.",
+      });
     }
   };
 

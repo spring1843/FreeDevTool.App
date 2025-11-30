@@ -153,3 +153,41 @@ console.log("\n✅ Static route generation complete!");
 console.log(
   `\nGenerated ${Object.keys(toolsMetadata).length} routes in: ${distPath}`
 );
+
+// --- Generate sitemap.xml alongside static routes ---
+function escapeXml(s: string) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function generateSitemap(dist: string) {
+  const baseUrl = (
+    process.env.SITE_BASE_URL || "https://freedevtool.app"
+  ).replace(/\/+$/, "");
+  // Use build time as lastmod for all routes, since all routes are statically generated at build time.
+  const now = new Date().toISOString();
+  const routes = Object.keys(toolsMetadata);
+
+  const entries = routes.map(route => {
+    const loc = `${baseUrl}${route === "/" ? "/" : route}`;
+    const isHome = route === "/";
+    const changefreq = isHome ? "weekly" : "monthly";
+    const priority = isHome ? "1.0" : "0.7";
+    return `  <url>\n    <loc>${escapeXml(loc)}</loc>\n    <lastmod>${now}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
+  });
+
+  const xml = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ...entries,
+    "</urlset>",
+    "",
+  ].join("\n");
+
+  const outFile = path.join(dist, "sitemap.xml");
+  fs.writeFileSync(outFile, xml, "utf-8");
+  console.log(
+    `\n✓ Generated sitemap.xml with ${routes.length} URLs at: ${outFile}`
+  );
+}
+
+generateSitemap(distPath);

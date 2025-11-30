@@ -6,6 +6,7 @@ import { SecurityBanner } from "@/components/ui/security-banner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { toast } from "@/hooks/use-toast";
 import { Keyboard, Info, Play, Square } from "lucide-react";
 import { ToolButton } from "@/components/ui/tool-button";
 
@@ -70,6 +71,15 @@ export default function KeyboardTest() {
     setIsActive(!isActive);
     if (!isActive) {
       setPressedKeys(new Set());
+      toast({
+        title: "Testing Started",
+        description: "Keyboard testing has been started",
+      });
+    } else {
+      toast({
+        title: "Testing Stopped",
+        description: "Keyboard testing has been stopped",
+      });
     }
   };
 

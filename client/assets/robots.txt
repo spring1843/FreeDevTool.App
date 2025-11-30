@@ -1,3 +1,4 @@
+# non-prod
+
 User-agent: *
-Allow: /
-Sitemap: https://freedevtool.app/sitemap.xml
+Disallow: /
