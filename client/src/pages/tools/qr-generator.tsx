@@ -345,7 +345,6 @@ export default function QRGenerator() {
                 <TextArea
                   id="input"
                   placeholder={currentPreset.placeholder}
-                  value={inputText}
                   onChange={e => setInputText(e.target.value)}
                   rows={4}
                   data-testid="qr-input"
