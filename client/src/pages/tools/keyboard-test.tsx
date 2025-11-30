@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Keyboard, RotateCcw, Info } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface KeyPress {
   key: string;
@@ -70,6 +71,10 @@ export default function KeyboardTest() {
     setIsActive(!isActive);
     if (!isActive) {
       setPressedKeys(new Set());
+      toast({
+        title: "Testing started",
+        description: "Keyboard testing has been started",
+      });
     }
   };
 
