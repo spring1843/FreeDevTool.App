@@ -427,7 +427,8 @@ export default function MicrophoneTest() {
 
           <ToolButtonGroup>
             <ActionButtonGroup>
-              {!hasPermission ? (
+              {!hasPermission &&
+              !(devices.length > 0 && devices.some(device => device.label)) ? (
                 <ToolButton
                   variant="custom"
                   onClick={requestPermission}
