@@ -13,21 +13,26 @@ import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import {
-  Hash,
-  CheckCircle,
-  XCircle,
-  RotateCcw,
-  Eye,
-  EyeOff,
-} from "lucide-react";
+import { Hash, CheckCircle, XCircle, Eye, EyeOff } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 import { DEFAULT_BCRYPT } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function BcryptHash() {
+  const tool = getToolByPath("/tools/bcrypt-hash");
   const [plaintext, setPlaintext] = useState(DEFAULT_BCRYPT);
   const [hash, setHash] = useState("");
   const [verifyText, setVerifyText] = useState("");
@@ -141,6 +146,23 @@ export default function BcryptHash() {
     setShowVerifyPassword(false);
   };
 
+  const handleClear = () => {
+    setPlaintext("");
+    setHash("");
+    setVerifyText("");
+    setVerificationResult(null);
+    setError(null);
+    setShowPassword(false);
+    setShowVerifyPassword(false);
+  };
+
+  const hasModifiedData =
+    (plaintext !== DEFAULT_BCRYPT && plaintext.trim() !== "") ||
+    hash.trim() !== "" ||
+    verifyText.trim() !== "";
+  const isAtDefault =
+    plaintext === DEFAULT_BCRYPT && verifyText === "" && rounds === 10;
+
   useEffect(() => {
     generateHash();
   }, [generateHash]);
@@ -170,8 +192,11 @@ export default function BcryptHash() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Bcrypt Hash Generator
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Generate and verify secure bcrypt password hashes
@@ -180,6 +205,38 @@ export default function BcryptHash() {
           <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={generateHash}
+            disabled={isHashing || !plaintext.trim()}
+            icon={<Hash className="w-4 h-4 mr-2" />}
+            tooltip="Generate bcrypt hash from password"
+          >
+            {isHashing ? "Generating..." : "Generate Hash"}
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={
+              plaintext.trim() === "" &&
+              hash.trim() === "" &&
+              verifyText.trim() === ""
+            }
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       {error ? (
         <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
@@ -248,15 +305,6 @@ export default function BcryptHash() {
                 Higher rounds = more secure but slower
               </div>
             </div>
-
-            <Button
-              onClick={generateHash}
-              disabled={isHashing || !plaintext.trim()}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
-            >
-              <Hash className="w-4 h-4 mr-2" />
-              {isHashing ? "Generating..." : "Generate Hash"}
-            </Button>
           </CardContent>
         </Card>
 
@@ -320,13 +368,7 @@ export default function BcryptHash() {
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             Generated Hash
-            <div className="flex gap-2">
-              <Badge variant="outline">{rounds} rounds</Badge>
-              <Button onClick={handleReset} variant="outline" size="sm">
-                <RotateCcw className="w-4 h-4 mr-1" />
-                Reset
-              </Button>
-            </div>
+            <Badge variant="outline">{rounds} rounds</Badge>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -338,37 +380,14 @@ export default function BcryptHash() {
             data-testid="hash-output"
             className="min-h-[100px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
             rows={5}
+            lang="plaintext"
             fileExtension="txt"
             theme={theme}
           />
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-          <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-            Bcrypt Features:
-          </h3>
-          <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-            <li>• Adaptive hashing function for passwords</li>
-            <li>• Built-in salt generation</li>
-            <li>• Configurable work factor (rounds)</li>
-            <li>• Resistant to rainbow table attacks</li>
-          </ul>
-        </div>
-
-        <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-          <h3 className="font-semibold text-green-800 dark:text-green-200 mb-2">
-            Security Notes:
-          </h3>
-          <ul className="text-sm text-green-700 dark:text-green-300 space-y-1">
-            <li>• Use 10+ rounds for production</li>
-            <li>• Higher rounds increase security but slow hashing</li>
-            <li>• Each hash includes its own unique salt</li>
-            <li>• Same password produces different hashes</li>
-          </ul>
-        </div>
-      </div>
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

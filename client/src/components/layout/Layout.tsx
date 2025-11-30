@@ -33,9 +33,10 @@ import {
   Play,
   Pause,
 } from "lucide-react";
-import { toolsData } from "@/data/tools";
+import { toolsData, getToolByPath } from "@/data/tools";
 import { useDemo } from "@/hooks/use-demo-hook";
 import { useTheme } from "@/providers/theme-provider";
+import { HOMEPAGE_TITLE, getToolPageTitle } from "@shared/page-title";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -66,6 +67,56 @@ export function Layout({ children }: LayoutProps) {
   } = useDemo();
 
   const { theme, setTheme } = useTheme();
+
+  // Mobile fix: Blur CodeMirror when touching anywhere outside the editor
+  // This prevents the focus lock issue on mobile devices
+  useEffect(() => {
+    const blurCodeMirror = () => {
+      // Blur any focused CodeMirror editors
+      const focusedEditors = document.querySelectorAll(".cm-editor.cm-focused");
+      focusedEditors.forEach(editor => {
+        const contentArea = editor.querySelector(".cm-content") as HTMLElement;
+        if (contentArea) {
+          contentArea.blur();
+        }
+      });
+      // Also blur any active element that might be inside CodeMirror
+      if (document.activeElement instanceof HTMLElement) {
+        const isInEditor = document.activeElement.closest(".cm-editor");
+        if (isInEditor) {
+          document.activeElement.blur();
+        }
+      }
+    };
+
+    const handlePointerDown = (event: PointerEvent) => {
+      const target = event.target as HTMLElement;
+
+      // If touch/click is NOT inside a CodeMirror editor, blur any focused editors
+      const isInsideEditor = target.closest(".cm-editor");
+      if (!isInsideEditor) {
+        blurCodeMirror();
+      }
+    };
+
+    // Use pointerdown for better cross-device support (touch and mouse)
+    document.addEventListener("pointerdown", handlePointerDown, {
+      passive: true,
+    });
+    return () => document.removeEventListener("pointerdown", handlePointerDown);
+  }, []);
+
+  // Update document title based on current location
+  useEffect(() => {
+    if (location === "/") {
+      document.title = HOMEPAGE_TITLE;
+    } else if (location.startsWith("/tools/")) {
+      const tool = getToolByPath(location);
+      if (tool) {
+        document.title = getToolPageTitle(tool);
+      }
+    }
+  }, [location]);
 
   // Global keyboard shortcut handler
   useEffect(() => {

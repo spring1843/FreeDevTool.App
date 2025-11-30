@@ -1,18 +1,30 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { Split, RotateCcw } from "lucide-react";
+import { Split } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_TEXT_SPLIT } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { CopyButton } from "@/components/ui/copy-button";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function TextSplit() {
+  const tool = getToolByPath("/tools/text-split");
   const [text, setText] = useState(DEFAULT_TEXT_SPLIT);
   const [delimiter, setDelimiter] = useState(",");
   const [removeEmpty, setRemoveEmpty] = useState(true);
@@ -56,30 +68,32 @@ export default function TextSplit() {
     setSplitResult([]);
   };
 
+  const handleClear = () => {
+    setText("");
+    setSplitResult([]);
+  };
+
+  const hasModifiedData = text !== DEFAULT_TEXT_SPLIT && text.trim() !== "";
+  const isAtDefault =
+    text === DEFAULT_TEXT_SPLIT &&
+    delimiter === "," &&
+    removeEmpty === true &&
+    trimWhitespace === true;
+
   useEffect(() => {
     splitText();
   }, [splitText]);
-
-  const getDelimiterDisplay = (delim: string) => {
-    switch (delim) {
-      case "\\n":
-        return "New Line";
-      case "\\t":
-        return "Tab";
-      case " ":
-        return "Space";
-      default:
-        return delim;
-    }
-  };
 
   return (
     <div className="max-w-6xl mx-auto">
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Text Splitter
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Split text into parts using custom delimiters
@@ -88,6 +102,34 @@ export default function TextSplit() {
           <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={splitText}
+            tooltip="Split the text using the delimiter"
+            icon={<Split className="w-4 h-4 mr-2" />}
+            className="bg-orange-600 hover:bg-orange-700 text-white"
+          >
+            Split Text
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset all settings to defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear text input"
+            hasModifiedData={hasModifiedData}
+            disabled={text.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <Card className="mb-6">
         <CardHeader>
@@ -126,28 +168,6 @@ export default function TextSplit() {
               <Label htmlFor="trim-whitespace">Trim Whitespace</Label>
             </div>
           </div>
-
-          <div className="flex items-center justify-between">
-            <div className="flex gap-3">
-              <Button
-                onClick={splitText}
-                className="bg-orange-600 hover:bg-orange-700 text-white"
-              >
-                <Split className="w-4 h-4 mr-2" />
-                Split Text
-              </Button>
-              <Button onClick={handleReset} variant="outline">
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Reset
-              </Button>
-            </div>
-            <Badge
-              variant="outline"
-              className="bg-orange-50 text-orange-700 border-orange-200"
-            >
-              Delimiter: {getDelimiterDisplay(delimiter)}
-            </Badge>
-          </div>
         </CardContent>
       </Card>
 
@@ -167,6 +187,7 @@ export default function TextSplit() {
               rows={15}
               autoFocus={true}
               minHeight="300px"
+              lang="plaintext"
               fileExtension="txt"
               theme={theme}
               data-default-input="true"
@@ -177,8 +198,13 @@ export default function TextSplit() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
-              Split Results
-              <Badge variant="outline">{splitResult.length} parts</Badge>
+              <span>Split Results</span>
+              <div className="flex items-center gap-2">
+                <Badge variant="outline">{splitResult.length} parts</Badge>
+                {splitResult.length > 0 && (
+                  <CopyButton text={splitResult.join("\n")} variant="outline" />
+                )}
+              </div>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -193,9 +219,12 @@ export default function TextSplit() {
                       <div className="font-mono text-sm flex-1 break-words">
                         {part || "<empty>"}
                       </div>
-                      <Badge variant="outline" className="ml-2 text-xs">
-                        {index + 1}
-                      </Badge>
+                      <div className="flex items-center gap-1">
+                        <CopyButton text={part} />
+                        <Badge variant="outline" className="text-xs">
+                          {index + 1}
+                        </Badge>
+                      </div>
                     </div>
                     <div className="text-xs text-gray-500 mt-1">
                       Length: {part.length} characters
@@ -212,61 +241,36 @@ export default function TextSplit() {
         </Card>
       </div>
 
-      <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-          Common Delimiters:
-        </h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm text-blue-700 dark:text-blue-300">
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              ,
-            </span>{" "}
-            Comma
-          </div>
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              ;
-            </span>{" "}
-            Semicolon
-          </div>
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              |
-            </span>{" "}
-            Pipe
-          </div>
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              \\n
-            </span>{" "}
-            New Line
-          </div>
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              \\t
-            </span>{" "}
-            Tab
-          </div>
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              {" "}
-            </span>{" "}
-            Space
-          </div>
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              :
-            </span>{" "}
-            Colon
-          </div>
-          <div>
-            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
-              -
-            </span>{" "}
-            Dash
-          </div>
-        </div>
-      </div>
+      {splitResult.length > 0 && (
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <span>Split as Lines</span>
+              <CopyButton text={splitResult.join("\n")} variant="outline" />
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TextArea
+              id="output"
+              value={splitResult.join("\n")}
+              readOnly={true}
+              placeholder="Split results will appear here, one part per line..."
+              data-testid="lines-output"
+              className="min-h-[200px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
+              rows={10}
+              minHeight="200px"
+              lang="plaintext"
+              fileExtension="txt"
+              theme={theme}
+            />
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+              Each part is shown on a separate line for easy copying
+            </p>
+          </CardContent>
+        </Card>
+      )}
+
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

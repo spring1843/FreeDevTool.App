@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { formatCSS, formatLESS, formatSCSS } from "@/lib/formatters";
@@ -11,16 +10,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Code, Minimize2, RotateCcw } from "lucide-react";
+import { Code, Minimize2 } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { useLocation } from "wouter";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { DEFAULT_CSS, DEFAULT_SCSS, DEFAULT_LESS } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 type FormatType = "css" | "scss" | "less";
 
 export default function CSSFormatter() {
+  const tool = getToolByPath("/tools/css-formatter");
   const [location] = useLocation();
   const { theme } = useTheme();
 
@@ -117,6 +128,27 @@ export default function CSSFormatter() {
     setError(null);
   };
 
+  const handleClear = () => {
+    setInput("");
+    setOutput("");
+    setError(null);
+  };
+
+  const getDefaultForFormat = () => {
+    switch (format) {
+      case "scss":
+        return DEFAULT_SCSS;
+      case "less":
+        return DEFAULT_LESS;
+      default:
+        return DEFAULT_CSS;
+    }
+  };
+
+  const hasModifiedData =
+    input !== getDefaultForFormat() && input.trim() !== "";
+  const isAtDefault = input === getDefaultForFormat();
+
   useEffect(() => {
     formatCode(false); // Beautify by default
   }, [formatCode]);
@@ -130,8 +162,11 @@ export default function CSSFormatter() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               CSS/LESS/SCSS Formatter
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Format, beautify, or minify CSS, LESS, and SCSS stylesheets using
@@ -150,6 +185,43 @@ export default function CSSFormatter() {
         </Alert>
       ) : null}
 
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={() => formatCode(false)}
+            icon={<Code className="w-4 h-4 mr-2" />}
+            tooltip="Format and beautify CSS code"
+            className="bg-green-600 hover:bg-green-700 text-white"
+          >
+            Beautify Code
+          </ToolButton>
+          <ToolButton
+            variant="custom"
+            onClick={() => formatCode(true)}
+            icon={<Minimize2 className="w-4 h-4 mr-2" />}
+            tooltip="Minify CSS to reduce file size"
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Minify Code
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={input.trim() === "" && output.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       <div className="mb-6 flex flex-wrap gap-4 items-center">
         <div className="flex items-center gap-2">
           <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
@@ -165,27 +237,6 @@ export default function CSSFormatter() {
               <SelectItem value="less">LESS</SelectItem>
             </SelectContent>
           </Select>
-        </div>
-
-        <div className="flex gap-4">
-          <Button
-            onClick={() => formatCode(false)}
-            className="bg-green-600 hover:bg-green-700 text-white"
-          >
-            <Code className="w-4 h-4 mr-2" />
-            Beautify Code
-          </Button>
-          <Button
-            onClick={() => formatCode(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
-          >
-            <Minimize2 className="w-4 h-4 mr-2" />
-            Minify Code
-          </Button>
-          <Button onClick={handleReset} variant="outline">
-            <RotateCcw className="w-4 h-4 mr-2" />
-            Reset
-          </Button>
         </div>
       </div>
 
@@ -235,29 +286,7 @@ export default function CSSFormatter() {
         </Card>
       </div>
 
-      <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-          CSS/LESS/SCSS Formatting Options:
-        </h3>
-        <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-          <div>
-            • <strong>Format Selector:</strong> Choose CSS, SCSS, or LESS to use
-            the appropriate parser and formatting rules
-          </div>
-          <div>
-            • <strong>Beautify:</strong> Adds proper indentation, line breaks,
-            and spacing for readability
-          </div>
-          <div>
-            • <strong>Minify:</strong> Removes all unnecessary whitespace and
-            comments to reduce file size
-          </div>
-          <div>
-            • <strong>Benefits:</strong> Beautified CSS is easier to maintain,
-            minified CSS loads faster
-          </div>
-        </div>
-      </div>
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

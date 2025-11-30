@@ -3,15 +3,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Globe, Clock, ArrowRight, Copy, Check, RefreshCw } from "lucide-react";
 import {
-  Globe,
-  Clock,
-  ArrowRight,
-  Copy,
-  Check,
-  RefreshCw,
-  Share,
-} from "lucide-react";
+  ResetButton,
+  ClearButton,
+  NowButton,
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { TimezoneSelector } from "@/components/ui/timezone-selector";
 import { getUserTimezone } from "@/lib/time-tools";
@@ -21,6 +22,10 @@ import {
   getValidatedParam,
 } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
 
 interface TimezoneConversion {
   timezone: string;
@@ -31,6 +36,7 @@ interface TimezoneConversion {
 }
 
 export default function TimezoneConverter() {
+  const tool = getToolByPath("/tools/timezone-converter");
   const [sourceDate, setSourceDate] = useState("");
   const [sourceTime, setSourceTime] = useState("");
   const [sourceTimezone, setSourceTimezone] = useState(getUserTimezone());
@@ -266,6 +272,34 @@ export default function TimezoneConverter() {
     setSourceTime(timeStr);
   };
 
+  const handleReset = () => {
+    const now = new Date();
+    const dateStr = now.toISOString().split("T")[0];
+    const timeStr = now.toTimeString().split(" ")[0];
+    setSourceDate(dateStr);
+    setSourceTime(timeStr);
+    setSourceTimezone(getUserTimezone());
+    setTargetTimezones([
+      "America/New_York",
+      "Europe/London",
+      "Asia/Tokyo",
+      "Australia/Sydney",
+    ]);
+    setConversions([]);
+  };
+
+  const handleClear = () => {
+    setSourceDate("");
+    setSourceTime("");
+    setConversions([]);
+  };
+
+  const hasModifiedData =
+    sourceDate.trim() !== "" &&
+    sourceTime.trim() !== "" &&
+    conversions.length > 0;
+  const isAtDefault = false; // Always allow reset to current time
+
   const shareConverter = async () => {
     const success = await copyShareableURL({
       date: sourceDate,
@@ -290,16 +324,56 @@ export default function TimezoneConverter() {
   // No need for manual timezone mapping - TimezoneSelector handles this
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
-          Timezone Converter
-        </h2>
-        <p className="text-slate-600 dark:text-slate-400">
-          Convert time across multiple timezones with second-level precision
-        </p>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              Timezone Converter
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Convert time across multiple timezones with second-level precision
+            </p>
+          </div>
+          <SecurityBanner variant="compact" />
+        </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            onClick={convertTimezones}
+            icon={<RefreshCw className="w-4 h-4 mr-2" />}
+            tooltip="Convert source time to all target timezones"
+            data-testid="convert-timezones-button"
+          >
+            Convert Timezones
+          </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={shareConverter}
+            tooltip="Copy shareable URL with current settings"
+          />
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to current time and defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={sourceDate.trim() === "" && sourceTime.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       {/* Source Time Input */}
       <Card className="mb-6">
@@ -344,36 +418,14 @@ export default function TimezoneConverter() {
               />
             </div>
             <div className="flex items-end">
-              <Button
+              <NowButton
                 onClick={setCurrentDateTime}
-                variant="outline"
-                className="w-full"
-                data-testid="set-current-time-button"
-              >
-                <Clock className="w-4 h-4 mr-2" />
-                Now
-              </Button>
+                tooltip="Set to current date and time"
+                toastTitle="Time updated"
+                toastDescription="Set to current date and time"
+                iconOnly
+              />
             </div>
-          </div>
-
-          <div className="flex gap-2 pt-4">
-            <Button
-              onClick={convertTimezones}
-              className="flex-1"
-              data-testid="convert-timezones-button"
-            >
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Convert Timezones
-            </Button>
-
-            <Button
-              onClick={shareConverter}
-              variant="outline"
-              data-testid="share-converter-button"
-            >
-              <Share className="w-4 h-4 mr-2" />
-              Share
-            </Button>
           </div>
         </CardContent>
       </Card>
@@ -482,40 +534,7 @@ export default function TimezoneConverter() {
         </Card>
       )}
 
-      {/* Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle>About Timezone Converter</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-            <div>
-              <h4 className="font-semibold mb-2">Features:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• Second-level time precision</li>
-                <li>• 100+ supported timezones worldwide</li>
-                <li>• Automatic daylight saving time handling</li>
-                <li>• Multiple target timezone conversion</li>
-                <li>• Real-time offset calculation</li>
-                <li>• Copy converted times to clipboard</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-2">Usage Tips:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• Use 24-hour format for precise conversion</li>
-                <li>• Add/remove target timezones as needed</li>
-                <li>• Click "Now" to use current date/time</li>
-                <li>• Copy button includes both date and time</li>
-                <li>• UTC offsets adjust for DST automatically</li>
-                <li>• Perfect for scheduling global meetings</li>
-              </ul>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="flex justify-center mt-8" />
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

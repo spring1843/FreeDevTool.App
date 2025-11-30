@@ -15,9 +15,20 @@ import {
   getUserTimezone,
 } from "@/lib/time-tools";
 import { Clock, Globe, Plus, X } from "lucide-react";
+import {
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import { useToast } from "@/hooks/use-toast";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
 
 export default function WorldClock() {
+  const tool = getToolByPath("/tools/world-clock");
   const [currentTimes, setCurrentTimes] = useState<
     Record<string, { time: string; date: string; offset: string }>
   >({});
@@ -155,17 +166,26 @@ export default function WorldClock() {
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
-            World Clock
-          </h2>
-          <p className="text-slate-600 dark:text-slate-400">
-            Browse all continents and important time zones, then add the ones
-            you're interested in to your custom clocks
-          </p>
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              World Clock
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Browse all continents and important time zones, then add the ones
+              you're interested in to your custom clocks
+            </p>
+          </div>
+          <SecurityBanner variant="compact" />
         </div>
-        <div className="flex gap-2">
+      </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
           <Button
             onClick={() => setShowAddClock(!showAddClock)}
             data-testid="add-clock-toggle"
@@ -173,18 +193,18 @@ export default function WorldClock() {
             <Plus className="w-4 h-4 mr-2" />
             Add Clock
           </Button>
-          {displayedCities.length > 0 && (
-            <Button
+        </ActionButtonGroup>
+        {displayedCities.length > 0 && (
+          <DataButtonGroup>
+            <ClearButton
               onClick={resetToDefault}
-              variant="outline"
-              data-testid="reset-clocks"
-            >
-              <X className="w-4 h-4 mr-2" />
-              Clear All
-            </Button>
-          )}
-        </div>
-      </div>
+              tooltip="Clear all custom clocks"
+              hasModifiedData={displayedCities.length > 0}
+              disabled={displayedCities.length === 0}
+            />
+          </DataButtonGroup>
+        )}
+      </ToolButtonGroup>
 
       {/* Add Clock Dropdown */}
       {showAddClock ? (
@@ -250,44 +270,41 @@ export default function WorldClock() {
                     return (
                       <Card
                         key={city.timezone}
-                        className="transition-all hover:shadow-md border-primary/20"
+                        className="transition-all hover:shadow-md border-primary/20 relative"
                       >
-                        <CardHeader className="pb-3">
-                          <div className="flex items-center justify-between">
-                            <CardTitle className="text-lg flex items-center">
-                              <Globe className="w-4 h-4 mr-2" />
-                              {city.name}
-                            </CardTitle>
-                            <div className="flex items-center gap-2">
-                              <Badge variant="secondary" className="text-xs">
-                                {city.country}
-                              </Badge>
-                              <Button
-                                onClick={() => removeClock(city.timezone)}
-                                size="sm"
-                                variant="ghost"
-                                className="h-6 w-6 p-0 text-slate-400 hover:text-red-500"
-                                data-testid={`remove-clock-${index}`}
-                              >
-                                <X className="w-3 h-3" />
-                              </Button>
+                        <Button
+                          onClick={() => removeClock(city.timezone)}
+                          size="sm"
+                          variant="ghost"
+                          className="absolute top-2 right-2 h-6 w-6 p-0 text-slate-400 hover:text-red-500"
+                          data-testid={`remove-clock-${index}`}
+                        >
+                          <X className="w-3 h-3" />
+                        </Button>
+                        <CardContent className="pt-6">
+                          <div className="text-center">
+                            <div className="flex items-center justify-center mb-2">
+                              <h4 className="font-semibold text-slate-900 dark:text-slate-100">
+                                {city.name}
+                              </h4>
                             </div>
+                            <Badge variant="secondary" className="text-xs mb-3">
+                              {city.country}
+                            </Badge>
+                            {timeData ? (
+                              <div>
+                                <div className="text-2xl font-mono font-bold text-slate-900 dark:text-slate-100 mb-1">
+                                  {timeData.time}
+                                </div>
+                                <div className="text-sm text-slate-600 dark:text-slate-400 mb-1">
+                                  {timeData.date}
+                                </div>
+                                <div className="text-xs text-slate-500 dark:text-slate-500">
+                                  {timeData.offset}
+                                </div>
+                              </div>
+                            ) : null}
                           </div>
-                        </CardHeader>
-                        <CardContent className="pt-0">
-                          {timeData ? (
-                            <div className="text-center">
-                              <div className="text-2xl font-mono font-bold text-slate-900 dark:text-slate-100 mb-1">
-                                {timeData.time}
-                              </div>
-                              <div className="text-sm text-slate-600 dark:text-slate-400 mb-1">
-                                {timeData.date}
-                              </div>
-                              <div className="text-xs text-slate-500 dark:text-slate-500">
-                                {timeData.offset}
-                              </div>
-                            </div>
-                          ) : null}
                         </CardContent>
                       </Card>
                     );
@@ -449,6 +466,8 @@ export default function WorldClock() {
             </Card>
           ))}
       </div>
+
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

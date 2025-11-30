@@ -2,8 +2,6 @@ import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { TextArea } from "@/components/ui/textarea";
-import { useTheme } from "@/providers/theme-provider";
 import {
   Select,
   SelectContent,
@@ -14,8 +12,6 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   QrCode,
-  Download,
-  Copy,
   Smartphone,
   Globe,
   Mail,
@@ -23,10 +19,22 @@ import {
   Wifi,
   CreditCard,
 } from "lucide-react";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import { useToast } from "@/hooks/use-toast";
 
 import QRCodeLib from "qrcode-generator";
 import { DEFAULT_QR_GENERATOR } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
 
 // Standalone QR Code generation using qrcode-generator library
 const generateQRCode = (
@@ -140,6 +148,7 @@ const qrPresets: QRPreset[] = [
 ];
 
 export default function QRGenerator() {
+  const tool = getToolByPath("/tools/qr-generator");
   const [inputText, setInputText] = useState(DEFAULT_QR_GENERATOR);
   const [qrType, setQrType] = useState<QRType>("url");
   const [qrSize, setQrSize] = useState(300);
@@ -148,7 +157,7 @@ export default function QRGenerator() {
   const [error, setError] = useState("");
 
   const { toast } = useToast();
-  const { theme } = useTheme();
+  // Theme no longer needed after switching to native textarea
 
   const currentPreset = qrPresets.find(p => p.type === qrType) || qrPresets[0];
 
@@ -245,6 +254,27 @@ export default function QRGenerator() {
     setInputText(preset);
   };
 
+  const handleReset = () => {
+    setInputText(DEFAULT_QR_GENERATOR);
+    setQrType("url");
+    setQrSize(300);
+    setQrUrl("");
+    setSvgData("");
+    setError("");
+  };
+
+  const handleClear = () => {
+    setInputText("");
+    setQrUrl("");
+    setSvgData("");
+    setError("");
+  };
+
+  const hasModifiedData =
+    inputText !== DEFAULT_QR_GENERATOR && inputText.trim() !== "";
+  const isAtDefault =
+    inputText === DEFAULT_QR_GENERATOR && qrType === "url" && qrSize === 300;
+
   const getQuickPresets = () => {
     const presets = {
       text: ["Hello World!", "DevTools Suite", "Generated with QR Tool"],
@@ -279,14 +309,67 @@ export default function QRGenerator() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
-          QR Code Generator
-        </h2>
-        <p className="text-slate-600 dark:text-slate-400">
-          Generate QR codes for text, URLs, contact info, WiFi credentials, and
-          more
-        </p>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              QR Code Generator
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Generate QR codes for text, URLs, contact info, WiFi credentials,
+              and more
+            </p>
+          </div>
+          <SecurityBanner variant="compact" />
+        </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={generateQR}
+            disabled={!inputText.trim()}
+            tooltip="Generate QR Code from input"
+          >
+            Generate QR Code
+          </ToolButton>
+          {qrUrl ? (
+            <>
+              <ToolButton
+                variant="download"
+                onClick={downloadQR}
+                tooltip="Download QR code as SVG"
+              >
+                Download
+              </ToolButton>
+              <ToolButton
+                variant="copy"
+                onClick={copyQRUrl}
+                tooltip="Copy QR code URL to clipboard"
+              >
+                Copy
+              </ToolButton>
+            </>
+          ) : null}
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={inputText.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Input Controls */}
@@ -341,18 +424,20 @@ export default function QRGenerator() {
               </div>
 
               <div>
-                <Label htmlFor="input">{currentPreset.name} Content</Label>
-                <TextArea
-                  id="input"
+                <Label htmlFor="qr-text-input">
+                  {currentPreset.name} Content
+                </Label>
+                {/* Use a native textarea for simpler e2e interaction (Playwright .fill & .toHaveValue) */}
+                <textarea
+                  id="qr-text-input"
                   placeholder={currentPreset.placeholder}
                   value={inputText}
                   onChange={e => setInputText(e.target.value)}
                   rows={4}
                   data-testid="qr-input"
                   autoFocus={true}
-                  fileExtension="txt"
-                  theme={theme}
                   data-default-input="true"
+                  className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 />
               </div>
 
@@ -363,35 +448,6 @@ export default function QRGenerator() {
                   </AlertDescription>
                 </Alert>
               ) : null}
-
-              <div className="flex gap-2">
-                <Button
-                  onClick={generateQR}
-                  className="flex-1"
-                  disabled={!inputText.trim()}
-                  data-testid="generate-qr"
-                >
-                  Generate QR Code
-                </Button>
-                {qrUrl ? (
-                  <>
-                    <Button
-                      onClick={downloadQR}
-                      variant="outline"
-                      data-testid="download-qr"
-                    >
-                      <Download className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      onClick={copyQRUrl}
-                      variant="outline"
-                      data-testid="copy-qr-url"
-                    >
-                      <Copy className="w-4 h-4" />
-                    </Button>
-                  </>
-                ) : null}
-              </div>
             </CardContent>
           </Card>
 
@@ -460,59 +516,7 @@ export default function QRGenerator() {
         </Card>
       </div>
 
-      <div className="flex justify-center my-8" />
-
-      {/* Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle>QR Code Types & Usage</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-            <div>
-              <h4 className="font-semibold mb-2">Supported QR Types:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>
-                  • <strong>Plain Text:</strong> Any text content
-                </li>
-                <li>
-                  • <strong>Website URL:</strong> Links to web pages
-                </li>
-                <li>
-                  • <strong>Email:</strong> Email addresses with mailto links
-                </li>
-                <li>
-                  • <strong>Phone Number:</strong> Clickable phone numbers
-                </li>
-                <li>
-                  • <strong>SMS Message:</strong> Pre-filled text messages
-                </li>
-                <li>
-                  • <strong>WiFi Network:</strong> Network credentials for easy
-                  connection
-                </li>
-                <li>
-                  • <strong>Contact Card:</strong> vCard format contact
-                  information
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-2">Usage Tips:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• QR codes auto-generate as you type</li>
-                <li>• Larger sizes work better for complex content</li>
-                <li>• Test QR codes with different apps and devices</li>
-                <li>• WiFi format: NetworkName:Password:Security</li>
-                <li>• SMS format: PhoneNumber:Message</li>
-                <li>• Contact format: Name:Phone:Email</li>
-              </ul>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="flex justify-center mt-8" />
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }
