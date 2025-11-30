@@ -68,23 +68,27 @@ deps-audit-fix: ## Fix dependency security issues
 help: ## Display this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "$(GREEN)%-20s$(NC) %s\n", $$1, $$2}'
 
-start: ## Start the development server
-	npm run dev
+start: clean build ## Build and serve static files locally (for preview)
+	npx serve dist/public
 
 stop: ## Stop the development server (if running in background)
-	@pkill -f "tsx server/index.ts" || true
+	@pkill -f "tsx dev-server/index.ts" || true
 	@pkill -f "vite" || true
 
 restart: stop start ## Restart the development server
 
 dev: ## Start development server with verbose logging
-	NODE_ENV=development DEBUG=* npm run dev
+	PORT=9095 NODE_ENV=development DEBUG=* npm run dev
 
-build: clean
+npm-build:
 	npm run build
 
-build-static: clean
-	npm run build:static
+inject-version:
+	@printf '{"version": "%s", "built-at": "%s"}\n' \
+	  "${GIT_SHA_SHORT}" "$$(date -u +%Y-%m-%dT%H:%M:%SZ)" > dist/public/version.json
+
+build: clean npm-build inject-version
+	cat dist/public/version.json
 
 build-image: ## Build the Docker image for the app
 	docker build --platform linux/amd64 -t ${IMAGE_TAG} -f infra/images/Dockerfile .
@@ -136,8 +140,9 @@ test-ui: ## Run tests with UI interface
 test-coverage: ## Run tests with coverage report
 	npx vitest run --coverage
 
-e2e-test: ## Run end-to-end tests with Playwright
-	npx playwright test
+e2e-test: ## Run end-to-end tests with Playwright (use TARGET=https://host to test remote)
+	@echo "Running e2e tests against: ${TARGET:-http://localhost:3000}"
+	@npx playwright test
 
 e2e-test-ui: ## Run end-to-end tests with UI
 	npx playwright test --ui
@@ -152,6 +157,8 @@ clean: ## Clean build artifacts and temporary files
 	rm -rf dist/
 	rm -rf node_modules/.cache/
 	rm -rf .next/
+	rm -rf playwright-report/
+	rm -rf test-results/
 
 clean-all: clean ## Clean everything including node_modules
 	rm -rf node_modules/
@@ -189,7 +196,7 @@ invalidate-stage-cdn:
 warm-cache-stage: ## Warm CloudFront cache for staging (shortcut for warm-cache DOMAIN=stage.freedevtool.app)
 	npx tsx scripts/warm-cache.ts https://stage.freedevtool.app
 
-deploy-to-stage: build-static copy-static-assets-to-stage invalidate-stage-cdn warm-cache-stage
+deploy-to-stage: build copy-static-assets-to-stage invalidate-stage-cdn warm-cache-stage
 
 copy-static-assets-to-production:
 	aws s3 sync ./dist/public s3://freedevtool-production
@@ -201,7 +208,7 @@ invalidate-production-cdn:
 warm-cache-production:
 	npx tsx scripts/warm-cache.ts https://freedevtool.app
 
-deploy-to-production: build-static copy-static-assets-to-production invalidate-production-cdn warm-cache-production
+deploy-to-production: build copy-static-assets-to-production invalidate-production-cdn warm-cache-production
 
 ## Infra Commands
 

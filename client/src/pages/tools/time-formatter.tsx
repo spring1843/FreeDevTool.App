@@ -1,11 +1,22 @@
 import { useState, useEffect, useCallback } from "react";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TimezoneSelector } from "@/components/ui/timezone-selector";
 import { getUserTimezone } from "@/lib/time-tools";
-import { Clock, Copy, Check, RefreshCw } from "lucide-react";
+import { Clock, Copy, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  ResetButton,
+  ClearButton,
+  NowButton,
+  ToolButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 interface TimeFormat {
   name: string;
@@ -14,6 +25,7 @@ interface TimeFormat {
 }
 
 export default function TimeFormatter() {
+  const tool = getToolByPath("/tools/time-formatter");
   const [inputTime, setInputTime] = useState("");
   const [inputDate, setInputDate] = useState("");
   const [inputTimezone, setInputTimezone] = useState(getUserTimezone());
@@ -48,7 +60,7 @@ export default function TimeFormatter() {
 
       const timeFormats: TimeFormat[] = [
         {
-          name: "24-Hour Format (HH:MM:SS)",
+          name: "24-Hour Format",
           value: dateTime.toLocaleTimeString("en-GB", {
             hour12: false,
             hour: "2-digit",
@@ -56,10 +68,10 @@ export default function TimeFormatter() {
             second: "2-digit",
             timeZone: inputTimezone,
           }),
-          description: "Standard 24-hour military time format",
+          description: "HH:MM:SS — Standard 24-hour military time format",
         },
         {
-          name: "12-Hour Format (h:MM:SS AM/PM)",
+          name: "12-Hour Format",
           value: dateTime.toLocaleTimeString("en-US", {
             hour12: true,
             hour: "numeric",
@@ -67,32 +79,34 @@ export default function TimeFormatter() {
             second: "2-digit",
             timeZone: inputTimezone,
           }),
-          description: "Standard 12-hour format with AM/PM",
+          description: "h:MM:SS AM/PM — Standard 12-hour format with AM/PM",
         },
         {
-          name: "ISO 8601 Time (HH:MM:SSZ)",
+          name: "ISO 8601 Time",
           value: dateTime.toISOString().split("T")[1],
-          description: "International standard time format with UTC",
+          description:
+            "HH:MM:SS.sssZ — International standard time format with UTC",
         },
         {
           name: "RFC 3339 DateTime",
           value: dateTime.toISOString(),
-          description: "Internet date/time format based on ISO 8601",
+          description:
+            "YYYY-MM-DDTHH:MM:SS.sssZ — Internet date/time format based on ISO 8601",
         },
         {
           name: "Unix Timestamp",
           value: Math.floor(dateTime.getTime() / 1000).toString(),
-          description: "Seconds since January 1, 1970 UTC",
+          description: "Numeric — Seconds since January 1, 1970 UTC",
         },
         {
           name: "Unix Timestamp (Milliseconds)",
           value: dateTime.getTime().toString(),
-          description: "Milliseconds since January 1, 1970 UTC",
+          description: "Numeric — Milliseconds since January 1, 1970 UTC",
         },
         {
           name: "UTC Time",
           value: dateTime.toUTCString().split(" ")[4],
-          description: "Time in Coordinated Universal Time",
+          description: "HH:MM:SS — Time in Coordinated Universal Time",
         },
         {
           name: "Local Time (Long)",
@@ -103,7 +117,8 @@ export default function TimeFormatter() {
             timeZoneName: "long",
             timeZone: inputTimezone,
           }),
-          description: "Local time with full timezone name",
+          description:
+            "h:MM:SS AM/PM Timezone — Local time with full timezone name",
         },
         {
           name: "Local Time (Short)",
@@ -114,7 +129,8 @@ export default function TimeFormatter() {
             timeZoneName: "short",
             timeZone: inputTimezone,
           }),
-          description: "Local time with abbreviated timezone",
+          description:
+            "h:MM:SS AM/PM TZ — Local time with abbreviated timezone",
         },
         {
           name: "Time Only (No Seconds)",
@@ -124,7 +140,7 @@ export default function TimeFormatter() {
             minute: "2-digit",
             timeZone: inputTimezone,
           }),
-          description: "24-hour format without seconds",
+          description: "HH:MM — 24-hour format without seconds",
         },
         {
           name: "12-Hour (No Seconds)",
@@ -134,7 +150,7 @@ export default function TimeFormatter() {
             minute: "2-digit",
             timeZone: inputTimezone,
           }),
-          description: "12-hour format without seconds",
+          description: "h:MM AM/PM — 12-hour format without seconds",
         },
         {
           name: "Microseconds Format",
@@ -145,7 +161,7 @@ export default function TimeFormatter() {
             second: "2-digit",
             timeZone: inputTimezone,
           })}.${dateTime.getMilliseconds().toString().padStart(3, "0")}000`,
-          description: "Time with microsecond precision",
+          description: "HH:MM:SS.ssssss — Time with microsecond precision",
         },
         {
           name: "Time with Offset",
@@ -169,33 +185,34 @@ export default function TimeFormatter() {
             .format(dateTime)
             .split(" ")
             .pop()}`,
-          description: "Time with timezone offset (±HH:MM)",
+          description: "HH:MM:SS ±HH:MM — Time with timezone offset",
         },
         {
           name: "Decimal Time",
           value: convertToDecimalTime(dateTime),
-          description: "French Revolutionary decimal time format",
+          description: "d:mm:ss — French Revolutionary decimal time format",
         },
         {
           name: "Internet Time (.beats)",
           value: convertToInternetTime(dateTime),
-          description: "Swatch Internet Time (BMT - Biel Mean Time)",
+          description: "@beats — Swatch Internet Time (BMT - Biel Mean Time)",
         },
         {
           name: "Julian Day Number",
           value: calculateJulianDay(dateTime).toFixed(6),
           description:
-            "Days since January 1, 4713 BCE proleptic Julian calendar",
+            "Numeric — Days since January 1, 4713 BCE proleptic Julian calendar",
         },
         {
           name: "Modified Julian Day",
           value: (calculateJulianDay(dateTime) - 2400000.5).toFixed(6),
-          description: "Modified Julian Day (MJD) for astronomical use",
+          description:
+            "Numeric — Modified Julian Day (MJD) for astronomical use",
         },
         {
           name: "Excel Serial Date",
           value: convertToExcelDate(dateTime).toFixed(6),
-          description: "Excel date serial number format",
+          description: "Numeric — Excel date serial number format",
         },
       ];
 
@@ -270,17 +287,57 @@ export default function TimeFormatter() {
     setInputTime(timeStr);
   };
 
+  const handleClear = () => {
+    setInputDate("");
+    setInputTime("");
+    setFormats([]);
+  };
+
+  const hasModifiedData = inputDate.trim() !== "" && inputTime.trim() !== "";
+  const isAtDefault = false; // Time formatter always starts with current time
+
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
-          Time Formatter
-        </h2>
-        <p className="text-slate-600 dark:text-slate-400">
-          Format time to all existing time standards and formats
-        </p>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              Time Formatter
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Format time to all existing time standards and formats
+            </p>
+          </div>
+          <SecurityBanner variant="compact" />
+        </div>
       </div>
+
+      <ToolButtonGroup className="mb-6 justify-end">
+        <DataButtonGroup>
+          <NowButton
+            onClick={setCurrentDateTime}
+            tooltip="Set to current date and time"
+            toastTitle="Time updated"
+            toastDescription="Set to current date and time"
+          />
+          <ResetButton
+            onClick={setCurrentDateTime}
+            tooltip="Reset to current time"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={inputDate.trim() === "" && inputTime.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       {/* Input Section */}
       <Card className="mb-6">
@@ -291,7 +348,7 @@ export default function TimeFormatter() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <Label htmlFor="input-date">Date</Label>
               <Input
@@ -323,17 +380,6 @@ export default function TimeFormatter() {
                 placeholder="Select timezone..."
                 data-testid="input-timezone-select"
               />
-            </div>
-            <div className="flex items-end">
-              <Button
-                onClick={setCurrentDateTime}
-                variant="outline"
-                className="w-full"
-                data-testid="set-current-button"
-              >
-                <RefreshCw className="w-4 h-4 mr-2" />
-                Now
-              </Button>
             </div>
           </div>
         </CardContent>
@@ -385,38 +431,7 @@ export default function TimeFormatter() {
         </Card>
       )}
 
-      {/* Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle>About Time Formatter</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-            <div>
-              <h4 className="font-semibold mb-2">Standard Formats:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• 24-hour and 12-hour formats</li>
-                <li>• ISO 8601 and RFC 3339 standards</li>
-                <li>• Unix timestamps (seconds/milliseconds)</li>
-                <li>• UTC and local time representations</li>
-                <li>• Timezone-aware formatting</li>
-                <li>• Microsecond precision support</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-2">Special Formats:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• French Revolutionary decimal time</li>
-                <li>• Swatch Internet Time (.beats)</li>
-                <li>• Julian Day Numbers (astronomical)</li>
-                <li>• Modified Julian Day (MJD)</li>
-                <li>• Excel serial date format</li>
-                <li>• Custom timezone offsets</li>
-              </ul>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }
