@@ -12,7 +12,7 @@ RUN make deps
 
 COPY . .
 
-RUN make build-static
+RUN make build
 
 FROM nginx:alpine
 

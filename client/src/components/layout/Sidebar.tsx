@@ -11,6 +11,7 @@ import { Link, useLocation } from "wouter";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { toolsData } from "@/data/tools";
 import {
+  Home,
   Calendar,
   ArrowRightLeft,
   Code,
@@ -337,7 +338,7 @@ export function Sidebar({
       <aside
         ref={sidebarRef}
         className={cn(
-          "w-full bg-white dark:bg-slate-900 h-full flex flex-col",
+          "w-full bg-white dark:bg-slate-900 h-full flex flex-col border-y border-slate-200 dark:border-slate-800 shadow-sm",
           className
         )}
         tabIndex={0}
@@ -345,6 +346,34 @@ export function Sidebar({
         aria-label="Tool navigation menu"
       >
         <nav className="p-6 space-y-3 flex-1 overflow-y-auto custom-scrollbar min-h-0">
+          {/* Home link at the very top */}
+          <Link href="/">
+            <Button
+              variant={location === "/" ? "default" : "ghost"}
+              onClick={onToolClick}
+              className={cn(
+                "w-full justify-start text-sm transition-all duration-300 relative rounded-xl h-11 group hover:scale-[1.02] hover:shadow-sm mb-2",
+                location === "/"
+                  ? "bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg font-medium"
+                  : "text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
+              )}
+              data-testid="nav-home"
+            >
+              {location === "/" ? (
+                <div className="absolute left-1 top-2 bottom-2 w-1 bg-primary-foreground rounded-r-full" />
+              ) : null}
+              <div
+                className={cn(
+                  "w-5 h-5 mr-3 flex-shrink-0 transition-all duration-300 group-hover:scale-110",
+                  location === "/" && "scale-110 text-primary-foreground"
+                )}
+              >
+                <Home className="w-4 h-4" />
+              </div>
+              <span className="truncate flex-1">Home</span>
+            </Button>
+          </Link>
+
           {/* Expand/Collapse All Controls */}
           <div className="flex gap-2 mb-4">
             <Button

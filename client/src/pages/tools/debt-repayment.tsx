@@ -1,11 +1,21 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Calculator, RotateCcw, CreditCard, BarChart3 } from "lucide-react";
+import { Calculator, CreditCard, BarChart3 } from "lucide-react";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 import {
   DEFAULT_DEBT_PRINCIPAL,
   DEFAULT_DEBT_ANNUAL_RATE,
@@ -39,6 +49,7 @@ interface DebtResult {
 }
 
 export default function DebtRepaymentCalculator() {
+  const tool = getToolByPath("/tools/debt-repayment");
   const [principal, setPrincipal] = useState(DEFAULT_DEBT_PRINCIPAL);
   const [annualRate, setAnnualRate] = useState(DEFAULT_DEBT_ANNUAL_RATE);
   const [monthlyPayment, setMonthlyPayment] = useState(
@@ -101,6 +112,22 @@ export default function DebtRepaymentCalculator() {
     setResult(null);
   };
 
+  const handleClear = () => {
+    setPrincipal(0);
+    setAnnualRate(0);
+    setMonthlyPayment(0);
+    setResult(null);
+  };
+
+  const hasModifiedData =
+    principal !== DEFAULT_DEBT_PRINCIPAL ||
+    annualRate !== DEFAULT_DEBT_ANNUAL_RATE ||
+    monthlyPayment !== DEFAULT_DEBT_MONTHLY_PAYMENT;
+  const isAtDefault =
+    principal === DEFAULT_DEBT_PRINCIPAL &&
+    annualRate === DEFAULT_DEBT_ANNUAL_RATE &&
+    monthlyPayment === DEFAULT_DEBT_MONTHLY_PAYMENT;
+
   useEffect(() => {
     calculateDebtRepayment();
   }, [calculateDebtRepayment]);
@@ -122,12 +149,15 @@ export default function DebtRepaymentCalculator() {
   const minimumPayment = principal * (annualRate / 100 / 12);
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto overflow-hidden">
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               Debt Repayment Calculator
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Calculate debt payoff timeline and interest savings
@@ -136,6 +166,36 @@ export default function DebtRepaymentCalculator() {
           <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={calculateDebtRepayment}
+            tooltip="Calculate debt repayment schedule"
+            icon={<Calculator className="w-4 h-4 mr-2" />}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Calculate
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset all values to defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={
+              principal === 0 && annualRate === 0 && monthlyPayment === 0
+            }
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <Card>
@@ -177,23 +237,9 @@ export default function DebtRepaymentCalculator() {
                 onChange={e => setMonthlyPayment(Number(e.target.value))}
                 placeholder="Monthly payment amount"
               />
-              <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              <div className="text-sm text-gray-600 dark:text-gray-400 mt-1 break-words min-w-0">
                 Minimum payment: {formatCurrency(minimumPayment)}
               </div>
-            </div>
-
-            <div className="flex gap-3 pt-4">
-              <Button
-                onClick={calculateDebtRepayment}
-                className="bg-red-600 hover:bg-red-700 text-white"
-              >
-                <Calculator className="w-4 h-4 mr-2" />
-                Calculate
-              </Button>
-              <Button onClick={handleReset} variant="outline">
-                <RotateCcw className="w-4 h-4 mr-2" />
-                Reset
-              </Button>
             </div>
           </CardContent>
         </Card>
@@ -209,7 +255,7 @@ export default function DebtRepaymentCalculator() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                  <div className="text-2xl font-bold text-red-600 dark:text-red-400">
+                  <div className="text-2xl font-bold text-red-600 dark:text-red-400 break-words min-w-0 overflow-x-auto">
                     {formatTime(result.payoffTime)}
                   </div>
                   <div className="text-sm text-red-700 dark:text-red-300">
@@ -217,7 +263,7 @@ export default function DebtRepaymentCalculator() {
                   </div>
                 </div>
                 <div className="text-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
-                  <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">
+                  <div className="text-2xl font-bold text-orange-600 dark:text-orange-400 break-words min-w-0 overflow-x-auto">
                     {formatCurrency(result.totalInterest)}
                   </div>
                   <div className="text-sm text-orange-700 dark:text-orange-300">
@@ -227,21 +273,30 @@ export default function DebtRepaymentCalculator() {
               </div>
 
               <div className="space-y-2">
-                <Badge variant="outline" className="w-full justify-between p-2">
+                <Badge
+                  variant="outline"
+                  className="w-full justify-between p-2 flex-wrap"
+                >
                   <span>Original Debt:</span>
-                  <span className="font-semibold">
+                  <span className="font-semibold break-words min-w-0">
                     {formatCurrency(principal)}
                   </span>
                 </Badge>
-                <Badge variant="outline" className="w-full justify-between p-2">
+                <Badge
+                  variant="outline"
+                  className="w-full justify-between p-2 flex-wrap"
+                >
                   <span>Total Payments:</span>
-                  <span className="font-semibold">
+                  <span className="font-semibold break-words min-w-0">
                     {formatCurrency(result.totalPayments)}
                   </span>
                 </Badge>
-                <Badge variant="outline" className="w-full justify-between p-2">
+                <Badge
+                  variant="outline"
+                  className="w-full justify-between p-2 flex-wrap"
+                >
                   <span>Interest Paid:</span>
-                  <span className="font-semibold">
+                  <span className="font-semibold break-words min-w-0">
                     {formatCurrency(result.totalInterest)}
                   </span>
                 </Badge>
@@ -250,7 +305,7 @@ export default function DebtRepaymentCalculator() {
               {monthlyPayment <= minimumPayment && (
                 <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
                   <div className="text-sm text-yellow-800 dark:text-yellow-200">
-                    ⚠️ Warning: Your payment may not cover the minimum interest.
+                    Warning: Your payment may not cover the minimum interest.
                     Consider increasing your monthly payment.
                   </div>
                 </div>
@@ -413,6 +468,7 @@ export default function DebtRepaymentCalculator() {
           </Card>
         </>
       ) : null}
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }
