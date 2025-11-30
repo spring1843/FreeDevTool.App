@@ -4,11 +4,22 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Key, CheckCircle, XCircle } from "lucide-react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useState, useEffect, useCallback } from "react";
-import { ToolButton, ResetButton } from "@/components/ui/tool-button";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 import { DEFAULT_JWT } from "@/data/defaults";
 import { useTheme } from "@/providers/theme-provider";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function JWTDecoder() {
+  const tool = getToolByPath("/tools/jwt-decoder");
   const [token, setToken] = useState(DEFAULT_JWT);
   const [header, setHeader] = useState("");
   const [payload, setPayload] = useState("");
@@ -79,6 +90,18 @@ export default function JWTDecoder() {
     setError(null);
   };
 
+  const handleClear = () => {
+    setToken("");
+    setHeader("");
+    setPayload("");
+    setSignature("");
+    setIsValid(false);
+    setError(null);
+  };
+
+  const hasModifiedData = token !== DEFAULT_JWT && token.trim() !== "";
+  const isAtDefault = token === DEFAULT_JWT;
+
   useEffect(() => {
     decodeToken();
   }, [decodeToken]);
@@ -88,8 +111,11 @@ export default function JWTDecoder() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               JWT Decoder
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Decode and validate JSON Web Tokens (JWT)
@@ -98,6 +124,38 @@ export default function JWTDecoder() {
           <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={decodeToken}
+            icon={<Key className="w-4 h-4 mr-2" />}
+            tooltip="Decode JWT token"
+          >
+            Decode
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default token"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={
+              token.trim() === "" &&
+              header.trim() === "" &&
+              payload.trim() === "" &&
+              signature.trim() === ""
+            }
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       {error ? (
         <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
@@ -127,20 +185,6 @@ export default function JWTDecoder() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="mb-4 flex gap-3">
-            <ToolButton
-              variant="custom"
-              onClick={decodeToken}
-              icon={<Key className="w-4 h-4 mr-2" />}
-              tooltip="Decode JWT token"
-            >
-              Decode
-            </ToolButton>
-            <ResetButton
-              onClick={handleReset}
-              tooltip="Reset to default token"
-            />
-          </div>
           <TextArea
             id="input"
             value={token}
@@ -151,8 +195,10 @@ export default function JWTDecoder() {
             rows={5}
             data-default-input="true"
             autoFocus={true}
-            fileExtension="json"
+            lang="plaintext"
+            fileExtension="txt"
             theme={theme}
+            lineWrapping={true}
           />
         </CardContent>
       </Card>
@@ -222,6 +268,7 @@ export default function JWTDecoder() {
           </CardContent>
         </Card>
       </div>
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }

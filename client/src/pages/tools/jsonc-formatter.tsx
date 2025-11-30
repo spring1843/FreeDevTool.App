@@ -1,17 +1,28 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { formatJSONC } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Code, RotateCcw } from "lucide-react";
+import { Code } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 import { DEFAULT_JSONC } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function JSONCFormatter() {
+  const tool = getToolByPath("/tools/jsonc-formatter");
   const [input, setInput] = useState(DEFAULT_JSONC);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -42,6 +53,15 @@ export default function JSONCFormatter() {
     setError(null);
   };
 
+  const handleClear = () => {
+    setInput("");
+    setOutput("");
+    setError(null);
+  };
+
+  const hasModifiedData = input !== DEFAULT_JSONC && input.trim() !== "";
+  const isAtDefault = input === DEFAULT_JSONC;
+
   useEffect(() => {
     document.title = "JSONC Formatter - FreeDevTool.App";
     formatCode();
@@ -52,8 +72,11 @@ export default function JSONCFormatter() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
               JSONC Formatter
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Format JSON with Comments (JSONC) files while preserving comments
@@ -62,6 +85,33 @@ export default function JSONCFormatter() {
           <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={formatCode}
+            icon={<Code className="w-4 h-4 mr-2" />}
+            tooltip="Format and beautify JSONC code"
+          >
+            Format JSONC
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={input.trim() === "" && output.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       {error ? (
         <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
@@ -87,26 +137,13 @@ export default function JSONCFormatter() {
               onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your JSONC code here..."
               className="font-mono text-sm min-h-[400px] resize-y"
-              lang="javascript"
+              lang="json"
               autoFocus={true}
               minHeight="400px"
               fileExtension="jsonc"
               theme={theme}
               data-default-input="true"
             />
-            <div className="flex gap-2 flex-wrap">
-              <Button onClick={formatCode} className="flex-1 sm:flex-none">
-                Format JSONC
-              </Button>
-              <Button
-                onClick={handleReset}
-                variant="outline"
-                className="flex items-center gap-2"
-              >
-                <RotateCcw className="w-4 h-4" />
-                Reset
-              </Button>
-            </div>
           </CardContent>
         </Card>
 
@@ -127,7 +164,7 @@ export default function JSONCFormatter() {
               className="font-mono text-sm min-h-[400px] resize-y"
               minHeight="400px"
               theme={theme}
-              lang="javascript"
+              lang="json"
               fileExtension="jsonc"
             />
             <div className="mt-4 text-sm text-slate-500 dark:text-slate-400">
@@ -140,34 +177,7 @@ export default function JSONCFormatter() {
         </Card>
       </div>
 
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>About JSONC Format</CardTitle>
-        </CardHeader>
-        <CardContent className="text-sm text-slate-600 dark:text-slate-400 space-y-2">
-          <p>
-            <strong>JSONC (JSON with Comments)</strong> is an extension of JSON
-            that allows comments:
-          </p>
-          <ul className="list-disc ml-6 space-y-1">
-            <li>
-              <strong>Single-line comments:</strong> {`// This is a comment`}
-            </li>
-            <li>
-              <strong>Multi-line comments:</strong>{" "}
-              {`/* This is a multi-line comment */`}
-            </li>
-            <li>
-              <strong>Use cases:</strong> Configuration files, VS Code settings,
-              TypeScript configs
-            </li>
-            <li>
-              <strong>Popular tools:</strong> VS Code, TypeScript, Azure DevOps,
-              and more
-            </li>
-          </ul>
-        </CardContent>
-      </Card>
+      <ToolExplanations explanations={tool?.explanations} />
     </div>
   );
 }
