@@ -320,6 +320,11 @@ export default function MicrophoneTest() {
       audioRef.current.play();
       setIsPlaying(true);
 
+      toast({
+        title: "Playing Recording",
+        description: "Your recorded audio is now playing.",
+      });
+
       audioRef.current.onended = () => {
         setIsPlaying(false);
         URL.revokeObjectURL(url);
