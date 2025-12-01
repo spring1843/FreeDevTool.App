@@ -83,15 +83,12 @@ dev: ## Start development server with verbose logging
 npm-build: ## Run npm build to build assets
 	npm run build
 
-inject-version: ## Inject version information into build artifacts
-	@printf '{"version": "%s", "built-at": "%s"}\n' \
-	  "${GIT_SHA_SHORT}" "$$(date -u +%Y-%m-%dT%H:%M:%SZ)" > dist/public/version.json
-	cat dist/public/version.json
+build: clean npm-build ## Build the project (version.json generated in routes script)
 
-build: clean npm-build inject-version ## Build the project
-
-build-prod: build ## Build the project for production
+move-robots-prod: ## Use a different robots.txt for production to allow indexing
 	mv dist/public/robots-prod.txt dist/public/robots.txt
+
+build-prod: build move-robots-prod ## Build the project for production
 
 build-image: ## Build the Docker image for the app
 	docker build --platform linux/amd64 -t ${IMAGE_TAG} -f infra/images/Dockerfile .
