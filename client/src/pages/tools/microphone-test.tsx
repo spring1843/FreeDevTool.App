@@ -374,6 +374,15 @@ export default function MicrophoneTest() {
     });
   };
 
+  const getPermissionStatus = () => {
+    if (hasPermission === null)
+      return { color: "text-gray-600", text: "Not Requested" };
+    if (hasPermission) return { color: "text-green-600", text: "Granted" };
+    return { color: "text-red-600", text: "Denied" };
+  };
+
+  const permissionStatus = getPermissionStatus();
+
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
@@ -397,9 +406,14 @@ export default function MicrophoneTest() {
       {/* Main Card */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center">
-            <Mic className="w-5 h-5 mr-2" />
-            Microphone Recording
+          <CardTitle className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Mic className="w-5 h-5 mr-2" />
+              Microphone Recording
+            </div>
+            <Badge variant="outline" className={permissionStatus.color}>
+              Permission: {permissionStatus.text}
+            </Badge>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
