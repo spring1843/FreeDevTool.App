@@ -1,7 +1,7 @@
-export const SITE_NAME = "FreeDevTool.App";
+const SITE_NAME = "FreeDevTool.App";
 export const HOMEPAGE_TITLE = `${SITE_NAME} | Free Developer Tools`;
 
-export interface ToolForTitle {
+interface ToolForTitle {
   metadata: {
     title: string;
   };

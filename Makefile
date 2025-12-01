@@ -40,7 +40,7 @@ setup: ## Complete project setup - install dependencies, browsers, and prepare f
 
 all: clean setup lint type-check test build ## Run full development setup with all dependencies including tests
 
-pre-commit: format type-check lint-fix ## Pre-commit hook (fix, format, check)
+pre-commit: format type-check lint-fix knip ## Pre-commit hook (fix, format, check)
 
 ci-containerized:  ## Run CI checks inside a container that has dependencies installed
 	docker run --rm -v "${PWD}:/app" ${E2E_IMAGE_USE} make setup && make ci
@@ -53,6 +53,14 @@ install: deps ## Install dependencies (alias for deps)
 
 deps: ## Install all dependencies
 	npm install
+
+## Knip - unused dependencies/exports/files analysis
+
+knip: ## Analyze unused deps/exports/files with Knip
+	npm run knip
+
+knip-fix: ## Attempt automatic Knip fixes (exports/deps)
+	npm run knip:fix
 
 deps-update: ## Update all dependencies
 	npm update

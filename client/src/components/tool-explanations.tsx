@@ -1,7 +1,7 @@
 import { type ReactNode, useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 
-export interface ToolExplanationItem {
+interface ToolExplanationItem {
   label?: string;
   text: string;
 }

@@ -15,7 +15,7 @@ export interface URLComponents {
   isTldKnown?: boolean;
 }
 
-export interface ParseURLResult {
+interface ParseURLResult {
   success: boolean;
   components: URLComponents;
   error?: string;

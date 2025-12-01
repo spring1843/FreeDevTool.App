@@ -9,7 +9,7 @@ const sessionState = new Map<string, unknown>();
  * @param initialValue - Default value if no stored value exists
  * @returns [value, setValue] - Similar to useState but persisted in session
  */
-export function usePersistentState<T>(
+function usePersistentState<T>(
   key: string,
   initialValue: T
 ): [T, (value: T | ((prev: T) => T)) => void] {
@@ -71,22 +71,4 @@ export function usePersistentForm<T extends Record<string, unknown>>(
     updateFields,
     resetFields,
   };
-}
-
-/**
- * Clear stored state for a specific tool from session
- * @param toolName - Name of the tool
- */
-export function clearToolState(toolName: string) {
-  sessionState.delete(`tool-state-${toolName}`);
-}
-
-/**
- * Clear all tool states from session (useful for reset functionality)
- */
-export function clearAllToolStates() {
-  const keysToDelete = Array.from(sessionState.keys()).filter(key =>
-    key.startsWith("tool-state-")
-  );
-  keysToDelete.forEach(key => sessionState.delete(key));
 }

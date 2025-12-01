@@ -526,30 +526,6 @@ export const DEFAULT_GRAPHQL = `type User
 type Comment{id:ID!content:String!author:User!post:Post!createdAt:String!}type UserProfile{bio:String avatar:String website:String location:String}input CreateUserInput{name:String!email:String!age:Int}input UpdateUserInput{name:String email:String age:Int}type Query{users:[User!]!user(id:ID!):User posts:[Post!]!post(id:ID!):Post searchPosts(query:String!):[Post!]!}type Mutation{createUser(input:CreateUserInput!):User!updateUser(id:ID!,input:UpdateUserInput!):User!deleteUser(id:ID!):Boolean!createPost(title:String!,content:String!,authorId:ID!):Post!}type Subscription{postAdded:Post!commentAdded(postId:ID!):Comment!}schema{query:Query mutation:Mutation subscription:Subscription}
 `;
 
-// Converters
-export const DEFAULT_JSON_YAML = `{
-  "name": "sample-project",
-  "version": "1.0.0",
-  "description": "A sample project for JSON to YAML conversion",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "test": "jest",
-    "build": "webpack"
-  },
-  "dependencies": {
-    "express": "^4.18.0",
-    "lodash": "^4.17.21"
-  },
-  "devDependencies": {
-    "jest": "^29.0.0",
-    "webpack": "^5.74.0"
-  },
-  "keywords": ["sample", "demo", "conversion"],
-  "author": "Developer Name",
-  "license": "MIT"
-}`;
-
 export const DEFAULT_URL_TO_JSON = `https://api.example.com/users?page=1&limit=10&sort=name&order=asc&filter=active&category=premium#section`;
 
 export const DEFAULT_CSV_TO_JSON = `name,email,age,city
@@ -630,19 +606,8 @@ export const DEFAULT_BCRYPT = `mypassword123`;
 // JWT
 export const DEFAULT_JWT = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c`;
 
-// Date/Time Tools
-export const DEFAULT_DATE_CONVERTER = `2024-01-15T10:30:00.000Z`;
-
-export const DEFAULT_TIMEZONE_CONVERTER = `2024-01-15 10:30:00`;
-
-export const DEFAULT_DATETIME_DIFF_START = `2024-01-01 09:00:00`;
-
-export const DEFAULT_DATETIME_DIFF_END = `2024-01-15 17:30:00`;
-
 // Utility Tools
 export const DEFAULT_UNIT_CONVERTER = `100`;
-
-export const DEFAULT_NUMBER_BASE_CONVERTER = `255`;
 
 // Generators
 export const DEFAULT_QR_GENERATOR = "https://FreeDevTool.App";
