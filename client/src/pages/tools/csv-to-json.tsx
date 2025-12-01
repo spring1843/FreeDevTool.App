@@ -51,7 +51,7 @@ export default function CSVToJSON() {
   const [csvInput, setCsvInput] = useState(DEFAULT_CSV_TO_JSON);
   const [selectedDelimiter, setSelectedDelimiter] = useState(",");
   const [jsonOutput, setJsonOutput] = useState("");
-  const [_parsedData, setParsedData] = useState<CSVRow[]>([]);
+  const [, setParsedData] = useState<CSVRow[]>([]);
   const [headers, setHeaders] = useState<string[]>([]);
   const [error, setError] = useState("");
   const [rowCount, setRowCount] = useState(0);

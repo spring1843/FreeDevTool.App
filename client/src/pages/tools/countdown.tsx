@@ -57,6 +57,9 @@ export default function Countdown() {
   const [timeZone, setTimeZone] = useState(
     Intl.DateTimeFormat().resolvedOptions().timeZone
   );
+  const [selectedPreset, setSelectedPreset] = useState<string | null>(
+    "New Year"
+  );
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -179,12 +182,14 @@ export default function Countdown() {
     setTargetTime(defaultDt.time);
     setSoundEnabled(true);
     setTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
+    setSelectedPreset("New Year");
   };
 
   const handleClear = () => {
     stopCountdown();
     setTargetDate("");
     setTargetTime("");
+    setSelectedPreset(null);
   };
 
   const hasModifiedData =
@@ -243,6 +248,7 @@ export default function Countdown() {
     setTargetDate(dateStr);
     setTargetTime(timeStr);
     setIsComplete(false);
+    setSelectedPreset(preset.label);
 
     // Calculate and set the initial time remaining
     const targetDateTime = new Date(`${dateStr}T${timeStr}`);
@@ -389,7 +395,10 @@ export default function Countdown() {
                 id="target-date"
                 type="date"
                 value={targetDate}
-                onChange={e => setTargetDate(e.target.value)}
+                onChange={e => {
+                  setTargetDate(e.target.value);
+                  setSelectedPreset(null);
+                }}
                 data-testid="target-date"
                 data-default-input="true"
                 autoFocus={true}
@@ -402,7 +411,10 @@ export default function Countdown() {
                 type="time"
                 step="1"
                 value={targetTime}
-                onChange={e => setTargetTime(e.target.value)}
+                onChange={e => {
+                  setTargetTime(e.target.value);
+                  setSelectedPreset(null);
+                }}
                 data-testid="target-time"
               />
             </div>
@@ -436,7 +448,9 @@ export default function Countdown() {
                 {presets.map((preset, index) => (
                   <Button
                     key={index}
-                    variant="outline"
+                    variant={
+                      selectedPreset === preset.label ? "default" : "outline"
+                    }
                     size="sm"
                     onClick={() => applyPreset(preset)}
                     className="text-xs"

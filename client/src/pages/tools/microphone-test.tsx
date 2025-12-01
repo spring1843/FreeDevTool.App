@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
@@ -105,8 +106,25 @@ export default function MicrophoneTest() {
     }
   };
 
-  // Get basic device info without permission on mount
+  // Check permission status and get basic device info on mount
   useEffect(() => {
+    // Check permission status using Permissions API
+    const checkPermissionStatus = async () => {
+      try {
+        const permissionStatus = await navigator.permissions.query({
+          name: "microphone" as PermissionName,
+        });
+        if (permissionStatus.state === "granted") {
+          setHasPermission(true);
+        } else if (permissionStatus.state === "denied") {
+          setHasPermission(false);
+        }
+        // If "prompt", leave as null (Not Requested)
+      } catch {
+        // Permissions API not supported, fall back to device label check
+      }
+    };
+
     const getBasicDevices = async () => {
       try {
         const deviceList = await navigator.mediaDevices.enumerateDevices();
@@ -120,6 +138,10 @@ export default function MicrophoneTest() {
           if (firstDevice.deviceId && firstDevice.deviceId !== "") {
             setSelectedDevice(firstDevice.deviceId);
           }
+          // If devices have labels, permission was previously granted (fallback check)
+          if (audioDevices.some(device => device.label)) {
+            setHasPermission(true);
+          }
         }
       } catch (err: unknown) {
         setError(
@@ -128,6 +150,7 @@ export default function MicrophoneTest() {
       }
     };
 
+    checkPermissionStatus();
     getBasicDevices();
   }, []);
 
@@ -351,6 +374,15 @@ export default function MicrophoneTest() {
     });
   };
 
+  const getPermissionStatus = () => {
+    if (hasPermission === null)
+      return { color: "text-gray-600", text: "Not Requested" };
+    if (hasPermission) return { color: "text-green-600", text: "Granted" };
+    return { color: "text-red-600", text: "Denied" };
+  };
+
+  const permissionStatus = getPermissionStatus();
+
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
@@ -374,9 +406,14 @@ export default function MicrophoneTest() {
       {/* Main Card */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center">
-            <Mic className="w-5 h-5 mr-2" />
-            Microphone Recording
+          <CardTitle className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Mic className="w-5 h-5 mr-2" />
+              Microphone Recording
+            </div>
+            <Badge variant="outline" className={permissionStatus.color}>
+              Permission: {permissionStatus.text}
+            </Badge>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -432,37 +469,47 @@ export default function MicrophoneTest() {
 
           <ToolButtonGroup>
             <ActionButtonGroup>
-              {!hasPermission &&
-              !(devices.length > 0 && devices.some(device => device.label)) ? (
-                <ToolButton
-                  variant="custom"
-                  onClick={requestPermission}
-                  tooltip="Request microphone access permission"
-                  icon={<Mic className="w-4 h-4 mr-2" />}
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
-                >
-                  Request Microphone Permission
-                </ToolButton>
-              ) : !isRecording ? (
-                <ToolButton
-                  variant="custom"
-                  onClick={startRecording}
-                  tooltip="Start recording audio from microphone"
-                  icon={<Mic className="w-4 h-4 mr-2" />}
-                >
-                  Start Recording
-                </ToolButton>
-              ) : (
-                <ToolButton
-                  variant="custom"
-                  onClick={stopRecording}
-                  tooltip="Stop the current recording"
-                  icon={<Square className="w-4 h-4 mr-2" />}
-                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                >
-                  Stop Recording
-                </ToolButton>
-              )}
+              {(() => {
+                const needsPermission =
+                  !hasPermission &&
+                  !(devices.length > 0 && devices.some(device => device.label));
+                if (needsPermission) {
+                  return (
+                    <ToolButton
+                      variant="custom"
+                      onClick={requestPermission}
+                      tooltip="Request microphone access permission"
+                      icon={<Mic className="w-4 h-4 mr-2" />}
+                      className="bg-blue-600 hover:bg-blue-700 text-white"
+                    >
+                      Request Microphone Permission
+                    </ToolButton>
+                  );
+                }
+                if (!isRecording) {
+                  return (
+                    <ToolButton
+                      variant="custom"
+                      onClick={startRecording}
+                      tooltip="Start recording audio from microphone"
+                      icon={<Mic className="w-4 h-4 mr-2" />}
+                    >
+                      Start Recording
+                    </ToolButton>
+                  );
+                }
+                return (
+                  <ToolButton
+                    variant="custom"
+                    onClick={stopRecording}
+                    tooltip="Stop the current recording"
+                    icon={<Square className="w-4 h-4 mr-2" />}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Stop Recording
+                  </ToolButton>
+                );
+              })()}
             </ActionButtonGroup>
           </ToolButtonGroup>
 

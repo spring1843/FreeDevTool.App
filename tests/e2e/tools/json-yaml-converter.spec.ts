@@ -95,7 +95,6 @@ test.describe("JSON ↔ YAML Converter Tool", () => {
 
     // Both should be empty
     const jsonInput = page.locator("#json-input");
-    const _yamlOutput = page.locator("#yaml-input");
 
     const jsonEmpty = await jsonInput.locator(".cm-content").textContent();
     // After clear, CodeMirror shows placeholder text; verify placeholder is present.

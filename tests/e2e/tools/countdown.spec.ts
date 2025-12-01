@@ -72,4 +72,22 @@ test.describe("Countdown Tool", () => {
     const uniqueValuesAfterSwitch = [...new Set(valuesAfterSwitch)];
     expect(uniqueValuesAfterSwitch.length).toBeLessThanOrEqual(2); // Allow for 1 decrement during test
   });
+
+  test("should show visual feedback for selected preset", async ({ page }) => {
+    // Wait for the page to be fully loaded
+    await expect(page.locator("main")).toBeVisible();
+
+    // New Year should be selected by default (variant="default" has different styling)
+    const newYearButton = page.getByRole("button", { name: "New Year" });
+    const oneHourButton = page.getByRole("button", { name: "1 Hour" });
+
+    // New Year button should have default variant (solid background)
+    await expect(newYearButton).not.toHaveClass(/border/);
+
+    // Click 1 Hour preset
+    await oneHourButton.click();
+
+    // Now 1 Hour should be selected and New Year should be outline
+    await expect(oneHourButton).not.toHaveClass(/border/);
+  });
 });

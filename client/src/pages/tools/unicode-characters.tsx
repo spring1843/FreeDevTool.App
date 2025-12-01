@@ -369,9 +369,10 @@ export default function UnicodeCharacters() {
     switch (viewMode) {
       case "all":
         return getAllViewCharacters();
-      case "block":
+      case "block": {
         const block = UNICODE_BLOCKS.find(b => b.name === selectedBlock);
         return block ? getBlockCharacters(block) : [];
+      }
       case "category":
         return selectedCategory ? getCategoryCharacters(selectedCategory) : [];
       case "search":
@@ -886,15 +887,20 @@ export default function UnicodeCharacters() {
                     <Type className="w-16 h-16 mx-auto mb-4 opacity-50" />
                     <p className="text-lg font-medium">No Characters Found</p>
                     <p className="text-sm">
-                      {viewMode === "search"
-                        ? "Try a different search term"
-                        : viewMode === "custom"
-                          ? "Enter a valid Unicode range"
-                          : viewMode === "category"
-                            ? "Select a character category"
-                            : viewMode === "all"
-                              ? "Browsing all Unicode characters"
-                              : "Select a Unicode block to view characters"}
+                      {(() => {
+                        switch (viewMode) {
+                          case "search":
+                            return "Try a different search term";
+                          case "custom":
+                            return "Enter a valid Unicode range";
+                          case "category":
+                            return "Select a character category";
+                          case "all":
+                            return "Browsing all Unicode characters";
+                          default:
+                            return "Select a Unicode block to view characters";
+                        }
+                      })()}
                     </p>
                   </div>
                 </div>

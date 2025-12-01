@@ -467,167 +467,174 @@ export default function Metronome() {
             </div>
 
             <div className="grid gap-4">
-              {toneSchedules.map((schedule, index) => (
-                <div
-                  key={schedule.id}
-                  className={`p-5 border rounded-lg transition-all duration-300 ${
-                    playingTones.has(schedule.id)
-                      ? "border-green-400 dark:border-green-500 bg-green-100/70 dark:bg-green-900/30 shadow-lg scale-105 ring-2 ring-green-300 dark:ring-green-600"
-                      : schedule.enabled
-                        ? "border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-900/10"
-                        : "border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900"
-                  }`}
-                  data-testid={`tone-schedule-${index}`}
-                >
-                  {/* Header Row */}
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center space-x-3">
-                      <Switch
-                        checked={schedule.enabled}
-                        onCheckedChange={checked => {
-                          updateToneSchedule(schedule.id, { enabled: checked });
-                        }}
-                        data-testid={`enabled-switch-${index}`}
-                      />
-                      <div>
-                        <h4
-                          className={`font-medium transition-colors duration-300 ${
-                            playingTones.has(schedule.id)
-                              ? "text-green-800 dark:text-green-200 font-bold"
-                              : "text-slate-900 dark:text-slate-100"
-                          }`}
-                        >
-                          Tone #{index + 1}{" "}
-                          {playingTones.has(schedule.id) && "🎵"}
-                        </h4>
-                        <p className="text-sm text-slate-500 dark:text-slate-400">
-                          {schedule.enabled ? (
-                            <>
-                              Playing {schedule.note} every{" "}
-                              {schedule.intervalSeconds}s
-                            </>
-                          ) : (
-                            <>Disabled</>
-                          )}
-                        </p>
+              {toneSchedules.map((schedule, index) => {
+                let stateClass =
+                  "border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900";
+                if (playingTones.has(schedule.id)) {
+                  stateClass =
+                    "border-green-400 dark:border-green-500 bg-green-100/70 dark:bg-green-900/30 shadow-lg scale-105 ring-2 ring-green-300 dark:ring-green-600";
+                } else if (schedule.enabled) {
+                  stateClass =
+                    "border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-900/10";
+                }
+                return (
+                  <div
+                    key={schedule.id}
+                    className={`p-5 border rounded-lg transition-all duration-300 ${stateClass}`}
+                    data-testid={`tone-schedule-${index}`}
+                  >
+                    {/* Header Row */}
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-3">
+                        <Switch
+                          checked={schedule.enabled}
+                          onCheckedChange={checked => {
+                            updateToneSchedule(schedule.id, {
+                              enabled: checked,
+                            });
+                          }}
+                          data-testid={`enabled-switch-${index}`}
+                        />
+                        <div>
+                          <h4
+                            className={`font-medium transition-colors duration-300 ${
+                              playingTones.has(schedule.id)
+                                ? "text-green-800 dark:text-green-200 font-bold"
+                                : "text-slate-900 dark:text-slate-100"
+                            }`}
+                          >
+                            Tone #{index + 1}{" "}
+                            {playingTones.has(schedule.id) && "🎵"}
+                          </h4>
+                          <p className="text-sm text-slate-500 dark:text-slate-400">
+                            {schedule.enabled ? (
+                              <>
+                                Playing {schedule.note} every{" "}
+                                {schedule.intervalSeconds}s
+                              </>
+                            ) : (
+                              <>Disabled</>
+                            )}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() =>
-                          testTone(schedule.frequency, schedule.id)
-                        }
-                        className="flex items-center space-x-1"
-                        data-testid={`test-tone-${index}`}
-                      >
-                        <Volume2 className="w-4 h-4" />
-                        <span>Test</span>
-                      </Button>
-                      {toneSchedules.length > 1 && (
+                      <div className="flex items-center space-x-2">
                         <Button
                           size="sm"
                           variant="ghost"
-                          onClick={() => removeToneSchedule(schedule.id)}
-                          className="text-red-500 hover:text-red-700"
-                          data-testid={`remove-tone-${index}`}
+                          onClick={() =>
+                            testTone(schedule.frequency, schedule.id)
+                          }
+                          className="flex items-center space-x-1"
+                          data-testid={`test-tone-${index}`}
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Volume2 className="w-4 h-4" />
+                          <span>Test</span>
                         </Button>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Configuration Controls */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div>
-                      <Label
-                        htmlFor={`note-${schedule.id}`}
-                        className="text-sm font-medium mb-2 block"
-                      >
-                        Musical Note & Frequency
-                      </Label>
-                      <Select
-                        value={schedule.note}
-                        onValueChange={value => {
-                          updateToneSchedule(schedule.id, {
-                            note: value,
-                            frequency: NOTES[value as keyof typeof NOTES],
-                          });
-                        }}
-                      >
-                        <SelectTrigger data-testid={`note-select-${index}`}>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {Object.entries(NOTES).map(([note, freq]) => (
-                            <SelectItem key={note} value={note}>
-                              {note} ({freq.toFixed(2)} Hz)
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                        {toneSchedules.length > 1 && (
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => removeToneSchedule(schedule.id)}
+                            className="text-red-500 hover:text-red-700"
+                            data-testid={`remove-tone-${index}`}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        )}
+                      </div>
                     </div>
 
-                    <div>
-                      <Label
-                        htmlFor={`interval-${schedule.id}`}
-                        className="text-sm font-medium mb-2 block"
-                      >
-                        Interval: {schedule.intervalSeconds}s
-                      </Label>
-                      <div className="space-y-2">
-                        <Slider
-                          value={[schedule.intervalSeconds]}
+                    {/* Configuration Controls */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      <div>
+                        <Label
+                          htmlFor={`note-${schedule.id}`}
+                          className="text-sm font-medium mb-2 block"
+                        >
+                          Musical Note & Frequency
+                        </Label>
+                        <Select
+                          value={schedule.note}
                           onValueChange={value => {
                             updateToneSchedule(schedule.id, {
-                              intervalSeconds: value[0],
+                              note: value,
+                              frequency: NOTES[value as keyof typeof NOTES],
                             });
                           }}
-                          min={0.1}
-                          max={10}
-                          step={0.1}
-                          className="w-full"
-                          data-testid={`interval-slider-${index}`}
-                        />
-                        <div className="flex justify-between text-xs text-slate-500">
-                          <span>0.1s</span>
-                          <span>10s</span>
+                        >
+                          <SelectTrigger data-testid={`note-select-${index}`}>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {Object.entries(NOTES).map(([note, freq]) => (
+                              <SelectItem key={note} value={note}>
+                                {note} ({freq.toFixed(2)} Hz)
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div>
+                        <Label
+                          htmlFor={`interval-${schedule.id}`}
+                          className="text-sm font-medium mb-2 block"
+                        >
+                          Interval: {schedule.intervalSeconds}s
+                        </Label>
+                        <div className="space-y-2">
+                          <Slider
+                            value={[schedule.intervalSeconds]}
+                            onValueChange={value => {
+                              updateToneSchedule(schedule.id, {
+                                intervalSeconds: value[0],
+                              });
+                            }}
+                            min={0.1}
+                            max={10}
+                            step={0.1}
+                            className="w-full"
+                            data-testid={`interval-slider-${index}`}
+                          />
+                          <div className="flex justify-between text-xs text-slate-500">
+                            <span>0.1s</span>
+                            <span>10s</span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Quick Presets */}
-                  <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
-                    <Label className="text-sm font-medium mb-2 block">
-                      Quick Interval Presets:
-                    </Label>
-                    <div className="flex flex-wrap gap-2">
-                      {[0.5, 1, 1.5, 2, 3, 4].map(interval => (
-                        <Button
-                          key={interval}
-                          size="sm"
-                          variant={
-                            schedule.intervalSeconds === interval
-                              ? "default"
-                              : "outline"
-                          }
-                          onClick={() =>
-                            updateToneSchedule(schedule.id, {
-                              intervalSeconds: interval,
-                            })
-                          }
-                          className="text-xs px-3 py-1"
-                        >
-                          {interval}s
-                        </Button>
-                      ))}
+                    {/* Quick Presets */}
+                    <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
+                      <Label className="text-sm font-medium mb-2 block">
+                        Quick Interval Presets:
+                      </Label>
+                      <div className="flex flex-wrap gap-2">
+                        {[0.5, 1, 1.5, 2, 3, 4].map(interval => (
+                          <Button
+                            key={interval}
+                            size="sm"
+                            variant={
+                              schedule.intervalSeconds === interval
+                                ? "default"
+                                : "outline"
+                            }
+                            onClick={() =>
+                              updateToneSchedule(schedule.id, {
+                                intervalSeconds: interval,
+                              })
+                            }
+                            className="text-xs px-3 py-1"
+                          >
+                            {interval}s
+                          </Button>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </CardContent>

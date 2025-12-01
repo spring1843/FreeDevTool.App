@@ -52,7 +52,7 @@ export default tseslint.config(
         { allowConstantExport: true },
       ],
       "react/react-in-jsx-scope": "off",
-      "react/prop-types": "off",
+      "react/prop-types": "error",
       "react/jsx-no-leaked-render": "error",
       "react/jsx-no-useless-fragment": "error",
       "react/self-closing-comp": "error",
@@ -76,7 +76,7 @@ export default tseslint.config(
       ],
 
       // TypeScript specific rules (non-type-aware)
-      "@typescript-eslint/no-unused-vars": "off", // Use unused-imports instead
+      "@typescript-eslint/no-unused-vars": "error", // Use unused-imports instead
       "@typescript-eslint/explicit-function-return-type": "off",
       "@typescript-eslint/explicit-module-boundary-types": "off",
       "@typescript-eslint/no-explicit-any": "error",
@@ -102,7 +102,7 @@ export default tseslint.config(
       "arrow-body-style": ["error", "as-needed"],
       "object-shorthand": ["error", "always"],
       "prefer-destructuring": ["error", { object: true, array: false }],
-      "consistent-return": "off", // Too strict for React components
+      "consistent-return": "error",
       "default-case": "error",
       eqeqeq: ["error", "always"],
       "no-empty-function": "error",
@@ -119,42 +119,6 @@ export default tseslint.config(
       "no-fallthrough": "error",
       "no-unreachable": "error",
       "valid-typeof": "error",
-    },
-  },
-  {
-    // Node.js specific configuration for server files
-    files: ["server/**/*.{ts,js}"],
-    rules: {
-      "no-console": "off", // Allow console in server files
-      "no-magic-numbers": "off", // More lenient for server configuration
-      "@typescript-eslint/no-require-imports": "off", // Allow require in server files
-    },
-  },
-  {
-    // Configuration files
-    files: ["*.config.{js,ts}", "tailwind.config.ts"],
-    rules: {
-      "@typescript-eslint/no-require-imports": "off",
-      "no-magic-numbers": "off",
-    },
-  },
-  {
-    // Tool pages - more lenient rules for business logic
-    files: ["client/src/pages/tools/**/*.{ts,tsx}"],
-    rules: {
-      "no-magic-numbers": "off",
-      "no-nested-ternary": "off",
-      "react/no-unescaped-entities": "off",
-      "no-case-declarations": "off",
-    },
-  },
-  {
-    // UI components - allow some flexibility for design values
-    files: ["client/src/components/ui/**/*.{ts,tsx}"],
-    rules: {
-      "no-magic-numbers": "off",
-      "react-refresh/only-export-components": "off",
-      "consistent-return": "off",
     },
   }
 );
