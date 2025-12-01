@@ -181,11 +181,12 @@ export default function BarcodeGenerator() {
         return /^\d+$/.test(inputText)
           ? null
           : "MSI supports numeric characters only";
-      case "pharmacode":
+      case "pharmacode": {
         const num = parseInt(inputText);
         return num >= 3 && num <= 131070
           ? null
           : "Pharmacode requires number between 3 and 131070";
+      }
       default:
         return null; // CODE128 supports all ASCII
     }

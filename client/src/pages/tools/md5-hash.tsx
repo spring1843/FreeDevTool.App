@@ -298,7 +298,9 @@ export default function MD5Hash() {
                   ) : (
                     <>
                       <XCircle className="w-5 h-5 mr-2" />
-                      <span className="font-medium">Hashes Don't Match</span>
+                      <span className="font-medium">
+                        Hashes Don&apos;t Match
+                      </span>
                     </>
                   )}
                 </div>
