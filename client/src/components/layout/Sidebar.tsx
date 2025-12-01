@@ -539,7 +539,7 @@ export function Sidebar({
                                 </div>
                                 <span
                                   className={cn(
-                                    "truncate flex-1 transition-all duration-300",
+                                    "break-words min-w-0 flex-1 transition-all duration-300",
                                     isActive && "font-medium"
                                   )}
                                 >

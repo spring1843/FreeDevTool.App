@@ -40,7 +40,7 @@ setup: ## Complete project setup - install dependencies, browsers, and prepare f
 
 all: clean setup lint type-check test build ## Run full development setup with all dependencies including tests
 
-pre-commit: format type-check lint-fix ## Pre-commit hook (fix, format, check)
+pre-commit: format type-check lint-fix knip ## Pre-commit hook (fix, format, check)
 
 ci-containerized:  ## Run CI checks inside a container that has dependencies installed
 	docker run --rm -v "${PWD}:/app" ${E2E_IMAGE_USE} make setup && make ci
@@ -53,6 +53,14 @@ install: deps ## Install dependencies (alias for deps)
 
 deps: ## Install all dependencies
 	npm install
+
+## Knip - unused dependencies/exports/files analysis
+
+knip: ## Analyze unused deps/exports/files with Knip
+	npm run knip
+
+knip-fix: ## Attempt automatic Knip fixes (exports/deps)
+	npm run knip:fix
 
 deps-update: ## Update all dependencies
 	npm update
@@ -80,15 +88,15 @@ restart: stop start ## Restart the development server
 dev: ## Start development server with verbose logging
 	PORT=9095 NODE_ENV=development DEBUG=* npm run dev
 
-npm-build:
+npm-build: ## Run npm build to build assets
 	npm run build
 
-inject-version:
-	@printf '{"version": "%s", "built-at": "%s"}\n' \
-	  "${GIT_SHA_SHORT}" "$$(date -u +%Y-%m-%dT%H:%M:%SZ)" > dist/public/version.json
+build: clean npm-build ## Build the project (version.json generated in routes script)
 
-build: clean npm-build inject-version
-	cat dist/public/version.json
+move-robots-prod: ## Use a different robots.txt for production to allow indexing
+	mv dist/public/robots-prod.txt dist/public/robots.txt
+
+build-prod: build move-robots-prod ## Build the project for production
 
 build-image: ## Build the Docker image for the app
 	docker build --platform linux/amd64 -t ${IMAGE_TAG} -f infra/images/Dockerfile .
@@ -208,7 +216,7 @@ invalidate-production-cdn:
 warm-cache-production:
 	npx tsx scripts/warm-cache.ts https://freedevtool.app
 
-deploy-to-production: build copy-static-assets-to-production invalidate-production-cdn warm-cache-production
+deploy-to-production: build-prod copy-static-assets-to-production invalidate-production-cdn warm-cache-production
 
 ## Infra Commands
 

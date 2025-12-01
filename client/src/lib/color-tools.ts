@@ -1,12 +1,12 @@
 // Color utility functions for palette generation
 
-export interface HSL {
+interface HSL {
   h: number; // 0-360
   s: number; // 0-100
   l: number; // 0-100
 }
 
-export interface RGB {
+interface RGB {
   r: number; // 0-255
   g: number; // 0-255
   b: number; // 0-255
@@ -26,7 +26,7 @@ export interface ColorPalette {
 }
 
 // Convert hex to RGB
-export function hexToRgb(hex: string): RGB | null {
+function hexToRgb(hex: string): RGB | null {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? {
@@ -38,7 +38,7 @@ export function hexToRgb(hex: string): RGB | null {
 }
 
 // Convert RGB to hex
-export function rgbToHex(rgb: RGB): string {
+function rgbToHex(rgb: RGB): string {
   return `#${((1 << 24) + (rgb.r << 16) + (rgb.g << 8) + rgb.b).toString(16).slice(1)}`;
 }
 
@@ -50,7 +50,7 @@ const HUE_SIXTH = 6;
 const HUE_HALF = 0.5;
 
 // Convert RGB to HSL
-export function rgbToHsl(rgb: RGB): HSL {
+function rgbToHsl(rgb: RGB): HSL {
   const r = rgb.r / RGB_MAX;
   const g = rgb.g / RGB_MAX;
   const b = rgb.b / RGB_MAX;
@@ -90,7 +90,7 @@ export function rgbToHsl(rgb: RGB): HSL {
 }
 
 // Convert HSL to RGB
-export function hslToRgb(hsl: HSL): RGB {
+function hslToRgb(hsl: HSL): RGB {
   const h = hsl.h / HUE_MAX;
   const s = hsl.s / PERCENT_MAX;
   const l = hsl.l / PERCENT_MAX;
@@ -124,7 +124,7 @@ export function hslToRgb(hsl: HSL): RGB {
 }
 
 // Create color info object
-export function createColorInfo(hex: string): ColorInfo {
+function createColorInfo(hex: string): ColorInfo {
   const rgb = hexToRgb(hex);
   if (!rgb) throw new Error("Invalid hex color");
 
@@ -138,7 +138,7 @@ export function createColorInfo(hex: string): ColorInfo {
 }
 
 // Generate complementary palette (opposite on color wheel)
-export function generateComplementary(baseHex: string): ColorPalette {
+function generateComplementary(baseHex: string): ColorPalette {
   const baseColor = createColorInfo(baseHex);
   const complementHue = (baseColor.hsl.h + 180) % 360;
 
@@ -159,7 +159,7 @@ export function generateComplementary(baseHex: string): ColorPalette {
 }
 
 // Generate triadic palette (3 colors equally spaced on color wheel)
-export function generateTriadic(baseHex: string): ColorPalette {
+function generateTriadic(baseHex: string): ColorPalette {
   const baseColor = createColorInfo(baseHex);
   const colors = [baseColor];
 
@@ -182,7 +182,7 @@ export function generateTriadic(baseHex: string): ColorPalette {
 }
 
 // Generate analogous palette (adjacent colors on color wheel)
-export function generateAnalogous(baseHex: string): ColorPalette {
+function generateAnalogous(baseHex: string): ColorPalette {
   const baseColor = createColorInfo(baseHex);
   const colors: ColorInfo[] = [];
 
@@ -206,7 +206,7 @@ export function generateAnalogous(baseHex: string): ColorPalette {
 }
 
 // Generate monochromatic palette (different shades of same color)
-export function generateMonochromatic(baseHex: string): ColorPalette {
+function generateMonochromatic(baseHex: string): ColorPalette {
   const baseColor = createColorInfo(baseHex);
   const colors: ColorInfo[] = [];
 
@@ -231,7 +231,7 @@ export function generateMonochromatic(baseHex: string): ColorPalette {
 }
 
 // Generate tetradic (square) palette (4 colors equally spaced)
-export function generateTetradic(baseHex: string): ColorPalette {
+function generateTetradic(baseHex: string): ColorPalette {
   const baseColor = createColorInfo(baseHex);
   const colors = [baseColor];
 
@@ -254,7 +254,7 @@ export function generateTetradic(baseHex: string): ColorPalette {
 }
 
 // Generate split complementary palette
-export function generateSplitComplementary(baseHex: string): ColorPalette {
+function generateSplitComplementary(baseHex: string): ColorPalette {
   const baseColor = createColorInfo(baseHex);
   const colors: ColorInfo[] = [baseColor];
 
@@ -280,7 +280,7 @@ export function generateSplitComplementary(baseHex: string): ColorPalette {
 }
 
 // Generate material design palette
-export function generateMaterialPalette(baseHex: string): ColorPalette {
+function generateMaterialPalette(baseHex: string): ColorPalette {
   const baseColor = createColorInfo(baseHex);
   const colors: ColorInfo[] = [];
 
@@ -355,7 +355,7 @@ export function generateRandomColor(): string {
 }
 
 // Check if color is light or dark (for text contrast)
-export function isLightColor(hex: string): boolean {
+function isLightColor(hex: string): boolean {
   const rgb = hexToRgb(hex);
   if (!rgb) return false;
 

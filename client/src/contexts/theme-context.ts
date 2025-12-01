@@ -2,7 +2,7 @@ import { createContext } from "react";
 
 export type Theme = "dark" | "light";
 
-export interface ThemeProviderState {
+interface ThemeProviderState {
   theme: Theme;
   setTheme: (theme: Theme) => void;
 }
