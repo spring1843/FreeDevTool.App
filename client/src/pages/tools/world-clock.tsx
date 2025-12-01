@@ -177,7 +177,7 @@ export default function WorldClock() {
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
               Browse all continents and important time zones, then add the ones
-              you're interested in to your custom clocks
+              you&apos;re interested in to your custom clocks
             </p>
           </div>
           <SecurityBanner variant="compact" />

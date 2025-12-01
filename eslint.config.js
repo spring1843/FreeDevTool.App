@@ -126,7 +126,6 @@ export default tseslint.config(
     files: ["client/src/pages/tools/**/*.{ts,tsx}"],
     rules: {
       "no-nested-ternary": "off",
-      "react/no-unescaped-entities": "off",
     },
-  },
+  }
 );

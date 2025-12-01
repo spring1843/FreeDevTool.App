@@ -354,7 +354,7 @@ export default function WebcamTest() {
                   <Camera className="w-16 h-16 mx-auto mb-4 opacity-50" />
                   <div>Camera preview will appear here</div>
                   <div className="text-sm mt-2">
-                    Click "Start Camera" to begin
+                    Click &quot;Start Camera&quot; to begin
                   </div>
                 </div>
               </div>
