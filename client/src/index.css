@@ -792,13 +792,18 @@
   }
 
   .ssr-tool-shortcut {
-    display: inline-block;
+    display: none;
     font-size: 0.75rem;
     font-family: var(--font-mono);
     background-color: hsl(210 40% 96%);
     padding: 0.25rem 0.5rem;
     border-radius: 0.25rem;
     color: hsl(215 19% 35%);
+  }
+  @media (min-width: 768px) {
+    .ssr-tool-shortcut {
+      display: inline-block;
+    }
   }
   .dark .ssr-tool-shortcut {
     background-color: hsl(217 33% 25%);
