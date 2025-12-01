@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useLocation } from "wouter";
 
-// Scroll to top on pathname changes. Ignores hash-only changes.
+// Scroll to top on navigation unless the location contains a hash (lets browser handle anchor navigation).
 export function ScrollToTop() {
   const [location] = useLocation();
 
