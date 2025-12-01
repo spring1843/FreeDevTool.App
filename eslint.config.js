@@ -76,8 +76,8 @@ export default tseslint.config(
       ],
 
       // TypeScript specific rules (non-type-aware)
-      "@typescript-eslint/no-unused-vars": "off", // Use unused-imports instead
-      "@typescript-eslint/explicit-function-return-type": "off",
+      "@typescript-eslint/no-unused-vars": "error", // Use unused-imports instead
+      "@typescript-eslint/explicit-function-return-type": "error",
       "@typescript-eslint/explicit-module-boundary-types": "off",
       "@typescript-eslint/no-explicit-any": "error",
       "@typescript-eslint/array-type": ["error", { default: "array-simple" }],
