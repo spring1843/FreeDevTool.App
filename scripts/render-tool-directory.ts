@@ -63,16 +63,7 @@ export function renderToolDirectoryHtml(): string {
     .map(([name, data]) => renderCategory(name, data))
     .join("");
 
-  const totalTools = Object.values(toolsData).reduce(
-    (acc, cat) => acc + cat.tools.length,
-    0
-  );
-
   return `<nav id="ssr-tool-directory" aria-label="Developer Tools Directory">
-    <div class="ssr-directory-header">
-      <h2 class="ssr-directory-title">All Developer Tools</h2>
-      <p class="ssr-directory-subtitle">${totalTools} free, in browser developer tools</p>
-    </div>
     ${categories}
   </nav>`;
 }
