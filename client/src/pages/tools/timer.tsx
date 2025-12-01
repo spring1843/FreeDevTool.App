@@ -199,7 +199,6 @@ export default function Timer() {
         ...timer,
         isRunning: false,
         isFinished: false,
-        timeLeft: timer.duration,
         currentAlarmPlays: 0,
       }))
     );
