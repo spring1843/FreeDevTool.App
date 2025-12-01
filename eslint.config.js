@@ -102,7 +102,7 @@ export default tseslint.config(
       "arrow-body-style": ["error", "as-needed"],
       "object-shorthand": ["error", "always"],
       "prefer-destructuring": ["error", { object: true, array: false }],
-      "consistent-return": "off", // Too strict for React components
+      "consistent-return": "error",
       "default-case": "error",
       eqeqeq: ["error", "always"],
       "no-empty-function": "error",
