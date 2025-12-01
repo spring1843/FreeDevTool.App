@@ -738,7 +738,9 @@
     border-radius: 0.5rem;
     background-color: white;
     text-decoration: none;
-    transition: box-shadow 0.2s, border-color 0.2s;
+    transition:
+      box-shadow 0.2s,
+      border-color 0.2s;
     border-left: 4px solid transparent;
   }
   .ssr-tool-card:hover {
