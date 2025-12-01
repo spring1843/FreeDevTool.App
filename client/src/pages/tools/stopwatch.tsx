@@ -342,26 +342,28 @@ export default function Stopwatch() {
                     </tr>
                   </thead>
                   <tbody>
-                    {laps.map(lap => (
-                      <tr
-                        key={lap.lapNumber}
-                        className={`border-b ${
-                          lap.lapTime === fastestLap
-                            ? "bg-green-50 dark:bg-green-900/20"
-                            : lap.lapTime === slowestLap
-                              ? "bg-red-50 dark:bg-red-900/20"
-                              : ""
-                        }`}
-                      >
-                        <td className="p-2 font-medium">#{lap.lapNumber}</td>
-                        <td className="text-right p-2 font-mono">
-                          {formatTime(lap.lapTime)}
-                        </td>
-                        <td className="text-right p-2 font-mono">
-                          {formatTime(lap.totalTime)}
-                        </td>
-                      </tr>
-                    ))}
+                    {laps.map(lap => {
+                      let rowClass = "";
+                      if (lap.lapTime === fastestLap) {
+                        rowClass = "bg-green-50 dark:bg-green-900/20";
+                      } else if (lap.lapTime === slowestLap) {
+                        rowClass = "bg-red-50 dark:bg-red-900/20";
+                      }
+                      return (
+                        <tr
+                          key={lap.lapNumber}
+                          className={`border-b ${rowClass}`}
+                        >
+                          <td className="p-2 font-medium">#{lap.lapNumber}</td>
+                          <td className="text-right p-2 font-mono">
+                            {formatTime(lap.lapTime)}
+                          </td>
+                          <td className="text-right p-2 font-mono">
+                            {formatTime(lap.totalTime)}
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>

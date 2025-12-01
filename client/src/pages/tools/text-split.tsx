@@ -233,7 +233,7 @@ export default function TextSplit() {
                 ))
               ) : (
                 <div className="text-center text-gray-500 py-8">
-                  No results yet. Enter text and click "Split Text".
+                  No results yet. Enter text and click &quot;Split Text&quot;.
                 </div>
               )}
             </div>
