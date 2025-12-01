@@ -102,7 +102,9 @@ function getCriticalCss(): string {
 .dark .exp-amber{background:rgba(120,53,15,0.2);border-color:#78350f}
 .dark .exp-amber h3,.dark .exp-amber h4{color:#fcd34d}
 .dark .exp-amber ul,.dark .exp-amber li{color:#fde68a}
-`.trim().replace(/\n/g, '');
+`
+    .trim()
+    .replace(/\n/g, "");
 }
 
 // Extract asset references from the root index.html

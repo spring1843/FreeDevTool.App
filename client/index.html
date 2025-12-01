@@ -20,10 +20,12 @@
       content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' ws: wss:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self';"
     />
     <script>
-      (function() {
-        var theme = localStorage.getItem('theme');
+      (function () {
+        var theme = localStorage.getItem("theme");
         if (!theme) {
-          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
         }
         document.documentElement.classList.add(theme);
       })();
@@ -88,16 +90,23 @@
         justify-content: center;
         align-items: center;
         height: 100vh;
-        font-family: system-ui, -apple-system, sans-serif;
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
         background: #ffffff;
         color: #333;
       }
-      .loading-screen a { color: #2563eb; }
+      .loading-screen a {
+        color: #2563eb;
+      }
       .dark .loading-screen {
         background: #0f172a;
         color: #e2e8f0;
       }
-      .dark .loading-screen a { color: #60a5fa; }
+      .dark .loading-screen a {
+        color: #60a5fa;
+      }
     </style>
   </head>
   <body>
