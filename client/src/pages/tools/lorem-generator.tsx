@@ -363,7 +363,9 @@ export default function LoremGenerator() {
                 onChange={e => setStartWithLorem(e.target.checked)}
                 className="rounded"
               />
-              <Label htmlFor="start-with-lorem">Start with "Lorem ipsum"</Label>
+              <Label htmlFor="start-with-lorem">
+                Start with &quot;Lorem ipsum&quot;
+              </Label>
             </div>
           </div>
         </CardContent>

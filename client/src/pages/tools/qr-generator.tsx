@@ -201,6 +201,7 @@ export default function QRGenerator() {
     setQrUrl("");
     setSvgData("");
     setError("");
+    return undefined;
   }, [inputText, qrType, qrSize, generateQR]);
 
   // Download QR code
