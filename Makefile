@@ -216,7 +216,7 @@ invalidate-production-cdn:
 warm-cache-production:
 	npx tsx scripts/warm-cache.ts https://freedevtool.app
 
-deploy-to-production: build copy-static-assets-to-production invalidate-production-cdn warm-cache-production
+deploy-to-production: build-prod copy-static-assets-to-production invalidate-production-cdn warm-cache-production
 
 ## Infra Commands
 
