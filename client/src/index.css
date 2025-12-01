@@ -394,6 +394,16 @@
   }
 
   /* Explanation blocks - base styles */
+  .exp-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  @media (min-width: 768px) {
+    .exp-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
   .exp-block {
     padding: 1rem;
     border-width: 1px;

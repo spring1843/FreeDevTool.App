@@ -72,6 +72,8 @@ function getCriticalCss(): string {
 .dark .ssr-tool-desc{color:#94a3b8}
 .ssr-tool-shortcut{display:inline-block;font-size:0.75rem;font-family:ui-monospace,monospace;background:#f1f5f9;padding:0.25rem 0.5rem;border-radius:0.25rem;color:#475569}
 .dark .ssr-tool-shortcut{background:#334155;color:#cbd5e1}
+.exp-grid{display:grid;grid-template-columns:1fr;gap:1rem}
+@media(min-width:768px){.exp-grid{grid-template-columns:repeat(2,1fr)}}
 .exp-block{padding:1rem;border-width:1px;border-radius:0.5rem;margin-bottom:0.75rem}
 .exp-block h3,.exp-block h4{font-weight:600;margin-bottom:0.5rem}
 .exp-block ul{font-size:0.875rem;list-style-type:disc;list-style-position:inside}

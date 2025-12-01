@@ -46,7 +46,7 @@ function renderShortcutsHtml(shortcuts: ToolExplanation["shortcuts"]): string {
   const shortcutsHtml = shortcuts
     .map(
       shortcut =>
-        `<div class="flex items-center gap-2">
+        `<div style="display:flex;align-items:center;gap:0.5rem">
           <kbd>${escapeHtml(shortcut.key)}</kbd>
           <span>${escapeHtml(shortcut.action)}</span>
         </div>`
@@ -142,10 +142,11 @@ export function renderExplanationsHtml(
 
   const blocksHtml = blocks
     .map((block, i) => {
-      const colSpanClass = i === 0 && !shortcuts ? "md:col-span-2" : "";
+      const colSpanStyle = i === 0 && !shortcuts ? "grid-column:span 2" : "";
       const revealMobile = i >= mobileLimit ? "exp-reveal-mobile" : "";
       const revealDesktop = i >= desktopLimit ? "exp-reveal-desktop" : "";
-      return `<div class="${colSpanClass} ${revealMobile} ${revealDesktop}" data-block-index="${i}">${block}</div>`;
+      const styleAttr = colSpanStyle ? ` style="${colSpanStyle}"` : "";
+      return `<div class="${revealMobile} ${revealDesktop}"${styleAttr} data-block-index="${i}">${block}</div>`;
     })
     .join("");
 
@@ -168,9 +169,9 @@ export function renderExplanationsHtml(
     }
   </style>`;
 
-  return `<div id="ssr-explanations" data-tool-path="${escapeHtml(toolPath)}" data-total-blocks="${totalBlocks}" class="mt-8 space-y-4">
+  return `<div id="ssr-explanations" data-tool-path="${escapeHtml(toolPath)}" data-total-blocks="${totalBlocks}" style="margin-top:2rem">
     ${dynamicStyles}
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">${blocksHtml}</div>
+    <div class="exp-grid">${blocksHtml}</div>
     ${showMoreButton}
   </div>`;
 }
