@@ -624,30 +624,36 @@ export default function CompoundInterestCalculator() {
                         {row.actualAmount}
                       </td>
                       <td className="text-center p-3">
-                        {row.yearReached ? (
-                          row.projected ? (
-                            <Badge
-                              variant="outline"
-                              className="text-orange-600 border-orange-300"
-                            >
-                              Projected
-                            </Badge>
-                          ) : (
+                        {(() => {
+                          if (!row.yearReached) {
+                            return (
+                              <Badge
+                                variant="outline"
+                                className="text-red-600 border-red-300"
+                              >
+                                Not Reached
+                              </Badge>
+                            );
+                          }
+                          if (row.projected) {
+                            return (
+                              <Badge
+                                variant="outline"
+                                className="text-orange-600 border-orange-300"
+                              >
+                                Projected
+                              </Badge>
+                            );
+                          }
+                          return (
                             <Badge
                               variant="outline"
                               className="text-green-600 border-green-300"
                             >
                               Achieved
                             </Badge>
-                          )
-                        ) : (
-                          <Badge
-                            variant="outline"
-                            className="text-red-600 border-red-300"
-                          >
-                            Not Reached
-                          </Badge>
-                        )}
+                          );
+                        })()}
                       </td>
                     </tr>
                   ))}

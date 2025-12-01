@@ -566,20 +566,21 @@ export default function PasswordGenerator() {
                     {strength ? (
                       <div className="flex items-center space-x-2">
                         <div className="flex space-x-1">
-                          {[1, 2, 3, 4, 5].map(level => (
-                            <div
-                              key={level}
-                              className={`w-4 h-2 rounded-sm ${
-                                level <= strength.score
-                                  ? strength.score <= 2
-                                    ? "bg-red-400"
-                                    : strength.score <= 3
-                                      ? "bg-yellow-400"
-                                      : "bg-green-400"
-                                  : "bg-slate-200 dark:bg-slate-600"
-                              }`}
-                            />
-                          ))}
+                          {[1, 2, 3, 4, 5].map(level => {
+                            let color = "bg-slate-200 dark:bg-slate-600";
+                            if (level <= strength.score) {
+                              if (strength.score <= 2) color = "bg-red-400";
+                              else if (strength.score <= 3)
+                                color = "bg-yellow-400";
+                              else color = "bg-green-400";
+                            }
+                            return (
+                              <div
+                                key={level}
+                                className={`w-4 h-2 rounded-sm ${color}`}
+                              />
+                            );
+                          })}
                         </div>
                         <span className="text-xs text-slate-500">
                           {password.length} characters
