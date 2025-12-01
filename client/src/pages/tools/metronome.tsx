@@ -105,7 +105,11 @@ export default function Metronome() {
           break;
         case "Escape":
           event.preventDefault();
-          stopMetronome();
+          if (isRunning) {
+            stopMetronome();
+          } else {
+            startMetronome();
+          }
           break;
         default: {
           // Handle default case
@@ -373,7 +377,7 @@ export default function Metronome() {
               different intervals
             </p>
             <p className="text-xs text-slate-500 dark:text-slate-500 mt-1">
-              Keyboard: Enter (start) • Space/Esc (stop)
+              Keyboard: Enter (start) • Space/Esc (toggle)
             </p>
           </div>
           <SecurityBanner variant="compact" />
