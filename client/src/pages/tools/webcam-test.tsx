@@ -283,40 +283,48 @@ export default function WebcamTest() {
 
           <ToolButtonGroup>
             <ActionButtonGroup>
-              {!hasPermission &&
-              !(devices.length > 0 && devices.some(device => device.label)) ? (
-                <ToolButton
-                  variant="custom"
-                  onClick={requestPermission}
-                  tooltip="Request camera access permission"
-                  icon={<Camera className="w-4 h-4 mr-2" />}
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
-                >
-                  Request Camera Permission
-                </ToolButton>
-              ) : !isActive ? (
-                <ToolButton
-                  variant="custom"
-                  onClick={startCamera}
-                  disabled={devices.length === 0}
-                  tooltip="Start the camera preview"
-                  icon={<Play className="w-4 h-4 mr-2" />}
-                  className="bg-green-600 hover:bg-green-700 text-white disabled:opacity-50"
-                >
-                  Start Camera
-                </ToolButton>
-              ) : (
-                <ToolButton
-                  variant="custom"
-                  onClick={stopCamera}
-                  tooltip="Stop the camera preview"
-                  icon={<Square className="w-4 h-4 mr-2" />}
-                  className="bg-red-600 hover:bg-red-700 text-white"
-                >
-                  Stop Camera
-                </ToolButton>
-              )}
-
+              {(() => {
+                const needsPermission =
+                  !hasPermission &&
+                  !(devices.length > 0 && devices.some(device => device.label));
+                if (needsPermission) {
+                  return (
+                    <ToolButton
+                      variant="custom"
+                      onClick={requestPermission}
+                      tooltip="Request camera access permission"
+                      icon={<Camera className="w-4 h-4 mr-2" />}
+                      className="bg-blue-600 hover:bg-blue-700 text-white"
+                    >
+                      Request Camera Permission
+                    </ToolButton>
+                  );
+                }
+                if (!isActive) {
+                  return (
+                    <ToolButton
+                      variant="custom"
+                      onClick={startCamera}
+                      tooltip="Start the camera preview"
+                      icon={<Play className="w-4 h-4 mr-2" />}
+                      className="bg-green-600 hover:bg-green-700 text-white disabled:opacity-50"
+                    >
+                      Start Camera
+                    </ToolButton>
+                  );
+                }
+                return (
+                  <ToolButton
+                    variant="custom"
+                    onClick={stopCamera}
+                    tooltip="Stop the camera preview"
+                    icon={<Square className="w-4 h-4 mr-2" />}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Stop Camera
+                  </ToolButton>
+                );
+              })()}
               <ToolButton
                 variant="custom"
                 onClick={capturePhoto}

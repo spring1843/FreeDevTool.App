@@ -52,7 +52,7 @@ export default tseslint.config(
         { allowConstantExport: true },
       ],
       "react/react-in-jsx-scope": "off",
-      "react/prop-types": "off",
+      "react/prop-types": "error",
       "react/jsx-no-leaked-render": "error",
       "react/jsx-no-useless-fragment": "error",
       "react/self-closing-comp": "error",
@@ -119,13 +119,6 @@ export default tseslint.config(
       "no-fallthrough": "error",
       "no-unreachable": "error",
       "valid-typeof": "error",
-    },
-  },
-  {
-    // Tool pages - more lenient rules for business logic
-    files: ["client/src/pages/tools/**/*.{ts,tsx}"],
-    rules: {
-      "no-nested-ternary": "off",
     },
   }
 );

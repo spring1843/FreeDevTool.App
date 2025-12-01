@@ -105,6 +105,7 @@ interface TextAreaProps {
   theme?: "light" | "dark";
   lineWrapping?: boolean;
   fixedHeight?: boolean; // when true, cap visible height by max lines; when false, allow full height
+  "data-default-input"?: string;
 }
 
 const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
