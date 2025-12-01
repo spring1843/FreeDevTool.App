@@ -46,4 +46,30 @@ test.describe("Site metadata files", () => {
       expect(disallowLines.some(l => /^Disallow:\s*\/$/i.test(l))).toBeTruthy();
     }
   });
+
+  test("version.json exists with non-empty version and past builtAt", async ({
+    page,
+  }) => {
+    const res = await page.goto("/version.json");
+    expect(res?.ok()).toBeTruthy();
+
+    const body = await res!.text();
+    expect(body).toBeTruthy();
+
+    let payload: { version?: string; builtAt?: string } = {};
+    try {
+      payload = JSON.parse(String(body));
+    } catch {
+      throw new Error("version.json is not valid JSON");
+    }
+
+    expect(typeof payload.version).toBe("string");
+    expect((payload.version || "").trim().length).toBeGreaterThan(0);
+
+    expect(typeof payload.builtAt).toBe("string");
+    const built = Date.parse(String(payload.builtAt));
+    expect(Number.isNaN(built)).toBeFalsy();
+    const now = Date.now();
+    expect(built).toBeLessThanOrEqual(now);
+  });
 });
