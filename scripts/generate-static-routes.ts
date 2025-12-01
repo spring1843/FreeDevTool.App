@@ -5,6 +5,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { getAllTools, getToolByPath } from "../client/src/data/tools.js";
 import { renderExplanationsHtml } from "./render-explanations.js";
+import { renderToolDirectoryHtml } from "./render-tool-directory.js";
 import { HOMEPAGE_TITLE, getToolPageTitle } from "../shared/page-title.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -75,11 +76,13 @@ function generateRouteHTML(
 ) {
   const metadata = toolsMetadata[route] || toolsMetadata["/"];
 
-  let ssrExplanations = "";
-  if (route.startsWith("/tools/")) {
+  let ssrContent = "";
+  if (route === "/") {
+    ssrContent = renderToolDirectoryHtml();
+  } else if (route.startsWith("/tools/")) {
     const tool = getToolByPath(route);
     if (tool?.explanations) {
-      ssrExplanations = renderExplanationsHtml(tool.explanations, route);
+      ssrContent = renderExplanationsHtml(tool.explanations, route);
     }
   }
 
@@ -119,7 +122,7 @@ function generateRouteHTML(
     <link rel="stylesheet" crossorigin href="${assets.cssFile}">
   </head>
   <body>
-    <div id="root"></div>${ssrExplanations ? `\n    ${ssrExplanations}` : ""}
+    <div id="root"></div>${ssrContent ? `\n    ${ssrContent}` : ""}
   </body>
 </html>`;
 
