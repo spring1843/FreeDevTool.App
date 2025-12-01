@@ -394,6 +394,16 @@
   }
 
   /* Explanation blocks - base styles */
+  .exp-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  @media (min-width: 768px) {
+    .exp-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
   .exp-block {
     padding: 1rem;
     border-width: 1px;
@@ -649,5 +659,154 @@
   }
   .dark .exp-examples code {
     background-color: hsl(217 33% 17%);
+  }
+
+  /* SSR Tool Directory for Homepage SEO */
+  #ssr-tool-directory {
+    max-width: 72rem;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+
+  .ssr-directory-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .ssr-directory-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: hsl(215 25% 15%);
+    margin-bottom: 0.25rem;
+  }
+  .dark .ssr-directory-title {
+    color: hsl(210 40% 98%);
+  }
+
+  .ssr-directory-subtitle {
+    font-size: 0.875rem;
+    color: hsl(215 16% 47%);
+  }
+  .dark .ssr-directory-subtitle {
+    color: hsl(215 20% 65%);
+  }
+
+  .ssr-category {
+    margin-bottom: 2rem;
+  }
+
+  .ssr-category-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .ssr-category-dot {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 9999px;
+    margin-right: 0.75rem;
+  }
+
+  .ssr-category-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: hsl(215 25% 15%);
+  }
+  .dark .ssr-category-title {
+    color: hsl(210 40% 98%);
+  }
+
+  .ssr-category-count {
+    margin-left: 0.5rem;
+    font-size: 0.875rem;
+    color: hsl(215 16% 47%);
+  }
+  .dark .ssr-category-count {
+    color: hsl(215 20% 65%);
+  }
+
+  .ssr-tools-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  @media (min-width: 768px) {
+    .ssr-tools-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1024px) {
+    .ssr-tools-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .ssr-tool-card {
+    display: block;
+    padding: 1rem;
+    border: 1px solid hsl(214 32% 91%);
+    border-radius: 0.5rem;
+    background-color: white;
+    text-decoration: none;
+    transition:
+      box-shadow 0.2s,
+      border-color 0.2s;
+    border-left: 4px solid transparent;
+  }
+  .ssr-tool-card:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border-left-color: hsl(215 16% 65%);
+  }
+  .dark .ssr-tool-card {
+    background-color: hsl(217 33% 17%);
+    border-color: hsl(217 33% 25%);
+  }
+  .dark .ssr-tool-card:hover {
+    border-left-color: hsl(215 16% 55%);
+  }
+
+  .ssr-tool-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: hsl(215 25% 15%);
+    margin-bottom: 0.5rem;
+  }
+  .ssr-tool-card:hover .ssr-tool-name {
+    color: hsl(217 91% 60%);
+  }
+  .dark .ssr-tool-name {
+    color: hsl(210 40% 98%);
+  }
+  .dark .ssr-tool-card:hover .ssr-tool-name {
+    color: hsl(217 91% 70%);
+  }
+
+  .ssr-tool-desc {
+    font-size: 0.875rem;
+    color: hsl(215 16% 47%);
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+  }
+  .dark .ssr-tool-desc {
+    color: hsl(215 20% 65%);
+  }
+
+  .ssr-tool-shortcut {
+    display: none;
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    background-color: hsl(210 40% 96%);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    color: hsl(215 19% 35%);
+  }
+  @media (min-width: 768px) {
+    .ssr-tool-shortcut {
+      display: inline-block;
+    }
+  }
+  .dark .ssr-tool-shortcut {
+    background-color: hsl(217 33% 25%);
+    color: hsl(215 20% 75%);
   }
 }

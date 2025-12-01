@@ -15,7 +15,7 @@ export interface URLComponents {
   isTldKnown?: boolean;
 }
 
-export interface ParseURLResult {
+interface ParseURLResult {
   success: boolean;
   components: URLComponents;
   error?: string;
@@ -64,7 +64,7 @@ export function parseURL(inputUrl: string): ParseURLResult {
 
     const cleanComponents = Object.fromEntries(
       Object.entries(components).filter(
-        ([_, value]) => value !== undefined && value !== ""
+        ([, value]) => value !== undefined && value !== ""
       )
     ) as URLComponents;
 

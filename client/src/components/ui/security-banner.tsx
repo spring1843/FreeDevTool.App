@@ -13,7 +13,7 @@ export function SecurityBanner({
 }: SecurityBannerProps) {
   if (variant === "compact") {
     return (
-      <div className={`inline-flex items-center gap-2 ${className}`}>
+      <div className={`hidden md:inline-flex items-center gap-2 ${className}`}>
         <a
           href="https://github.com/spring1843/FreeDevTool.App/blob/main/SECURITY.md"
           target="_blank"

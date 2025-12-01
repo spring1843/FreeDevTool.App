@@ -1,0 +1,17 @@
+{
+  "$schema": "https://unpkg.com/knip/schema.json",
+  "entry": [
+    "client/src/main.tsx",
+    "scripts/**/*.ts",
+    "vite.config.ts",
+    "playwright.config.ts"
+  ],
+  "project": ["**/*.{ts,tsx,js,jsx}"],
+  "ignore": [
+    "dist/**",
+    "node_modules/**",
+    ".cache/**",
+    "playwright-report/**",
+    "test-results/**"
+  ]
+}

@@ -187,6 +187,11 @@ export default function QRGenerator() {
     }
   }, [inputText, currentPreset, qrSize, toast]);
 
+  const handleQrTypeChange = (value: QRType) => {
+    setQrType(value);
+    setInputText("");
+  };
+
   // Auto-generate on input change
   useEffect(() => {
     if (inputText.trim()) {
@@ -196,6 +201,7 @@ export default function QRGenerator() {
     setQrUrl("");
     setSvgData("");
     setError("");
+    return undefined;
   }, [inputText, qrType, qrSize, generateQR]);
 
   // Download QR code
@@ -384,10 +390,7 @@ export default function QRGenerator() {
             <CardContent className="space-y-4">
               <div>
                 <Label htmlFor="qr-type">QR Code Type</Label>
-                <Select
-                  value={qrType}
-                  onValueChange={(value: QRType) => setQrType(value)}
-                >
+                <Select value={qrType} onValueChange={handleQrTypeChange}>
                   <SelectTrigger data-testid="qr-type-select">
                     <SelectValue />
                   </SelectTrigger>
