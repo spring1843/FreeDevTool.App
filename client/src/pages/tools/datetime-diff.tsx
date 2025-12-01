@@ -174,10 +174,12 @@ export default function DateTimeDiff() {
       endTime = future.toTimeString().slice(0, 5);
     }
 
-    updateField("startDate", startDate);
-    updateField("startTime", startTime);
-    updateField("endDate", endDate);
-    updateField("endTime", endTime);
+    updateFields({
+      startDate,
+      startTime,
+      endDate,
+      endTime,
+    });
 
     toast({
       title: "Preset Applied",
