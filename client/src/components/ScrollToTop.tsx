@@ -1,15 +1,22 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation } from "wouter";
 
-// Scroll to top on navigation unless the location contains a hash (lets browser handle anchor navigation).
+// Scroll to top on pathname changes. Ignores hash-only changes.
 export function ScrollToTop() {
   const [location] = useLocation();
+  const prevLocationRef = useRef(location);
 
   useEffect(() => {
-    // If navigating with a hash-only change, let browser handle anchor
-    // Otherwise, scroll to top instantly to avoid landing mid-page
-    if (typeof location === "string" && location.includes("#")) return;
-    window.scrollTo({ top: 0, left: 0 });
+    const prevLocation = prevLocationRef.current;
+    const currentPathname = typeof location === "string" ? location.split("?")[0] : "";
+    const prevPathname = typeof prevLocation === "string" ? prevLocation.split("?")[0] : "";
+
+    // Only scroll if the pathname changed (not just query params or hash)
+    if (currentPathname !== prevPathname) {
+      window.scrollTo({ top: 0, left: 0 });
+    }
+
+    prevLocationRef.current = location;
   }, [location]);
 
   return null;
