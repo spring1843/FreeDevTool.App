@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import fs from "fs";
+import { execSync } from "child_process";
 import path from "path";
 import { fileURLToPath } from "url";
 import { getAllTools, getToolByPath } from "../client/src/data/tools.js";
@@ -191,3 +192,20 @@ function generateSitemap(dist: string) {
 }
 
 generateSitemap(distPath);
+function writeVersionJson(dist: string) {
+  let version = "unknown";
+  try {
+    version = execSync("git rev-parse --short HEAD", {
+      encoding: "utf-8",
+    }).trim();
+  } catch {
+    // keep version as unknown if git not available
+  }
+  const builtAt = new Date().toISOString();
+  const payload = { version, builtAt };
+  const outFile = path.join(dist, "version.json");
+  fs.writeFileSync(outFile, `${JSON.stringify(payload, null, 2)}\n`, "utf-8");
+  console.log(`\n✓ Generated version.json (${version}) at: ${outFile}`);
+}
+
+writeVersionJson(distPath);
