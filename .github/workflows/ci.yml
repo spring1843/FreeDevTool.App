@@ -37,6 +37,7 @@ jobs:
       - run: make format-check
       - run: make lint
       - run: make build
+      - run: make knip
       - run: make format
 
       - name: Upload build artifacts

@@ -527,7 +527,7 @@ type Comment{id:ID!content:String!author:User!post:Post!createdAt:String!}type U
 `;
 
 // Converters
-export const DEFAULT_JSON_YAML = `{
+const DEFAULT_JSON_YAML = `{
   "name": "sample-project",
   "version": "1.0.0",
   "description": "A sample project for JSON to YAML conversion",
@@ -631,18 +631,18 @@ export const DEFAULT_BCRYPT = `mypassword123`;
 export const DEFAULT_JWT = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c`;
 
 // Date/Time Tools
-export const DEFAULT_DATE_CONVERTER = `2024-01-15T10:30:00.000Z`;
+const DEFAULT_DATE_CONVERTER = `2024-01-15T10:30:00.000Z`;
 
-export const DEFAULT_TIMEZONE_CONVERTER = `2024-01-15 10:30:00`;
+const DEFAULT_TIMEZONE_CONVERTER = `2024-01-15 10:30:00`;
 
-export const DEFAULT_DATETIME_DIFF_START = `2024-01-01 09:00:00`;
+const DEFAULT_DATETIME_DIFF_START = `2024-01-01 09:00:00`;
 
-export const DEFAULT_DATETIME_DIFF_END = `2024-01-15 17:30:00`;
+const DEFAULT_DATETIME_DIFF_END = `2024-01-15 17:30:00`;
 
 // Utility Tools
 export const DEFAULT_UNIT_CONVERTER = `100`;
 
-export const DEFAULT_NUMBER_BASE_CONVERTER = `255`;
+const DEFAULT_NUMBER_BASE_CONVERTER = `255`;
 
 // Generators
 export const DEFAULT_QR_GENERATOR = "https://FreeDevTool.App";

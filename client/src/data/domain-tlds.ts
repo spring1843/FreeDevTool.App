@@ -1,6 +1,6 @@
 // Downloaded from https://data.iana.org/TLD/tlds-alpha-by-domain.txt
 // And https://publicsuffix.org/list/public_suffix_list.dat
-export const COMMON_TLDS = [
+const COMMON_TLDS = [
   "!city.kawasaki.jp",
   "!city.kitakyushu.jp",
   "!city.kobe.jp",
@@ -10080,15 +10080,15 @@ const CLEAN_TLDS: string[] = COMMON_TLDS.filter(Boolean)
   .filter(s => !s.startsWith("!"))
   .map(s => (s.startsWith("*.") ? s.slice(2) : s));
 
-export const SINGLE_PART_TLDS: Set<string> = new Set(
+const SINGLE_PART_TLDS: Set<string> = new Set(
   CLEAN_TLDS.filter(s => !s.includes("."))
 );
 
-export const MULTI_PART_TLDS: Set<string> = new Set(
+const MULTI_PART_TLDS: Set<string> = new Set(
   CLEAN_TLDS.filter(s => s.includes("."))
 );
 
-export const MAX_TLD_LABELS: number = Array.from(MULTI_PART_TLDS).reduce(
+const MAX_TLD_LABELS: number = Array.from(MULTI_PART_TLDS).reduce(
   (max, t) => Math.max(max, t.split(".").length),
   2
 );
@@ -10139,5 +10139,5 @@ export function extractDomainParts(hostname: string): {
   return { tld: unknownTld, domain, subdomain, isTldKnown: false };
 }
 
-export const IsCommonTLD = (tld: string): boolean =>
+const IsCommonTLD = (tld: string): boolean =>
   COMMON_TLDS.includes(tld.toLowerCase());

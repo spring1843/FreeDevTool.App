@@ -1,9 +1,9 @@
-export interface DateFormat {
+interface DateFormat {
   name: string;
   value: string;
 }
 
-export interface TimezoneInfo {
+interface TimezoneInfo {
   name: string;
   code: string;
   time: string;
@@ -22,7 +22,7 @@ export interface RegexMatch {
   groups?: string[];
 }
 
-export interface JWTPayload {
+interface JWTPayload {
   header: Record<string, unknown>;
   payload: Record<string, unknown>;
   signature: string;
@@ -30,7 +30,7 @@ export interface JWTPayload {
   error?: string;
 }
 
-export interface CertificateInfo {
+interface CertificateInfo {
   subject: string;
   issuer: string;
   validFrom: string;
@@ -45,7 +45,7 @@ export interface CertificateInfo {
 export type SortOrder = "asc" | "desc";
 export type SortType = "alphabetical" | "numerical" | "length";
 
-export interface LapTime {
+interface LapTime {
   id: number;
   time: number;
   lapTime: number;
@@ -67,7 +67,7 @@ export interface TextStats {
   bytes: number;
 }
 
-export interface CompoundInterestResult {
+interface CompoundInterestResult {
   finalAmount: number;
   totalInterest: number;
   totalContributions: number;
@@ -85,7 +85,7 @@ export interface CompoundInterestResult {
   }>;
 }
 
-export interface DebtPaymentResult {
+interface DebtPaymentResult {
   totalInterest: number;
   totalPayments: number;
   payoffTime: number;

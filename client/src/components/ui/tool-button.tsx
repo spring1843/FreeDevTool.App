@@ -140,7 +140,7 @@ export function ToolButton({
 }
 
 // Specialized button variants for common use cases
-export function CopyButton({
+function CopyButton({
   onClick,
   disabled,
   text = "Copy",
@@ -347,7 +347,7 @@ export function ClearButton({
   );
 }
 
-export function ShareButton({
+function ShareButton({
   onClick,
   disabled,
   tooltip = "Copy shareable URL to clipboard",

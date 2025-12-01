@@ -90,7 +90,7 @@ const releasePointerCaptureExtension = EditorView.domEventHandlers({
 });
 
 // Define props for the CodeMirror component
-export interface TextAreaProps {
+interface TextAreaProps {
   className?: string;
   value?: string;
   lang?: string;

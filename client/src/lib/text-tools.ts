@@ -42,7 +42,7 @@ function getWordDiff(
   };
 }
 
-export function computeTextDiff(
+function computeTextDiff(
   text1: string,
   text2: string
 ): {
@@ -157,7 +157,7 @@ function calculateLineSimilarity(line1: string, line2: string): number {
   return union.size > 0 ? intersection.size / union.size : 0;
 }
 
-export function testRegex(
+function testRegex(
   pattern: string,
   text: string,
   flags = "g"
@@ -203,7 +203,7 @@ export function testRegex(
   }
 }
 
-export function sortText(
+function sortText(
   text: string,
   sortType: SortType,
   order: SortOrder,

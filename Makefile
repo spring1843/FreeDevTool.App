@@ -54,6 +54,14 @@ install: deps ## Install dependencies (alias for deps)
 deps: ## Install all dependencies
 	npm install
 
+## Knip - unused dependencies/exports/files analysis
+
+knip: ## Analyze unused deps/exports/files with Knip
+	npm run knip
+
+knip-fix: ## Attempt automatic Knip fixes (exports/deps)
+	npm run knip:fix
+
 deps-update: ## Update all dependencies
 	npm update
 

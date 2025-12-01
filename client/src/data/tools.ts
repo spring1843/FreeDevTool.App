@@ -1,7 +1,7 @@
 import type { ToolExplanation } from "@/components/tool-explanations";
 
 // Global tools data with keyboard shortcuts
-export interface Tool {
+interface Tool {
   name: string;
   path: string;
   shortcut: string;
@@ -14,7 +14,7 @@ export interface Tool {
   explanations: ToolExplanation;
 }
 
-export interface ToolCategory {
+interface ToolCategory {
   color: string;
   shortcut: string;
   tools: Tool[];
