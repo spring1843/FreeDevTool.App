@@ -2,6 +2,7 @@ import type {
   ToolExplanation,
   ToolExplanationSection,
 } from "../client/src/components/tool-explanations";
+import { escapeHtml } from "./html-utils.js";
 
 const sectionColorClasses = [
   "exp-emerald",
@@ -9,15 +10,6 @@ const sectionColorClasses = [
   "exp-cyan",
   "exp-rose",
 ];
-
-function escapeHtml(text: string): string {
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
 
 function renderNoticeHtml(notice: ToolExplanation["notice"]): string {
   if (!notice) return "";

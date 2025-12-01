@@ -1,13 +1,5 @@
 import { toolsData, type Tool } from "../client/src/data/tools.js";
-
-function escapeHtml(text: string): string {
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
+import { escapeHtml } from "./html-utils.js";
 
 function renderToolCard(tool: Tool): string {
   return `<a href="${escapeHtml(tool.path)}" class="ssr-tool-card">
