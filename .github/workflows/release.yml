@@ -154,5 +154,6 @@ jobs:
           make warm-cache-production
           make warm-cache-production
 
-      - name: Run E2E Tests Against Production
+      - name: Run E2E Tests Against Production For Cache Warming
+        continue-on-error: true
         run: TARGET=https://freedevtool.app make e2e-test
