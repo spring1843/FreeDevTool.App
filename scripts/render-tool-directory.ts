@@ -71,7 +71,7 @@ export function renderToolDirectoryHtml(): string {
   return `<nav id="ssr-tool-directory" aria-label="Developer Tools Directory">
     <div class="ssr-directory-header">
       <h2 class="ssr-directory-title">All Developer Tools</h2>
-      <p class="ssr-directory-subtitle">${totalTools} free, offline tools for developers</p>
+      <p class="ssr-directory-subtitle">${totalTools} free, in browser developer tools</p>
     </div>
     ${categories}
   </nav>`;
