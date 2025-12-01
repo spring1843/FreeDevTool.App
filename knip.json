@@ -20,6 +20,5 @@
     ".cache/**",
     "playwright-report/**",
     "test-results/**"
-  ],
-  
+  ]
 }
