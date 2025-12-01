@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import {
   Keyboard,
@@ -22,6 +22,14 @@ import { useDemo } from "@/hooks/use-demo-hook";
 export default function Home() {
   const { filteredToolsData } = useSearch();
   const [showAllShortcuts, setShowAllShortcuts] = useState(false);
+
+  useEffect(() => {
+    const ssrDirectory = document.getElementById("ssr-tool-directory");
+    if (ssrDirectory) {
+      ssrDirectory.remove();
+    }
+  }, []);
+
   const {
     isDemoRunning,
     isDemoPaused,
