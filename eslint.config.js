@@ -122,23 +122,6 @@ export default tseslint.config(
     },
   },
   {
-    // Node.js specific configuration for server files
-    files: ["server/**/*.{ts,js}"],
-    rules: {
-      "no-console": "off", // Allow console in server files
-      "no-magic-numbers": "off", // More lenient for server configuration
-      "@typescript-eslint/no-require-imports": "off", // Allow require in server files
-    },
-  },
-  {
-    // Configuration files
-    files: ["*.config.{js,ts}", "tailwind.config.ts"],
-    rules: {
-      "@typescript-eslint/no-require-imports": "off",
-      "no-magic-numbers": "off",
-    },
-  },
-  {
     // Tool pages - more lenient rules for business logic
     files: ["client/src/pages/tools/**/*.{ts,tsx}"],
     rules: {
@@ -146,13 +129,4 @@ export default tseslint.config(
       "react/no-unescaped-entities": "off",
     },
   },
-  {
-    // UI components - allow some flexibility for design values
-    files: ["client/src/components/ui/**/*.{ts,tsx}"],
-    rules: {
-      "no-magic-numbers": "off",
-      "react-refresh/only-export-components": "off",
-      "consistent-return": "off",
-    },
-  }
 );
