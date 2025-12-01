@@ -158,8 +158,8 @@ export default function KeyboardTest() {
               ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
-              Test your keyboard keys and see which buttons you're pressing in
-              real-time
+              Test your keyboard keys and see which buttons you&apos;re pressing
+              in real-time
             </p>
           </div>
           <SecurityBanner variant="compact" />
@@ -209,8 +209,8 @@ export default function KeyboardTest() {
                 </>
               ) : (
                 <>
-                  Click "Start Testing" to begin keyboard testing. Make sure
-                  this page has focus.
+                  Click &quot;Start Testing&quot; to begin keyboard testing.
+                  Make sure this page has focus.
                 </>
               )}
             </AlertDescription>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Monitor, Globe, HardDrive, Cpu, RefreshCw, Copy } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -108,7 +108,45 @@ export default function BrowserInfo() {
   const [refreshCount, setRefreshCount] = useState<number>(0);
   const { toast } = useToast();
 
-  const getBrowserInfo = (): BrowserInfo => {
+  const detectSystemTheme = (): "dark" | "light" | "no-preference" => {
+    if (
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+    ) {
+      return "dark";
+    }
+    if (
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: light)").matches
+    ) {
+      return "light";
+    }
+    return "no-preference";
+  };
+
+  const getSystemThemeClass = (theme: string): string => {
+    switch (theme) {
+      case "dark":
+        return "text-purple-600";
+      case "light":
+        return "text-yellow-600";
+      default:
+        return "text-gray-600";
+    }
+  };
+
+  const formatSystemTheme = (theme: string): string => {
+    switch (theme) {
+      case "dark":
+        return "Dark";
+      case "light":
+        return "Light";
+      default:
+        return "No Preference";
+    }
+  };
+
+  const getBrowserInfo = useCallback((): BrowserInfo => {
     const nav = navigator as Navigator & {
       connection?: {
         type?: string;
@@ -197,14 +235,7 @@ export default function BrowserInfo() {
       currentTime: new Date().toISOString(),
 
       // System preferences
-      systemTheme:
-        window.matchMedia &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "dark"
-          : window.matchMedia &&
-              window.matchMedia("(prefers-color-scheme: light)").matches
-            ? "light"
-            : "no-preference",
+      systemTheme: detectSystemTheme(),
       reducedMotion:
         window.matchMedia &&
         window.matchMedia("(prefers-reduced-motion: reduce)").matches,
@@ -266,7 +297,7 @@ export default function BrowserInfo() {
       // Device memory (if available)
       deviceMemory: nav.deviceMemory,
     };
-  };
+  }, []);
 
   const refreshInfo = () => {
     const newInfo = getBrowserInfo();
@@ -285,7 +316,7 @@ export default function BrowserInfo() {
     setBrowserInfo(info);
     setLastUpdated(new Date());
     setRefreshCount(1);
-  }, []); // Only run once on mount
+  }, [getBrowserInfo]); // Run when getter changes (stable due to useCallback)
 
   const copyToClipboard = async (text: string) => {
     try {
@@ -613,19 +644,9 @@ export default function BrowserInfo() {
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">System Theme:</span>
                 <span
-                  className={`font-medium ${
-                    browserInfo.systemTheme === "dark"
-                      ? "text-purple-600"
-                      : browserInfo.systemTheme === "light"
-                        ? "text-yellow-600"
-                        : "text-gray-600"
-                  }`}
+                  className={`font-medium ${getSystemThemeClass(browserInfo.systemTheme)}`}
                 >
-                  {browserInfo.systemTheme === "dark"
-                    ? "Dark"
-                    : browserInfo.systemTheme === "light"
-                      ? "Light"
-                      : "No Preference"}
+                  {formatSystemTheme(browserInfo.systemTheme)}
                 </span>
               </div>
               <div className="grid grid-cols-2 gap-2">
