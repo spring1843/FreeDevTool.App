@@ -8,8 +8,10 @@ export function ScrollToTop() {
 
   useEffect(() => {
     const prevLocation = prevLocationRef.current;
-    const currentPathname = typeof location === "string" ? location.split("?")[0] : "";
-    const prevPathname = typeof prevLocation === "string" ? prevLocation.split("?")[0] : "";
+    const currentPathname =
+      typeof location === "string" ? location.split("?")[0] : "";
+    const prevPathname =
+      typeof prevLocation === "string" ? prevLocation.split("?")[0] : "";
 
     // Only scroll if the pathname changed (not just query params or hash)
     if (currentPathname !== prevPathname) {
