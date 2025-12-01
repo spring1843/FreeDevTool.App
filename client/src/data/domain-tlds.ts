@@ -10138,6 +10138,3 @@ export function extractDomainParts(hostname: string): {
   const subdomain = parts.slice(0, -2).join(".");
   return { tld: unknownTld, domain, subdomain, isTldKnown: false };
 }
-
-const IsCommonTLD = (tld: string): boolean =>
-  COMMON_TLDS.includes(tld.toLowerCase());

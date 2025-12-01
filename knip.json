@@ -6,9 +6,7 @@
     "vite.config.ts",
     "playwright.config.ts"
   ],
-  "project": [
-    "**/*.{ts,tsx,js,jsx}"
-  ],
+  "project": ["**/*.{ts,tsx,js,jsx}"],
   "ignore": [
     "dist/**",
     "node_modules/**",

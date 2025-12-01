@@ -139,30 +139,6 @@ export function ToolButton({
   );
 }
 
-// Specialized button variants for common use cases
-function CopyButton({
-  onClick,
-  disabled,
-  text = "Copy",
-  tooltip = "Copy to clipboard",
-}: {
-  onClick: () => void;
-  disabled?: boolean;
-  text?: string;
-  tooltip?: string;
-}) {
-  return (
-    <ToolButton
-      variant="copy"
-      onClick={onClick}
-      disabled={disabled}
-      tooltip={tooltip}
-    >
-      {text}
-    </ToolButton>
-  );
-}
-
 export function ResetButton({
   onClick,
   disabled,
@@ -344,25 +320,6 @@ export function ClearButton({
         </AlertDialogContent>
       </AlertDialog>
     </>
-  );
-}
-
-function ShareButton({
-  onClick,
-  disabled,
-  tooltip = "Copy shareable URL to clipboard",
-}: {
-  onClick: () => void;
-  disabled?: boolean;
-  tooltip?: string;
-}) {
-  return (
-    <ToolButton
-      variant="share"
-      onClick={onClick}
-      disabled={disabled}
-      tooltip={tooltip}
-    />
   );
 }
 

@@ -72,21 +72,3 @@ export function usePersistentForm<T extends Record<string, unknown>>(
     resetFields,
   };
 }
-
-/**
- * Clear stored state for a specific tool from session
- * @param toolName - Name of the tool
- */
-function clearToolState(toolName: string) {
-  sessionState.delete(`tool-state-${toolName}`);
-}
-
-/**
- * Clear all tool states from session (useful for reset functionality)
- */
-function clearAllToolStates() {
-  const keysToDelete = Array.from(sessionState.keys()).filter(key =>
-    key.startsWith("tool-state-")
-  );
-  keysToDelete.forEach(key => sessionState.delete(key));
-}
