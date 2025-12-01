@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
@@ -105,8 +106,25 @@ export default function MicrophoneTest() {
     }
   };
 
-  // Get basic device info without permission on mount
+  // Check permission status and get basic device info on mount
   useEffect(() => {
+    // Check permission status using Permissions API
+    const checkPermissionStatus = async () => {
+      try {
+        const permissionStatus = await navigator.permissions.query({
+          name: "microphone" as PermissionName,
+        });
+        if (permissionStatus.state === "granted") {
+          setHasPermission(true);
+        } else if (permissionStatus.state === "denied") {
+          setHasPermission(false);
+        }
+        // If "prompt", leave as null (Not Requested)
+      } catch {
+        // Permissions API not supported, fall back to device label check
+      }
+    };
+
     const getBasicDevices = async () => {
       try {
         const deviceList = await navigator.mediaDevices.enumerateDevices();
@@ -120,6 +138,10 @@ export default function MicrophoneTest() {
           if (firstDevice.deviceId && firstDevice.deviceId !== "") {
             setSelectedDevice(firstDevice.deviceId);
           }
+          // If devices have labels, permission was previously granted (fallback check)
+          if (audioDevices.some(device => device.label)) {
+            setHasPermission(true);
+          }
         }
       } catch (err: unknown) {
         setError(
@@ -128,6 +150,7 @@ export default function MicrophoneTest() {
       }
     };
 
+    checkPermissionStatus();
     getBasicDevices();
   }, []);
 
