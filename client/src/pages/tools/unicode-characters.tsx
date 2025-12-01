@@ -369,9 +369,10 @@ export default function UnicodeCharacters() {
     switch (viewMode) {
       case "all":
         return getAllViewCharacters();
-      case "block":
+      case "block": {
         const block = UNICODE_BLOCKS.find(b => b.name === selectedBlock);
         return block ? getBlockCharacters(block) : [];
+      }
       case "category":
         return selectedCategory ? getCategoryCharacters(selectedCategory) : [];
       case "search":
