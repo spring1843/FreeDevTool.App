@@ -25,7 +25,7 @@ const DEFAULT_BASE64_ENCODED = encodeBase64(DEFAULT_BASE64);
 export default function Base64Encoder() {
   const tool = getToolByPath("/tools/base64");
   const [plainText, setPlainText] = useState(DEFAULT_BASE64);
-  const [encodedText, setEncodedText] = useState("");
+  const [encodedText, setEncodedText] = useState(DEFAULT_BASE64_ENCODED);
   const [error, setError] = useState<string | null>(null);
   const { theme } = useTheme();
 
@@ -65,9 +65,6 @@ export default function Base64Encoder() {
 
   const handleEncodedTextChange = (value: string) => {
     setEncodedText(value);
-    if (plainText !== DEFAULT_BASE64) {
-      setPlainText(DEFAULT_BASE64);
-    }
   };
 
   const handleReset = () => {
@@ -88,11 +85,6 @@ export default function Base64Encoder() {
   const isAtDefault =
     plainText === DEFAULT_BASE64 &&
     (encodedText === "" || encodedText === DEFAULT_BASE64_ENCODED);
-
-  // Execute encoding with default value on component mount
-  useEffect(() => {
-    encode();
-  }, [encode]);
 
   return (
     <div className="max-w-6xl mx-auto">
