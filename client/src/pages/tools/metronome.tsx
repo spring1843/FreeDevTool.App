@@ -296,8 +296,8 @@ export default function Metronome() {
     };
     setToneSchedules([...toneSchedules, newSchedule]);
     toast({
-      title: "Tone Schedule Added",
-      description: "The tone schedule has been added.",
+      title: "Tone Added",
+      description: "The tone has been added.",
     });
   };
 
