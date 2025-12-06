@@ -61,11 +61,21 @@ export default function Timer() {
   const [newTimerAlarmCount, setNewTimerAlarmCount] = useState(3);
   const [timers, setTimers] = useState<TimerInstance[]>([]);
   const [showAddTimer, setShowAddTimer] = useState(false);
+  // Track which timers were paused by the global pause so we can resume only those
+  const [pausedByGlobal, setPausedByGlobal] = useState<Set<string>>(new Set());
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const alarmIntervalsRef = useRef<Map<string, NodeJS.Timeout>>(new Map());
   const { toast } = useToast();
+
+  // Clear any alarm handle (interval or timeout) robustly
+  const clearAlarmHandle = useCallback((handle: NodeJS.Timeout) => {
+    // In browsers, both clearInterval and clearTimeout accept the same handle id
+    // Use both to be safe across environments/typings
+    clearInterval(handle as unknown as number);
+    clearTimeout(handle as unknown as number);
+  }, []);
 
   // Define functions first before using them in effects
   const startAlarm = useCallback(
@@ -87,36 +97,57 @@ export default function Timer() {
           description: `${timer.name} - Click stop to silence alarm`,
         });
       } else {
-        // Limited plays mode
-        let playsLeft = timer.alarmCount;
-        const playAlarm = () => {
-          if (audioContextRef.current && playsLeft > 0) {
+        // Limited plays mode: play immediately, then repeat every 2s until the selected count is reached
+        const countSelected = timer.alarmCount;
+
+        // Ensure audio context exists
+        if (!audioContextRef.current) {
+          audioContextRef.current = createTimerSound();
+        }
+
+        const ctx = audioContextRef.current;
+        if (!ctx) return;
+
+        // Ensure audio context is active on browsers that require user interaction
+        if (
+          typeof (ctx as unknown as { resume?: () => Promise<void> }).resume ===
+          "function"
+        ) {
+          (ctx as unknown as { resume?: () => Promise<void> })
+            .resume?.()
+            .catch(() => undefined);
+        }
+
+        // Play once immediately
+        playTimerBeep(ctx);
+
+        // Remaining plays
+        let remaining = Math.max(0, countSelected - 1);
+
+        if (remaining > 0) {
+          const intervalHandle = setInterval(() => {
+            // Each tick plays once and decrements remaining
+            if (!audioContextRef.current) return;
             playTimerBeep(audioContextRef.current);
-            playsLeft--;
+            remaining -= 1;
 
-            if (playsLeft <= 0) {
-              const interval = alarmIntervalsRef.current.get(timer.id);
-              if (interval) {
-                clearInterval(interval);
-                alarmIntervalsRef.current.delete(timer.id);
-              }
+            if (remaining <= 0) {
+              clearAlarmHandle(intervalHandle as unknown as NodeJS.Timeout);
+              alarmIntervalsRef.current.delete(timer.id);
             }
-          }
-        };
+          }, 2000) as unknown as NodeJS.Timeout;
 
-        playAlarm(); // Play immediately
-        if (playsLeft > 0) {
-          const alarmInterval = setInterval(playAlarm, 2000);
-          alarmIntervalsRef.current.set(timer.id, alarmInterval);
+          // Track the handle so Stop Alarm can cancel
+          alarmIntervalsRef.current.set(timer.id, intervalHandle);
         }
 
         toast({
           title: "Timer Finished!",
-          description: `${timer.name} - Playing alarm ${timer.alarmCount} times`,
+          description: `${timer.name} - Playing alarm ${countSelected} times`,
         });
       }
     },
-    [toast]
+    [toast, clearAlarmHandle]
   );
 
   const addTimer = useCallback(() => {
@@ -191,7 +222,7 @@ export default function Timer() {
 
   const stopAllTimers = useCallback(() => {
     // Clear all alarms
-    alarmIntervalsRef.current.forEach(interval => clearInterval(interval));
+    alarmIntervalsRef.current.forEach(handle => clearAlarmHandle(handle));
     alarmIntervalsRef.current.clear();
 
     setTimers(prev =>
@@ -202,7 +233,68 @@ export default function Timer() {
         currentAlarmPlays: 0,
       }))
     );
+    // Clear any global paused tracking
+    setPausedByGlobal(new Set());
+  }, [clearAlarmHandle]);
+
+  const pauseAllTimers = useCallback(() => {
+    const idsPaused: string[] = [];
+    setTimers(prev =>
+      prev.map(timer => {
+        if (timer.isRunning) {
+          idsPaused.push(timer.id);
+          return { ...timer, isRunning: false };
+        }
+        return timer;
+      })
+    );
+    setPausedByGlobal(new Set(idsPaused));
   }, []);
+
+  const continueAllTimers = useCallback(() => {
+    setTimers(prev =>
+      prev.map(timer =>
+        pausedByGlobal.has(timer.id) && !timer.isFinished
+          ? { ...timer, isRunning: true }
+          : timer
+      )
+    );
+    // Reset tracking after resuming
+    setPausedByGlobal(new Set());
+  }, [pausedByGlobal]);
+
+  const startAllTimers = useCallback(() => {
+    // Start all timers that haven't finished and have time remaining
+    setTimers(prev =>
+      prev.map(timer =>
+        !timer.isFinished && timer.timeLeft > 0
+          ? { ...timer, isRunning: true }
+          : timer
+      )
+    );
+    // Clear any global paused tracking just in case
+    setPausedByGlobal(new Set());
+  }, []);
+
+  const resetAllTimers = useCallback(() => {
+    // Clear any alarms first
+    alarmIntervalsRef.current.forEach(handle => clearAlarmHandle(handle));
+    alarmIntervalsRef.current.clear();
+
+    // Reset all timers to their original duration and stopped state
+    setTimers(prev =>
+      prev.map(timer => ({
+        ...timer,
+        isRunning: false,
+        isFinished: false,
+        timeLeft: timer.duration,
+        currentAlarmPlays: 0,
+      }))
+    );
+
+    // Clear global paused tracking
+    setPausedByGlobal(new Set());
+  }, [clearAlarmHandle]);
 
   // Initialize audio context and default timer
   useEffect(() => {
@@ -242,7 +334,7 @@ export default function Timer() {
       intervals.forEach(interval => clearInterval(interval));
       intervals.clear();
     };
-  }, []);
+  }, [clearAlarmHandle]);
 
   // Main timer update loop
   useEffect(() => {
@@ -321,39 +413,45 @@ export default function Timer() {
   }, [timers, showAddTimer, addTimer, toggleTimer, stopAllTimers]);
 
   // Additional timer functions
-  const stopTimer = useCallback((id: string) => {
-    // Stop alarm if playing
-    const alarmInterval = alarmIntervalsRef.current.get(id);
-    if (alarmInterval) {
-      clearInterval(alarmInterval);
-      alarmIntervalsRef.current.delete(id);
-    }
+  const stopTimer = useCallback(
+    (id: string) => {
+      // Stop alarm if playing
+      const alarmHandle = alarmIntervalsRef.current.get(id);
+      if (alarmHandle) {
+        clearAlarmHandle(alarmHandle);
+        alarmIntervalsRef.current.delete(id);
+      }
 
-    setTimers(prev =>
-      prev.map(timer =>
-        timer.id === id
-          ? {
-              ...timer,
-              isRunning: false,
-              isFinished: false,
-              timeLeft: timer.duration,
-              currentAlarmPlays: 0,
-            }
-          : timer
-      )
-    );
-  }, []);
+      setTimers(prev =>
+        prev.map(timer =>
+          timer.id === id
+            ? {
+                ...timer,
+                isRunning: false,
+                isFinished: false,
+                timeLeft: timer.duration,
+                currentAlarmPlays: 0,
+              }
+            : timer
+        )
+      );
+    },
+    [clearAlarmHandle]
+  );
 
-  const removeTimer = useCallback((id: string) => {
-    // Stop alarm if playing
-    const alarmInterval = alarmIntervalsRef.current.get(id);
-    if (alarmInterval) {
-      clearInterval(alarmInterval);
-      alarmIntervalsRef.current.delete(id);
-    }
+  const removeTimer = useCallback(
+    (id: string) => {
+      // Stop alarm if playing
+      const alarmHandle = alarmIntervalsRef.current.get(id);
+      if (alarmHandle) {
+        clearAlarmHandle(alarmHandle);
+        alarmIntervalsRef.current.delete(id);
+      }
 
-    setTimers(prev => prev.filter(timer => timer.id !== id));
-  }, []);
+      setTimers(prev => prev.filter(timer => timer.id !== id));
+    },
+    [clearAlarmHandle]
+  );
 
   const copyShareURL = useCallback(() => {
     if (timers.length > 0) {
@@ -477,16 +575,67 @@ export default function Timer() {
             <Plus className="w-4 h-4 mr-1" />
             Add
           </Button>
-          {timers.length > 0 && (
-            <Button
-              onClick={stopAllTimers}
-              variant="outline"
-              data-testid="stop-all-timers"
-            >
-              <Square className="w-4 h-4 mr-1" />
-              Stop All
-            </Button>
-          )}
+          {(() => {
+            // Decide which global action button to render without nested ternaries
+            if (timers.length === 0) return null;
+
+            const noneStarted = timers.every(
+              t => !t.isRunning && !t.isFinished && t.timeLeft === t.duration
+            );
+
+            const allFinished =
+              timers.length > 0 && timers.every(t => t.isFinished);
+
+            if (noneStarted) {
+              return (
+                <Button
+                  onClick={startAllTimers}
+                  variant="outline"
+                  data-testid="start-all-timers"
+                >
+                  <Play className="w-4 h-4 mr-1" />
+                  Start All
+                </Button>
+              );
+            }
+
+            if (allFinished) {
+              return (
+                <Button
+                  onClick={resetAllTimers}
+                  variant="outline"
+                  data-testid="reset-all-timers"
+                >
+                  <Square className="w-4 h-4 mr-1" />
+                  Reset All
+                </Button>
+              );
+            }
+
+            if (pausedByGlobal.size > 0) {
+              return (
+                <Button
+                  onClick={continueAllTimers}
+                  variant="outline"
+                  data-testid="continue-all-timers"
+                >
+                  <Play className="w-4 h-4 mr-1" />
+                  Continue All
+                </Button>
+              );
+            }
+
+            return (
+              <Button
+                onClick={pauseAllTimers}
+                variant="outline"
+                data-testid="pause-all-timers"
+              >
+                <Pause className="w-4 h-4 mr-1" />
+                Pause All
+              </Button>
+            );
+          })()}
           <ToolButton
             variant="share"
             onClick={copyShareURL}
@@ -667,7 +816,9 @@ export default function Timer() {
                       ) : (
                         <>
                           <Play className="w-4 h-4 mr-2" />
-                          Start
+                          {timer.timeLeft < timer.duration
+                            ? "Continue"
+                            : "Start"}
                         </>
                       )}
                     </Button>
@@ -684,11 +835,11 @@ export default function Timer() {
                       {alarmIntervalsRef.current.has(timer.id) && (
                         <Button
                           onClick={() => {
-                            const interval = alarmIntervalsRef.current.get(
+                            const handle = alarmIntervalsRef.current.get(
                               timer.id
                             );
-                            if (interval) {
-                              clearInterval(interval);
+                            if (handle) {
+                              clearAlarmHandle(handle);
                               alarmIntervalsRef.current.delete(timer.id);
                             }
                           }}

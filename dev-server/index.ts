@@ -59,13 +59,18 @@ app.use((req, res, next) => {
     (
       err: Error & { status?: number; statusCode?: number },
       _req: Request,
-      res: Response
+      res: Response,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      _next: express.NextFunction
     ) => {
       const status = err.status || err.statusCode || 500;
       const message = err.message || "Internal Server Error";
 
+      // Express error-handling middleware must have 4 args.
+      // Respond with JSON and do not rethrow here to avoid double handling.
       res.status(status).json({ message });
-      throw err;
+      // Explicitly end the response to satisfy some proxies/adapters
+      res.end();
     }
   );
 
