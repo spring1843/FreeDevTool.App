@@ -98,18 +98,8 @@ test.describe("Timer Tool", () => {
 
     // Continue All resumes only previously paused (fallback to manual resume if button not present)
     const continueAll = page.getByTestId("continue-all-timers");
-    const continueAllCount = await continueAll.count();
-    if (continueAllCount > 0) {
-      await continueAll.first().click();
-    } else {
-      // Fallback: verify paused state and resume both individually to satisfy the intent of the test
-      await expect(page.locator("text=Running")).toHaveCount(0);
-      const toggles = page.locator('[data-testid^="toggle-timer-"]');
-      const toggleCount = await toggles.count();
-      for (let i = 0; i < toggleCount; i++) {
-        await toggles.nth(i).click();
-      }
-    }
+    await expect(continueAll).toBeVisible();
+    await continueAll.first().click();
 
     // Expect both timers to be Running again
     const runningBadges = page.locator("text=Running");
