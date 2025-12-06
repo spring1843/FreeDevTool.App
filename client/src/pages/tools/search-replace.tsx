@@ -79,7 +79,11 @@ export default function SearchReplace() {
       setMatchCount(matches ? matches.length : 0);
 
       // Perform replacement
-      const replacedText = text.replace(searchPattern, replaceText);
+      // When not in regex mode, escape $ in replacement to prevent special replacement patterns
+      const safeReplaceText = isRegex
+        ? replaceText
+        : replaceText.replace(/\$/g, "$$$$");
+      const replacedText = text.replace(searchPattern, safeReplaceText);
       setResult(replacedText);
     } catch (err) {
       setError(`Error: ${err instanceof Error ? err.message : String(err)}`);
