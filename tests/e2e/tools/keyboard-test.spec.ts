@@ -13,4 +13,26 @@ test.describe("Keyboard Test Tool", () => {
     await expect(page.locator("main")).toBeVisible();
     await expectNoErrors(page);
   });
+
+  test("should auto-focus the keyboard input area on load", async ({
+    page,
+  }) => {
+    const focusArea = page.getByTestId("keyboard-focus-area");
+    await expect(focusArea).toBeVisible();
+    await expect(focusArea).toBeFocused();
+  });
+
+  test("should auto-focus when starting testing after stopping", async ({
+    page,
+  }) => {
+    const focusArea = page.getByTestId("keyboard-focus-area");
+
+    // Stop testing
+    await page.getByRole("button", { name: /stop testing/i }).click();
+    await expect(focusArea).not.toBeFocused();
+
+    // Start testing again
+    await page.getByRole("button", { name: /start testing/i }).click();
+    await expect(focusArea).toBeFocused();
+  });
 });

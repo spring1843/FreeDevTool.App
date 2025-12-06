@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
@@ -22,6 +22,7 @@ export default function KeyboardTest() {
   const [pressedKeys, setPressedKeys] = useState<Set<string>>(new Set());
   const [keyHistory, setKeyHistory] = useState<KeyPress[]>([]);
   const [isActive, setIsActive] = useState(true);
+  const focusAreaRef = useRef<HTMLDivElement>(null);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -59,6 +60,8 @@ export default function KeyboardTest() {
     if (isActive) {
       window.addEventListener("keydown", handleKeyDown);
       window.addEventListener("keyup", handleKeyUp);
+      // Auto-focus the focus area when testing becomes active
+      focusAreaRef.current?.focus();
     }
 
     return () => {
@@ -221,10 +224,21 @@ export default function KeyboardTest() {
             <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
               Currently Pressed ({pressedKeys.size})
             </h3>
-            <div className="min-h-[60px] p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex flex-wrap gap-2">
+            <div
+              ref={focusAreaRef}
+              tabIndex={isActive ? 0 : -1}
+              className={`min-h-[60px] p-4 bg-slate-50 dark:bg-slate-800 border-2 flex flex-wrap gap-2 outline-none transition-colors ${
+                isActive
+                  ? "border-blue-500 dark:border-blue-400 focus:ring-2 focus:ring-blue-500/50 cursor-text"
+                  : "border-slate-200 dark:border-slate-700"
+              }`}
+              data-testid="keyboard-focus-area"
+            >
               {pressedKeys.size === 0 ? (
                 <div className="text-slate-500 dark:text-slate-400 italic">
-                  No keys currently pressed
+                  {isActive
+                    ? "Click here and start typing to test your keyboard..."
+                    : "No keys currently pressed"}
                 </div>
               ) : (
                 Array.from(pressedKeys).map(code => {
