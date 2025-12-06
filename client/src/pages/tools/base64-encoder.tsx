@@ -5,7 +5,7 @@ import { encodeBase64, decodeBase64 } from "@/lib/encoders";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Lock, Unlock, ArrowRightLeft } from "lucide-react";
 import { SecurityBanner } from "@/components/ui/security-banner";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import {
   ToolButton,
   ResetButton,
