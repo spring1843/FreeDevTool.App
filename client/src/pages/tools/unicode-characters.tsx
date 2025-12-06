@@ -848,7 +848,7 @@ export default function UnicodeCharacters() {
                     const isCopied = copiedChar === char;
                     const isEmpty = char === "";
 
-                    // Skip empty characters
+                    // Skip control characters and invalid code points (rendered as empty strings)
                     if (isEmpty && viewMode === "all") {
                       return null;
                     }
