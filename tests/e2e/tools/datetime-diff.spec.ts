@@ -115,8 +115,11 @@ test.describe("Date/Time Difference Tool", () => {
     await expect(hourPreset).toBeVisible();
     await hourPreset.click();
 
-    // Verify toast notification appears
-    const toast = page.locator("text=Preset Applied");
+    // Verify toast notification appears (aria-live region)
+    const toast = page
+      .locator('[role="status"]')
+      .filter({ hasText: "Preset Applied" })
+      .first();
     await expect(toast).toBeVisible();
 
     // Verify results are now displayed (No Calculation Yet should disappear)
@@ -137,8 +140,11 @@ test.describe("Date/Time Difference Tool", () => {
     await expect(unixEpochPreset).toBeVisible();
     await unixEpochPreset.click();
 
-    // Verify toast notification appears
-    const toast = page.locator("text=Preset Applied");
+    // Verify toast notification appears (aria-live region)
+    const toast = page
+      .locator('[role="status"]')
+      .filter({ hasText: "Preset Applied" })
+      .first();
     await expect(toast).toBeVisible();
 
     // Verify start date is set to Unix epoch
@@ -160,8 +166,11 @@ test.describe("Date/Time Difference Tool", () => {
     await expect(futurePreset).toBeVisible();
     await futurePreset.click();
 
-    // Verify toast notification appears
-    const toast = page.locator("text=Preset Applied");
+    // Verify toast notification appears (aria-live region)
+    const toast = page
+      .locator('[role="status"]')
+      .filter({ hasText: "Preset Applied" })
+      .first();
     await expect(toast).toBeVisible();
 
     // Verify end date is set to year 3000
@@ -180,8 +189,12 @@ test.describe("Date/Time Difference Tool", () => {
     const quickPreset = page.getByTestId("preset-quick-0");
     await quickPreset.click();
 
-    // Wait for toast
-    await expect(page.locator("text=Preset Applied")).toBeVisible();
+    // Wait for toast (aria-live region)
+    const toast = page
+      .locator('[role="status"]')
+      .filter({ hasText: "Preset Applied" })
+      .first();
+    await expect(toast).toBeVisible();
 
     // Then apply a historical preset
     const historicalPreset = page.getByTestId("preset-historical-0");
