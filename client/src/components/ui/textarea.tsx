@@ -271,8 +271,8 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
       return () => window.clearTimeout(id);
     }, [value, theme]);
 
-    const DESKTOP_MAX_LINES = 300;
-    const MOBILE_MAX_LINES = 100;
+    const DESKTOP_MAX_LINES = 80;
+    const MOBILE_MAX_LINES = 50;
     const maxVisibleLines = isMobile ? MOBILE_MAX_LINES : DESKTOP_MAX_LINES;
     const maxHeightPx = Math.max(1, Math.round(lineHeightPx * maxVisibleLines));
 

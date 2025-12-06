@@ -295,6 +295,10 @@ export default function Metronome() {
       enabled: true,
     };
     setToneSchedules([...toneSchedules, newSchedule]);
+    toast({
+      title: "Tone Added",
+      description: "The tone has been added.",
+    });
   };
 
   const removeToneSchedule = (id: string) => {
