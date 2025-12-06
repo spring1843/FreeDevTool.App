@@ -847,19 +847,10 @@ export default function UnicodeCharacters() {
                     const info = getCharacterInfo(char);
                     const isCopied = copiedChar === char;
                     const isEmpty = char === "";
-                    const codePoint = currentPage * CHARS_PER_PAGE + index;
 
+                    // Skip control characters and invalid code points (rendered as empty strings)
                     if (isEmpty && viewMode === "all") {
-                      // Show empty placeholder for control characters
-                      return (
-                        <div
-                          key={`empty-${index}`}
-                          className="aspect-square p-1 border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 flex items-center justify-center"
-                          title={`U+${codePoint.toString(16).toUpperCase().padStart(4, "0")} - Control Character`}
-                        >
-                          <span className="text-xs text-slate-400">•</span>
-                        </div>
-                      );
+                      return null;
                     }
 
                     return (
