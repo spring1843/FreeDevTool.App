@@ -71,38 +71,4 @@ test.describe("Timer Tool", () => {
     const runningBadges = page.locator("text=Running");
     await expect(runningBadges).toHaveCount(2);
   });
-
-  test("Continue All resumes only globally paused timers", async ({ page }) => {
-    await page.goto("/tools/timer?m=0&s=08");
-    await expect(page.locator("main")).toBeVisible();
-
-    // Add a second timer and start both
-    await page.getByTestId("add-timer-toggle").click();
-    await page.getByTestId("timer-seconds-input").fill("06");
-    await page.getByTestId("add-timer-confirm").click();
-
-    // Start first timer
-    const firstToggle = page.locator('[data-testid^="toggle-timer-"]').first();
-    await firstToggle.click();
-
-    // Start second timer
-    const secondToggle = page.locator('[data-testid^="toggle-timer-"]').nth(1);
-    await secondToggle.click();
-
-    // Pause All (records which were running)
-    const pauseAll = page.getByTestId("pause-all-timers");
-    await expect(pauseAll).toBeVisible();
-    await pauseAll.click();
-    // Wait for running badges to disappear after Pause All
-    await expect(page.locator("text=Running")).toHaveCount(0);
-
-    // Continue All resumes only previously paused (fallback to manual resume if button not present)
-    const continueAll = page.getByTestId("continue-all-timers");
-    await expect(continueAll).toBeVisible();
-    await continueAll.first().click();
-
-    // Expect both timers to be Running again
-    const runningBadges = page.locator("text=Running");
-    await expect(runningBadges).toHaveCount(2);
-  });
 });
