@@ -219,7 +219,8 @@ export default function NumberBaseConverter() {
 
       setResults(newResults);
     } catch {
-      const errorMessage = "Conversion failed";
+      const errorMessage =
+        "Invalid number for the selected base. Please check your input";
       setError(errorMessage);
       setResults([]);
     }
@@ -554,7 +555,16 @@ export default function NumberBaseConverter() {
                       </span>
                       <span className="text-sm text-blue-600 dark:text-blue-300">
                         Decimal:{" "}
-                        {convertFromBaseToDecimal(inputNumber, inputBase)}
+                        {(() => {
+                          try {
+                            return convertFromBaseToDecimal(
+                              inputNumber,
+                              inputBase
+                            );
+                          } catch {
+                            return "Invalid input";
+                          }
+                        })()}
                       </span>
                     </div>
                   </div>
