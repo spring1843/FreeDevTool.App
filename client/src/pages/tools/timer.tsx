@@ -331,7 +331,7 @@ export default function Timer() {
         audioContextRef.current.close();
       }
       // Clear all alarm intervals using captured ref value
-      intervals.forEach(interval => clearInterval(interval));
+      intervals.forEach(interval => clearAlarmHandle(interval));
       intervals.clear();
     };
   }, [clearAlarmHandle]);
