@@ -3,11 +3,11 @@
  * Includes validation and sanitization to prevent malicious input
  */
 
-export interface URLShareParams {
+interface URLShareParams {
   [key: string]: string | number | boolean;
 }
 
-export interface ValidationRule {
+interface ValidationRule {
   type: "string" | "number" | "boolean" | "enum" | "array";
   min?: number;
   max?: number;
@@ -18,14 +18,10 @@ export interface ValidationRule {
   arrayItemPattern?: RegExp;
 }
 
-export interface ValidationSchema {
-  [key: string]: ValidationRule;
-}
-
 /**
  * Get URL parameters as an object
  */
-export function getURLParams(): URLSearchParams {
+function getURLParams(): URLSearchParams {
   return new URLSearchParams(window.location.search);
 }
 
@@ -230,71 +226,4 @@ export async function copyShareableURL(
     console.error("Failed to copy URL to clipboard:", error);
     return false;
   }
-}
-
-/**
- * Parse array parameters from URL (comma-separated values) - DEPRECATED
- * Use getValidatedParam with type: 'array' instead for security
- */
-export function getArrayParam(
-  key: string,
-  defaultValue: string[] = []
-): string[] {
-  const value = getParam(key, "");
-  if (!value) return defaultValue;
-  return value.split(",").filter(Boolean);
-}
-
-/**
- * Create a validation schema for common tool parameter types
- */
-export const commonValidationSchemas = {
-  // Numeric inputs with reasonable ranges
-  percentage: { type: "number" as const, min: 0, max: 100 },
-  smallNumber: { type: "number" as const, min: 0, max: 999999 },
-  largeNumber: { type: "number" as const, min: 0, max: 1000000000 },
-  year: { type: "number" as const, min: 1900, max: 2200 },
-
-  // String inputs with patterns
-  alphanumeric: {
-    type: "string" as const,
-    pattern: /^[a-zA-Z0-9]*$/,
-    maxLength: 100,
-  },
-  safePath: {
-    type: "string" as const,
-    pattern: /^[a-zA-Z0-9/_-]*$/,
-    maxLength: 200,
-  },
-  dateString: {
-    type: "string" as const,
-    pattern: /^\d{4}-\d{2}-\d{2}$/,
-    maxLength: 10,
-  },
-  timeString: {
-    type: "string" as const,
-    pattern: /^\d{2}:\d{2}(:\d{2})?$/,
-    maxLength: 8,
-  },
-
-  // Common enums
-  frequency: {
-    type: "enum" as const,
-    allowedValues: ["daily", "weekly", "monthly", "yearly"],
-  },
-  booleanString: { type: "enum" as const, allowedValues: ["true", "false"] },
-};
-
-/**
- * Set array parameter in URL (comma-separated values)
- */
-export function setArrayParam(key: string, values: string[]): void {
-  updateURL({ [key]: values.join(",") });
-}
-
-/**
- * Clear all URL parameters
- */
-export function clearURLParams(): void {
-  window.history.replaceState(null, "", window.location.pathname);
 }

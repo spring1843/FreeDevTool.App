@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import {
   Keyboard,
@@ -22,6 +22,14 @@ import { useDemo } from "@/hooks/use-demo-hook";
 export default function Home() {
   const { filteredToolsData } = useSearch();
   const [showAllShortcuts, setShowAllShortcuts] = useState(false);
+
+  useEffect(() => {
+    const ssrDirectory = document.getElementById("ssr-tool-directory");
+    if (ssrDirectory) {
+      ssrDirectory.remove();
+    }
+  }, []);
+
   const {
     isDemoRunning,
     isDemoPaused,
@@ -240,7 +248,7 @@ export default function Home() {
                       <p className="text-sm text-slate-600 dark:text-slate-400 mb-3">
                         {tool.metadata.description}
                       </p>
-                      <div className="flex items-center justify-between">
+                      <div className="hidden md:flex items-center justify-between">
                         <span className="text-xs bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded font-mono">
                           {tool.shortcut}
                         </span>

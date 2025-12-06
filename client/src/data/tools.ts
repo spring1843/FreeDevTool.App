@@ -14,7 +14,7 @@ export interface Tool {
   explanations: ToolExplanation;
 }
 
-export interface ToolCategory {
+interface ToolCategory {
   color: string;
   shortcut: string;
   tools: Tool[];
@@ -4984,15 +4984,14 @@ export const toolsData: ToolData = {
       },
     ],
   },
-  Hardware: {
+  System: {
     color: "bg-slate-500 text-white dark:bg-slate-600",
-    shortcut: "H",
+    shortcut: "S",
     tools: [
       {
         name: "Camera Test",
         path: "/tools/webcam-test",
         shortcut: "Ctrl+Shift+.",
-        experimental: true,
         metadata: {
           title: "Webcam Test - Test Your Camera",
           description:
@@ -5247,12 +5246,6 @@ export const toolsData: ToolData = {
           ],
         },
       },
-    ],
-  },
-  Browser: {
-    color: "bg-purple-500 text-white dark:bg-purple-600",
-    shortcut: "B",
-    tools: [
       {
         name: "Browser Info",
         path: "/tools/browser-info",

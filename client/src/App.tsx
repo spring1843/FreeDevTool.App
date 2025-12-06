@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { DemoProvider } from "@/providers/demo-provider";
 import { Layout } from "@/components/layout/Layout";
+import { ScrollToTop } from "@/components/ScrollToTop";
 
 // Eager load home page for fast initial load
 import Home from "@/pages/home";
@@ -198,6 +199,7 @@ function App() {
         <DemoProvider>
           <TooltipProvider>
             <Toaster />
+            <ScrollToTop />
             <Router />
           </TooltipProvider>
         </DemoProvider>

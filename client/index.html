@@ -6,6 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1"
     />
+    <meta name="color-scheme" content="light dark" />
     <!--
   Security & Privacy: CSP meta tag blocks external scripts, enforces
   a sandbox, and prevents outbound calls. All processing is offline
@@ -18,6 +19,17 @@
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' ws: wss:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self';"
     />
+    <script>
+      (function () {
+        var theme = localStorage.getItem("theme");
+        if (!theme) {
+          theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+        }
+        document.documentElement.classList.add(theme);
+      })();
+    </script>
     <title>
       FreeDevTool.App - Free, Secure, Open Source, and Offline Developer Tools
     </title>
@@ -72,24 +84,39 @@
       sizes="512x512"
       href="/assets/android-chrome-512x512.png"
     />
+    <style id="critical-loading">
+      .loading-screen {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: #ffffff;
+        color: #333;
+      }
+      .loading-screen a {
+        color: #2563eb;
+      }
+      .dark .loading-screen {
+        background: #0f172a;
+        color: #e2e8f0;
+      }
+      .dark .loading-screen a {
+        color: #60a5fa;
+      }
+    </style>
   </head>
   <body>
     <div id="root">
-      <div
-        style="
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 100vh;
-          font-family: system-ui;
-          background: #ffffff;
-        "
-      >
+      <div class="loading-screen">
         <div style="text-align: center">
-          <div style="margin-bottom: 16px; font-size: 18px; color: #333">
+          <div style="margin-bottom: 16px; font-size: 18px">
             Loading FreeDevTool.App...
           </div>
-          <div style="font-size: 14px; color: #666">
+          <div style="font-size: 14px; opacity: 0.7">
             <a
               href="https://github.com/spring1843/FreeDevTool.App/blob/main/SECURITY.md"
               target="_blank"
@@ -103,11 +130,10 @@
     </div>
     <script type="module" src="/src/main.tsx" defer></script>
     <script>
-      // Remove loading screen once page is fully loaded
       window.addEventListener("load", function () {
         setTimeout(function () {
-          const loadingDiv = document.querySelector("#root > div");
-          if (loadingDiv && loadingDiv.style.display === "flex") {
+          var loadingDiv = document.querySelector(".loading-screen");
+          if (loadingDiv) {
             loadingDiv.style.display = "none";
           }
         }, 500);
