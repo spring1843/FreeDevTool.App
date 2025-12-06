@@ -584,7 +584,7 @@ export default function Timer() {
             );
 
             const allFinished =
-              timers.length > 0 && timers.every(t => t.isFinished);
+              timers.every(t => t.isFinished);
 
             if (noneStarted) {
               return (
