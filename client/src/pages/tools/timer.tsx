@@ -583,8 +583,7 @@ export default function Timer() {
               t => !t.isRunning && !t.isFinished && t.timeLeft === t.duration
             );
 
-            const allFinished =
-              timers.every(t => t.isFinished);
+            const allFinished = timers.every(t => t.isFinished);
 
             if (noneStarted) {
               return (
