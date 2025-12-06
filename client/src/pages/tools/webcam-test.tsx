@@ -10,7 +10,8 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Camera, Square, Download, Play } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { getToolByPath } from "@/data/tools";
@@ -34,10 +35,17 @@ export default function WebcamTest() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { toast } = useToast();
 
   const requestPermission = async () => {
     try {
       setError(null);
+
+      // Notify user that permission request is starting
+      toast({
+        title: "Requesting Permission",
+        description: "Requesting camera access from your browser...",
+      });
 
       // Request camera permission
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -45,6 +53,12 @@ export default function WebcamTest() {
 
       setHasPermission(true);
       await getVideoDevices();
+
+      toast({
+        title: "Permission Granted",
+        description:
+          "Camera access has been granted. You can now start the preview.",
+      });
     } catch (err: unknown) {
       setHasPermission(false);
       const error = err as DOMException;
@@ -52,12 +66,29 @@ export default function WebcamTest() {
         setError(
           "Camera permission denied. Please allow camera access to use this tool."
         );
+        toast({
+          title: "Permission Denied",
+          description:
+            "Camera permission denied. Please allow camera access to use this tool.",
+          variant: "destructive",
+        });
       } else if (error.name === "NotFoundError") {
         setError("No camera found. Please connect a camera device.");
+        toast({
+          title: "No Camera Found",
+          description: "Please connect a camera device and try again.",
+          variant: "destructive",
+        });
       } else {
         setError(
           `Failed to access camera: ${error instanceof Error ? error.message : "Unknown error"}`
         );
+        toast({
+          title: "Camera Access Error",
+          description:
+            error instanceof Error ? error.message : "Failed to access camera",
+          variant: "destructive",
+        });
       }
     }
   };
@@ -109,16 +140,28 @@ export default function WebcamTest() {
 
       // Get updated device list with labels
       await getVideoDevices();
+
+      toast({
+        title: "Camera Started",
+        description: "Camera preview is now active.",
+      });
     } catch (err: unknown) {
       setError(
         `Camera access failed: ${err instanceof Error ? err.message : "Unknown error"}`
       );
       setHasPermission(false);
       setIsActive(false);
+
+      toast({
+        title: "Camera Error",
+        description:
+          err instanceof Error ? err.message : "Failed to start camera preview",
+        variant: "destructive",
+      });
     }
   };
 
-  const stopCamera = () => {
+  const stopCamera = useCallback(() => {
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
       streamRef.current = null;
@@ -129,7 +172,12 @@ export default function WebcamTest() {
     }
 
     setIsActive(false);
-  };
+
+    toast({
+      title: "Camera Stopped",
+      description: "Camera preview has been stopped.",
+    });
+  }, [toast]);
 
   const capturePhoto = () => {
     if (!videoRef.current || !canvasRef.current) return;
@@ -157,6 +205,11 @@ export default function WebcamTest() {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+
+      toast({
+        title: "Photo Captured",
+        description: "Your snapshot has been downloaded.",
+      });
     });
   };
 
@@ -202,8 +255,18 @@ export default function WebcamTest() {
     checkPermissionStatus();
     getBasicDevices();
 
+    const videoEl = videoRef.current;
+    const stream = streamRef.current;
     return () => {
-      stopCamera();
+      // Clean up silently on unmount without showing a toast
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        streamRef.current = null;
+      }
+      if (videoEl) {
+        videoEl.srcObject = null;
+      }
+      setIsActive(false);
     };
   }, []);
 

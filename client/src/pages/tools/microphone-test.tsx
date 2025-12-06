@@ -49,6 +49,12 @@ export default function MicrophoneTest() {
     try {
       setError("");
 
+      // Notify user that permission request is starting
+      toast({
+        title: "Requesting Permission",
+        description: "Requesting microphone access from your browser...",
+      });
+
       // Request microphone permission
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       stream.getTracks().forEach(track => track.stop()); // Stop immediately after getting permission
