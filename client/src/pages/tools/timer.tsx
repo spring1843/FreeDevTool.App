@@ -210,15 +210,39 @@ export default function Timer() {
     toast,
   ]);
 
-  const toggleTimer = useCallback((id: string) => {
-    setTimers(prev =>
-      prev.map(timer =>
-        timer.id === id
-          ? { ...timer, isRunning: !timer.isRunning, isFinished: false }
-          : timer
-      )
-    );
-  }, []);
+  const toggleTimer = useCallback(
+    (id: string) => {
+      const target = timers.find(t => t.id === id);
+      const wasRunning = target?.isRunning ?? false;
+      const wasFinished = target?.isFinished ?? false;
+
+      setTimers(prev =>
+        prev.map(timer =>
+          timer.id === id
+            ? { ...timer, isRunning: !timer.isRunning, isFinished: false }
+            : timer
+        )
+      );
+
+      if (wasFinished) {
+        toast({
+          title: "Timer Restarted",
+          description: `${target?.name ?? "Timer"} restarted.`,
+        });
+      } else if (wasRunning) {
+        toast({
+          title: "Timer Paused",
+          description: `${target?.name ?? "Timer"} paused.`,
+        });
+      } else {
+        toast({
+          title: "Timer Started",
+          description: `${target?.name ?? "Timer"} started.`,
+        });
+      }
+    },
+    [timers, toast]
+  );
 
   const stopAllTimers = useCallback(() => {
     // Clear all alarms
@@ -235,7 +259,11 @@ export default function Timer() {
     );
     // Clear any global paused tracking
     setPausedByGlobal(new Set());
-  }, [clearAlarmHandle]);
+    toast({
+      title: "All Timers Stopped",
+      description: "All timers have been stopped.",
+    });
+  }, [clearAlarmHandle, toast]);
 
   const pauseAllTimers = useCallback(() => {
     const idsPaused: string[] = [];
@@ -249,7 +277,15 @@ export default function Timer() {
       })
     );
     setPausedByGlobal(new Set(idsPaused));
-  }, []);
+    const count = idsPaused.length;
+    toast({
+      title: "Timers Paused",
+      description:
+        count > 0
+          ? `Paused ${count} timer${count === 1 ? "" : "s"}.`
+          : "No running timers to pause.",
+    });
+  }, [toast]);
 
   const continueAllTimers = useCallback(() => {
     setTimers(prev =>
@@ -261,7 +297,15 @@ export default function Timer() {
     );
     // Reset tracking after resuming
     setPausedByGlobal(new Set());
-  }, [pausedByGlobal]);
+    const count = pausedByGlobal.size;
+    toast({
+      title: "Timers Resumed",
+      description:
+        count > 0
+          ? `Resumed ${count} timer${count === 1 ? "" : "s"}.`
+          : "No paused timers to resume.",
+    });
+  }, [pausedByGlobal, toast]);
 
   const startAllTimers = useCallback(() => {
     // Start all timers that haven't finished and have time remaining
@@ -274,7 +318,15 @@ export default function Timer() {
     );
     // Clear any global paused tracking just in case
     setPausedByGlobal(new Set());
-  }, []);
+    const count = timers.filter(t => !t.isFinished && t.timeLeft > 0).length;
+    toast({
+      title: "Timers Started",
+      description:
+        count > 0
+          ? `Started ${count} timer${count === 1 ? "" : "s"}.`
+          : "No timers available to start.",
+    });
+  }, [timers, toast]);
 
   const resetAllTimers = useCallback(() => {
     // Clear any alarms first
@@ -294,7 +346,11 @@ export default function Timer() {
 
     // Clear global paused tracking
     setPausedByGlobal(new Set());
-  }, [clearAlarmHandle]);
+    toast({
+      title: "All Timers Reset",
+      description: "Timers have been reset to their original durations.",
+    });
+  }, [clearAlarmHandle, toast]);
 
   // Initialize audio context and default timer
   useEffect(() => {
@@ -435,8 +491,13 @@ export default function Timer() {
             : timer
         )
       );
+      const t = timers.find(x => x.id === id);
+      toast({
+        title: "Timer Reset",
+        description: `${t?.name ?? "Timer"} reset to original duration.`,
+      });
     },
-    [clearAlarmHandle]
+    [clearAlarmHandle, timers, toast]
   );
 
   const removeTimer = useCallback(
