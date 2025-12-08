@@ -18,4 +18,12 @@ test.describe("Timezone Converter Tool", () => {
     await expectNoErrors(page);
     await expectDefaultValue(page);
   });
+
+  test("should filter and select timezone from dropdown", async ({ page }) => {
+    await page.getByRole("combobox").first().click();
+    await page.getByPlaceholder("Search timezones...").fill("Tokyo");
+    await expect(page.getByText("Tokyo, Japan")).toBeVisible();
+    await page.getByText("Tokyo, Japan").click();
+    await expect(page.getByRole("combobox").first()).toContainText("Tokyo");
+  });
 });
