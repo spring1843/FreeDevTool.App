@@ -1,13 +1,20 @@
 import { useState, useMemo } from "react";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { allTimezones, getUserTimezone } from "@/lib/time-tools";
 
 interface WorldClockCity {
@@ -31,7 +38,7 @@ export function TimezoneSelector({
   className,
   "data-testid": testId,
 }: TimezoneSelectorProps) {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [open, setOpen] = useState(false);
 
   // Get timezone offset for display
   const getTimezoneOffset = (timezone: string): string => {
@@ -50,72 +57,105 @@ export function TimezoneSelector({
     }
   };
 
-  // Filter and sort timezones
-  const filteredTimezones = useMemo(() => {
-    const filtered = allTimezones.filter(
-      (city: WorldClockCity) =>
-        city.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        city.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        city.timezone.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+  // Sort timezones by offset then by name
+  const sortedTimezones = useMemo(
+    () =>
+      [...allTimezones].sort((a: WorldClockCity, b: WorldClockCity) => {
+        const offsetA = getTimezoneOffset(a.timezone);
+        const offsetB = getTimezoneOffset(b.timezone);
 
-    // Sort by timezone offset, then by city name
-    return filtered.sort((a: WorldClockCity, b: WorldClockCity) => {
-      const offsetA = getTimezoneOffset(a.timezone);
-      const offsetB = getTimezoneOffset(b.timezone);
+        // Extract numeric offset for proper sorting
+        const numericOffsetA = parseFloat(offsetA.replace(/[^\d.-]/g, "")) || 0;
+        const numericOffsetB = parseFloat(offsetB.replace(/[^\d.-]/g, "")) || 0;
 
-      // Extract numeric offset for proper sorting
-      const numericOffsetA = parseFloat(offsetA.replace(/[^\d.-]/g, "")) || 0;
-      const numericOffsetB = parseFloat(offsetB.replace(/[^\d.-]/g, "")) || 0;
+        if (numericOffsetA !== numericOffsetB) {
+          return numericOffsetA - numericOffsetB;
+        }
 
-      if (numericOffsetA !== numericOffsetB) {
-        return numericOffsetA - numericOffsetB;
-      }
+        return a.name.localeCompare(b.name);
+      }),
+    []
+  );
 
-      return a.name.localeCompare(b.name);
-    });
-  }, [searchTerm]);
+  // Find the selected timezone display value
+  const selectedTimezone = value
+    ? allTimezones.find((tz: WorldClockCity) => tz.timezone === value)
+    : null;
 
   return (
-    <Select value={value} onValueChange={onValueChange} data-testid={testId}>
-      <SelectTrigger className={className}>
-        <SelectValue placeholder={placeholder} />
-      </SelectTrigger>
-      <SelectContent className="max-h-80">
-        {/* Search Input */}
-        <div className="flex items-center px-3 pb-2 border-b border-slate-200 dark:border-slate-700">
-          <Search className="w-4 h-4 mr-2 text-slate-400" />
-          <Input
-            placeholder="Search timezones..."
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-            className="border-0 px-0 focus-visible:ring-0"
-          />
-        </div>
-
-        {/* Timezone Options */}
-        {filteredTimezones.map((city: WorldClockCity) => {
-          const offset = getTimezoneOffset(city.timezone);
-          return (
-            <SelectItem key={city.timezone} value={city.timezone}>
-              <div className="flex justify-between items-center w-full min-w-0">
-                <span className="font-medium truncate">
-                  {city.name}, {city.country}
-                </span>
-                <span className="text-xs text-slate-500 dark:text-slate-400 ml-2 flex-shrink-0">
-                  {offset}
-                </span>
-              </div>
-            </SelectItem>
-          );
-        })}
-
-        {filteredTimezones.length === 0 && (
-          <div className="px-3 py-2 text-sm text-slate-500 dark:text-slate-400">
-            No timezones found matching &ldquo;{searchTerm}&rdquo;
-          </div>
-        )}
-      </SelectContent>
-    </Select>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className={cn("w-full justify-between", className)}
+          data-testid={testId}
+        >
+          {selectedTimezone ? (
+            <span className="truncate">
+              {selectedTimezone.name}, {selectedTimezone.country} (
+              {getTimezoneOffset(selectedTimezone.timezone)})
+            </span>
+          ) : (
+            <span className="text-muted-foreground">{placeholder}</span>
+          )}
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[350px] p-0" align="start">
+        <Command
+          filter={(value, search) => {
+            // Custom filter that searches city name, country, and timezone
+            const timezone = allTimezones.find(
+              (tz: WorldClockCity) => tz.timezone === value
+            );
+            if (!timezone) return 0;
+            const searchLower = search.toLowerCase();
+            if (
+              timezone.name.toLowerCase().includes(searchLower) ||
+              timezone.country.toLowerCase().includes(searchLower) ||
+              timezone.timezone.toLowerCase().includes(searchLower)
+            ) {
+              return 1;
+            }
+            return 0;
+          }}
+        >
+          <CommandInput placeholder="Search timezones..." />
+          <CommandList>
+            <CommandEmpty>No timezone found.</CommandEmpty>
+            <CommandGroup>
+              {sortedTimezones.map((city: WorldClockCity) => {
+                const offset = getTimezoneOffset(city.timezone);
+                return (
+                  <CommandItem
+                    key={city.timezone}
+                    value={city.timezone}
+                    onSelect={currentValue => {
+                      onValueChange(currentValue);
+                      setOpen(false);
+                    }}
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        value === city.timezone ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    <span className="flex-1 truncate">
+                      {city.name}, {city.country}
+                    </span>
+                    <span className="ml-2 text-xs text-muted-foreground">
+                      {offset}
+                    </span>
+                  </CommandItem>
+                );
+              })}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
   );
 }
