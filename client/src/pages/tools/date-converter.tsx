@@ -330,7 +330,7 @@ const DATE_FORMATS = [
 export default function DateConverter() {
   const tool = getToolByPath("/tools/date-converter");
   const [inputDate, setInputDate] = useState("1699123456");
-  const [inputFormat, setInputFormat] = useState("iso");
+  const [inputFormat, setInputFormat] = useState("unix");
   const [formats, setFormats] = useState<DateFormat[]>([]);
   const { toast } = useToast();
 
@@ -784,7 +784,7 @@ export default function DateConverter() {
 
   const handleReset = () => {
     setInputDate("1699123456");
-    setInputFormat("iso");
+    setInputFormat("unix");
     setFormats([]);
   };
 
