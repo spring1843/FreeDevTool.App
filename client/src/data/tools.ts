@@ -36,7 +36,7 @@ export const toolsData: ToolData = {
         metadata: {
           title: "Date Converter - Convert Between Date Formats",
           description:
-            "Convert dates between 20+ practical formats including ISO 8601, Unix timestamps, RFC 2822, and human-readable formats. Auto-detects input format for easy conversion.",
+            "Convert dates between 20+ practical formats including ISO 8601, Unix timestamps, RFC 2822, and human-readable formats.",
           keywords: [
             "date converter",
             "timestamp converter",

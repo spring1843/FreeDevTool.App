@@ -37,11 +37,6 @@ interface DateFormat {
 
 // Input format options with detailed patterns
 const INPUT_FORMATS = [
-  {
-    value: "auto",
-    label: "Auto-detect",
-    description: "Automatically detect input format",
-  },
   // Timestamps
   {
     value: "unix",
@@ -335,7 +330,7 @@ const DATE_FORMATS = [
 export default function DateConverter() {
   const tool = getToolByPath("/tools/date-converter");
   const [inputDate, setInputDate] = useState("1699123456");
-  const [inputFormat, setInputFormat] = useState("auto");
+  const [inputFormat, setInputFormat] = useState("iso");
   const [formats, setFormats] = useState<DateFormat[]>([]);
   const { toast } = useToast();
 
@@ -768,10 +763,7 @@ export default function DateConverter() {
         {
           name: "Error",
           value: "Invalid date input",
-          description:
-            inputFormat === "auto"
-              ? "Supported: Unix timestamps (seconds/milliseconds), ISO 8601, or any standard date format"
-              : `Expected format: ${selectedFormat?.description || inputFormat}`,
+          description: `Expected format: ${selectedFormat?.description || inputFormat}`,
           pattern: "",
           category: "Error",
         },
@@ -792,7 +784,7 @@ export default function DateConverter() {
 
   const handleReset = () => {
     setInputDate("1699123456");
-    setInputFormat("auto");
+    setInputFormat("iso");
     setFormats([]);
   };
 
@@ -915,10 +907,8 @@ export default function DateConverter() {
             </div>
           </div>
           <p className="text-sm text-gray-500">
-            {inputFormat === "auto"
-              ? "Auto-detect: Unix timestamps (seconds/milliseconds), ISO 8601, RFC formats, human-readable dates"
-              : INPUT_FORMATS.find(f => f.value === inputFormat)?.description ||
-                ""}
+            {INPUT_FORMATS.find(f => f.value === inputFormat)?.description ||
+              ""}
           </p>
         </CardContent>
       </Card>
