@@ -105,7 +105,7 @@ export function TimezoneSelector({
       </PopoverTrigger>
       <PopoverContent className="w-[350px] p-0" align="start">
         <Command
-          filter={(value, search) => {
+          filter={(value: string, search: string) => {
             // Custom filter that searches city name, country, and timezone
             const timezone = allTimezones.find(
               (tz: WorldClockCity) => tz.timezone === value
@@ -132,7 +132,7 @@ export function TimezoneSelector({
                   <CommandItem
                     key={city.timezone}
                     value={city.timezone}
-                    onSelect={currentValue => {
+                    onSelect={(currentValue: string) => {
                       onValueChange(currentValue);
                       setOpen(false);
                     }}
