@@ -1,10 +1,7 @@
 import { describe, it, expect } from "vitest";
 
 // Replicate the parseInputDate function from the component with format parameter
-const parseInputDate = (
-  input: string,
-  format = "auto"
-): Date | null => {
+const parseInputDate = (input: string, format = "auto"): Date | null => {
   const trimmed = input.trim();
 
   // Parse based on selected format
