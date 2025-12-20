@@ -49,6 +49,12 @@ export default function MicrophoneTest() {
     try {
       setError("");
 
+      // Notify user that permission request is starting
+      toast({
+        title: "Requesting Permission",
+        description: "Requesting microphone access from your browser...",
+      });
+
       // Request microphone permission
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       stream.getTracks().forEach(track => track.stop()); // Stop immediately after getting permission
@@ -469,37 +475,47 @@ export default function MicrophoneTest() {
 
           <ToolButtonGroup>
             <ActionButtonGroup>
-              {!hasPermission &&
-              !(devices.length > 0 && devices.some(device => device.label)) ? (
-                <ToolButton
-                  variant="custom"
-                  onClick={requestPermission}
-                  tooltip="Request microphone access permission"
-                  icon={<Mic className="w-4 h-4 mr-2" />}
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
-                >
-                  Request Microphone Permission
-                </ToolButton>
-              ) : !isRecording ? (
-                <ToolButton
-                  variant="custom"
-                  onClick={startRecording}
-                  tooltip="Start recording audio from microphone"
-                  icon={<Mic className="w-4 h-4 mr-2" />}
-                >
-                  Start Recording
-                </ToolButton>
-              ) : (
-                <ToolButton
-                  variant="custom"
-                  onClick={stopRecording}
-                  tooltip="Stop the current recording"
-                  icon={<Square className="w-4 h-4 mr-2" />}
-                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                >
-                  Stop Recording
-                </ToolButton>
-              )}
+              {(() => {
+                const needsPermission =
+                  !hasPermission &&
+                  !(devices.length > 0 && devices.some(device => device.label));
+                if (needsPermission) {
+                  return (
+                    <ToolButton
+                      variant="custom"
+                      onClick={requestPermission}
+                      tooltip="Request microphone access permission"
+                      icon={<Mic className="w-4 h-4 mr-2" />}
+                      className="bg-blue-600 hover:bg-blue-700 text-white"
+                    >
+                      Request Microphone Permission
+                    </ToolButton>
+                  );
+                }
+                if (!isRecording) {
+                  return (
+                    <ToolButton
+                      variant="custom"
+                      onClick={startRecording}
+                      tooltip="Start recording audio from microphone"
+                      icon={<Mic className="w-4 h-4 mr-2" />}
+                    >
+                      Start Recording
+                    </ToolButton>
+                  );
+                }
+                return (
+                  <ToolButton
+                    variant="custom"
+                    onClick={stopRecording}
+                    tooltip="Stop the current recording"
+                    icon={<Square className="w-4 h-4 mr-2" />}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Stop Recording
+                  </ToolButton>
+                );
+              })()}
             </ActionButtonGroup>
           </ToolButtonGroup>
 

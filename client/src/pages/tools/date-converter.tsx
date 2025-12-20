@@ -183,6 +183,17 @@ export default function DateConverter() {
 
     // Try standard date parsing
     const date = new Date(input);
+    if (/^\d{4}-\d{2}-\d{2}$/.test(input)) {
+      const [y, m, d] = input.split("-").map(Number);
+
+      if (
+        date.getUTCFullYear() !== y ||
+        date.getUTCMonth() + 1 !== m ||
+        date.getUTCDate() !== d
+      ) {
+        return null;
+      }
+    }
     return isNaN(date.getTime()) ? null : date;
   };
 
@@ -214,9 +225,10 @@ export default function DateConverter() {
         return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
       case "sqldate":
         return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
-      case "objectid":
+      case "objectid": {
         const timestamp = Math.floor(date.getTime() / 1000).toString(16);
         return `${timestamp.padStart(8, "0")}f1a2b3c4d5e6f789`;
+      }
       case "full":
         return date.toLocaleDateString("en-US", {
           weekday: "long",

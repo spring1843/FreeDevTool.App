@@ -369,9 +369,10 @@ export default function UnicodeCharacters() {
     switch (viewMode) {
       case "all":
         return getAllViewCharacters();
-      case "block":
+      case "block": {
         const block = UNICODE_BLOCKS.find(b => b.name === selectedBlock);
         return block ? getBlockCharacters(block) : [];
+      }
       case "category":
         return selectedCategory ? getCategoryCharacters(selectedCategory) : [];
       case "search":
@@ -846,19 +847,10 @@ export default function UnicodeCharacters() {
                     const info = getCharacterInfo(char);
                     const isCopied = copiedChar === char;
                     const isEmpty = char === "";
-                    const codePoint = currentPage * CHARS_PER_PAGE + index;
 
+                    // Skip control characters and invalid code points (rendered as empty strings)
                     if (isEmpty && viewMode === "all") {
-                      // Show empty placeholder for control characters
-                      return (
-                        <div
-                          key={`empty-${index}`}
-                          className="aspect-square p-1 border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 flex items-center justify-center"
-                          title={`U+${codePoint.toString(16).toUpperCase().padStart(4, "0")} - Control Character`}
-                        >
-                          <span className="text-xs text-slate-400">•</span>
-                        </div>
-                      );
+                      return null;
                     }
 
                     return (
@@ -886,15 +878,20 @@ export default function UnicodeCharacters() {
                     <Type className="w-16 h-16 mx-auto mb-4 opacity-50" />
                     <p className="text-lg font-medium">No Characters Found</p>
                     <p className="text-sm">
-                      {viewMode === "search"
-                        ? "Try a different search term"
-                        : viewMode === "custom"
-                          ? "Enter a valid Unicode range"
-                          : viewMode === "category"
-                            ? "Select a character category"
-                            : viewMode === "all"
-                              ? "Browsing all Unicode characters"
-                              : "Select a Unicode block to view characters"}
+                      {(() => {
+                        switch (viewMode) {
+                          case "search":
+                            return "Try a different search term";
+                          case "custom":
+                            return "Enter a valid Unicode range";
+                          case "category":
+                            return "Select a character category";
+                          case "all":
+                            return "Browsing all Unicode characters";
+                          default:
+                            return "Select a Unicode block to view characters";
+                        }
+                      })()}
                     </p>
                   </div>
                 </div>

@@ -71,7 +71,7 @@ const mobileThemeExtension = EditorView.theme({
 
 // Extension to release pointer capture on touch end - prevents focus lock on iOS
 const releasePointerCaptureExtension = EditorView.domEventHandlers({
-  pointerup(event, _view) {
+  pointerup(event) {
     const target = event.target as HTMLElement;
     if (target.hasPointerCapture?.(event.pointerId)) {
       target.releasePointerCapture(event.pointerId);
@@ -105,21 +105,19 @@ interface TextAreaProps {
   theme?: "light" | "dark";
   lineWrapping?: boolean;
   fixedHeight?: boolean; // when true, cap visible height by max lines; when false, allow full height
+  "data-default-input"?: string;
 }
 
 const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
-  (
-    {
-      className,
-      value,
-      onChange,
-      theme = "light",
-      lineWrapping = false,
-      fixedHeight = true,
-      ...props
-    },
-    _ref // The ref is not used, but forwardRef requires it.
-  ) => {
+  ({
+    className,
+    value,
+    onChange,
+    theme = "light",
+    lineWrapping = false,
+    fixedHeight = true,
+    ...props
+  }) => {
     const isMobile = useIsMobile();
 
     const baseClassName = cn(
@@ -273,8 +271,8 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
       return () => window.clearTimeout(id);
     }, [value, theme]);
 
-    const DESKTOP_MAX_LINES = 300;
-    const MOBILE_MAX_LINES = 100;
+    const DESKTOP_MAX_LINES = 80;
+    const MOBILE_MAX_LINES = 50;
     const maxVisibleLines = isMobile ? MOBILE_MAX_LINES : DESKTOP_MAX_LINES;
     const maxHeightPx = Math.max(1, Math.round(lineHeightPx * maxVisibleLines));
 
@@ -490,7 +488,7 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
       setIsDragOver(true);
     };
 
-    const handleDragLeave = (_e: React.DragEvent<HTMLDivElement>) => {
+    const handleDragLeave = () => {
       if (props.readOnly) return;
       setIsDragOver(false);
     };

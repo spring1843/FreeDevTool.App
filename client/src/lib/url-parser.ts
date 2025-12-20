@@ -64,7 +64,7 @@ export function parseURL(inputUrl: string): ParseURLResult {
 
     const cleanComponents = Object.fromEntries(
       Object.entries(components).filter(
-        ([_, value]) => value !== undefined && value !== ""
+        ([, value]) => value !== undefined && value !== ""
       )
     ) as URLComponents;
 
