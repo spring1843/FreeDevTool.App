@@ -183,7 +183,29 @@ export default function DateConverter() {
 
     // Try standard date parsing
     const date = new Date(input);
-    return isNaN(date.getTime()) ? null : date;
+    if (isNaN(date.getTime())) {
+      return null;
+    }
+
+    // Validate ISO-like date strings (YYYY-MM-DD) to catch invalid dates like Feb 29 in non-leap years
+    // JavaScript's Date normalizes these instead of rejecting them (e.g., 2100-02-29 becomes 2100-03-01)
+    const isoMatch = input.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (isoMatch) {
+      const inputYear = parseInt(isoMatch[1], 10);
+      const inputMonth = parseInt(isoMatch[2], 10);
+      const inputDay = parseInt(isoMatch[3], 10);
+
+      // Check if parsed date matches input (using UTC to avoid timezone issues)
+      if (
+        date.getUTCFullYear() !== inputYear ||
+        date.getUTCMonth() + 1 !== inputMonth ||
+        date.getUTCDate() !== inputDay
+      ) {
+        return null; // Date was normalized, meaning input was invalid
+      }
+    }
+
+    return date;
   };
 
   const formatDate = (date: Date, format: string): string => {
