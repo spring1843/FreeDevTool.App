@@ -37,12 +37,41 @@ interface DateFormat {
 
 // Input format options
 const INPUT_FORMATS = [
-  { value: "auto", label: "Auto-detect", description: "Automatically detect input format" },
-  { value: "unix", label: "Unix Epoch (seconds)", description: "e.g., 1699123456" },
-  { value: "unixms", label: "Unix Epoch (milliseconds)", description: "e.g., 1699123456000" },
-  { value: "iso", label: "ISO 8601", description: "e.g., 2024-01-15T14:30:45Z" },
-  { value: "us", label: "US Format (MM/DD/YYYY)", description: "e.g., 01/15/2024" },
-  { value: "eu", label: "EU Format (DD/MM/YYYY)", description: "e.g., 15/01/2024" },
+  {
+    value: "auto",
+    label: "Auto-detect",
+    description: "Automatically detect input format",
+  },
+  {
+    value: "unix",
+    label: "Unix Epoch (seconds)",
+    description: "e.g., 1699123456",
+  },
+  {
+    value: "unixms",
+    label: "Unix Epoch (milliseconds)",
+    description: "e.g., 1699123456000",
+  },
+  {
+    value: "iso",
+    label: "ISO 8601",
+    description: "e.g., 2024-01-15T14:30:45Z",
+  },
+  {
+    value: "isodate",
+    label: "ISO 8601 Date (YYYY-MM-DD)",
+    description: "e.g., 2024-01-15",
+  },
+  {
+    value: "us",
+    label: "US Format (MM/DD/YYYY)",
+    description: "e.g., 01/15/2024",
+  },
+  {
+    value: "eu",
+    label: "EU Format (DD/MM/YYYY)",
+    description: "e.g., 15/01/2024",
+  },
 ];
 
 // 20 Essential Date Formats for Developers
@@ -230,13 +259,29 @@ export default function DateConverter() {
       return isNaN(date.getTime()) ? null : date;
     }
 
+    if (format === "isodate") {
+      // YYYY-MM-DD
+      const match = trimmed.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (!match) return null;
+      const [, y, m, d] = match.map(Number);
+      const date = new Date(y, m - 1, d);
+      if (date.getFullYear() !== y || date.getMonth() + 1 !== m || date.getDate() !== d) {
+        return null;
+      }
+      return date;
+    }
+
     if (format === "us") {
       // MM/DD/YYYY
       const match = trimmed.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
       if (!match) return null;
       const [, m, d, y] = match.map(Number);
       const date = new Date(y, m - 1, d);
-      if (date.getFullYear() !== y || date.getMonth() + 1 !== m || date.getDate() !== d) {
+      if (
+        date.getFullYear() !== y ||
+        date.getMonth() + 1 !== m ||
+        date.getDate() !== d
+      ) {
         return null;
       }
       return date;
@@ -248,7 +293,11 @@ export default function DateConverter() {
       if (!match) return null;
       const [, d, m, y] = match.map(Number);
       const date = new Date(y, m - 1, d);
-      if (date.getFullYear() !== y || date.getMonth() + 1 !== m || date.getDate() !== d) {
+      if (
+        date.getFullYear() !== y ||
+        date.getMonth() + 1 !== m ||
+        date.getDate() !== d
+      ) {
         return null;
       }
       return date;
@@ -350,9 +399,10 @@ export default function DateConverter() {
         {
           name: "Error",
           value: "Invalid date input",
-          description: inputFormat === "auto"
-            ? "Supported: Unix timestamps (seconds/milliseconds), ISO 8601, or any standard date format"
-            : `Expected format: ${selectedFormat?.description || inputFormat}`,
+          description:
+            inputFormat === "auto"
+              ? "Supported: Unix timestamps (seconds/milliseconds), ISO 8601, or any standard date format"
+              : `Expected format: ${selectedFormat?.description || inputFormat}`,
           pattern: "",
           category: "Error",
         },
@@ -479,7 +529,10 @@ export default function DateConverter() {
             <div>
               <Label htmlFor="input-format">Input Format</Label>
               <Select value={inputFormat} onValueChange={setInputFormat}>
-                <SelectTrigger id="input-format" data-testid="input-format-select">
+                <SelectTrigger
+                  id="input-format"
+                  data-testid="input-format-select"
+                >
                   <SelectValue placeholder="Select format" />
                 </SelectTrigger>
                 <SelectContent>
@@ -495,7 +548,8 @@ export default function DateConverter() {
           <p className="text-sm text-gray-500">
             {inputFormat === "auto"
               ? "Auto-detect: Unix timestamps (seconds/milliseconds), ISO 8601, RFC formats, human-readable dates"
-              : INPUT_FORMATS.find(f => f.value === inputFormat)?.description || ""}
+              : INPUT_FORMATS.find(f => f.value === inputFormat)?.description ||
+                ""}
           </p>
         </CardContent>
       </Card>
@@ -540,7 +594,10 @@ export default function DateConverter() {
                             <Badge variant="outline" className="text-xs">
                               {format.name}
                             </Badge>
-                            <Badge variant="secondary" className="text-xs font-mono bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
+                            <Badge
+                              variant="secondary"
+                              className="text-xs font-mono bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
+                            >
                               {format.pattern}
                             </Badge>
                           </div>
