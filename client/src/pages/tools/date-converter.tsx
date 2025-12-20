@@ -35,13 +35,14 @@ interface DateFormat {
   category: string;
 }
 
-// Input format options
+// Input format options with detailed patterns
 const INPUT_FORMATS = [
   {
     value: "auto",
     label: "Auto-detect",
     description: "Automatically detect input format",
   },
+  // Timestamps
   {
     value: "unix",
     label: "Unix Epoch (seconds)",
@@ -52,16 +53,18 @@ const INPUT_FORMATS = [
     label: "Unix Epoch (milliseconds)",
     description: "e.g., 1699123456000",
   },
+  // ISO Standards
   {
     value: "iso",
-    label: "ISO 8601",
-    description: "e.g., 2024-01-15T14:30:45Z",
+    label: "ISO 8601 (YYYY-MM-DDTHH:mm:ss.sssZ)",
+    description: "e.g., 2024-01-15T14:30:45.123Z",
   },
   {
     value: "isodate",
     label: "ISO 8601 Date (YYYY-MM-DD)",
     description: "e.g., 2024-01-15",
   },
+  // Regional
   {
     value: "us",
     label: "US Format (MM/DD/YYYY)",
@@ -71,6 +74,39 @@ const INPUT_FORMATS = [
     value: "eu",
     label: "EU Format (DD/MM/YYYY)",
     description: "e.g., 15/01/2024",
+  },
+  // SQL/Database
+  {
+    value: "sql",
+    label: "SQL DateTime (YYYY-MM-DD HH:mm:ss)",
+    description: "e.g., 2024-01-15 14:30:45",
+  },
+  {
+    value: "sqldate",
+    label: "SQL Date (YYYY-MM-DD)",
+    description: "e.g., 2024-01-15",
+  },
+  // RFC Standards
+  {
+    value: "rfc2822",
+    label: "RFC 2822 (ddd, DD MMM YYYY HH:mm:ss GMT)",
+    description: "e.g., Mon, 15 Jan 2024 14:30:45 GMT",
+  },
+  {
+    value: "rfc3339",
+    label: "RFC 3339 (YYYY-MM-DDTHH:mm:ssZ)",
+    description: "e.g., 2024-01-15T14:30:45Z",
+  },
+  // Human Readable
+  {
+    value: "shorttext",
+    label: "Short Text (Mon DD, YYYY)",
+    description: "e.g., Jan 15, 2024",
+  },
+  {
+    value: "fulltext",
+    label: "Full Text (Weekday, Month DD, YYYY)",
+    description: "e.g., Monday, January 15, 2024",
   },
 ];
 
@@ -370,6 +406,78 @@ export default function DateConverter() {
         return null;
       }
       return date;
+    }
+
+    if (format === "sql") {
+      // YYYY-MM-DD HH:mm:ss
+      const match = trimmed.match(
+        /^(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2}):(\d{2})$/
+      );
+      if (!match) return null;
+      const [, y, mo, d, h, mi, s] = match.map(Number);
+      const date = new Date(y, mo - 1, d, h, mi, s);
+      if (
+        date.getFullYear() !== y ||
+        date.getMonth() + 1 !== mo ||
+        date.getDate() !== d
+      ) {
+        return null;
+      }
+      return date;
+    }
+
+    if (format === "sqldate") {
+      // YYYY-MM-DD (same as isodate)
+      const match = trimmed.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (!match) return null;
+      const [, y, m, d] = match.map(Number);
+      const date = new Date(y, m - 1, d);
+      if (
+        date.getFullYear() !== y ||
+        date.getMonth() + 1 !== m ||
+        date.getDate() !== d
+      ) {
+        return null;
+      }
+      return date;
+    }
+
+    if (format === "rfc2822" || format === "rfc3339") {
+      // Let JavaScript's Date parser handle these RFC formats
+      const date = new Date(trimmed);
+      return isNaN(date.getTime()) ? null : date;
+    }
+
+    if (format === "shorttext") {
+      // Mon DD, YYYY (e.g., Jan 15, 2024)
+      const months = [
+        "jan", "feb", "mar", "apr", "may", "jun",
+        "jul", "aug", "sep", "oct", "nov", "dec",
+      ];
+      const match = trimmed.match(/^([A-Za-z]{3})\s+(\d{1,2}),?\s+(\d{4})$/);
+      if (!match) return null;
+      const [, monthStr, dayStr, yearStr] = match;
+      const monthIdx = months.indexOf(monthStr.toLowerCase());
+      if (monthIdx === -1) return null;
+      const date = new Date(parseInt(yearStr), monthIdx, parseInt(dayStr));
+      return isNaN(date.getTime()) ? null : date;
+    }
+
+    if (format === "fulltext") {
+      // Weekday, Month DD, YYYY (e.g., Monday, January 15, 2024)
+      const months = [
+        "january", "february", "march", "april", "may", "june",
+        "july", "august", "september", "october", "november", "december",
+      ];
+      const match = trimmed.match(
+        /^[A-Za-z]+,?\s+([A-Za-z]+)\s+(\d{1,2}),?\s+(\d{4})$/
+      );
+      if (!match) return null;
+      const [, monthStr, dayStr, yearStr] = match;
+      const monthIdx = months.indexOf(monthStr.toLowerCase());
+      if (monthIdx === -1) return null;
+      const date = new Date(parseInt(yearStr), monthIdx, parseInt(dayStr));
+      return isNaN(date.getTime()) ? null : date;
     }
 
     // Auto-detect mode
