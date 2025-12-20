@@ -117,6 +117,41 @@ const DATE_FORMATS = [
 
   // RFC Standards
   {
+    name: "RFC 822",
+    format: "rfc822",
+    pattern: "DD MMM YY HH:mm TZ",
+    description: "Original email date format",
+    category: "RFC Standards",
+  },
+  {
+    name: "RFC 822Z",
+    format: "rfc822z",
+    pattern: "DD MMM YY HH:mm -0700",
+    description: "RFC 822 with numeric zone",
+    category: "RFC Standards",
+  },
+  {
+    name: "RFC 850",
+    format: "rfc850",
+    pattern: "Weekday, DD-Mon-YY HH:mm:ss TZ",
+    description: "Usenet date format",
+    category: "RFC Standards",
+  },
+  {
+    name: "RFC 1123",
+    format: "rfc1123",
+    pattern: "ddd, DD MMM YYYY HH:mm:ss TZ",
+    description: "HTTP/1.1 date format",
+    category: "RFC Standards",
+  },
+  {
+    name: "RFC 1123Z",
+    format: "rfc1123z",
+    pattern: "ddd, DD MMM YYYY HH:mm:ss -0700",
+    description: "RFC 1123 with numeric zone",
+    category: "RFC Standards",
+  },
+  {
     name: "RFC 2822",
     format: "rfc2822",
     pattern: "ddd, DD MMM YYYY HH:mm:ss GMT",
@@ -126,9 +161,39 @@ const DATE_FORMATS = [
   {
     name: "RFC 3339",
     format: "rfc3339",
-    pattern: "YYYY-MM-DDTHH:mm:ss.sssZ",
+    pattern: "YYYY-MM-DDTHH:mm:ssZ",
     description: "Internet date/time format",
     category: "RFC Standards",
+  },
+  {
+    name: "RFC 3339 Nano",
+    format: "rfc3339nano",
+    pattern: "YYYY-MM-DDTHH:mm:ss.nnnnnnnnnZ",
+    description: "RFC 3339 with nanoseconds",
+    category: "RFC Standards",
+  },
+
+  // Unix-style Formats
+  {
+    name: "ANSIC",
+    format: "ansic",
+    pattern: "ddd Mon _D HH:mm:ss YYYY",
+    description: "C library asctime() format",
+    category: "Unix-style",
+  },
+  {
+    name: "Unix Date",
+    format: "unixdate",
+    pattern: "ddd Mon _D HH:mm:ss TZ YYYY",
+    description: "Unix date command format",
+    category: "Unix-style",
+  },
+  {
+    name: "Ruby Date",
+    format: "rubydate",
+    pattern: "ddd Mon DD HH:mm:ss -0700 YYYY",
+    description: "Ruby Time.to_s format",
+    category: "Unix-style",
   },
 
   // Common International
@@ -265,7 +330,11 @@ export default function DateConverter() {
       if (!match) return null;
       const [, y, m, d] = match.map(Number);
       const date = new Date(y, m - 1, d);
-      if (date.getFullYear() !== y || date.getMonth() + 1 !== m || date.getDate() !== d) {
+      if (
+        date.getFullYear() !== y ||
+        date.getMonth() + 1 !== m ||
+        date.getDate() !== d
+      ) {
         return null;
       }
       return date;
@@ -344,10 +413,182 @@ export default function DateConverter() {
         return date.toISOString().split("T")[0];
       case "isotime":
         return date.toISOString().split("T")[1];
+      case "rfc822": {
+        const months = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        const year2 = String(date.getUTCFullYear()).slice(-2);
+        return `${pad(date.getUTCDate())} ${months[date.getUTCMonth()]} ${year2} ${pad(date.getUTCHours())}:${pad(date.getUTCMinutes())} GMT`;
+      }
+      case "rfc822z": {
+        const months = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        const year2 = String(date.getUTCFullYear()).slice(-2);
+        return `${pad(date.getUTCDate())} ${months[date.getUTCMonth()]} ${year2} ${pad(date.getUTCHours())}:${pad(date.getUTCMinutes())} +0000`;
+      }
+      case "rfc850": {
+        const weekdays = [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ];
+        const months = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        const year2 = String(date.getUTCFullYear()).slice(-2);
+        return `${weekdays[date.getUTCDay()]}, ${pad(date.getUTCDate())}-${months[date.getUTCMonth()]}-${year2} ${pad(date.getUTCHours())}:${pad(date.getUTCMinutes())}:${pad(date.getUTCSeconds())} GMT`;
+      }
+      case "rfc1123": {
+        const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const months = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        return `${weekdays[date.getUTCDay()]}, ${pad(date.getUTCDate())} ${months[date.getUTCMonth()]} ${date.getUTCFullYear()} ${pad(date.getUTCHours())}:${pad(date.getUTCMinutes())}:${pad(date.getUTCSeconds())} GMT`;
+      }
+      case "rfc1123z": {
+        const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const months = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        return `${weekdays[date.getUTCDay()]}, ${pad(date.getUTCDate())} ${months[date.getUTCMonth()]} ${date.getUTCFullYear()} ${pad(date.getUTCHours())}:${pad(date.getUTCMinutes())}:${pad(date.getUTCSeconds())} +0000`;
+      }
       case "rfc2822":
         return date.toUTCString();
       case "rfc3339":
-        return date.toISOString();
+        return date.toISOString().replace(/\.\d{3}Z$/, "Z");
+      case "rfc3339nano": {
+        const iso = date.toISOString();
+        return iso.replace(
+          /\.\d{3}Z$/,
+          `.${String(date.getMilliseconds()).padStart(3, "0")}000000Z`
+        );
+      }
+      case "ansic": {
+        const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const months = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        const day = date.getDate();
+        const dayStr = day < 10 ? ` ${day}` : String(day);
+        return `${weekdays[date.getDay()]} ${months[date.getMonth()]} ${dayStr} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())} ${date.getFullYear()}`;
+      }
+      case "unixdate": {
+        const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const months = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        const day = date.getDate();
+        const dayStr = day < 10 ? ` ${day}` : String(day);
+        const tz =
+          Intl.DateTimeFormat().resolvedOptions().timeZone.split("/").pop() ||
+          "Local";
+        return `${weekdays[date.getDay()]} ${months[date.getMonth()]} ${dayStr} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())} ${tz} ${date.getFullYear()}`;
+      }
+      case "rubydate": {
+        const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const months = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        const offset = -date.getTimezoneOffset();
+        const sign = offset >= 0 ? "+" : "-";
+        const absOffset = Math.abs(offset);
+        const offsetHours = pad(Math.floor(absOffset / 60));
+        const offsetMins = pad(absOffset % 60);
+        return `${weekdays[date.getDay()]} ${months[date.getMonth()]} ${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())} ${sign}${offsetHours}${offsetMins} ${date.getFullYear()}`;
+      }
       case "us":
         return `${pad(date.getMonth() + 1)}/${pad(date.getDate())}/${date.getFullYear()}`;
       case "eu":
@@ -568,6 +809,7 @@ export default function DateConverter() {
               "Timestamp",
               "ISO Standards",
               "RFC Standards",
+              "Unix-style",
               "Regional",
               "Database",
               "Human Readable",
