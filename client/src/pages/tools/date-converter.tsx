@@ -183,6 +183,17 @@ export default function DateConverter() {
 
     // Try standard date parsing
     const date = new Date(input);
+    if (/^\d{4}-\d{2}-\d{2}$/.test(input)) {
+      const [y, m, d] = input.split("-").map(Number);
+
+      if (
+        date.getUTCFullYear() !== y ||
+        date.getUTCMonth() + 1 !== m ||
+        date.getUTCDate() !== d
+      ) {
+        return null;
+      }
+    }
     return isNaN(date.getTime()) ? null : date;
   };
 
