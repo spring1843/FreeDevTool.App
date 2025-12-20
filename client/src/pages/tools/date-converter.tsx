@@ -451,8 +451,18 @@ export default function DateConverter() {
     if (format === "shorttext") {
       // Mon DD, YYYY (e.g., Jan 15, 2024)
       const months = [
-        "jan", "feb", "mar", "apr", "may", "jun",
-        "jul", "aug", "sep", "oct", "nov", "dec",
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "may",
+        "jun",
+        "jul",
+        "aug",
+        "sep",
+        "oct",
+        "nov",
+        "dec",
       ];
       const match = trimmed.match(/^([A-Za-z]{3})\s+(\d{1,2}),?\s+(\d{4})$/);
       if (!match) return null;
@@ -466,8 +476,18 @@ export default function DateConverter() {
     if (format === "fulltext") {
       // Weekday, Month DD, YYYY (e.g., Monday, January 15, 2024)
       const months = [
-        "january", "february", "march", "april", "may", "june",
-        "july", "august", "september", "october", "november", "december",
+        "january",
+        "february",
+        "march",
+        "april",
+        "may",
+        "june",
+        "july",
+        "august",
+        "september",
+        "october",
+        "november",
+        "december",
       ];
       const match = trimmed.match(
         /^[A-Za-z]+,?\s+([A-Za-z]+)\s+(\d{1,2}),?\s+(\d{4})$/
