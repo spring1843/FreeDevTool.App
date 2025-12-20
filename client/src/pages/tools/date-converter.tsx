@@ -3,6 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Copy, Clock } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import {
@@ -24,8 +31,19 @@ interface DateFormat {
   name: string;
   value: string;
   description: string;
+  pattern: string;
   category: string;
 }
+
+// Input format options
+const INPUT_FORMATS = [
+  { value: "auto", label: "Auto-detect", description: "Automatically detect input format" },
+  { value: "unix", label: "Unix Epoch (seconds)", description: "e.g., 1699123456" },
+  { value: "unixms", label: "Unix Epoch (milliseconds)", description: "e.g., 1699123456000" },
+  { value: "iso", label: "ISO 8601", description: "e.g., 2024-01-15T14:30:45Z" },
+  { value: "us", label: "US Format (MM/DD/YYYY)", description: "e.g., 01/15/2024" },
+  { value: "eu", label: "EU Format (DD/MM/YYYY)", description: "e.g., 15/01/2024" },
+];
 
 // 20 Essential Date Formats for Developers
 const DATE_FORMATS = [
@@ -33,12 +51,14 @@ const DATE_FORMATS = [
   {
     name: "Unix Timestamp",
     format: "unix",
+    pattern: "Epoch (seconds)",
     description: "Seconds since Jan 1, 1970",
     category: "Timestamp",
   },
   {
     name: "Unix Milliseconds",
     format: "unixms",
+    pattern: "Epoch (milliseconds)",
     description: "Milliseconds since Jan 1, 1970",
     category: "Timestamp",
   },
@@ -47,19 +67,22 @@ const DATE_FORMATS = [
   {
     name: "ISO 8601",
     format: "iso",
-    description: "2024-01-15T14:30:45.123Z",
+    pattern: "YYYY-MM-DDTHH:mm:ss.sssZ",
+    description: "International standard format",
     category: "ISO Standards",
   },
   {
     name: "ISO Date Only",
     format: "isodate",
-    description: "2024-01-15",
+    pattern: "YYYY-MM-DD",
+    description: "Date portion only",
     category: "ISO Standards",
   },
   {
     name: "ISO Time Only",
     format: "isotime",
-    description: "14:30:45.123Z",
+    pattern: "HH:mm:ss.sssZ",
+    description: "Time portion with timezone",
     category: "ISO Standards",
   },
 
@@ -67,13 +90,15 @@ const DATE_FORMATS = [
   {
     name: "RFC 2822",
     format: "rfc2822",
-    description: "Mon, 15 Jan 2024 14:30:45 GMT",
+    pattern: "ddd, DD MMM YYYY HH:mm:ss GMT",
+    description: "Email/HTTP date format",
     category: "RFC Standards",
   },
   {
     name: "RFC 3339",
     format: "rfc3339",
-    description: "2024-01-15T14:30:45.123Z",
+    pattern: "YYYY-MM-DDTHH:mm:ss.sssZ",
+    description: "Internet date/time format",
     category: "RFC Standards",
   },
 
@@ -81,19 +106,22 @@ const DATE_FORMATS = [
   {
     name: "US Format",
     format: "us",
-    description: "01/15/2024",
+    pattern: "MM/DD/YYYY",
+    description: "Month-Day-Year",
     category: "Regional",
   },
   {
     name: "European Format",
     format: "eu",
-    description: "15/01/2024",
+    pattern: "DD/MM/YYYY",
+    description: "Day-Month-Year",
     category: "Regional",
   },
   {
     name: "ISO Numeric",
     format: "numeric",
-    description: "2024-01-15",
+    pattern: "YYYY-MM-DD",
+    description: "Year-Month-Day",
     category: "Regional",
   },
 
@@ -101,19 +129,22 @@ const DATE_FORMATS = [
   {
     name: "SQL DateTime",
     format: "sql",
-    description: "2024-01-15 14:30:45",
+    pattern: "YYYY-MM-DD HH:mm:ss",
+    description: "Database datetime format",
     category: "Database",
   },
   {
     name: "SQL Date",
     format: "sqldate",
-    description: "2024-01-15",
+    pattern: "YYYY-MM-DD",
+    description: "Database date format",
     category: "Database",
   },
   {
     name: "MongoDB ObjectId",
     format: "objectid",
-    description: "65a5c1d5f1a2b3c4d5e6f789",
+    pattern: "Hex timestamp + random",
+    description: "First 8 chars encode timestamp",
     category: "Database",
   },
 
@@ -121,25 +152,29 @@ const DATE_FORMATS = [
   {
     name: "Full Text",
     format: "full",
-    description: "Monday, January 15, 2024",
+    pattern: "Weekday, Month DD, YYYY",
+    description: "Full written date",
     category: "Human Readable",
   },
   {
     name: "Short Text",
     format: "short",
-    description: "Jan 15, 2024",
+    pattern: "Mon DD, YYYY",
+    description: "Abbreviated month",
     category: "Human Readable",
   },
   {
     name: "Time 12-hour",
     format: "time12",
-    description: "2:30:45 PM",
+    pattern: "h:mm:ss AM/PM",
+    description: "12-hour clock format",
     category: "Human Readable",
   },
   {
     name: "Time 24-hour",
     format: "time24",
-    description: "14:30:45",
+    pattern: "HH:mm:ss",
+    description: "24-hour clock format",
     category: "Human Readable",
   },
 
@@ -147,19 +182,22 @@ const DATE_FORMATS = [
   {
     name: "HTTP Date",
     format: "http",
-    description: "Mon, 15 Jan 2024 14:30:45 GMT",
+    pattern: "ddd, DD MMM YYYY HH:mm:ss GMT",
+    description: "HTTP header date format",
     category: "Web/API",
   },
   {
     name: "JSON Date",
     format: "json",
-    description: "2024-01-15T14:30:45.123Z",
+    pattern: "YYYY-MM-DDTHH:mm:ss.sssZ",
+    description: "JSON serialized date",
     category: "Web/API",
   },
   {
     name: "Cookie Expires",
     format: "cookie",
-    description: "Mon, 15-Jan-2024 14:30:45 GMT",
+    pattern: "ddd, DD-Mon-YYYY HH:mm:ss GMT",
+    description: "Cookie expiration format",
     category: "Web/API",
   },
 ];
@@ -167,24 +205,70 @@ const DATE_FORMATS = [
 export default function DateConverter() {
   const tool = getToolByPath("/tools/date-converter");
   const [inputDate, setInputDate] = useState("1699123456");
+  const [inputFormat, setInputFormat] = useState("auto");
   const [formats, setFormats] = useState<DateFormat[]>([]);
   const { toast } = useToast();
 
-  const parseInputDate = (input: string): Date | null => {
+  const parseInputDate = (input: string, format: string): Date | null => {
+    const trimmed = input.trim();
+
+    // Parse based on selected format
+    if (format === "unix") {
+      const num = parseInt(trimmed, 10);
+      if (isNaN(num)) return null;
+      return new Date(num * 1000);
+    }
+
+    if (format === "unixms") {
+      const num = parseInt(trimmed, 10);
+      if (isNaN(num)) return null;
+      return new Date(num);
+    }
+
+    if (format === "iso") {
+      const date = new Date(trimmed);
+      return isNaN(date.getTime()) ? null : date;
+    }
+
+    if (format === "us") {
+      // MM/DD/YYYY
+      const match = trimmed.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+      if (!match) return null;
+      const [, m, d, y] = match.map(Number);
+      const date = new Date(y, m - 1, d);
+      if (date.getFullYear() !== y || date.getMonth() + 1 !== m || date.getDate() !== d) {
+        return null;
+      }
+      return date;
+    }
+
+    if (format === "eu") {
+      // DD/MM/YYYY
+      const match = trimmed.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+      if (!match) return null;
+      const [, d, m, y] = match.map(Number);
+      const date = new Date(y, m - 1, d);
+      if (date.getFullYear() !== y || date.getMonth() + 1 !== m || date.getDate() !== d) {
+        return null;
+      }
+      return date;
+    }
+
+    // Auto-detect mode
     // Try Unix timestamp (seconds) - supports negative values for pre-epoch dates
-    if (/^-?\d{10}$/.test(input)) {
-      return new Date(parseInt(input) * 1000);
+    if (/^-?\d{10}$/.test(trimmed)) {
+      return new Date(parseInt(trimmed) * 1000);
     }
 
     // Try Unix timestamp (milliseconds) - supports negative values for pre-epoch dates
-    if (/^-?\d{13}$/.test(input)) {
-      return new Date(parseInt(input));
+    if (/^-?\d{13}$/.test(trimmed)) {
+      return new Date(parseInt(trimmed));
     }
 
     // Try standard date parsing
-    const date = new Date(input);
-    if (/^\d{4}-\d{2}-\d{2}$/.test(input)) {
-      const [y, m, d] = input.split("-").map(Number);
+    const date = new Date(trimmed);
+    if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+      const [y, m, d] = trimmed.split("-").map(Number);
 
       if (
         date.getUTCFullYear() !== y ||
@@ -258,15 +342,18 @@ export default function DateConverter() {
   };
 
   const convertDate = useCallback(() => {
-    const date = parseInputDate(inputDate.trim());
+    const date = parseInputDate(inputDate, inputFormat);
 
     if (!date) {
+      const selectedFormat = INPUT_FORMATS.find(f => f.value === inputFormat);
       setFormats([
         {
           name: "Error",
           value: "Invalid date input",
-          description:
-            "Supported: Unix timestamps (seconds/milliseconds), ISO 8601, or any standard date format",
+          description: inputFormat === "auto"
+            ? "Supported: Unix timestamps (seconds/milliseconds), ISO 8601, or any standard date format"
+            : `Expected format: ${selectedFormat?.description || inputFormat}`,
+          pattern: "",
           category: "Error",
         },
       ]);
@@ -277,14 +364,16 @@ export default function DateConverter() {
       name: fmt.name,
       value: formatDate(date, fmt.format),
       description: fmt.description,
+      pattern: fmt.pattern,
       category: fmt.category,
     }));
 
     setFormats(newFormats);
-  }, [inputDate]);
+  }, [inputDate, inputFormat]);
 
   const handleReset = () => {
     setInputDate("1699123456");
+    setInputFormat("auto");
     setFormats([]);
   };
 
@@ -373,23 +462,41 @@ export default function DateConverter() {
           <CardTitle>Input Date</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div>
-            <Label htmlFor="input-date">Date Input</Label>
-            <Input
-              id="input-date"
-              value={inputDate}
-              onChange={e => setInputDate(e.target.value)}
-              placeholder="Enter Unix timestamp, ISO date, or any standard date format..."
-              data-testid="date-input"
-              className="font-mono"
-              autoFocus={true}
-              data-default-input="true"
-            />
-            <p className="text-sm text-gray-500 mt-1">
-              Supports: Unix timestamps (seconds/milliseconds), ISO 8601, RFC
-              formats, human-readable dates
-            </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="md:col-span-2">
+              <Label htmlFor="input-date">Date Input</Label>
+              <Input
+                id="input-date"
+                value={inputDate}
+                onChange={e => setInputDate(e.target.value)}
+                placeholder="Enter date value..."
+                data-testid="date-input"
+                className="font-mono"
+                autoFocus={true}
+                data-default-input="true"
+              />
+            </div>
+            <div>
+              <Label htmlFor="input-format">Input Format</Label>
+              <Select value={inputFormat} onValueChange={setInputFormat}>
+                <SelectTrigger id="input-format" data-testid="input-format-select">
+                  <SelectValue placeholder="Select format" />
+                </SelectTrigger>
+                <SelectContent>
+                  {INPUT_FORMATS.map(fmt => (
+                    <SelectItem key={fmt.value} value={fmt.value}>
+                      {fmt.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
+          <p className="text-sm text-gray-500">
+            {inputFormat === "auto"
+              ? "Auto-detect: Unix timestamps (seconds/milliseconds), ISO 8601, RFC formats, human-readable dates"
+              : INPUT_FORMATS.find(f => f.value === inputFormat)?.description || ""}
+          </p>
         </CardContent>
       </Card>
 
@@ -429,9 +536,14 @@ export default function DateConverter() {
                         className="p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                       >
                         <div className="flex items-center justify-between mb-2">
-                          <Badge variant="outline" className="text-xs">
-                            {format.name}
-                          </Badge>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <Badge variant="outline" className="text-xs">
+                              {format.name}
+                            </Badge>
+                            <Badge variant="secondary" className="text-xs font-mono bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
+                              {format.pattern}
+                            </Badge>
+                          </div>
                           <Button
                             size="sm"
                             variant="ghost"
