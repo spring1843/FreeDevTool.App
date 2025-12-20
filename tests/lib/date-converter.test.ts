@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 
 // Replicate the parseInputDate function from the component with format parameter
-const parseInputDate = (input: string, format = "auto"): Date | null => {
+const parseInputDate = (input: string, format: string = "auto"): Date | null => {
   const trimmed = input.trim();
 
   // Parse based on selected format
@@ -151,70 +151,6 @@ const parseInputDate = (input: string, format = "auto"): Date | null => {
     const monthIdx = months.indexOf(monthStr.toLowerCase());
     if (monthIdx === -1) return null;
     const date = new Date(parseInt(yearStr), monthIdx, parseInt(dayStr));
-    return isNaN(date.getTime()) ? null : date;
-  }
-
-  if (format === "shamsi") {
-    const match = trimmed.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);
-    if (!match) return null;
-    const [, jy, jm, jd] = match.map(Number);
-    const jalaliToGregorian = (
-      jy: number,
-      jm: number,
-      jd: number
-    ): [number, number, number] => {
-      let gy: number;
-      let jyear = jy;
-      if (jyear > 979) {
-        gy = 1600;
-        jyear -= 979;
-      } else {
-        gy = 621;
-      }
-      let days =
-        365 * jyear +
-        Math.floor(jyear / 33) * 8 +
-        Math.floor(((jyear % 33) + 3) / 4) +
-        78 +
-        jd +
-        (jm < 7 ? (jm - 1) * 31 : (jm - 7) * 30 + 186);
-      gy += 400 * Math.floor(days / 146097);
-      days %= 146097;
-      if (days > 36524) {
-        gy += 100 * Math.floor(--days / 36524);
-        days %= 36524;
-        if (days >= 365) days++;
-      }
-      gy += 4 * Math.floor(days / 1461);
-      days %= 1461;
-      if (days > 365) {
-        gy += Math.floor((days - 1) / 365);
-        days = (days - 1) % 365;
-      }
-      let gd = days + 1;
-      const sal_a = [
-        0,
-        31,
-        (gy % 4 === 0 && gy % 100 !== 0) || gy % 400 === 0 ? 29 : 28,
-        31,
-        30,
-        31,
-        30,
-        31,
-        31,
-        30,
-        31,
-        30,
-        31,
-      ];
-      let gm = 0;
-      for (gm = 0; gm < 13 && gd > sal_a[gm]; gm++) {
-        gd -= sal_a[gm];
-      }
-      return [gy, gm, gd];
-    };
-    const [gy, gm, gd] = jalaliToGregorian(jy, jm, jd);
-    const date = new Date(gy, gm - 1, gd);
     return isNaN(date.getTime()) ? null : date;
   }
 
@@ -434,46 +370,6 @@ const formatDate = (date: Date, format: string): string => {
       return `${pad(date.getUTCDate())}/${pad(date.getUTCMonth() + 1)}/${date.getUTCFullYear()}`;
     case "numeric":
       return `${date.getUTCFullYear()}-${pad(date.getUTCMonth() + 1)}-${pad(date.getUTCDate())}`;
-    case "shamsi": {
-      const gregorianToJalali = (
-        gy: number,
-        gm: number,
-        gd: number
-      ): [number, number, number] => {
-        const g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
-        let jy = gy <= 1600 ? 0 : 979;
-        const gyear = gy <= 1600 ? gy - 621 : gy - 1600;
-        const gy2 = gm > 2 ? gyear + 1 : gyear;
-        let days =
-          365 * gyear +
-          Math.floor((gy2 + 3) / 4) -
-          Math.floor((gy2 + 99) / 100) +
-          Math.floor((gy2 + 399) / 400) -
-          80 +
-          gd +
-          g_d_m[gm - 1];
-        jy += 33 * Math.floor(days / 12053);
-        days %= 12053;
-        jy += 4 * Math.floor(days / 1461);
-        days %= 1461;
-        if (days > 365) {
-          jy += Math.floor((days - 1) / 365);
-          days = (days - 1) % 365;
-        }
-        const jm =
-          days < 186
-            ? 1 + Math.floor(days / 31)
-            : 7 + Math.floor((days - 186) / 30);
-        const jd = 1 + (days < 186 ? days % 31 : (days - 186) % 30);
-        return [jy, jm, jd];
-      };
-      const [jy, jm, jd] = gregorianToJalali(
-        date.getFullYear(),
-        date.getMonth() + 1,
-        date.getDate()
-      );
-      return `${jy}/${pad(jm)}/${pad(jd)}`;
-    }
     case "sql":
       return `${date.getUTCFullYear()}-${pad(date.getUTCMonth() + 1)}-${pad(date.getUTCDate())} ${pad(date.getUTCHours())}:${pad(date.getUTCMinutes())}:${pad(date.getUTCSeconds())}`;
     case "sqldate":
@@ -623,10 +519,7 @@ describe("Date Converter", () => {
 
     describe("RFC Formats", () => {
       it("should parse RFC 2822 format", () => {
-        const result = parseInputDate(
-          "Mon, 15 Jan 2024 14:30:45 GMT",
-          "rfc2822"
-        );
+        const result = parseInputDate("Mon, 15 Jan 2024 14:30:45 GMT", "rfc2822");
         expect(result).toBeInstanceOf(Date);
         expect(result!.getFullYear()).toBe(2024);
       });
@@ -669,30 +562,6 @@ describe("Date Converter", () => {
 
       it("should reject invalid month names", () => {
         const result = parseInputDate("Foo 15, 2024", "shorttext");
-        expect(result).toBeNull();
-      });
-    });
-
-    describe("Shamsi (Persian/Jalali) Format", () => {
-      it("should parse Shamsi date format (YYYY/MM/DD)", () => {
-        // 1402/10/25 = January 15, 2024
-        const result = parseInputDate("1402/10/25", "shamsi");
-        expect(result).toBeInstanceOf(Date);
-        expect(result!.getFullYear()).toBe(2024);
-        expect(result!.getMonth()).toBe(0); // January
-        expect(result!.getDate()).toBe(15);
-      });
-
-      it("should parse Nowruz (Persian New Year)", () => {
-        // 1403/01/01 = March 20, 2024
-        const result = parseInputDate("1403/1/1", "shamsi");
-        expect(result).toBeInstanceOf(Date);
-        expect(result!.getFullYear()).toBe(2024);
-        expect(result!.getMonth()).toBe(2); // March
-      });
-
-      it("should reject invalid Shamsi format", () => {
-        const result = parseInputDate("1402-10-25", "shamsi");
         expect(result).toBeNull();
       });
     });
@@ -881,16 +750,12 @@ describe("Date Converter", () => {
     describe("Unix-style Formats", () => {
       it("should format ANSIC correctly", () => {
         const result = formatDate(testDate, "ansic");
-        expect(result).toMatch(
-          /^[A-Z][a-z]{2} [A-Z][a-z]{2} \s?\d{1,2} \d{2}:\d{2}:\d{2} \d{4}$/
-        );
+        expect(result).toMatch(/^[A-Z][a-z]{2} [A-Z][a-z]{2} \s?\d{1,2} \d{2}:\d{2}:\d{2} \d{4}$/);
       });
 
       it("should format Unix Date correctly", () => {
         const result = formatDate(testDate, "unixdate");
-        expect(result).toMatch(
-          /^[A-Z][a-z]{2} [A-Z][a-z]{2} \s?\d{1,2} \d{2}:\d{2}:\d{2} \w+ \d{4}$/
-        );
+        expect(result).toMatch(/^[A-Z][a-z]{2} [A-Z][a-z]{2} \s?\d{1,2} \d{2}:\d{2}:\d{2} \w+ \d{4}$/);
       });
 
       it("should format Ruby Date correctly", () => {
@@ -992,9 +857,7 @@ describe("Date Converter", () => {
 
     it("should handle year boundaries correctly", () => {
       const newYear = new Date("2024-01-01T00:00:00Z");
-      expect(formatDate(newYear, "rfc2822")).toBe(
-        "Mon, 01 Jan 2024 00:00:00 GMT"
-      );
+      expect(formatDate(newYear, "rfc2822")).toBe("Mon, 01 Jan 2024 00:00:00 GMT");
     });
 
     it("should handle single digit dates with padding", () => {
