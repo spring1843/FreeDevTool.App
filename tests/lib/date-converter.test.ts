@@ -1,7 +1,10 @@
 import { describe, it, expect } from "vitest";
 
 // Replicate the parseInputDate function from the component with format parameter
-const parseInputDate = (input: string, format: string = "auto"): Date | null => {
+const parseInputDate = (
+  input: string,
+  format: string = "auto"
+): Date | null => {
   const trimmed = input.trim();
 
   // Parse based on selected format
@@ -519,7 +522,10 @@ describe("Date Converter", () => {
 
     describe("RFC Formats", () => {
       it("should parse RFC 2822 format", () => {
-        const result = parseInputDate("Mon, 15 Jan 2024 14:30:45 GMT", "rfc2822");
+        const result = parseInputDate(
+          "Mon, 15 Jan 2024 14:30:45 GMT",
+          "rfc2822"
+        );
         expect(result).toBeInstanceOf(Date);
         expect(result!.getFullYear()).toBe(2024);
       });
@@ -750,12 +756,16 @@ describe("Date Converter", () => {
     describe("Unix-style Formats", () => {
       it("should format ANSIC correctly", () => {
         const result = formatDate(testDate, "ansic");
-        expect(result).toMatch(/^[A-Z][a-z]{2} [A-Z][a-z]{2} \s?\d{1,2} \d{2}:\d{2}:\d{2} \d{4}$/);
+        expect(result).toMatch(
+          /^[A-Z][a-z]{2} [A-Z][a-z]{2} \s?\d{1,2} \d{2}:\d{2}:\d{2} \d{4}$/
+        );
       });
 
       it("should format Unix Date correctly", () => {
         const result = formatDate(testDate, "unixdate");
-        expect(result).toMatch(/^[A-Z][a-z]{2} [A-Z][a-z]{2} \s?\d{1,2} \d{2}:\d{2}:\d{2} \w+ \d{4}$/);
+        expect(result).toMatch(
+          /^[A-Z][a-z]{2} [A-Z][a-z]{2} \s?\d{1,2} \d{2}:\d{2}:\d{2} \w+ \d{4}$/
+        );
       });
 
       it("should format Ruby Date correctly", () => {
@@ -857,7 +867,9 @@ describe("Date Converter", () => {
 
     it("should handle year boundaries correctly", () => {
       const newYear = new Date("2024-01-01T00:00:00Z");
-      expect(formatDate(newYear, "rfc2822")).toBe("Mon, 01 Jan 2024 00:00:00 GMT");
+      expect(formatDate(newYear, "rfc2822")).toBe(
+        "Mon, 01 Jan 2024 00:00:00 GMT"
+      );
     });
 
     it("should handle single digit dates with padding", () => {
