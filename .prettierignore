@@ -4,3 +4,4 @@ package-lock.json
 .cache/
 .local/
 .upm/
+src-tauri/target/
