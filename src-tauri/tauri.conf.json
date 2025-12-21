@@ -1,0 +1,37 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "FreeDevTool.App",
+  "version": "1.0.0",
+  "identifier": "app.freedevtool",
+  "build": {
+    "frontendDist": "../dist/public",
+    "devUrl": "http://localhost:9095",
+    "beforeDevCommand": "make dev",
+    "beforeBuildCommand": "make build"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "FreeDevTool.App",
+        "width": 1280,
+        "height": 800,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  }
+}
