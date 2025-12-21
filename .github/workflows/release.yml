@@ -12,6 +12,75 @@ on:
         type: string
 
 jobs:
+  # Build Tauri desktop apps for macOS and Windows
+  build-tauri:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: macos-latest
+            args: --target aarch64-apple-darwin
+            artifact: macos-arm64
+            rust-target: aarch64-apple-darwin
+          - platform: macos-13
+            args: --target x86_64-apple-darwin
+            artifact: macos-x64
+            rust-target: x86_64-apple-darwin
+          - platform: windows-latest
+            args: ""
+            artifact: windows
+            rust-target: ""
+
+    runs-on: ${{ matrix.platform }}
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-action@stable
+        with:
+          targets: ${{ matrix.rust-target }}
+
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Build Tauri app
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: ${{ matrix.args }}
+
+      - name: Upload Tauri artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: tauri-${{ matrix.artifact }}
+          path: |
+            src-tauri/target/*/release/bundle/**/*.dmg
+            src-tauri/target/*/release/bundle/**/*.app.tar.gz
+            src-tauri/target/release/bundle/**/*.dmg
+            src-tauri/target/release/bundle/**/*.app.tar.gz
+            src-tauri/target/release/bundle/**/*.msi
+            src-tauri/target/release/bundle/**/*.exe
+          if-no-files-found: warn
+
   build-and-release:
     container: ghcr.io/spring1843/freedevtool.app/e2e:v0.0.4
     permissions:
@@ -22,6 +91,8 @@ jobs:
 
     name: Build and Release
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -97,6 +168,18 @@ jobs:
 
           Released on $(date '+%Y-%m-%d')
 
+          ## 🖥️ Desktop Apps
+
+          Download the desktop app for your platform:
+
+          | Platform | File |
+          |----------|------|
+          | **macOS (Apple Silicon)** | \`FreeDevTool.App_*_aarch64.dmg\` |
+          | **macOS (Intel)** | \`FreeDevTool.App_*_x64.dmg\` |
+          | **Windows** | \`FreeDevTool.App_*_x64-setup.exe\` or \`.msi\` |
+
+          > Note: Desktop apps are currently unsigned. On macOS, right-click and select "Open" to bypass Gatekeeper. On Windows, click "More info" → "Run anyway" if SmartScreen appears.
+
           ## 🐳 Run Compiled Image Locally
 
           Using Docker
@@ -158,3 +241,33 @@ jobs:
       - name: Run E2E Tests Against Production For Cache Warming
         continue-on-error: true
         run: TARGET=https://freedevtool.app make e2e-test
+
+  # Collect Tauri artifacts and attach to release
+  attach-desktop-apps:
+    needs: [build-and-release, build-tauri]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download all Tauri artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: tauri-*
+          path: tauri-builds
+          merge-multiple: true
+
+      - name: List downloaded artifacts
+        run: find tauri-builds -type f | head -50
+
+      - name: Attach desktop apps to release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.build-and-release.outputs.version }}
+          files: |
+            tauri-builds/**/*.dmg
+            tauri-builds/**/*.app.tar.gz
+            tauri-builds/**/*.msi
+            tauri-builds/**/*.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
