@@ -17,18 +17,18 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - platform: 'macos-apple' # for Arm based macs (M1 and above).
-            args: '--target aarch64-apple-darwin'
-            image: 'macos-latest'
-          - platform: 'macos-intel' # for Intel based macs.
-            args: '--target x86_64-apple-darwin'
-            image: 'macos-latest'
-          - platform: 'linux'
-            args: ''
-            image: 'ubuntu-22.04'
-          - platform: 'windows'
-            args: ''
-            image: 'windows-latest'
+          - platform: "macos-apple" # for Arm based macs (M1 and above).
+            args: "--target aarch64-apple-darwin"
+            image: "macos-latest"
+          - platform: "macos-intel" # for Intel based macs.
+            args: "--target x86_64-apple-darwin"
+            image: "macos-latest"
+          - platform: "linux"
+            args: ""
+            image: "ubuntu-22.04"
+          - platform: "windows"
+            args: ""
+            image: "windows-latest"
 
     runs-on: ${{ matrix.image }}
     permissions:

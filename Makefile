@@ -109,21 +109,6 @@ tauri-build: ## Build Tauri desktop app for current platform
 tauri-build-debug: ## Build Tauri desktop app in debug mode (faster, for testing)
 	npx tauri build --debug
 
-tauri-build-macos: ## Build Tauri for macOS (requires macOS host)
-	npx tauri build --target aarch64-apple-darwin
-	npx tauri build --target x86_64-apple-darwin
-
-tauri-build-windows: ## Build Tauri for Windows (requires Windows host or cross-compilation toolchain)
-	npx tauri build --target x86_64-pc-windows-msvc
-
-tauri-build-linux: ## Build Tauri for Linux (requires Linux host or cross-compilation toolchain)
-	npx tauri build --target x86_64-unknown-linux-gnu
-
-tauri-build-all: ## Build Tauri for all platforms (run on each platform or in CI)
-	@echo "Note: Cross-compilation is limited. Run on each target platform or use CI."
-	@echo "For local builds, run: make tauri-build"
-	@echo "For CI builds, use GitHub Actions with tauri-apps/tauri-action"
-
 build-image: ## Build the Docker image for the app
 	docker build --platform linux/amd64 -t ${IMAGE_TAG} -f infra/images/Dockerfile .
 
