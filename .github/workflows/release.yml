@@ -82,13 +82,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          releaseId: ${{ steps.version.outputs.version }}
           args: ${{ matrix.args }}
 
       - name: Upload Tauri artifacts
         uses: actions/upload-artifact@v4
         with:
           name: desktop-${{ matrix.platform }}-${{ steps.version.outputs.version || 'default' }}
-          compression-level: 9
           path: |
             src-tauri/target/*/release/bundle/**/*.dmg
             src-tauri/target/release/bundle/**/*.msi
