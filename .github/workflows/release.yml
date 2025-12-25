@@ -96,7 +96,7 @@ jobs:
           if-no-files-found: warn
 
   build-and-release:
-    container: ghcr.io/spring1843/freedevtool.app/e2e:v0.0.4
+    container: ghcr.io/spring1843/freedevtool.app/e2e:v0.0.19
     permissions:
       contents: write
       pages: write
