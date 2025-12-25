@@ -107,8 +107,11 @@ tauri-clean: ## Clean Tauri build artifacts
 tauri-dev: ## Start Tauri in development mode with hot reload
 	npx tauri dev
 
-tauri-build: tauri-clean build ## Build Tauri desktop app for current platform
-	npx tauri build
+tauri-build-osx-arm: tauri-clean build ## Build Tauri desktop app for current platform
+	npx tauri build --target aarch64-apple-darwin
+
+tauri-build-osx-intel: tauri-clean build ## Build Tauri desktop app for macOS Intel
+	npx tauri build --target x86_64-apple-darwin
 
 tauri-build-debug: build ## Build Tauri desktop app in debug mode (faster, for testing)
 	npx tauri build --debug

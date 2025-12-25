@@ -12,25 +12,11 @@ on:
         type: string
 
 jobs:
-  build-desktop-apps:
+  build-desktop-osx:
     strategy:
       fail-fast: false
-      matrix:
-        include:
-          - platform: "macos-apple" # for Arm based macs (M1 and above).
-            args: "--target aarch64-apple-darwin"
-            image: "macos-latest"
-          - platform: "macos-intel" # for Intel based macs.
-            args: "--target x86_64-apple-darwin"
-            image: "macos-latest"
-          - platform: "linux"
-            args: ""
-            image: "ubuntu-22.04"
-          - platform: "windows"
-            args: ""
-            image: "windows-latest"
 
-    runs-on: ${{ matrix.image }}
+    runs-on: macos-latest
     permissions:
       contents: write
 
@@ -55,12 +41,6 @@ jobs:
         with:
           workspaces: src-tauri
 
-      - name: Install Linux dependencies (Ubuntu only)
-        if: matrix.image == 'ubuntu-22.04'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
-
       - name: Get version from tag or input
         id: version
         run: |
@@ -74,18 +54,11 @@ jobs:
       - name: Install frontend dependencies
         run: |
           make setup
-          npm ci
-
-      - name: Build frontend
-        run: npm run build
+          make build
 
       - name: Build Tauri app
-        uses: tauri-apps/tauri-action@v0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          releaseId: ${{ steps.version.outputs.version }}
-          args: ${{ matrix.args }}
+        run: |
+          make tauri-build-osx-arm
 
       - name: Upload Tauri artifacts
         uses: actions/upload-artifact@v4
@@ -106,7 +79,7 @@ jobs:
       id-token: write
 
     name: Build and Release
-    needs: build-desktop-apps
+    needs: build-desktop-osx
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.version }}

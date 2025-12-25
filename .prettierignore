@@ -5,3 +5,4 @@ package-lock.json
 .local/
 .upm/
 src-tauri/target/
+src-tauri/gen/
