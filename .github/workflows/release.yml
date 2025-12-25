@@ -72,7 +72,9 @@ jobs:
         shell: bash
 
       - name: Install frontend dependencies
-        run: npm ci
+        run: |
+          make setup
+          npm ci
 
       - name: Build frontend
         run: npm run build
