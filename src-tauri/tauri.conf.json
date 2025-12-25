@@ -1,7 +1,6 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "FreeDevTool.App",
-  "version": "1.0.0",
+  "productName": "FreeDevTool",
   "identifier": "app.freedevtool",
   "build": {
     "frontendDist": "../dist/public",
