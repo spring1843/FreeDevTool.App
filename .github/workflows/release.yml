@@ -55,9 +55,6 @@ jobs:
         run: |
           make setup
           make build
-
-      - name: Build Tauri app
-        run: |
           make tauri-build-osx-arm
 
       - name: Upload Tauri artifacts
@@ -66,8 +63,6 @@ jobs:
           name: desktop-${{ matrix.platform }}-${{ steps.version.outputs.version || 'default' }}
           path: |
             src-tauri/target/*/release/bundle/**/*.dmg
-            src-tauri/target/release/bundle/**/*.msi
-            src-tauri/target/release/bundle/**/*.deb
           if-no-files-found: warn
 
   build-and-release:
