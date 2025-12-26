@@ -64,6 +64,7 @@ jobs:
           path: |
             src-tauri/target/*/release/bundle/**/*.dmg
           if-no-files-found: warn
+          compression-level: 0
 
   build-and-release:
     container: ghcr.io/spring1843/freedevtool.app/e2e:v0.0.19
