@@ -56,7 +56,7 @@ jobs:
           make setup
           make build
           make tauri-build-osx-arm
-          cp /Users/nicolas/go/src/github.com/spring1843/freedevtool.app/src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/*.dmg ./
+          cp src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/*.dmg ./
 
       - name: Upload Tauri artifacts
         uses: actions/upload-artifact@v4
