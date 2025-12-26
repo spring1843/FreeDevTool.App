@@ -56,13 +56,13 @@ jobs:
           make setup
           make build
           make tauri-build-osx-arm
+          cp /Users/nicolas/go/src/github.com/spring1843/freedevtool.app/src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/*.dmg ./
 
       - name: Upload Tauri artifacts
         uses: actions/upload-artifact@v4
         with:
           name: desktop-${{ matrix.platform }}-${{ steps.version.outputs.version || 'default' }}
-          path: |
-            src-tauri/target/*/release/bundle/**/*.dmg
+          path: *.dmg
           if-no-files-found: warn
           compression-level: 0
 
