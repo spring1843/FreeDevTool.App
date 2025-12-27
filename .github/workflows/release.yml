@@ -56,12 +56,12 @@ jobs:
           make setup
           make build
           make tauri-build-osx-arm
-          cp -R src-tauri/target/aarch64-apple-darwin/release/bundle/macos/FreeDevTool.app ./
+          cp src-tauri/target/aarch64-apple-darwin/release/bundle/macos/FreeDevTool.app ./FreeDevTool.app
 
       - name: Upload Tauri artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: desktop-${{ matrix.platform }}-${{ steps.version.outputs.version || 'default' }}
+          name: FreeDevTool-osx-arm64
           path: |
             FreeDevTool.app
           if-no-files-found: warn
