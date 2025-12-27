@@ -56,17 +56,14 @@ jobs:
           make setup
           make build
           make tauri-build-osx-arm
-          cp -r src-tauri/target/aarch64-apple-darwin/release/bundle/macos/FreeDevTool.app ./FreeDevTool.app
-
-      - name: Ad-hoc sign macOS app
-        run: codesign --force --deep --sign - "FreeDevTool.app"
+          cp src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/*.dmg ./
 
       - name: Upload Tauri artifacts
         uses: actions/upload-artifact@v4
         with:
           name: FreeDevTool-osx-arm64
           path: |
-            FreeDevTool.app
+            *.dmg
 
   build-and-release:
     container: ghcr.io/spring1843/freedevtool.app/e2e:v0.0.19
