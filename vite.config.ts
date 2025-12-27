@@ -63,7 +63,9 @@ export default defineConfig({
       },
     },
   },
+  clearScreen: false,
   server: {
+    strictPort: true,
     fs: {
       strict: true,
       deny: ["**/.*"],

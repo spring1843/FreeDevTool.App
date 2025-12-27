@@ -12,8 +12,61 @@ on:
         type: string
 
 jobs:
+  build-desktop-osx:
+    strategy:
+      fail-fast: false
+
+    runs-on: macos-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          # Those targets are only used on macos runners so it's in an `if` to slightly speed up windows and linux builds.
+          targets: ${{ matrix.image == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Get version from tag or input
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          fi
+        shell: bash
+
+      - name: Install frontend dependencies
+        run: |
+          make setup
+          make build
+          make tauri-build-osx-arm
+          cp src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/*.dmg ./
+
+      - name: Upload Tauri artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: FreeDevTool-osx-arm64
+          path: |
+            *.dmg
+
   build-and-release:
-    container: ghcr.io/spring1843/freedevtool.app/e2e:v0.0.4
+    container: ghcr.io/spring1843/freedevtool.app/e2e:v0.0.19
     permissions:
       contents: write
       pages: write
@@ -21,6 +74,7 @@ jobs:
       id-token: write
 
     name: Build and Release
+    needs: build-desktop-osx
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -34,6 +88,16 @@ jobs:
         with:
           node-version: "24"
           cache: "npm"
+
+      - name: Get version from tag or input
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          fi
+        shell: bash
 
       - name: Install dependencies
         run: make deps
@@ -61,14 +125,18 @@ jobs:
           zip -r ../freedevtool-app.zip .
           cd ..
 
-      - name: Get version from tag or input
-        id: version
+      - name: Download all Tauri artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: desktop-*
+          path: desktop-builds
+          merge-multiple: true
+
+      - name: Unzip all files in desktop builds
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
-          else
-            echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          fi
+          find desktop-builds -type f
+          find desktop-builds -type f -name '*' -exec unzip -o {} -d tauri-builds/ \;
+          find desktop-builds -type f
 
       - name: Log in to the Container registry
         uses: docker/login-action@v3.6.0
@@ -96,6 +164,18 @@ jobs:
                     cat <<EOF >> ${CHANGELOG_FILE}
 
           Released on $(date '+%Y-%m-%d')
+
+          ## 🖥️ Desktop Apps
+
+          Download the desktop app for your platform:
+
+          | Platform | File |
+          |----------|------|
+          | **macOS (Apple Silicon)** | \`FreeDevTool.App_*_aarch64.dmg\` |
+          | **macOS (Intel)** | \`FreeDevTool.App_*_x64.dmg\` |
+          | **Windows** | \`FreeDevTool.App_*_x64.msi\` |
+
+          > Note: Desktop apps are currently unsigned. On macOS, right-click and select "Open" to bypass Gatekeeper. On Windows, click "More info" → "Run anyway" if SmartScreen appears.
 
           ## 🐳 Run Compiled Image Locally
 
@@ -133,6 +213,9 @@ jobs:
           files: |
             freedevtool-app.tar.gz
             freedevtool-app.zip
+            desktop-builds/**/*.dmg
+            desktop-builds/**/*.msi
+            desktop-builds/**/*.deb
             ${{ steps.changelog.outputs.changelog_file }}
           draft: false
           prerelease: ${{ github.event_name == 'workflow_dispatch' && inputs.bypass_ci }}
