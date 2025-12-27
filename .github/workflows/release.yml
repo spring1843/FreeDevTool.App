@@ -79,8 +79,6 @@ jobs:
     name: Build and Release
     needs: build-desktop-osx
     runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.version.outputs.version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -93,6 +91,16 @@ jobs:
         with:
           node-version: "24"
           cache: "npm"
+
+      - name: Get version from tag or input
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          fi
+        shell: bash
 
       - name: Install dependencies
         run: make deps
