@@ -164,6 +164,21 @@ const unitGroups: { [key: string]: UnitGroup } = {
       c: { name: "Speed of Light", factor: 299792458, symbol: "c" },
     },
   },
+  time: {
+    name: "Time",
+    units: {
+      ns: { name: "Nanosecond", factor: 0.000000001, symbol: "ns" },
+      us: { name: "Microsecond", factor: 0.000001, symbol: "μs" },
+      ms_time: { name: "Millisecond", factor: 0.001, symbol: "ms" },
+      s: { name: "Second", factor: 1, symbol: "s" },
+      min: { name: "Minute", factor: 60, symbol: "min" },
+      h: { name: "Hour", factor: 3600, symbol: "h" },
+      day: { name: "Day", factor: 86400, symbol: "d" },
+      week: { name: "Week", factor: 604800, symbol: "wk" },
+      month: { name: "Month (30 days)", factor: 2592000, symbol: "mo" },
+      year: { name: "Year (365 days)", factor: 31536000, symbol: "yr" },
+    },
+  },
 };
 
 export default function UnitConverter() {
