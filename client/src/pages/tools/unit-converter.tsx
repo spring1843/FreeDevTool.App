@@ -193,7 +193,11 @@ const unitGroups: { [key: string]: UnitGroup } = {
       tb: { name: "Terabyte (1000⁴)", factor: 1000000000000, symbol: "TB" },
       tib: { name: "Tebibyte (1024⁴)", factor: 1099511627776, symbol: "TiB" },
       pb: { name: "Petabyte (1000⁵)", factor: 1000000000000000, symbol: "PB" },
-      pib: { name: "Pebibyte (1024⁵)", factor: 1125899906842624, symbol: "PiB" },
+      pib: {
+        name: "Pebibyte (1024⁵)",
+        factor: 1125899906842624,
+        symbol: "PiB",
+      },
     },
   },
   datarate: {
@@ -206,7 +210,11 @@ const unitGroups: { [key: string]: UnitGroup } = {
       Bps: { name: "Bytes per Second", factor: 8, symbol: "B/s" },
       kBps: { name: "Kilobytes per Second", factor: 8000, symbol: "KB/s" },
       mBps: { name: "Megabytes per Second", factor: 8000000, symbol: "MB/s" },
-      gBps: { name: "Gigabytes per Second", factor: 8000000000, symbol: "GB/s" },
+      gBps: {
+        name: "Gigabytes per Second",
+        factor: 8000000000,
+        symbol: "GB/s",
+      },
     },
   },
   frequency: {
@@ -253,7 +261,11 @@ const unitGroups: { [key: string]: UnitGroup } = {
       ftlb: { name: "Foot-pound", factor: 1.35582, symbol: "ft·lbf" },
       inlb: { name: "Inch-pound", factor: 0.112985, symbol: "in·lbf" },
       kgfm: { name: "Kilogram-force meter", factor: 9.80665, symbol: "kgf·m" },
-      kgfcm: { name: "Kilogram-force centimeter", factor: 0.0980665, symbol: "kgf·cm" },
+      kgfcm: {
+        name: "Kilogram-force centimeter",
+        factor: 0.0980665,
+        symbol: "kgf·cm",
+      },
       dyncm: { name: "Dyne-centimeter", factor: 0.0000001, symbol: "dyn·cm" },
     },
   },
@@ -261,20 +273,44 @@ const unitGroups: { [key: string]: UnitGroup } = {
     name: "Density",
     units: {
       kgm3: { name: "Kilogram per Cubic Meter", factor: 1, symbol: "kg/m³" },
-      gcm3: { name: "Gram per Cubic Centimeter", factor: 1000, symbol: "g/cm³" },
+      gcm3: {
+        name: "Gram per Cubic Centimeter",
+        factor: 1000,
+        symbol: "g/cm³",
+      },
       kgl: { name: "Kilogram per Liter", factor: 1000, symbol: "kg/L" },
       gl: { name: "Gram per Liter", factor: 1, symbol: "g/L" },
-      lbft3: { name: "Pound per Cubic Foot", factor: 16.0185, symbol: "lb/ft³" },
-      lbin3: { name: "Pound per Cubic Inch", factor: 27679.9, symbol: "lb/in³" },
-      lbgal: { name: "Pound per Gallon (US)", factor: 119.826, symbol: "lb/gal" },
-      ozin3: { name: "Ounce per Cubic Inch", factor: 1729.99, symbol: "oz/in³" },
+      lbft3: {
+        name: "Pound per Cubic Foot",
+        factor: 16.0185,
+        symbol: "lb/ft³",
+      },
+      lbin3: {
+        name: "Pound per Cubic Inch",
+        factor: 27679.9,
+        symbol: "lb/in³",
+      },
+      lbgal: {
+        name: "Pound per Gallon (US)",
+        factor: 119.826,
+        symbol: "lb/gal",
+      },
+      ozin3: {
+        name: "Ounce per Cubic Inch",
+        factor: 1729.99,
+        symbol: "oz/in³",
+      },
     },
   },
   fueleconomy: {
     name: "Fuel Economy",
     units: {
       mpgus: { name: "Miles per Gallon (US)", factor: 1, symbol: "mpg" },
-      mpguk: { name: "Miles per Gallon (UK)", factor: 1.20095, symbol: "mpg (UK)" },
+      mpguk: {
+        name: "Miles per Gallon (UK)",
+        factor: 1.20095,
+        symbol: "mpg (UK)",
+      },
       kml: { name: "Kilometers per Liter", factor: 0.425144, symbol: "km/L" },
       l100km: { name: "Liters per 100 km", factor: 235.215, symbol: "L/100km" },
       mpl: { name: "Miles per Liter", factor: 0.264172, symbol: "mi/L" },
