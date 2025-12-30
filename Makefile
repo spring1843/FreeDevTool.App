@@ -98,6 +98,24 @@ move-robots-prod: ## Use a different robots.txt for production to allow indexing
 
 build-prod: build move-robots-prod ## Build the project for production
 
+## Tauri Desktop App Commands
+
+tauri-clean: ## Clean Tauri build artifacts
+	cargo clean --manifest-path src-tauri/Cargo.toml
+	rm -rf src-tauri/target/
+
+tauri-dev: ## Start Tauri in development mode with hot reload
+	npx tauri dev
+
+tauri-build-osx-arm: tauri-clean ## Build Tauri desktop app for current platform
+	npx tauri build --target aarch64-apple-darwin
+
+tauri-build-osx-intel: tauri-clean ## Build Tauri desktop app for macOS Intel
+	npx tauri build --target x86_64-apple-darwin
+
+tauri-build-debug: build ## Build Tauri desktop app in debug mode (faster, for testing)
+	npx tauri build --debug
+
 build-image: ## Build the Docker image for the app
 	docker build --platform linux/amd64 -t ${IMAGE_TAG} -f infra/images/Dockerfile .
 
