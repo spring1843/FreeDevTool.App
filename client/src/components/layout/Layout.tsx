@@ -220,6 +220,7 @@ export function Layout({ children }: LayoutProps) {
                 setMobileMenuOpen(!mobileMenuOpen);
               }
             }}
+            onHeaderMinimize={() => setHeaderCollapsed(!headerCollapsed)}
           />
         </div>
 

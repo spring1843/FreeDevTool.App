@@ -17,9 +17,10 @@ import { useDemo } from "@/hooks/use-demo-hook";
 
 interface HeaderProps {
   onMenuClick: () => void;
+  onHeaderMinimize: () => void;
 }
 
-export function Header({ onMenuClick }: HeaderProps) {
+export function Header({ onMenuClick, onHeaderMinimize }: HeaderProps) {
   const { theme, setTheme } = useTheme();
   const {
     searchQuery,
@@ -450,11 +451,11 @@ export function Header({ onMenuClick }: HeaderProps) {
                 </TooltipContent>
               </Tooltip>
 
-              {/* Menu Button */}
+              {/* Header Minimize Button */}
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
-                    onClick={onMenuClick}
+                    onClick={onHeaderMinimize}
                     className="flex items-center justify-center overflow-hidden hover:opacity-80 transition-opacity"
                     style={{
                       width: '48px',
@@ -464,8 +465,8 @@ export function Header({ onMenuClick }: HeaderProps) {
                       borderRadius: '12px',
                       gap: '9.40px'
                     }}
-                    data-testid="menu-button"
-                    aria-label="Toggle navigation menu"
+                    data-testid="header-minimize-button"
+                    aria-label="Minimize header"
                   >
                     <div
                       className="relative overflow-hidden"
@@ -474,29 +475,17 @@ export function Header({ onMenuClick }: HeaderProps) {
                         height: '30px'
                       }}
                     >
-                      <div
-                        className="absolute"
-                        style={{
-                          width: '18.56px',
-                          height: '20px',
-                          left: '5px',
-                          top: '23.56px',
-                          transform: 'rotate(-90deg)',
-                          transformOrigin: 'top left'
-                        }}
-                      >
-                        <img
-                          src="/assets/header-icons/side-panel-switch-icon.svg"
-                          alt="Menu"
-                          className="w-full h-full"
-                          style={{ filter: 'brightness(0) saturate(100%) invert(78%) sepia(9%) saturate(1015%) hue-rotate(192deg) brightness(93%) contrast(88%)' }}
-                        />
-                      </div>
+                      <img
+                        src="/assets/header-icons/header-minimize.svg"
+                        alt="Minimize"
+                        className="w-full h-full"
+                        style={{ filter: 'brightness(0) saturate(100%) invert(78%) sepia(9%) saturate(1015%) hue-rotate(192deg) brightness(93%) contrast(88%)' }}
+                      />
                     </div>
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Toggle Menu (Ctrl+M)</p>
+                  <p>Minimize Header</p>
                 </TooltipContent>
               </Tooltip>
             </div>
