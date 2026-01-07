@@ -1,4 +1,4 @@
-import { Search, Moon, Sun, Menu, X, Play, ChevronLeft } from "lucide-react";
+import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -141,29 +141,75 @@ export function Header({ onMenuClick }: HeaderProps) {
       <header className="bg-[#081028] border-b border-[#111F49] relative">
         <div className="w-full flex items-center justify-between">
           {/* Left Section - Logo and Title */}
-          <div className="w-[300px] h-[82px] px-4 py-3 border-r border-[#ffffff14] flex items-center justify-between relative">
-            <div className="absolute bottom-0 left-5 w-[260px] h-px bg-[#111F49]" />
+          <div
+            className="relative flex items-center justify-between bg-[#081028]"
+            style={{
+              width: '300px',
+              height: '82px',
+              paddingTop: '12px',
+              paddingBottom: '12px',
+              paddingLeft: '16px',
+              paddingRight: '24px',
+              borderRight: '1px rgba(255, 255, 255, 0.08) solid'
+            }}
+          >
+            <div
+              className="absolute"
+              style={{
+                width: '260px',
+                height: '0px',
+                left: '20px',
+                top: '82px',
+                outline: '1px #111F49 solid',
+                outlineOffset: '-0.50px'
+              }}
+            />
 
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center" style={{ gap: '10px' }}>
               {/* Logo with cyan background */}
               <Link href="/">
-                <div className="p-1.5 bg-[#00C2FF] rounded-lg flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity">
+                <div
+                  className="flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity"
+                  style={{
+                    padding: '5px',
+                    background: '#00C2FF',
+                    borderRadius: '8px',
+                    gap: '10px'
+                  }}
+                >
                   <img
                     src="/assets/favicon-32x32.png"
                     alt="FreeDevTool"
-                    className="w-8 h-8"
+                    style={{ width: '32px', height: '32px' }}
                   />
                 </div>
               </Link>
 
               {/* Title */}
-              <div className="flex flex-col gap-0.5">
+              <div className="inline-flex flex-col" style={{ gap: '2px' }}>
                 <Link href="/">
-                  <h1 className="text-white text-xl font-bold leading-tight cursor-pointer hover:opacity-90 transition-opacity">
+                  <h1
+                    className="cursor-pointer hover:opacity-90 transition-opacity"
+                    style={{
+                      color: 'white',
+                      fontSize: '20px',
+                      fontFamily: 'Inter',
+                      fontWeight: '700',
+                      wordWrap: 'break-word'
+                    }}
+                  >
                     FreeDevTool
                   </h1>
                 </Link>
-                <p className="text-white text-[10px] font-normal leading-tight">
+                <p
+                  style={{
+                    color: 'white',
+                    fontSize: '10px',
+                    fontFamily: 'Inter',
+                    fontWeight: '400',
+                    wordWrap: 'break-word'
+                  }}
+                >
                   Secure Developer Tools
                 </p>
               </div>
@@ -174,11 +220,21 @@ export function Header({ onMenuClick }: HeaderProps) {
               <TooltipTrigger asChild>
                 <button
                   onClick={onMenuClick}
-                  className="w-5 h-5 flex items-center justify-center hover:opacity-80 transition-opacity"
+                  className="relative hover:opacity-80 transition-opacity"
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    transform: 'rotate(180deg)'
+                  }}
                   data-testid="logo-menu-toggle"
                   aria-label="Toggle navigation menu"
                 >
-                  <ChevronLeft className="w-4 h-4 text-[#AEB9E1]" />
+                  <img
+                    src="/assets/header-icons/header-minimize.svg"
+                    alt="Toggle menu"
+                    className="w-full h-full"
+                    style={{ filter: 'brightness(0) saturate(100%) invert(78%) sepia(9%) saturate(1015%) hue-rotate(192deg) brightness(93%) contrast(88%)' }}
+                  />
                 </button>
               </TooltipTrigger>
               <TooltipContent>
@@ -188,21 +244,64 @@ export function Header({ onMenuClick }: HeaderProps) {
           </div>
 
           {/* Right Section - Search and Controls */}
-          <div className="flex-1 h-[82px] px-8 py-4 flex items-center justify-between">
+          <div
+            className="flex-1 flex items-center justify-between bg-[#081028]"
+            style={{
+              height: '82px',
+              paddingTop: '16px',
+              paddingBottom: '16px',
+              paddingLeft: '42px',
+              paddingRight: '32px',
+              borderBottom: '1px #111F49 solid'
+            }}
+          >
             {/* Search Bar */}
-            <div className="hidden md:block relative z-50 w-[360px]" ref={searchRef}>
-              <div className="relative">
-                <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-[#AEB9E1] h-5 w-5 z-10" />
-                <Input
-                  type="text"
-                  placeholder={`Search ${getToolsCount()} tools... (Ctrl+S)`}
-                  value={searchQuery}
-                  onChange={e => handleSearchChange(e.target.value)}
-                  onKeyDown={handleSearchKeyDown}
-                  className="h-12 pl-10 pr-8 bg-[#ffffff12] border-0 rounded-xl text-[#AEB9E1] placeholder:text-[#AEB9E199] text-sm shadow-[0px_2px_4px_rgba(1,5,17,0.2)] focus-visible:ring-1 focus-visible:ring-[#00C2FF]"
-                  data-testid="search-input"
-                  onFocus={() => setShowResults(searchQuery.trim().length > 0)}
-                />
+            <div className="hidden md:block relative z-50" style={{ width: '360px' }} ref={searchRef}>
+              <div
+                className="flex items-center relative"
+                style={{
+                  height: '48px',
+                  paddingTop: '13px',
+                  paddingBottom: '13px',
+                  paddingLeft: '14px',
+                  paddingRight: '100px',
+                  background: 'rgba(255, 255, 255, 0.07)',
+                  boxShadow: '0px 2px 4px rgba(1, 5, 17, 0.20)',
+                  borderRadius: '12px',
+                  gap: '10px'
+                }}
+              >
+                <div className="flex items-center" style={{ gap: '10px' }}>
+                  <div
+                    className="relative overflow-hidden"
+                    style={{ width: '20px', height: '20px' }}
+                  >
+                    <img
+                      src="/assets/header-icons/search-icon.svg"
+                      alt="Search"
+                      className="w-full h-full"
+                      style={{ filter: 'brightness(0) saturate(100%) invert(78%) sepia(9%) saturate(1015%) hue-rotate(192deg) brightness(93%) contrast(88%)' }}
+                    />
+                  </div>
+                  <Input
+                    type="text"
+                    placeholder={`Search ${getToolsCount()} tools... (Ctrl+S)`}
+                    value={searchQuery}
+                    onChange={e => handleSearchChange(e.target.value)}
+                    onKeyDown={handleSearchKeyDown}
+                    className="border-0 bg-transparent p-0 h-auto focus-visible:ring-0 focus-visible:ring-offset-0"
+                    style={{
+                      opacity: 0.6,
+                      color: '#AEB9E1',
+                      fontSize: '14px',
+                      fontFamily: 'Inter',
+                      fontWeight: '400',
+                      wordWrap: 'break-word'
+                    }}
+                    data-testid="search-input"
+                    onFocus={() => setShowResults(searchQuery.trim().length > 0)}
+                  />
+                </div>
                 {searchQuery ? (
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -235,16 +334,29 @@ export function Header({ onMenuClick }: HeaderProps) {
             <div className="md:hidden">
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-12 w-12 p-0 rounded-xl bg-[#ffffff12] hover:bg-[#ffffff1a] transition-colors"
+                  <button
                     onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
+                    className="flex items-center justify-center overflow-hidden hover:opacity-80 transition-opacity"
+                    style={{
+                      width: '48px',
+                      height: '48px',
+                      padding: '11.75px',
+                      background: 'rgba(255, 255, 255, 0.07)',
+                      borderRadius: '12px',
+                      gap: '9.40px'
+                    }}
                     data-testid="mobile-search-toggle"
                     aria-label="Toggle search"
                   >
-                    <Search className="h-5 w-5 text-[#AEB9E1]" />
-                  </Button>
+                    <div className="relative overflow-hidden" style={{ width: '30px', height: '30px' }}>
+                      <img
+                        src="/assets/header-icons/search-icon.svg"
+                        alt="Search"
+                        className="w-full h-full"
+                        style={{ filter: 'brightness(0) saturate(100%) invert(78%) sepia(9%) saturate(1015%) hue-rotate(192deg) brightness(93%) contrast(88%)' }}
+                      />
+                    </div>
+                  </button>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>Open Search (Ctrl+S)</p>
@@ -253,19 +365,49 @@ export function Header({ onMenuClick }: HeaderProps) {
             </div>
 
             {/* Right Side Controls */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center" style={{ gap: '16px' }}>
               {/* Demo Tour Button */}
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
                     onClick={startDemo}
-                    className="h-[46px] px-[18px] py-2.5 bg-gradient-to-br from-[#6366F1] to-[#8B5CF6] hover:from-[#5558E3] hover:to-[#7C4DE7] rounded-xl shadow-[0px_3px_15px_rgba(99,102,241,0.3)] flex items-center gap-1.5 transition-all hover:scale-105"
+                    className="flex items-center hover:opacity-90 transition-all"
+                    style={{
+                      height: '46px',
+                      paddingLeft: '17.59px',
+                      paddingRight: '17.59px',
+                      paddingTop: '8.79px',
+                      paddingBottom: '8.79px',
+                      background: 'linear-gradient(168deg, #6366F1 0%, #8B5CF6 100%)',
+                      boxShadow: '0px 2.931162118911743px 14.655810356140137px rgba(99, 102, 241, 0.30)',
+                      borderRadius: '12px',
+                      gap: '5.86px'
+                    }}
                     data-testid="start-demo-button"
                   >
-                    <Play className="w-5 h-5 text-white fill-white" />
-                    <span className="text-white text-[15px] font-bold leading-tight">
+                    <div
+                      className="relative overflow-hidden"
+                      style={{ width: '24px', height: '24px' }}
+                    >
+                      <img
+                        src="/assets/header-icons/demo-button-play.svg"
+                        alt="Play"
+                        className="w-full h-full"
+                        style={{ filter: 'brightness(0) saturate(100%) invert(100%)' }}
+                      />
+                    </div>
+                    <div
+                      className="text-center flex justify-center"
+                      style={{
+                        color: 'white',
+                        fontSize: '15.26px',
+                        fontFamily: 'Arial',
+                        fontWeight: '700',
+                        wordWrap: 'break-word'
+                      }}
+                    >
                       Demo Tour ({totalTools} tools)
-                    </span>
+                    </div>
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -278,15 +420,29 @@ export function Header({ onMenuClick }: HeaderProps) {
                 <TooltipTrigger asChild>
                   <button
                     onClick={toggleTheme}
-                    className="w-12 h-12 p-3 bg-[#ffffff12] hover:bg-[#ffffff1a] rounded-xl flex items-center justify-center transition-colors"
+                    className="flex items-center justify-center overflow-hidden hover:opacity-80 transition-opacity"
+                    style={{
+                      width: '48px',
+                      height: '48px',
+                      padding: '11.75px',
+                      background: 'rgba(255, 255, 255, 0.07)',
+                      borderRadius: '12px',
+                      gap: '9.40px'
+                    }}
                     data-testid="theme-toggle"
                     aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode (CTRL+D)`}
                   >
-                    {theme === "dark" ? (
-                      <Sun className="w-6 h-6 text-[#AEB9E1]" />
-                    ) : (
-                      <Moon className="w-6 h-6 text-[#AEB9E1]" />
-                    )}
+                    <div
+                      className="relative overflow-hidden"
+                      style={{ width: '30px', height: '30px' }}
+                    >
+                      <img
+                        src="/assets/header-icons/themeicon.svg"
+                        alt="Theme"
+                        className="w-full h-full"
+                        style={{ filter: 'brightness(0) saturate(100%) invert(78%) sepia(9%) saturate(1015%) hue-rotate(192deg) brightness(93%) contrast(88%)' }}
+                      />
+                    </div>
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -299,11 +455,44 @@ export function Header({ onMenuClick }: HeaderProps) {
                 <TooltipTrigger asChild>
                   <button
                     onClick={onMenuClick}
-                    className="w-12 h-12 p-3 bg-[#ffffff12] hover:bg-[#ffffff1a] rounded-xl flex items-center justify-center transition-colors"
+                    className="flex items-center justify-center overflow-hidden hover:opacity-80 transition-opacity"
+                    style={{
+                      width: '48px',
+                      height: '48px',
+                      padding: '11.75px',
+                      background: 'rgba(255, 255, 255, 0.07)',
+                      borderRadius: '12px',
+                      gap: '9.40px'
+                    }}
                     data-testid="menu-button"
                     aria-label="Toggle navigation menu"
                   >
-                    <Menu className="w-6 h-6 text-[#AEB9E1]" />
+                    <div
+                      className="relative overflow-hidden"
+                      style={{
+                        width: '30px',
+                        height: '30px'
+                      }}
+                    >
+                      <div
+                        className="absolute"
+                        style={{
+                          width: '18.56px',
+                          height: '20px',
+                          left: '5px',
+                          top: '23.56px',
+                          transform: 'rotate(-90deg)',
+                          transformOrigin: 'top left'
+                        }}
+                      >
+                        <img
+                          src="/assets/header-icons/side-panel-switch-icon.svg"
+                          alt="Menu"
+                          className="w-full h-full"
+                          style={{ filter: 'brightness(0) saturate(100%) invert(78%) sepia(9%) saturate(1015%) hue-rotate(192deg) brightness(93%) contrast(88%)' }}
+                        />
+                      </div>
+                    </div>
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -320,18 +509,51 @@ export function Header({ onMenuClick }: HeaderProps) {
             className="md:hidden border-t border-[#111F49] p-4 relative z-50"
             ref={searchRef}
           >
-            <div className="relative">
-              <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-[#AEB9E1] h-5 w-5 z-10" />
-              <Input
-                type="text"
-                placeholder={`Search ${getToolsCount()} tools... (Ctrl+S)`}
-                value={searchQuery}
-                onChange={e => handleSearchChange(e.target.value)}
-                onKeyDown={handleSearchKeyDown}
-                className="h-12 pl-10 pr-8 w-full bg-[#ffffff12] border-0 rounded-xl text-[#AEB9E1] placeholder:text-[#AEB9E199] text-sm"
-                data-testid="mobile-search-input"
-                autoFocus
-              />
+            <div
+              className="flex items-center relative"
+              style={{
+                height: '48px',
+                paddingTop: '13px',
+                paddingBottom: '13px',
+                paddingLeft: '14px',
+                paddingRight: '14px',
+                background: 'rgba(255, 255, 255, 0.07)',
+                boxShadow: '0px 2px 4px rgba(1, 5, 17, 0.20)',
+                borderRadius: '12px',
+                gap: '10px'
+              }}
+            >
+              <div className="flex items-center flex-1" style={{ gap: '10px' }}>
+                <div
+                  className="relative overflow-hidden flex-shrink-0"
+                  style={{ width: '20px', height: '20px' }}
+                >
+                  <img
+                    src="/assets/header-icons/search-icon.svg"
+                    alt="Search"
+                    className="w-full h-full"
+                    style={{ filter: 'brightness(0) saturate(100%) invert(78%) sepia(9%) saturate(1015%) hue-rotate(192deg) brightness(93%) contrast(88%)' }}
+                  />
+                </div>
+                <Input
+                  type="text"
+                  placeholder={`Search ${getToolsCount()} tools... (Ctrl+S)`}
+                  value={searchQuery}
+                  onChange={e => handleSearchChange(e.target.value)}
+                  onKeyDown={handleSearchKeyDown}
+                  className="border-0 bg-transparent p-0 h-auto focus-visible:ring-0 focus-visible:ring-offset-0 flex-1"
+                  style={{
+                    opacity: 0.6,
+                    color: '#AEB9E1',
+                    fontSize: '14px',
+                    fontFamily: 'Inter',
+                    fontWeight: '400',
+                    wordWrap: 'break-word'
+                  }}
+                  data-testid="mobile-search-input"
+                  autoFocus
+                />
+              </div>
               {searchQuery ? (
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -339,7 +561,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                       variant="ghost"
                       size="sm"
                       onClick={clearSearch}
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 hover:bg-transparent"
+                      className="h-6 w-6 p-0 hover:bg-transparent flex-shrink-0"
                       data-testid="mobile-clear-search"
                     >
                       <X className="h-3 w-3 text-[#AEB9E1] hover:text-white" />
