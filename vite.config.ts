@@ -29,6 +29,9 @@ export default defineConfig({
       ],
     }),
   ],
+  optimizeDeps: {
+    exclude: ["modern-screenshot"],
+  },
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),
