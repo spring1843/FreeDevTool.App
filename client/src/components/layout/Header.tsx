@@ -197,7 +197,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                       fontWeight: '700',
                       wordWrap: 'break-word'
                     }}
-                  />
+                  >
                     FreeDevTool
                   </h1>
                 </Link>
