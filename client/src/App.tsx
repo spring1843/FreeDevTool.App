@@ -12,6 +12,9 @@ import { ScrollToTop } from "@/components/ScrollToTop";
 // Eager load home page for fast initial load
 import Home from "@/pages/home";
 
+// V2 Pages
+const HomeV2 = lazy(() => import("@/pages/V2/home-v2"));
+
 // Lazy load all tool pages
 const DateConverter = lazy(() => import("@/pages/tools/date-converter"));
 const JsonYamlConverter = lazy(
@@ -91,6 +94,9 @@ function Router() {
         <Switch>
           {/* Home */}
           <Route path="/" component={Home} />
+
+          {/* V2 Home */}
+          <Route path="/v2" component={HomeV2} />
 
           {/* Conversions */}
           <Route path="/tools/date-converter" component={DateConverter} />
