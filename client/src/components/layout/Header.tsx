@@ -174,8 +174,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                     padding: '5px',
                     background: '#00C2FF',
                     borderRadius: '8px',
-                    gap: '10px',
-                    radius: 12px,
+                    gap: '10px'
                   }}
                 >
                   <img
