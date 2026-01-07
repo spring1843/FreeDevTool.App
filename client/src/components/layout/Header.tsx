@@ -216,25 +216,30 @@ export function Header({ onMenuClick, onHeaderMinimize }: HeaderProps) {
               </div>
             </div>
 
-            {/* Collapse/Expand Icon */}
+            {/* Menu Toggle Icon */}
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
                   onClick={onMenuClick}
-                  className="relative hover:opacity-80 transition-opacity"
+                  className="flex items-center justify-center hover:opacity-80 transition-opacity"
                   style={{
-                    width: '20px',
-                    height: '20px',
-                    transform: 'rotate(180deg)'
+                    width: '32px',
+                    height: '32px',
+                    padding: '6px',
+                    background: 'rgba(255, 255, 255, 0.07)',
+                    borderRadius: '8px'
                   }}
                   data-testid="logo-menu-toggle"
                   aria-label="Toggle navigation menu"
                 >
                   <img
-                    src="/assets/header-icons/header-minimize.svg"
+                    src="/assets/header-icons/side-panel-switch-icon.svg"
                     alt="Toggle menu"
-                    className="w-full h-full"
-                    style={{ filter: 'brightness(0) saturate(100%) invert(78%) sepia(9%) saturate(1015%) hue-rotate(192deg) brightness(93%) contrast(88%)' }}
+                    style={{
+                      width: '20px',
+                      height: '20px',
+                      filter: 'brightness(0) saturate(100%) invert(78%) sepia(9%) saturate(1015%) hue-rotate(192deg) brightness(93%) contrast(88%)'
+                    }}
                   />
                 </button>
               </TooltipTrigger>
