@@ -1,54 +1,52 @@
 export default function HeaderV2() {
   return (
-    <div className="w-full inline-flex justify-between items-center">
-      <div className="w-72 h-20 pl-4 pr-6 py-3 relative bg-slate-900 border-r border-white/10 flex justify-between items-center">
-        <div className="w-64 h-0 left-[20px] top-[82px] absolute outline outline-1 outline-offset-[-0.50px] outline-indigo-950"></div>
-        <div className="flex justify-start items-center gap-2.5">
-          <div className="p-[5px] bg-sky-500 rounded-lg flex justify-start items-center gap-2.5">
-            <img className="w-8 h-8" src="/assets/android-chrome-192x192.png" alt="Logo" />
+    <div style={{width: '100%', height: '100%', justifyContent: 'space-between', alignItems: 'center', display: 'inline-flex'}}>
+      <div style={{width: 300, height: 82, paddingTop: 12, paddingBottom: 12, paddingLeft: 16, paddingRight: 24, position: 'relative', background: '#081028', borderRight: '1px rgba(255, 255, 255, 0.08) solid', justifyContent: 'space-between', alignItems: 'center', display: 'flex'}}>
+        <div style={{width: 260, height: 0, left: 20, top: 82, position: 'absolute', outline: '1px #111F49 solid', outlineOffset: '-0.50px'}}></div>
+        <div style={{justifyContent: 'flex-start', alignItems: 'center', gap: 10, display: 'flex'}}>
+          <div style={{padding: 5, background: '#00C2FF', borderRadius: 8, justifyContent: 'flex-start', alignItems: 'center', gap: 10, display: 'flex'}}>
+            <img style={{width: 32, height: 32}} src="/assets/android-chrome-192x192.png" alt="Logo" />
           </div>
-          <div className="inline-flex flex-col justify-start items-start gap-0.5">
-            <div className="justify-start text-white text-xl font-bold font-['Inter']">FreeDevTool</div>
-            <div className="self-stretch justify-start text-white text-[10px] font-normal font-['Inter']">Secure Developer Tools</div>
+          <div style={{flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', gap: 2, display: 'inline-flex'}}>
+            <div style={{color: 'white', fontSize: 20, fontFamily: 'Inter', fontWeight: '700', wordWrap: 'break-word'}}>FreeDevTool</div>
+            <div style={{alignSelf: 'stretch', color: 'white', fontSize: 10, fontFamily: 'Inter', fontWeight: '400', wordWrap: 'break-word'}}>Secure Developer Tools</div>
           </div>
         </div>
-        <div className="w-5 h-5 relative origin-top-left rotate-180 cursor-pointer">
-          <div className="w-4 h-3.5 left-[1.67px] top-[2.50px] absolute outline outline-[1.47px] outline-offset-[-0.73px] outline-slate-300" />
-          <div className="w-0 h-3.5 left-[12.08px] top-[2.50px] absolute outline outline-[1.47px] outline-offset-[-0.73px] outline-slate-300" />
-          <div className="w-[0.83px] h-[2.50px] left-[15px] top-[5.83px] absolute outline outline-[1.47px] outline-offset-[-0.73px] outline-slate-300" />
+        <div style={{width: 20, height: 20, position: 'relative', transform: 'rotate(180deg)', transformOrigin: 'top left', cursor: 'pointer'}}>
+          <div style={{width: 16.67, height: 15, left: 1.67, top: 2.50, position: 'absolute', outline: '1.47px #AEB9E1 solid', outlineOffset: '-0.73px'}} />
+          <div style={{width: 0.83, height: 2.50, left: 15, top: 5.83, position: 'absolute', outline: '1.47px #AEB9E1 solid', outlineOffset: '-0.73px'}} />
         </div>
       </div>
-      <div className="flex-1 h-20 pl-10 pr-8 py-4 bg-slate-900 border-b border-indigo-950 flex justify-between items-center">
-        <div className="w-96 h-12 pl-3.5 pr-24 py-3 bg-white/5 rounded-xl shadow-[0px_2px_4px_0px_rgba(1,5,17,0.20)] flex justify-start items-center gap-2.5">
-          <div className="flex justify-start items-center gap-2.5">
-            <div className="w-5 h-5 relative overflow-hidden">
-              <div className="w-4 h-4 left-[1.67px] top-[1.67px] absolute">
-                <div className="w-3.5 h-3.5 left-[0.89px] top-[0.83px] absolute outline outline-[1.50px] outline-offset-[-0.75px] outline-slate-300" />
+      <div style={{width: 1140, height: 82, paddingTop: 16, paddingBottom: 16, paddingLeft: 42, paddingRight: 32, background: '#081028', borderBottom: '1px #111F49 solid', justifyContent: 'space-between', alignItems: 'center', display: 'flex'}}>
+        <div style={{width: 360, height: 48, paddingTop: 13, paddingBottom: 13, paddingLeft: 14, paddingRight: 100, background: 'rgba(255, 255, 255, 0.07)', boxShadow: '0px 2px 4px rgba(1, 5, 17, 0.20)', borderRadius: 12, justifyContent: 'flex-start', alignItems: 'center', gap: 10, display: 'flex'}}>
+          <div style={{justifyContent: 'flex-start', alignItems: 'center', gap: 10, display: 'flex'}}>
+            <div style={{width: 20, height: 20, position: 'relative', overflow: 'hidden'}}>
+              <div style={{width: 16.67, height: 16.67, left: 1.67, top: 1.67, position: 'absolute'}}>
+                <div style={{width: 15, height: 15, left: 0.89, top: 0.83, position: 'absolute', outline: '1.50px #AEB9E1 solid', outlineOffset: '-0.75px'}} />
               </div>
             </div>
-            <div className="opacity-60 justify-center text-slate-300 text-sm font-normal font-['Inter']">Search 47 tools... (Ctrl+S)</div>
+            <div style={{opacity: 0.60, justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#AEB9E1', fontSize: 14, fontFamily: 'Inter', fontWeight: '400', wordWrap: 'break-word'}}>Search 47 tools... (Ctrl+S)</div>
           </div>
         </div>
-        <div className="flex justify-start items-center gap-4">
-          <div className="h-11 px-4 py-3 bg-gradient-to-b from-indigo-500 to-violet-500 rounded-xl shadow-[0px_2.931162118911743px_14.655810356140137px_0px_rgba(99,102,241,0.30)] flex justify-start items-center gap-1.5 cursor-pointer hover:from-indigo-600 hover:to-violet-600 transition-all">
-            <div className="w-6 h-6 relative overflow-hidden">
-              <div className="w-5 h-5 left-[2px] top-[2px] absolute">
-                <div className="w-5 h-5 left-0 top-0 absolute outline outline-[1.50px] outline-offset-[-0.75px] outline-white" />
+        <div style={{justifyContent: 'flex-start', alignItems: 'center', gap: 16, display: 'flex'}}>
+          <div style={{height: 46, paddingLeft: 17.59, paddingRight: 17.59, paddingTop: 12, paddingBottom: 12, background: 'linear-gradient(168deg, #6366F1 0%, #8B5CF6 100%)', boxShadow: '0px 2.931162118911743px 14.655810356140137px rgba(99, 102, 241, 0.30)', borderRadius: 12, justifyContent: 'flex-start', alignItems: 'center', gap: 5.86, display: 'flex', cursor: 'pointer'}}>
+            <div style={{width: 24, height: 24, position: 'relative', overflow: 'hidden'}}>
+              <div style={{width: 20, height: 20, left: 2, top: 2, position: 'absolute'}}>
+                <div style={{width: 20, height: 20, left: 0, top: 0, position: 'absolute', outline: '1.50px white solid', outlineOffset: '-0.75px'}} />
               </div>
             </div>
-            <div className="text-center justify-center text-white text-base font-bold font-['Arial']">Demo Tour (47 tools)</div>
+            <div style={{textAlign: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'white', fontSize: 15.26, fontFamily: 'Arial', fontWeight: '700', wordWrap: 'break-word'}}>Demo Tour (47 tools)</div>
           </div>
-          <div className="w-12 h-12 p-3 bg-white/5 rounded-xl flex justify-center items-center gap-2.5 overflow-hidden cursor-pointer hover:bg-white/10 transition-colors">
-            <div className="w-7 h-7 relative overflow-hidden">
-              <div className="w-5 h-5 left-[5.25px] top-[5.25px] absolute bg-slate-300" />
+          <div style={{width: 48, height: 48, padding: 11.75, background: 'rgba(255, 255, 255, 0.07)', overflow: 'hidden', borderRadius: 12, justifyContent: 'center', alignItems: 'center', gap: 9.40, display: 'flex', cursor: 'pointer'}}>
+            <div style={{width: 30, height: 30, position: 'relative', overflow: 'hidden'}}>
+              <div style={{width: 19.50, height: 19.50, left: 5.25, top: 5.25, position: 'absolute', background: '#AEB9E1'}} />
             </div>
           </div>
-          <div className="w-12 h-12 p-3 bg-white/5 rounded-xl flex justify-center items-center gap-2.5 overflow-hidden cursor-pointer hover:bg-white/10 transition-colors">
-            <div className="w-7 h-7 relative overflow-hidden">
-              <div className="w-5 h-5 left-[5px] top-[23.56px] absolute origin-top-left -rotate-90">
-                <div className="w-3.5 h-4 left-[2.50px] top-[1.67px] absolute outline outline-[1.47px] outline-offset-[-0.73px] outline-slate-300" />
-                <div className="w-3.5 h-0 left-[2.50px] top-[12.08px] absolute outline outline-[1.47px] outline-offset-[-0.73px] outline-slate-300" />
-                <div className="w-[2.50px] h-[0.83px] left-[11.67px] top-[15px] absolute outline outline-[1.47px] outline-offset-[-0.73px] outline-slate-300" />
+          <div style={{width: 48, height: 48, padding: 11.75, background: 'rgba(255, 255, 255, 0.07)', overflow: 'hidden', borderRadius: 12, justifyContent: 'center', alignItems: 'center', gap: 9.40, display: 'flex', cursor: 'pointer'}}>
+            <div style={{width: 30, height: 30, position: 'relative', overflow: 'hidden'}}>
+              <div style={{width: 18.56, height: 20, left: 5, top: 23.56, position: 'absolute', transform: 'rotate(-90deg)', transformOrigin: 'top left'}}>
+                <div style={{width: 15, height: 16.67, left: 2.50, top: 1.67, position: 'absolute', outline: '1.47px #AEB9E1 solid', outlineOffset: '-0.73px'}} />
+                <div style={{width: 2.50, height: 0.83, left: 11.67, top: 15, position: 'absolute', outline: '1.47px #AEB9E1 solid', outlineOffset: '-0.73px'}} />
               </div>
             </div>
           </div>

@@ -1,195 +1,195 @@
 export default function SideMenuV2() {
   return (
-    <div className="w-72 h-full px-3.5 pt-5 pb-4 bg-slate-900 outline outline-1 outline-offset-[-1px] outline-white/10 inline-flex flex-col justify-start items-start gap-5">
-      <div className="self-stretch flex flex-col justify-start items-start gap-1">
-        <div className="self-stretch h-11 px-4 py-2.5 bg-white/5 rounded-xl inline-flex justify-between items-center">
-          <div className="flex justify-start items-center gap-4">
-            <div className="w-6 h-6 relative overflow-hidden">
-              <div className="w-5 h-5 left-[2px] top-[2px] absolute">
-                <div className="w-4 h-4 left-[1px] top-[1px] absolute outline outline-[1.50px] outline-offset-[-0.75px] outline-teal-400" />
+    <div style={{width: '100%', height: '100%', paddingTop: 20, paddingBottom: 16, paddingLeft: 14, paddingRight: 14, background: '#081028', outline: '1px rgba(255, 255, 255, 0.08) solid', outlineOffset: '-1px', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', gap: 20, display: 'inline-flex'}}>
+      <div style={{alignSelf: 'stretch', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', gap: 4, display: 'flex'}}>
+        <div style={{alignSelf: 'stretch', height: 46, paddingLeft: 16, paddingRight: 16, paddingTop: 10, paddingBottom: 10, background: 'rgba(255, 255, 255, 0.04)', borderRadius: 12, justifyContent: 'space-between', alignItems: 'center', display: 'inline-flex'}}>
+          <div style={{justifyContent: 'flex-start', alignItems: 'center', gap: 16, display: 'flex'}}>
+            <div style={{width: 24, height: 24, position: 'relative', overflow: 'hidden'}}>
+              <div style={{width: 20, height: 20, left: 2, top: 2, position: 'absolute'}}>
+                <div style={{width: 18, height: 18, left: 1, top: 1, position: 'absolute', outline: '1.50px #55D6FF solid', outlineOffset: '-0.75px'}} />
               </div>
             </div>
-            <div className="justify-start text-teal-400 text-base font-semibold font-['Inter']">Home</div>
+            <div style={{color: '#55D6FF', fontSize: 16, fontFamily: 'Inter', fontWeight: '600', wordWrap: 'break-word'}}>Home</div>
           </div>
-          <div className="w-4 h-4 relative origin-top-left -rotate-90 opacity-0 overflow-hidden">
-            <div className="w-3.5 h-3.5 left-[1.33px] top-[1.33px] absolute">
-              <div className="w-2.5 h-1.5 left-[4px] top-[12px] absolute origin-top-left -rotate-90 outline outline-[1.50px] outline-offset-[-0.75px] outline-teal-400" />
+          <div style={{width: 16, height: 16, position: 'relative', transform: 'rotate(-90deg)', transformOrigin: 'top left', opacity: 0, overflow: 'hidden'}}>
+            <div style={{width: 13.33, height: 13.33, left: 1.33, top: 1.33, position: 'absolute'}}>
+              <div style={{width: 10.67, height: 5.33, left: 4, top: 12, position: 'absolute', transform: 'rotate(-90deg)', transformOrigin: 'top left', outline: '1.50px #55D6FF solid', outlineOffset: '-0.75px'}} />
             </div>
           </div>
         </div>
-        <div className="self-stretch h-11 px-4 py-2.5 bg-slate-900 rounded-xl inline-flex justify-between items-center cursor-pointer hover:bg-white/5 transition-colors">
-          <div className="flex justify-start items-center gap-4">
-            <div className="w-6 h-6 relative overflow-hidden">
-              <div className="w-5 h-5 left-[2px] top-[2px] absolute">
-                <div className="w-4 h-4 left-[1px] top-[1px] absolute outline outline-[1.50px] outline-offset-[-0.75px] outline-slate-300" />
+        <div style={{alignSelf: 'stretch', height: 46, paddingLeft: 16, paddingRight: 16, paddingTop: 10, paddingBottom: 10, background: '#081028', borderRadius: 12, justifyContent: 'space-between', alignItems: 'center', display: 'inline-flex', cursor: 'pointer'}}>
+          <div style={{justifyContent: 'flex-start', alignItems: 'center', gap: 16, display: 'flex'}}>
+            <div style={{width: 24, height: 24, position: 'relative', overflow: 'hidden'}}>
+              <div style={{width: 20, height: 20, left: 2, top: 2, position: 'absolute'}}>
+                <div style={{width: 18, height: 18, left: 1, top: 1, position: 'absolute', outline: '1.50px #AEB9E1 solid', outlineOffset: '-0.75px'}} />
               </div>
             </div>
-            <div className="justify-start text-indigo-300 text-base font-normal font-['Inter']">Conversions</div>
+            <div style={{color: '#AEB9E1', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', wordWrap: 'break-word'}}>Conversions</div>
           </div>
-          <div className="w-4 h-4 relative overflow-hidden">
-            <div className="w-3.5 h-3.5 left-[1.33px] top-[1.33px] absolute">
-              <div className="w-1.5 h-2.5 left-[1.33px] top-[9.33px] absolute origin-top-left -rotate-90 outline outline-[1.50px] outline-offset-[-0.75px] outline-slate-300" />
+          <div style={{width: 16, height: 16, position: 'relative', overflow: 'hidden'}}>
+            <div style={{width: 13.33, height: 13.33, left: 1.33, top: 1.33, position: 'absolute'}}>
+              <div style={{width: 5.33, height: 10.67, left: 1.33, top: 9.33, position: 'absolute', transform: 'rotate(-90deg)', transformOrigin: 'top left', outline: '1.50px #AEB9E1 solid', outlineOffset: '-0.75px'}} />
             </div>
           </div>
         </div>
-        <div className="self-stretch flex flex-col justify-start items-center gap-1.5">
-          <div className="self-stretch h-11 pl-14 pr-5 py-3 bg-slate-900/0 rounded inline-flex justify-start items-center gap-5 cursor-pointer hover:bg-white/5 transition-colors">
-            <div className="flex justify-start items-center gap-5">
-              <div className="justify-start text-indigo-300 text-sm font-normal font-['Inter']">Date Converter</div>
+        <div style={{alignSelf: 'stretch', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', gap: 6, display: 'flex'}}>
+          <div style={{alignSelf: 'stretch', height: 44, paddingTop: 12, paddingBottom: 12, paddingLeft: 58, paddingRight: 20, background: 'rgba(10, 19, 48, 0)', borderRadius: 4, justifyContent: 'flex-start', alignItems: 'center', gap: 20, display: 'inline-flex', cursor: 'pointer'}}>
+            <div style={{justifyContent: 'flex-start', alignItems: 'center', gap: 20, display: 'flex'}}>
+              <div style={{color: '#AEB9E1', fontSize: 14, fontFamily: 'Inter', fontWeight: '400', wordWrap: 'break-word'}}>Date Converter</div>
             </div>
           </div>
-          <div className="self-stretch h-11 pl-14 pr-5 py-3 bg-slate-900/0 rounded flex flex-col justify-center items-start gap-5 cursor-pointer hover:bg-white/5 transition-colors">
-            <div className="inline-flex justify-start items-center gap-5">
-              <div className="justify-start text-indigo-300 text-sm font-normal font-['Inter']">JSON - YAML</div>
+          <div style={{alignSelf: 'stretch', height: 44, paddingTop: 12, paddingBottom: 12, paddingLeft: 58, paddingRight: 20, background: 'rgba(10, 19, 48, 0)', borderRadius: 4, flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', gap: 20, display: 'flex', cursor: 'pointer'}}>
+            <div style={{justifyContent: 'flex-start', alignItems: 'center', gap: 20, display: 'inline-flex'}}>
+              <div style={{color: '#AEB9E1', fontSize: 14, fontFamily: 'Inter', fontWeight: '400', wordWrap: 'break-word'}}>JSON - YAML</div>
             </div>
           </div>
-          <div className="self-stretch h-11 pl-14 pr-5 py-3 bg-slate-900/0 rounded flex flex-col justify-center items-start gap-5 cursor-pointer hover:bg-white/5 transition-colors">
-            <div className="inline-flex justify-start items-center gap-5">
-              <div className="justify-start text-indigo-300 text-sm font-normal font-['Inter']">Timezone Converter</div>
+          <div style={{alignSelf: 'stretch', height: 44, paddingTop: 12, paddingBottom: 12, paddingLeft: 58, paddingRight: 20, background: 'rgba(10, 19, 48, 0)', borderRadius: 4, flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', gap: 20, display: 'flex', cursor: 'pointer'}}>
+            <div style={{justifyContent: 'flex-start', alignItems: 'center', gap: 20, display: 'inline-flex'}}>
+              <div style={{color: '#AEB9E1', fontSize: 14, fontFamily: 'Inter', fontWeight: '400', wordWrap: 'break-word'}}>Timezone Converter</div>
             </div>
           </div>
-          <div className="self-stretch h-11 pl-14 pr-5 py-3 bg-slate-900 rounded flex flex-col justify-center items-start gap-5 cursor-pointer hover:bg-white/10 transition-colors">
-            <div className="inline-flex justify-start items-center gap-5">
-              <div className="justify-start text-indigo-300 text-sm font-normal font-['Inter']">Unit Converter</div>
+          <div style={{alignSelf: 'stretch', height: 44, paddingTop: 12, paddingBottom: 12, paddingLeft: 58, paddingRight: 20, background: '#081028', borderRadius: 4, flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', gap: 20, display: 'flex', cursor: 'pointer'}}>
+            <div style={{justifyContent: 'flex-start', alignItems: 'center', gap: 20, display: 'inline-flex'}}>
+              <div style={{color: '#AEB9E1', fontSize: 14, fontFamily: 'Inter', fontWeight: '400', wordWrap: 'break-word'}}>Unit Converter</div>
             </div>
           </div>
-          <div className="self-stretch h-11 pl-14 pr-5 py-3 bg-slate-900/0 rounded flex flex-col justify-center items-start gap-5 cursor-pointer hover:bg-white/5 transition-colors">
-            <div className="inline-flex justify-start items-center gap-5">
-              <div className="justify-start text-indigo-300 text-sm font-normal font-['Inter']">URL to JSON</div>
+          <div style={{alignSelf: 'stretch', height: 44, paddingTop: 12, paddingBottom: 12, paddingLeft: 58, paddingRight: 20, background: 'rgba(10, 19, 48, 0)', borderRadius: 4, flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', gap: 20, display: 'flex', cursor: 'pointer'}}>
+            <div style={{justifyContent: 'flex-start', alignItems: 'center', gap: 20, display: 'inline-flex'}}>
+              <div style={{color: '#AEB9E1', fontSize: 14, fontFamily: 'Inter', fontWeight: '400', wordWrap: 'break-word'}}>URL to JSON</div>
             </div>
           </div>
-          <div className="self-stretch h-11 pl-14 pr-5 py-3 bg-slate-900/0 rounded flex flex-col justify-center items-start gap-5 cursor-pointer hover:bg-white/5 transition-colors">
-            <div className="inline-flex justify-start items-center gap-5">
-              <div className="justify-start text-indigo-300 text-sm font-normal font-['Inter']">CSV to JSON</div>
+          <div style={{alignSelf: 'stretch', height: 44, paddingTop: 12, paddingBottom: 12, paddingLeft: 58, paddingRight: 20, background: 'rgba(10, 19, 48, 0)', borderRadius: 4, flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', gap: 20, display: 'flex', cursor: 'pointer'}}>
+            <div style={{justifyContent: 'flex-start', alignItems: 'center', gap: 20, display: 'inline-flex'}}>
+              <div style={{color: '#AEB9E1', fontSize: 14, fontFamily: 'Inter', fontWeight: '400', wordWrap: 'break-word'}}>CSV to JSON</div>
             </div>
           </div>
-          <div className="self-stretch h-11 pl-14 pr-5 py-3 bg-slate-900/0 rounded flex flex-col justify-center items-start gap-5 cursor-pointer hover:bg-white/5 transition-colors">
-            <div className="inline-flex justify-start items-center gap-5">
-              <div className="justify-start text-indigo-300 text-sm font-normal font-['Inter']">Number Base Converter</div>
-            </div>
-          </div>
-        </div>
-        <div className="self-stretch h-11 px-4 py-2.5 bg-slate-900 rounded-xl inline-flex justify-between items-center cursor-pointer hover:bg-white/5 transition-colors">
-          <div className="flex justify-start items-center gap-4">
-            <div className="w-6 h-6 relative">
-              <div className="w-5 h-5 left-[2px] top-[2px] absolute">
-                <div className="w-4 h-4 left-[1px] top-[1px] absolute outline outline-[1.50px] outline-offset-[-0.75px] outline-slate-300" />
-              </div>
-            </div>
-            <div className="justify-start text-indigo-300 text-base font-normal font-['Inter']">Formatters</div>
-          </div>
-          <div className="w-4 h-4 relative origin-top-left -rotate-90 overflow-hidden">
-            <div className="w-3.5 h-3.5 left-[1.33px] top-[1.33px] absolute">
-              <div className="w-2.5 h-1.5 left-[4px] top-[12px] absolute origin-top-left -rotate-90 outline outline-[1.50px] outline-offset-[-0.75px] outline-slate-300" />
+          <div style={{alignSelf: 'stretch', height: 44, paddingTop: 12, paddingBottom: 12, paddingLeft: 58, paddingRight: 20, background: 'rgba(10, 19, 48, 0)', borderRadius: 4, flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', gap: 20, display: 'flex', cursor: 'pointer'}}>
+            <div style={{justifyContent: 'flex-start', alignItems: 'center', gap: 20, display: 'inline-flex'}}>
+              <div style={{color: '#AEB9E1', fontSize: 14, fontFamily: 'Inter', fontWeight: '400', wordWrap: 'break-word'}}>Number Base Converter</div>
             </div>
           </div>
         </div>
-        <div className="self-stretch h-11 px-4 py-2.5 bg-slate-900 rounded-xl inline-flex justify-between items-center cursor-pointer hover:bg-white/5 transition-colors">
-          <div className="flex justify-start items-center gap-4">
-            <div className="w-6 h-6 relative overflow-hidden">
-              <div className="w-5 h-5 left-[2px] top-[2px] absolute">
-                <div className="w-4 h-4 left-[1px] top-[1px] absolute outline outline-[1.50px] outline-offset-[-0.75px] outline-slate-300" />
+        <div style={{alignSelf: 'stretch', height: 46, paddingLeft: 16, paddingRight: 16, paddingTop: 10, paddingBottom: 10, background: '#081028', borderRadius: 12, justifyContent: 'space-between', alignItems: 'center', display: 'inline-flex', cursor: 'pointer'}}>
+          <div style={{justifyContent: 'flex-start', alignItems: 'center', gap: 16, display: 'flex'}}>
+            <div style={{width: 24, height: 24, position: 'relative'}}>
+              <div style={{width: 20, height: 20, left: 2, top: 2, position: 'absolute'}}>
+                <div style={{width: 18, height: 18, left: 1, top: 1, position: 'absolute', outline: '1.50px #AEB9E1 solid', outlineOffset: '-0.75px'}} />
               </div>
             </div>
-            <div className="justify-start text-indigo-300 text-base font-normal font-['Inter']">Encoders</div>
+            <div style={{color: '#AEB9E1', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', wordWrap: 'break-word'}}>Formatters</div>
           </div>
-          <div className="w-4 h-4 relative origin-top-left -rotate-90 overflow-hidden">
-            <div className="w-3.5 h-3.5 left-[1.33px] top-[1.33px] absolute">
-              <div className="w-2.5 h-1.5 left-[4px] top-[12px] absolute origin-top-left -rotate-90 outline outline-[1.50px] outline-offset-[-0.75px] outline-slate-300" />
+          <div style={{width: 16, height: 16, position: 'relative', transform: 'rotate(-90deg)', transformOrigin: 'top left', overflow: 'hidden'}}>
+            <div style={{width: 13.33, height: 13.33, left: 1.33, top: 1.33, position: 'absolute'}}>
+              <div style={{width: 10.67, height: 5.33, left: 4, top: 12, position: 'absolute', transform: 'rotate(-90deg)', transformOrigin: 'top left', outline: '1.50px #AEB9E1 solid', outlineOffset: '-0.75px'}} />
             </div>
           </div>
         </div>
-        <div className="self-stretch h-11 px-4 py-2.5 bg-slate-900 rounded-xl inline-flex justify-between items-center cursor-pointer hover:bg-white/5 transition-colors">
-          <div className="flex justify-start items-center gap-4">
-            <div className="w-6 h-6 relative">
-              <div className="w-5 h-5 left-[2px] top-[2px] absolute">
-                <div className="w-4 h-4 left-[1px] top-[1px] absolute rounded-[1px] outline outline-[1.50px] outline-offset-[-0.75px] outline-slate-300" />
+        <div style={{alignSelf: 'stretch', height: 46, paddingLeft: 16, paddingRight: 16, paddingTop: 10, paddingBottom: 10, background: '#081028', borderRadius: 12, justifyContent: 'space-between', alignItems: 'center', display: 'inline-flex', cursor: 'pointer'}}>
+          <div style={{justifyContent: 'flex-start', alignItems: 'center', gap: 16, display: 'flex'}}>
+            <div style={{width: 24, height: 24, position: 'relative', overflow: 'hidden'}}>
+              <div style={{width: 20, height: 20, left: 2, top: 2, position: 'absolute'}}>
+                <div style={{width: 18, height: 18, left: 1, top: 1, position: 'absolute', outline: '1.50px #AEB9E1 solid', outlineOffset: '-0.75px'}} />
               </div>
             </div>
-            <div className="justify-start text-indigo-300 text-base font-normal font-['Inter']">Text Tools</div>
+            <div style={{color: '#AEB9E1', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', wordWrap: 'break-word'}}>Encoders</div>
           </div>
-          <div className="w-4 h-4 relative origin-top-left -rotate-90 overflow-hidden">
-            <div className="w-3.5 h-3.5 left-[1.33px] top-[1.33px] absolute">
-              <div className="w-2.5 h-1.5 left-[4px] top-[12px] absolute origin-top-left -rotate-90 outline outline-[1.50px] outline-offset-[-0.75px] outline-slate-300" />
+          <div style={{width: 16, height: 16, position: 'relative', transform: 'rotate(-90deg)', transformOrigin: 'top left', overflow: 'hidden'}}>
+            <div style={{width: 13.33, height: 13.33, left: 1.33, top: 1.33, position: 'absolute'}}>
+              <div style={{width: 10.67, height: 5.33, left: 4, top: 12, position: 'absolute', transform: 'rotate(-90deg)', transformOrigin: 'top left', outline: '1.50px #AEB9E1 solid', outlineOffset: '-0.75px'}} />
             </div>
           </div>
         </div>
-        <div className="self-stretch h-11 px-4 py-2.5 bg-slate-900 rounded-xl inline-flex justify-between items-center cursor-pointer hover:bg-white/5 transition-colors">
-          <div className="flex justify-start items-center gap-4">
-            <div className="w-6 h-6 relative overflow-hidden">
-              <div className="w-5 h-5 left-[2px] top-[2px] absolute">
-                <div className="w-4 h-4 left-[1px] top-[1px] absolute outline outline-[1.50px] outline-offset-[-0.75px] outline-slate-300" />
+        <div style={{alignSelf: 'stretch', height: 46, paddingLeft: 16, paddingRight: 16, paddingTop: 10, paddingBottom: 10, background: '#081028', borderRadius: 12, justifyContent: 'space-between', alignItems: 'center', display: 'inline-flex', cursor: 'pointer'}}>
+          <div style={{justifyContent: 'flex-start', alignItems: 'center', gap: 16, display: 'flex'}}>
+            <div style={{width: 24, height: 24, position: 'relative'}}>
+              <div style={{width: 20, height: 20, left: 2, top: 2, position: 'absolute'}}>
+                <div style={{width: 18, height: 17.50, left: 1, top: 1, position: 'absolute', borderRadius: 1, outline: '1.50px #AEB9E1 solid', outlineOffset: '-0.75px'}} />
               </div>
             </div>
-            <div className="justify-start text-indigo-300 text-base font-normal font-['Inter']">Time Tools</div>
+            <div style={{color: '#AEB9E1', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', wordWrap: 'break-word'}}>Text Tools</div>
           </div>
-          <div className="w-4 h-4 relative origin-top-left -rotate-90 overflow-hidden">
-            <div className="w-3.5 h-3.5 left-[1.33px] top-[1.33px] absolute">
-              <div className="w-2.5 h-1.5 left-[4px] top-[12px] absolute origin-top-left -rotate-90 outline outline-[1.50px] outline-offset-[-0.75px] outline-slate-300" />
+          <div style={{width: 16, height: 16, position: 'relative', transform: 'rotate(-90deg)', transformOrigin: 'top left', overflow: 'hidden'}}>
+            <div style={{width: 13.33, height: 13.33, left: 1.33, top: 1.33, position: 'absolute'}}>
+              <div style={{width: 10.67, height: 5.33, left: 4, top: 12, position: 'absolute', transform: 'rotate(-90deg)', transformOrigin: 'top left', outline: '1.50px #AEB9E1 solid', outlineOffset: '-0.75px'}} />
             </div>
           </div>
         </div>
-        <div className="self-stretch h-11 px-4 py-2.5 bg-slate-900 rounded-xl inline-flex justify-between items-center cursor-pointer hover:bg-white/5 transition-colors">
-          <div className="flex justify-start items-center gap-4">
-            <div className="w-6 h-6 relative overflow-hidden">
-              <div className="w-5 h-5 left-[2px] top-[2px] absolute">
-                <div className="w-5 h-4 left-0 top-[2px] absolute outline outline-[1.50px] outline-offset-[-0.75px] outline-slate-300" />
+        <div style={{alignSelf: 'stretch', height: 46, paddingLeft: 16, paddingRight: 16, paddingTop: 10, paddingBottom: 10, background: '#081028', borderRadius: 12, justifyContent: 'space-between', alignItems: 'center', display: 'inline-flex', cursor: 'pointer'}}>
+          <div style={{justifyContent: 'flex-start', alignItems: 'center', gap: 16, display: 'flex'}}>
+            <div style={{width: 24, height: 24, position: 'relative', overflow: 'hidden'}}>
+              <div style={{width: 20, height: 20, left: 2, top: 2, position: 'absolute'}}>
+                <div style={{width: 18, height: 18, left: 1, top: 1, position: 'absolute', outline: '1.50px #AEB9E1 solid', outlineOffset: '-0.75px'}} />
               </div>
             </div>
-            <div className="justify-start text-indigo-300 text-base font-normal font-['Inter']">Financial Tools</div>
+            <div style={{color: '#AEB9E1', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', wordWrap: 'break-word'}}>Time Tools</div>
           </div>
-          <div className="w-4 h-4 relative origin-top-left -rotate-90 overflow-hidden">
-            <div className="w-3.5 h-3.5 left-[1.33px] top-[1.33px] absolute">
-              <div className="w-2.5 h-1.5 left-[4px] top-[12px] absolute origin-top-left -rotate-90 outline outline-[1.50px] outline-offset-[-0.75px] outline-slate-300" />
+          <div style={{width: 16, height: 16, position: 'relative', transform: 'rotate(-90deg)', transformOrigin: 'top left', overflow: 'hidden'}}>
+            <div style={{width: 13.33, height: 13.33, left: 1.33, top: 1.33, position: 'absolute'}}>
+              <div style={{width: 10.67, height: 5.33, left: 4, top: 12, position: 'absolute', transform: 'rotate(-90deg)', transformOrigin: 'top left', outline: '1.50px #AEB9E1 solid', outlineOffset: '-0.75px'}} />
             </div>
           </div>
         </div>
-        <div className="self-stretch h-11 px-4 py-2.5 bg-slate-900 rounded-xl inline-flex justify-between items-center cursor-pointer hover:bg-white/5 transition-colors">
-          <div className="flex justify-start items-center gap-4">
-            <div className="w-6 h-6 relative overflow-hidden">
-              <div className="w-5 h-5 left-[2px] top-[2px] absolute">
-                <div className="w-4 h-4 left-[1px] top-[1px] absolute outline outline-[1.50px] outline-offset-[-0.75px] outline-slate-300" />
+        <div style={{alignSelf: 'stretch', height: 46, paddingLeft: 16, paddingRight: 16, paddingTop: 10, paddingBottom: 10, background: '#081028', borderRadius: 12, justifyContent: 'space-between', alignItems: 'center', display: 'inline-flex', cursor: 'pointer'}}>
+          <div style={{justifyContent: 'flex-start', alignItems: 'center', gap: 16, display: 'flex'}}>
+            <div style={{width: 24, height: 24, position: 'relative', overflow: 'hidden'}}>
+              <div style={{width: 20, height: 20, left: 2, top: 2, position: 'absolute'}}>
+                <div style={{width: 20, height: 16, left: 0, top: 2, position: 'absolute', outline: '1.50px #AEB9E1 solid', outlineOffset: '-0.75px'}} />
               </div>
             </div>
-            <div className="justify-start text-indigo-300 text-base font-normal font-['Inter']">Color Tools</div>
+            <div style={{color: '#AEB9E1', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', wordWrap: 'break-word'}}>Financial Tools</div>
           </div>
-          <div className="w-4 h-4 relative origin-top-left -rotate-90 overflow-hidden">
-            <div className="w-3.5 h-3.5 left-[1.33px] top-[1.33px] absolute">
-              <div className="w-2.5 h-1.5 left-[4px] top-[12px] absolute origin-top-left -rotate-90 outline outline-[1.50px] outline-offset-[-0.75px] outline-slate-300" />
+          <div style={{width: 16, height: 16, position: 'relative', transform: 'rotate(-90deg)', transformOrigin: 'top left', overflow: 'hidden'}}>
+            <div style={{width: 13.33, height: 13.33, left: 1.33, top: 1.33, position: 'absolute'}}>
+              <div style={{width: 10.67, height: 5.33, left: 4, top: 12, position: 'absolute', transform: 'rotate(-90deg)', transformOrigin: 'top left', outline: '1.50px #AEB9E1 solid', outlineOffset: '-0.75px'}} />
             </div>
           </div>
         </div>
-        <div className="self-stretch h-11 px-4 py-2.5 bg-slate-900 rounded-xl inline-flex justify-between items-center cursor-pointer hover:bg-white/5 transition-colors">
-          <div className="flex justify-start items-center gap-4">
-            <div className="w-6 h-6 relative overflow-hidden">
-              <div className="w-5 h-5 left-[2px] top-[2px] absolute">
-                <div className="w-4 h-4 left-[1px] top-[1px] absolute outline outline-[1.50px] outline-offset-[-0.75px] outline-slate-300" />
+        <div style={{alignSelf: 'stretch', height: 46, paddingLeft: 16, paddingRight: 16, paddingTop: 10, paddingBottom: 10, background: '#081028', borderRadius: 12, justifyContent: 'space-between', alignItems: 'center', display: 'inline-flex', cursor: 'pointer'}}>
+          <div style={{justifyContent: 'flex-start', alignItems: 'center', gap: 16, display: 'flex'}}>
+            <div style={{width: 24, height: 24, position: 'relative', overflow: 'hidden'}}>
+              <div style={{width: 20, height: 20, left: 2, top: 2, position: 'absolute'}}>
+                <div style={{width: 18, height: 18, left: 1, top: 1, position: 'absolute', outline: '1.50px #AEB9E1 solid', outlineOffset: '-0.75px'}} />
               </div>
             </div>
-            <div className="justify-start text-indigo-300 text-base font-normal font-['Inter']">System</div>
+            <div style={{color: '#AEB9E1', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', wordWrap: 'break-word'}}>Color Tools</div>
           </div>
-          <div className="w-4 h-4 relative origin-top-left -rotate-90 overflow-hidden">
-            <div className="w-3.5 h-3.5 left-[1.33px] top-[1.33px] absolute">
-              <div className="w-2.5 h-1.5 left-[4px] top-[12px] absolute origin-top-left -rotate-90 outline outline-[1.50px] outline-offset-[-0.75px] outline-slate-300" />
+          <div style={{width: 16, height: 16, position: 'relative', transform: 'rotate(-90deg)', transformOrigin: 'top left', overflow: 'hidden'}}>
+            <div style={{width: 13.33, height: 13.33, left: 1.33, top: 1.33, position: 'absolute'}}>
+              <div style={{width: 10.67, height: 5.33, left: 4, top: 12, position: 'absolute', transform: 'rotate(-90deg)', transformOrigin: 'top left', outline: '1.50px #AEB9E1 solid', outlineOffset: '-0.75px'}} />
+            </div>
+          </div>
+        </div>
+        <div style={{alignSelf: 'stretch', height: 46, paddingLeft: 16, paddingRight: 16, paddingTop: 10, paddingBottom: 10, background: '#081028', borderRadius: 12, justifyContent: 'space-between', alignItems: 'center', display: 'inline-flex', cursor: 'pointer'}}>
+          <div style={{justifyContent: 'flex-start', alignItems: 'center', gap: 16, display: 'flex'}}>
+            <div style={{width: 24, height: 24, position: 'relative', overflow: 'hidden'}}>
+              <div style={{width: 20, height: 20, left: 2, top: 2, position: 'absolute'}}>
+                <div style={{width: 18, height: 18, left: 1, top: 1, position: 'absolute', outline: '1.50px #AEB9E1 solid', outlineOffset: '-0.75px'}} />
+              </div>
+            </div>
+            <div style={{color: '#AEB9E1', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', wordWrap: 'break-word'}}>System</div>
+          </div>
+          <div style={{width: 16, height: 16, position: 'relative', transform: 'rotate(-90deg)', transformOrigin: 'top left', overflow: 'hidden'}}>
+            <div style={{width: 13.33, height: 13.33, left: 1.33, top: 1.33, position: 'absolute'}}>
+              <div style={{width: 10.67, height: 5.33, left: 4, top: 12, position: 'absolute', transform: 'rotate(-90deg)', transformOrigin: 'top left', outline: '1.50px #AEB9E1 solid', outlineOffset: '-0.75px'}} />
             </div>
           </div>
         </div>
       </div>
-      <div className="self-stretch flex-1 flex flex-col justify-end items-start gap-1">
-        <div className="self-stretch px-3 py-2 inline-flex justify-start items-center gap-2 cursor-pointer hover:bg-white/5 rounded transition-colors">
-          <div className="w-5 h-5 relative overflow-hidden">
-            <div className="w-4 h-4 left-[1.83px] top-[1.83px] absolute bg-neutral-400" />
+      <div style={{alignSelf: 'stretch', flex: '1 1 0', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'flex-start', gap: 4, display: 'flex'}}>
+        <div style={{alignSelf: 'stretch', paddingLeft: 12, paddingRight: 12, paddingTop: 8, paddingBottom: 8, justifyContent: 'flex-start', alignItems: 'center', gap: 8, display: 'inline-flex', cursor: 'pointer'}}>
+          <div style={{width: 20, height: 20, position: 'relative', overflow: 'hidden'}}>
+            <div style={{width: 16.35, height: 16.35, left: 1.83, top: 1.83, position: 'absolute', background: '#99A0AE'}} />
           </div>
-          <div className="flex-1 flex justify-start items-center gap-1.5">
-            <div className="justify-end text-neutral-400 text-sm font-medium font-['Inter'] leading-5">Settings</div>
+          <div style={{flex: '1 1 0', justifyContent: 'flex-start', alignItems: 'center', gap: 6, display: 'flex'}}>
+            <div style={{justifyContent: 'flex-end', display: 'flex', flexDirection: 'column', color: '#99A0AE', fontSize: 14, fontFamily: 'Inter', fontWeight: '500', lineHeight: '20px', wordWrap: 'break-word'}}>Settings</div>
           </div>
         </div>
-        <div className="self-stretch px-3 py-2 inline-flex justify-start items-center gap-2 cursor-pointer hover:bg-white/5 rounded transition-colors">
-          <div className="w-5 h-5 relative overflow-hidden">
-            <div className="w-3.5 h-3.5 left-[2.50px] top-[2.50px] absolute bg-neutral-400" />
+        <div style={{alignSelf: 'stretch', paddingLeft: 12, paddingRight: 12, paddingTop: 8, paddingBottom: 8, justifyContent: 'flex-start', alignItems: 'center', gap: 8, display: 'inline-flex', cursor: 'pointer'}}>
+          <div style={{width: 20, height: 20, position: 'relative', overflow: 'hidden'}}>
+            <div style={{width: 15, height: 14.25, left: 2.50, top: 2.50, position: 'absolute', background: '#99A0AE'}} />
           </div>
-          <div className="flex-1 flex justify-start items-center gap-1.5">
-            <div className="justify-end text-neutral-400 text-sm font-medium font-['Inter'] leading-5">Support</div>
+          <div style={{flex: '1 1 0', justifyContent: 'flex-start', alignItems: 'center', gap: 6, display: 'flex'}}>
+            <div style={{justifyContent: 'flex-end', display: 'flex', flexDirection: 'column', color: '#99A0AE', fontSize: 14, fontFamily: 'Inter', fontWeight: '500', lineHeight: '20px', wordWrap: 'break-word'}}>Support</div>
           </div>
         </div>
       </div>
