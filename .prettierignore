@@ -1,0 +1,6 @@
+node_modules/
+.replit
+package-lock.json
+.cache/
+.local/
+.upm/

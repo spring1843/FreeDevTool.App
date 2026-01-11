@@ -1,0 +1,437 @@
+import { useState, useEffect, useCallback } from "react";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { SecurityBanner } from "@/components/ui/security-banner";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { TimezoneSelector } from "@/components/ui/timezone-selector";
+import { getUserTimezone } from "@/lib/time-tools";
+import { Clock, Copy, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  ResetButton,
+  ClearButton,
+  NowButton,
+  ToolButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
+
+interface TimeFormat {
+  name: string;
+  value: string;
+  description: string;
+}
+
+export default function TimeFormatter() {
+  const tool = getToolByPath("/tools/time-formatter");
+  const [inputTime, setInputTime] = useState("");
+  const [inputDate, setInputDate] = useState("");
+  const [inputTimezone, setInputTimezone] = useState(getUserTimezone());
+  const [formats, setFormats] = useState<TimeFormat[]>([]);
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+
+  // Set current date and time on load
+  useEffect(() => {
+    const now = new Date();
+    const dateStr = now.toISOString().split("T")[0];
+    const timeStr = now.toTimeString().split(" ")[0];
+    setInputDate(dateStr);
+    setInputTime(timeStr);
+  }, []);
+
+  // Format time whenever input changes
+  useEffect(() => {
+    if (inputDate && inputTime) {
+      formatTime();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputDate, inputTime, inputTimezone]);
+
+  const formatTime = useCallback(() => {
+    try {
+      // Create date object from input
+      const dateTime = new Date(`${inputDate}T${inputTime}`);
+
+      if (isNaN(dateTime.getTime())) {
+        throw new Error("Invalid date/time");
+      }
+
+      const timeFormats: TimeFormat[] = [
+        {
+          name: "24-Hour Format",
+          value: dateTime.toLocaleTimeString("en-GB", {
+            hour12: false,
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            timeZone: inputTimezone,
+          }),
+          description: "HH:MM:SS — Standard 24-hour military time format",
+        },
+        {
+          name: "12-Hour Format",
+          value: dateTime.toLocaleTimeString("en-US", {
+            hour12: true,
+            hour: "numeric",
+            minute: "2-digit",
+            second: "2-digit",
+            timeZone: inputTimezone,
+          }),
+          description: "h:MM:SS AM/PM — Standard 12-hour format with AM/PM",
+        },
+        {
+          name: "ISO 8601 Time",
+          value: dateTime.toISOString().split("T")[1],
+          description:
+            "HH:MM:SS.sssZ — International standard time format with UTC",
+        },
+        {
+          name: "RFC 3339 DateTime",
+          value: dateTime.toISOString(),
+          description:
+            "YYYY-MM-DDTHH:MM:SS.sssZ — Internet date/time format based on ISO 8601",
+        },
+        {
+          name: "Unix Timestamp",
+          value: Math.floor(dateTime.getTime() / 1000).toString(),
+          description: "Numeric — Seconds since January 1, 1970 UTC",
+        },
+        {
+          name: "Unix Timestamp (Milliseconds)",
+          value: dateTime.getTime().toString(),
+          description: "Numeric — Milliseconds since January 1, 1970 UTC",
+        },
+        {
+          name: "UTC Time",
+          value: dateTime.toUTCString().split(" ")[4],
+          description: "HH:MM:SS — Time in Coordinated Universal Time",
+        },
+        {
+          name: "Local Time (Long)",
+          value: dateTime.toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "2-digit",
+            second: "2-digit",
+            timeZoneName: "long",
+            timeZone: inputTimezone,
+          }),
+          description:
+            "h:MM:SS AM/PM Timezone — Local time with full timezone name",
+        },
+        {
+          name: "Local Time (Short)",
+          value: dateTime.toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "2-digit",
+            second: "2-digit",
+            timeZoneName: "short",
+            timeZone: inputTimezone,
+          }),
+          description:
+            "h:MM:SS AM/PM TZ — Local time with abbreviated timezone",
+        },
+        {
+          name: "Time Only (No Seconds)",
+          value: dateTime.toLocaleTimeString("en-GB", {
+            hour12: false,
+            hour: "2-digit",
+            minute: "2-digit",
+            timeZone: inputTimezone,
+          }),
+          description: "HH:MM — 24-hour format without seconds",
+        },
+        {
+          name: "12-Hour (No Seconds)",
+          value: dateTime.toLocaleTimeString("en-US", {
+            hour12: true,
+            hour: "numeric",
+            minute: "2-digit",
+            timeZone: inputTimezone,
+          }),
+          description: "h:MM AM/PM — 12-hour format without seconds",
+        },
+        {
+          name: "Microseconds Format",
+          value: `${dateTime.toLocaleTimeString("en-GB", {
+            hour12: false,
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            timeZone: inputTimezone,
+          })}.${dateTime.getMilliseconds().toString().padStart(3, "0")}000`,
+          description: "HH:MM:SS.ssssss — Time with microsecond precision",
+        },
+        {
+          name: "Time with Offset",
+          value: `${
+            new Intl.DateTimeFormat("en", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+              timeZoneName: "longOffset",
+              timeZone: inputTimezone,
+            })
+              .format(dateTime)
+              .split(" ")[1]
+          } ${new Intl.DateTimeFormat("en", {
+            timeZoneName: "longOffset",
+            timeZone: inputTimezone,
+          })
+            .format(dateTime)
+            .split(" ")
+            .pop()}`,
+          description: "HH:MM:SS ±HH:MM — Time with timezone offset",
+        },
+        {
+          name: "Decimal Time",
+          value: convertToDecimalTime(dateTime),
+          description: "d:mm:ss — French Revolutionary decimal time format",
+        },
+        {
+          name: "Internet Time (.beats)",
+          value: convertToInternetTime(dateTime),
+          description: "@beats — Swatch Internet Time (BMT - Biel Mean Time)",
+        },
+        {
+          name: "Julian Day Number",
+          value: calculateJulianDay(dateTime).toFixed(6),
+          description:
+            "Numeric — Days since January 1, 4713 BCE proleptic Julian calendar",
+        },
+        {
+          name: "Modified Julian Day",
+          value: (calculateJulianDay(dateTime) - 2400000.5).toFixed(6),
+          description:
+            "Numeric — Modified Julian Day (MJD) for astronomical use",
+        },
+        {
+          name: "Excel Serial Date",
+          value: convertToExcelDate(dateTime).toFixed(6),
+          description: "Numeric — Excel date serial number format",
+        },
+      ];
+
+      setFormats(timeFormats);
+    } catch {
+      console.error("Time formatting error");
+      setFormats([]);
+    }
+  }, [inputDate, inputTime, inputTimezone]);
+
+  const convertToDecimalTime = (date: Date): string => {
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+    const decimalTime = (totalSeconds / 86400) * 100000;
+    const decimalHours = Math.floor(decimalTime / 10000);
+    const decimalMinutes = Math.floor((decimalTime % 10000) / 100);
+    const decimalSeconds = Math.floor(decimalTime % 100);
+    return `${decimalHours}:${decimalMinutes.toString().padStart(2, "0")}:${decimalSeconds.toString().padStart(2, "0")}`;
+  };
+
+  const convertToInternetTime = (date: Date): string => {
+    const utc = date.getTime() + date.getTimezoneOffset() * 60000;
+    const bmt = new Date(utc + 1 * 3600000); // BMT is UTC+1
+    const totalSeconds =
+      bmt.getHours() * 3600 + bmt.getMinutes() * 60 + bmt.getSeconds();
+    const beats = Math.floor(totalSeconds / 86.4);
+    return `@${beats.toString().padStart(3, "0")}`;
+  };
+
+  const calculateJulianDay = (date: Date): number => {
+    const a = Math.floor((14 - (date.getMonth() + 1)) / 12);
+    const y = date.getFullYear() + 4800 - a;
+    const m = date.getMonth() + 1 + 12 * a - 3;
+    const jdn =
+      date.getDate() +
+      Math.floor((153 * m + 2) / 5) +
+      365 * y +
+      Math.floor(y / 4) -
+      Math.floor(y / 100) +
+      Math.floor(y / 400) -
+      32045;
+    const dayFraction =
+      (date.getHours() - 12) / 24 +
+      date.getMinutes() / 1440 +
+      date.getSeconds() / 86400;
+    return jdn + dayFraction;
+  };
+
+  const convertToExcelDate = (date: Date): number => {
+    const epoch = new Date(1899, 11, 30); // Excel's epoch (December 30, 1899)
+    const diffTime = date.getTime() - epoch.getTime();
+    return diffTime / (1000 * 60 * 60 * 24);
+  };
+
+  const copyToClipboard = async (text: string, index: number) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedIndex(index);
+      setTimeout(() => setCopiedIndex(null), 2000);
+    } catch {
+      console.error("Failed to copy");
+    }
+  };
+
+  const setCurrentDateTime = () => {
+    const now = new Date();
+    const dateStr = now.toISOString().split("T")[0];
+    const timeStr = now.toTimeString().split(" ")[0];
+    setInputDate(dateStr);
+    setInputTime(timeStr);
+  };
+
+  const handleClear = () => {
+    setInputDate("");
+    setInputTime("");
+    setFormats([]);
+  };
+
+  const hasModifiedData = inputDate.trim() !== "" && inputTime.trim() !== "";
+  const isAtDefault = false; // Time formatter always starts with current time
+
+  return (
+    <div className="max-w-6xl mx-auto">
+      {/* Header */}
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              Time Formatter
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Format time to all existing time standards and formats
+            </p>
+          </div>
+          <SecurityBanner variant="compact" />
+        </div>
+      </div>
+
+      <ToolButtonGroup className="mb-6 justify-end">
+        <DataButtonGroup>
+          <NowButton
+            onClick={setCurrentDateTime}
+            tooltip="Set to current date and time"
+            toastTitle="Time updated"
+            toastDescription="Set to current date and time"
+          />
+          <ResetButton
+            onClick={setCurrentDateTime}
+            tooltip="Reset to current time"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={inputDate.trim() === "" && inputTime.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
+      {/* Input Section */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <Clock className="w-5 h-5 mr-2" />
+            Input Time
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <Label htmlFor="input-date">Date</Label>
+              <Input
+                id="input-date"
+                type="date"
+                value={inputDate}
+                onChange={e => setInputDate(e.target.value)}
+                data-testid="input-date"
+                autoFocus={true}
+                data-default-input="true"
+              />
+            </div>
+            <div>
+              <Label htmlFor="input-time">Time</Label>
+              <Input
+                id="input-time"
+                type="time"
+                step="1"
+                value={inputTime}
+                onChange={e => setInputTime(e.target.value)}
+                data-testid="input-time"
+              />
+            </div>
+            <div>
+              <Label htmlFor="input-timezone">Timezone</Label>
+              <TimezoneSelector
+                value={inputTimezone}
+                onValueChange={setInputTimezone}
+                placeholder="Select timezone..."
+                data-testid="input-timezone-select"
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Formatted Times */}
+      {formats.length > 0 && (
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Formatted Times</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {formats.map((format, index) => (
+                <div
+                  key={index}
+                  className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-slate-100 dark:bg-slate-900"
+                  data-testid={`format-${index}`}
+                >
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex-1">
+                      <h4 className="font-medium text-slate-900 dark:text-slate-100 mb-1">
+                        {format.name}
+                      </h4>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                        {format.description}
+                      </p>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => copyToClipboard(format.value, index)}
+                      data-testid={`copy-${index}`}
+                    >
+                      {copiedIndex === index ? (
+                        <Check className="w-4 h-4" />
+                      ) : (
+                        <Copy className="w-4 h-4" />
+                      )}
+                    </Button>
+                  </div>
+                  <div className="font-mono text-lg text-slate-900 dark:text-slate-100 bg-slate-50 dark:bg-slate-950 p-3 rounded border border-slate-200 dark:border-slate-700">
+                    {format.value}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      <ToolExplanations explanations={tool?.explanations} />
+    </div>
+  );
+}

@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1"
+    />
+    <meta name="color-scheme" content="light dark" />
+    <!--
+  Security & Privacy: CSP meta tag blocks external scripts, enforces
+  a sandbox, and prevents outbound calls. All processing is offline
+  and local—your data never leaves your browser.
+
+  Read more about FreeDevTool.App's security policies:
+    https://github.com/spring1843/FreeDevTool.App/blob/main/SECURITY.md
+-->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' ws: wss:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self';"
+    />
+    <script>
+      (function () {
+        var theme = localStorage.getItem("theme");
+        if (!theme) {
+          theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+        }
+        document.documentElement.classList.add(theme);
+      })();
+    </script>
+    <title>
+      FreeDevTool.App - Free, Secure, Open Source, and Offline Developer Tools
+    </title>
+    <meta
+      name="description"
+      content="Open source offline developer tools designed for privacy. Free utilities including converters, formatters, encoders, text tools, and hardware testing - built to work without network requests."
+    />
+    <meta
+      name="keywords"
+      content="offline developer tools, privacy-focused dev utilities, open source coding tools, no network requests, local processing developer tools, privacy-first utilities"
+    />
+    <meta
+      property="og:title"
+      content="FreeDevTool.App - Free, Secure, Open Source, and Offline Developer Tools"
+    />
+    <meta
+      property="og:description"
+      content="Open source offline developer utilities designed for privacy. Free, secure tools that work without internet connectivity, built for local data processing."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://freedevtool.app" />
+
+    <meta name="robots" content="index, follow" />
+    <meta name="referrer" content="no-referrer" />
+
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/favicon-16x16.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="/assets/android-chrome-192x192.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="/assets/android-chrome-512x512.png"
+    />
+    <style id="critical-loading">
+      .loading-screen {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: #ffffff;
+        color: #333;
+      }
+      .loading-screen a {
+        color: #2563eb;
+      }
+      .dark .loading-screen {
+        background: #0f172a;
+        color: #e2e8f0;
+      }
+      .dark .loading-screen a {
+        color: #60a5fa;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <div class="loading-screen">
+        <div style="text-align: center">
+          <div style="margin-bottom: 16px; font-size: 18px">
+            Loading FreeDevTool.App...
+          </div>
+          <div style="font-size: 14px; opacity: 0.7">
+            <a
+              href="https://github.com/spring1843/FreeDevTool.App/blob/main/SECURITY.md"
+              target="_blank"
+              rel="noreferrer"
+              >Secure</a
+            >
+            Developer Tools
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.tsx" defer></script>
+    <script>
+      window.addEventListener("load", function () {
+        setTimeout(function () {
+          var loadingDiv = document.querySelector(".loading-screen");
+          if (loadingDiv) {
+            loadingDiv.style.display = "none";
+          }
+        }, 500);
+      });
+    </script>
+  </body>
+</html>

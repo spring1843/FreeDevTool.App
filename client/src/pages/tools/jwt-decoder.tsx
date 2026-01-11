@@ -1,0 +1,274 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { TextArea } from "@/components/ui/textarea";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Key, CheckCircle, XCircle } from "lucide-react";
+import { SecurityBanner } from "@/components/ui/security-banner";
+import { useState, useEffect, useCallback } from "react";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
+import { DEFAULT_JWT } from "@/data/defaults";
+import { useTheme } from "@/providers/theme-provider";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+
+export default function JWTDecoder() {
+  const tool = getToolByPath("/tools/jwt-decoder");
+  const [token, setToken] = useState(DEFAULT_JWT);
+  const [header, setHeader] = useState("");
+  const [payload, setPayload] = useState("");
+  const [signature, setSignature] = useState("");
+  const [isValid, setIsValid] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { theme } = useTheme();
+
+  const decodeToken = useCallback(() => {
+    try {
+      const parts = token.split(".");
+      if (parts.length !== 3) {
+        setError(
+          "Invalid JWT format: Token must have 3 parts separated by dots"
+        );
+        setIsValid(false);
+        return;
+      }
+
+      const [headerPart, payloadPart, signaturePart] = parts;
+
+      // Decode header
+      const decodedHeader = JSON.parse(
+        atob(headerPart.replace(/-/g, "+").replace(/_/g, "/"))
+      );
+      setHeader(JSON.stringify(decodedHeader, null, 2));
+
+      // Decode payload
+      const decodedPayload = JSON.parse(
+        atob(payloadPart.replace(/-/g, "+").replace(/_/g, "/"))
+      );
+      setPayload(JSON.stringify(decodedPayload, null, 2));
+
+      // Set signature (base64url encoded)
+      setSignature(signaturePart);
+
+      setIsValid(true);
+      setError(null);
+    } catch (err) {
+      setError(
+        `Invalid JWT: Unable to decode token${
+          err instanceof Error ? ` - ${err.message}` : ""
+        }`
+      );
+      setIsValid(false);
+      setHeader("");
+      setPayload("");
+      setSignature("");
+    }
+  }, [token]);
+
+  const handleTokenChange = (value: string) => {
+    setToken(value);
+    if (header || payload || signature) {
+      setHeader("");
+      setPayload("");
+      setSignature("");
+      setIsValid(false);
+    }
+  };
+
+  const handleReset = () => {
+    setToken(DEFAULT_JWT);
+    setHeader("");
+    setPayload("");
+    setSignature("");
+    setIsValid(false);
+    setError(null);
+  };
+
+  const handleClear = () => {
+    setToken("");
+    setHeader("");
+    setPayload("");
+    setSignature("");
+    setIsValid(false);
+    setError(null);
+  };
+
+  const hasModifiedData = token !== DEFAULT_JWT && token.trim() !== "";
+  const isAtDefault = token === DEFAULT_JWT;
+
+  useEffect(() => {
+    decodeToken();
+  }, [decodeToken]);
+
+  return (
+    <div className="max-w-6xl mx-auto">
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              JWT Decoder
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Decode and validate JSON Web Tokens (JWT)
+            </p>
+          </div>
+          <SecurityBanner variant="compact" />
+        </div>
+      </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={decodeToken}
+            icon={<Key className="w-4 h-4 mr-2" />}
+            tooltip="Decode JWT token"
+          >
+            Decode
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default token"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={
+              token.trim() === "" &&
+              header.trim() === "" &&
+              payload.trim() === "" &&
+              signature.trim() === ""
+            }
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
+      {error ? (
+        <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
+          <AlertDescription className="text-red-800 dark:text-red-200">
+            {error}
+          </AlertDescription>
+        </Alert>
+      ) : null}
+
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            JWT Token
+            <div className="ml-auto flex items-center">
+              {isValid ? (
+                <div className="flex items-center text-green-600 text-sm">
+                  <CheckCircle className="w-4 h-4 mr-1" />
+                  Valid
+                </div>
+              ) : (
+                <div className="flex items-center text-red-600 text-sm">
+                  <XCircle className="w-4 h-4 mr-1" />
+                  Invalid
+                </div>
+              )}
+            </div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <TextArea
+            id="input"
+            value={token}
+            onChange={e => handleTokenChange(e.target.value)}
+            placeholder="Paste your JWT token here..."
+            data-testid="jwt-token-input"
+            className="min-h-[100px] font-mono text-sm"
+            rows={5}
+            data-default-input="true"
+            autoFocus={true}
+            lang="plaintext"
+            fileExtension="txt"
+            theme={theme}
+            lineWrapping={true}
+          />
+        </CardContent>
+      </Card>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-blue-600 dark:text-blue-400">
+              Header
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TextArea
+              id="output1"
+              value={header}
+              readOnly={true}
+              placeholder="Decoded header will appear here..."
+              data-testid="jwt-header-output"
+              className="min-h-[300px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
+              rows={15}
+              minHeight="300px"
+              theme={theme}
+            />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-green-600 dark:text-green-400">
+              Payload
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TextArea
+              id="output2"
+              value={payload}
+              readOnly={true}
+              placeholder="Decoded payload will appear here..."
+              data-testid="jwt-payload-output"
+              className="min-h-[300px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
+              rows={15}
+              minHeight="300px"
+              theme={theme}
+            />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-purple-600 dark:text-purple-400">
+              Signature
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TextArea
+              id="output3"
+              value={signature}
+              data-default-input="true"
+              readOnly={true}
+              placeholder="Signature will appear here..."
+              data-testid="jwt-signature-output"
+              className="min-h-[300px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
+              rows={15}
+              minHeight="300px"
+              theme={theme}
+            />
+          </CardContent>
+        </Card>
+      </div>
+      <ToolExplanations explanations={tool?.explanations} />
+    </div>
+  );
+}

@@ -1,0 +1,282 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "production Environment - S3 Static Website with CloudFront Distribution and Origin Access Control"
+
+# IMPORTANT: This stack MUST be deployed in us-east-1 region (required for CloudFront + ACM)
+# PREREQUISITE: Update the HOSTED_ZONE_ID below with your Route 53 hosted zone ID for freedevtool.app
+# Find it with: aws route53 list-hosted-zones --query "HostedZones[?Name=='freedevtool.app.'].Id" --output text
+
+Mappings:
+  Config:
+    Route53:
+      HostedZoneId: "Z08420001ZIINIX60XR7X"
+
+Conditions:
+  IsUsEast1: !Equals [!Ref "AWS::Region", "us-east-1"]
+
+Rules:
+  RegionCheck:
+    Assertions:
+      - Assert: !Equals [!Ref "AWS::Region", "us-east-1"]
+        AssertDescription: "This stack must be deployed in us-east-1 region because CloudFront requires ACM certificates from us-east-1"
+
+Resources:
+  # GitHub OIDC Identity Provider
+  # This allows GitHub Actions to authenticate with AWS without long-lived credentials
+  # Shared by both staging and production environments
+  GitHubOIDCProvider:
+    Type: AWS::IAM::OIDCProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ClientIdList:
+        - sts.amazonaws.com
+      ThumbprintList:
+        # GitHub Actions OIDC thumbprint (valid as of 2024)
+        - 6938fd4d98bab03faadb97b34396831e3780aea1
+        - 1c58a3a8518e8759bf075b76b750d4f2df264fcd
+      Tags:
+        - Key: Environment
+          Value: production
+        - Key: Purpose
+          Value: github-actions-oidc
+
+  # ACM Certificate for freedevtool.app
+  # Must be created in us-east-1 for CloudFront
+  SSLCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: freedevtool.app
+      ValidationMethod: DNS
+      DomainValidationOptions:
+        - DomainName: freedevtool.app
+          HostedZoneId: !FindInMap [Config, Route53, HostedZoneId]
+      Tags:
+        - Key: Environment
+          Value: production
+        - Key: Project
+          Value: freedevtool
+
+  # S3 Bucket for static website content
+  WebsiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: "freedevtool-production"
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      WebsiteConfiguration: # Enable static hosting
+        IndexDocument: index.html
+      VersioningConfiguration:
+        Status: Enabled
+      LifecycleConfiguration:
+        Rules:
+          - Id: DeleteOldVersions
+            Status: Enabled
+            NoncurrentVersionExpirationInDays: 30
+      Tags:
+        - Key: Environment
+          Value: production
+        - Key: Project
+          Value: freedevtool
+
+  # S3 Bucket Policy - Public Website Hosting
+  WebsiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref WebsiteBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AllowPublicRead
+            Effect: Allow
+            Principal: "*"
+            Action: s3:GetObject
+            Resource: !Sub "${WebsiteBucket.Arn}/*"
+
+  # CloudFront Distribution
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Comment: "freedevtool.app production"
+        Enabled: true
+        HttpVersion: http2and3
+        IPV6Enabled: true
+        DefaultRootObject: index.html
+
+        Aliases:
+          - freedevtool.app
+
+        Origins:
+          - Id: S3Origin
+            DomainName: !Sub "${WebsiteBucket}.s3-website-${AWS::Region}.amazonaws.com"
+            CustomOriginConfig:
+              OriginProtocolPolicy: http-only
+
+        # Default Cache Behavior
+        DefaultCacheBehavior:
+          TargetOriginId: S3Origin
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          CachedMethods:
+            - GET
+            - HEAD
+          Compress: true
+          # Use AWS Managed Cache Policy - CachingOptimized
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+          # Use AWS Managed Origin Request Policy - CORS-S3Origin
+          OriginRequestPolicyId: 88a5eaf4-2fd4-4709-b370-b4c650ea3fcf
+          # Use AWS Managed Response Headers Policy - SecurityHeadersPolicy
+          ResponseHeadersPolicyId: 67f7725c-6f97-4210-82d7-5512b31e9d03
+
+        # Price Class - Use only North America and Europe for production cost optimization
+        PriceClass: PriceClass_100
+
+        # Viewer Certificate - ACM certificate for custom domain
+        ViewerCertificate:
+          AcmCertificateArn: !Ref SSLCertificate
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.2_2021
+
+      Tags:
+        - Key: Environment
+          Value: production
+        - Key: Project
+          Value: freedevtool
+
+  # Route 53 DNS Record - CNAME pointing to CloudFront
+  DNSRecordIPV4:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !FindInMap [Config, Route53, HostedZoneId]
+      Name: freedevtool.app
+      Type: A
+      AliasTarget:
+        HostedZoneId: Z2FDTNDATAQYW2 # CloudFront hosted zone ID (global constant)
+        DNSName: !GetAtt CloudFrontDistribution.DomainName
+        EvaluateTargetHealth: false
+
+  DNSRecordIPV6:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !FindInMap [Config, Route53, HostedZoneId]
+      Name: freedevtool.app
+      Type: AAAA
+      AliasTarget:
+        HostedZoneId: Z2FDTNDATAQYW2 # CloudFront hosted zone ID (global constant)
+        DNSName: !GetAtt CloudFrontDistribution.DomainName
+        EvaluateTargetHealth: false
+
+  # IAM Role for CI/CD deployment
+  ProductionDeploymentRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: freedevtool-production-deployment-role
+      Description: "Role for deploying static files to S3 and invalidating CloudFront cache in production from GitHub Actions"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          # Allow GitHub Actions to assume this role via OIDC
+          - Effect: Allow
+            Principal:
+              Federated: !GetAtt GitHubOIDCProvider.Arn
+            Action: "sts:AssumeRoleWithWebIdentity"
+            Condition:
+              StringEquals:
+                "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+              StringLike:
+                "token.actions.githubusercontent.com:sub": !Sub "repo:spring1843/FreeDevTool.App:ref:refs/tags/v*"
+      Policies:
+        - PolicyName: S3DeploymentPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              # Allow uploading and replacing files in the S3 bucket
+              - Effect: Allow
+                Action:
+                  - "s3:PutObject"
+                  - "s3:GetObject"
+                  - "s3:DeleteObject"
+                  - "s3:ListBucket"
+                Resource:
+                  - !Sub "${WebsiteBucket.Arn}"
+                  - !Sub "${WebsiteBucket.Arn}/*"
+        - PolicyName: CloudFrontInvalidationPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              # Allow invalidating CloudFront distribution cache
+              - Effect: Allow
+                Action:
+                  - "cloudfront:CreateInvalidation"
+                  - "cloudfront:GetInvalidation"
+                  - "cloudfront:ListInvalidations"
+                Resource: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}"
+      Tags:
+        - Key: Environment
+          Value: production
+        - Key: Purpose
+          Value: deployment
+
+Outputs:
+  WebsiteBucketName:
+    Description: "S3 bucket name for uploading static files"
+    Value: !Ref WebsiteBucket
+    Export:
+      Name: !Sub "${AWS::StackName}-BucketName"
+
+  CloudFrontDistributionId:
+    Description: "CloudFront distribution ID for cache invalidation"
+    Value: !Ref CloudFrontDistribution
+    Export:
+      Name: !Sub "${AWS::StackName}-DistributionId"
+
+  CloudFrontDomainName:
+    Description: "CloudFront distribution domain name"
+    Value: !GetAtt CloudFrontDistribution.DomainName
+    Export:
+      Name: !Sub "${AWS::StackName}-DomainName"
+
+  WebsiteURL:
+    Description: "production website URL (CloudFront domain)"
+    Value: !Sub "https://${CloudFrontDistribution.DomainName}"
+
+  CustomDomainURL:
+    Description: "production website URL (custom domain) - READY TO USE"
+    Value: "https://freedevtool.app"
+
+  SSLCertificateArn:
+    Description: "ACM certificate ARN for freedevtool.app"
+    Value: !Ref SSLCertificate
+
+  ProductionDeploymentRoleArn:
+    Description: "IAM Role ARN for production deployment (use with GitHub Actions OIDC)"
+    Value: !GetAtt ProductionDeploymentRole.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-DeploymentRoleArn"
+
+  GitHubOIDCProviderArn:
+    Description: "GitHub OIDC Provider ARN (shared with staging)"
+    Value: !GetAtt GitHubOIDCProvider.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-GitHubOIDCProviderArn"
+
+  DeploymentCommands:
+    Description: "Commands to deploy your static site"
+    Value: !Sub |
+      # GitHub Actions will automatically assume this role using OIDC
+      # No manual credential configuration needed!
+
+      # For manual deployment, you can still use:
+      # aws s3 sync ./dist/public/ s3://${WebsiteBucket} --delete --cache-control "public, max-age=31536000, immutable"
+      # aws cloudfront create-invalidation --distribution-id ${CloudFrontDistribution} --paths "/*"
+
+      # GitHub Actions workflow configuration:
+      # - uses: aws-actions/configure-aws-credentials@v5
+      #   with:
+      #     role-to-assume: ${ProductionDeploymentRole.Arn}
+      #     aws-region: us-east-1

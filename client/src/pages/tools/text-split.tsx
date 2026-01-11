@@ -1,0 +1,276 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
+import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
+import { Split } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import {
+  ResetButton,
+  ClearButton,
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
+
+import { SecurityBanner } from "@/components/ui/security-banner";
+import { DEFAULT_TEXT_SPLIT } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { CopyButton } from "@/components/ui/copy-button";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+
+export default function TextSplit() {
+  const tool = getToolByPath("/tools/text-split");
+  const [text, setText] = useState(DEFAULT_TEXT_SPLIT);
+  const [delimiter, setDelimiter] = useState(",");
+  const [removeEmpty, setRemoveEmpty] = useState(true);
+  const [trimWhitespace, setTrimWhitespace] = useState(true);
+  const [splitResult, setSplitResult] = useState<string[]>([]);
+  const { theme } = useTheme();
+
+  const splitText = useCallback(() => {
+    try {
+      let parts: string[] = [];
+
+      if (delimiter === "\\n") {
+        parts = text.split("\n");
+      } else if (delimiter === "\\t") {
+        parts = text.split("\t");
+      } else {
+        parts = text.split(delimiter);
+      }
+
+      if (trimWhitespace) {
+        parts = parts.map(part => part.trim());
+      }
+
+      if (removeEmpty) {
+        parts = parts.filter(part => part.length > 0);
+      }
+
+      setSplitResult(parts);
+    } catch (error) {
+      setSplitResult([
+        `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
+      ]);
+    }
+  }, [text, delimiter, removeEmpty, trimWhitespace]);
+
+  const handleReset = () => {
+    setText(DEFAULT_TEXT_SPLIT);
+    setDelimiter(",");
+    setRemoveEmpty(true);
+    setTrimWhitespace(true);
+    setSplitResult([]);
+  };
+
+  const handleClear = () => {
+    setText("");
+    setSplitResult([]);
+  };
+
+  const hasModifiedData = text !== DEFAULT_TEXT_SPLIT && text.trim() !== "";
+  const isAtDefault =
+    text === DEFAULT_TEXT_SPLIT &&
+    delimiter === "," &&
+    removeEmpty === true &&
+    trimWhitespace === true;
+
+  useEffect(() => {
+    splitText();
+  }, [splitText]);
+
+  return (
+    <div className="max-w-6xl mx-auto">
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              Text Splitter
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Split text into parts using custom delimiters
+            </p>
+          </div>
+          <SecurityBanner variant="compact" />
+        </div>
+      </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={splitText}
+            tooltip="Split the text using the delimiter"
+            icon={<Split className="w-4 h-4 mr-2" />}
+            className="bg-orange-600 hover:bg-orange-700 text-white"
+          >
+            Split Text
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset all settings to defaults"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear text input"
+            hasModifiedData={hasModifiedData}
+            disabled={text.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle>Split Options</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <Label htmlFor="delimiter">Delimiter</Label>
+            <Input
+              id="delimiter"
+              value={delimiter}
+              onChange={e => setDelimiter(e.target.value)}
+              placeholder="Enter delimiter (e.g., comma, space, \\n, \\t)..."
+              data-testid="delimiter-input"
+            />
+            <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              Use \\n for new lines, \\t for tabs
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-4">
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="remove-empty"
+                checked={removeEmpty}
+                onCheckedChange={setRemoveEmpty}
+              />
+              <Label htmlFor="remove-empty">Remove Empty Parts</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="trim-whitespace"
+                checked={trimWhitespace}
+                onCheckedChange={setTrimWhitespace}
+              />
+              <Label htmlFor="trim-whitespace">Trim Whitespace</Label>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Input Text</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TextArea
+              id="input"
+              value={text}
+              onChange={e => setText(e.target.value)}
+              placeholder="Enter text to split..."
+              data-testid="text-input"
+              className="min-h-[300px] font-mono text-sm"
+              rows={15}
+              autoFocus={true}
+              minHeight="300px"
+              lang="plaintext"
+              fileExtension="txt"
+              theme={theme}
+              data-default-input="true"
+            />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <span>Split Results</span>
+              <div className="flex items-center gap-2">
+                <Badge variant="outline">{splitResult.length} parts</Badge>
+                {splitResult.length > 0 && (
+                  <CopyButton text={splitResult.join("\n")} variant="outline" />
+                )}
+              </div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="max-h-[300px] overflow-y-auto space-y-2">
+              {splitResult.length > 0 ? (
+                splitResult.map((part, index) => (
+                  <div
+                    key={index}
+                    className="p-2 bg-gray-50 dark:bg-gray-800 rounded border-l-4 border-orange-500"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="font-mono text-sm flex-1 break-words">
+                        {part || "<empty>"}
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <CopyButton text={part} />
+                        <Badge variant="outline" className="text-xs">
+                          {index + 1}
+                        </Badge>
+                      </div>
+                    </div>
+                    <div className="text-xs text-gray-500 mt-1">
+                      Length: {part.length} characters
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center text-gray-500 py-8">
+                  No results yet. Enter text and click &quot;Split Text&quot;.
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {splitResult.length > 0 && (
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <span>Split as Lines</span>
+              <CopyButton text={splitResult.join("\n")} variant="outline" />
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TextArea
+              id="output"
+              value={splitResult.join("\n")}
+              readOnly={true}
+              placeholder="Split results will appear here, one part per line..."
+              data-testid="lines-output"
+              className="min-h-[200px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
+              rows={10}
+              minHeight="200px"
+              lang="plaintext"
+              fileExtension="txt"
+              theme={theme}
+            />
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+              Each part is shown on a separate line for easy copying
+            </p>
+          </CardContent>
+        </Card>
+      )}
+
+      <ToolExplanations explanations={tool?.explanations} />
+    </div>
+  );
+}

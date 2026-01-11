@@ -1,0 +1,463 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Camera, Square, Download, Play } from "lucide-react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { useToast } from "@/hooks/use-toast";
+
+import { SecurityBanner } from "@/components/ui/security-banner";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import {
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+} from "@/components/ui/tool-button";
+
+export default function WebcamTest() {
+  const tool = getToolByPath("/tools/webcam-test");
+  const [isActive, setIsActive] = useState(false);
+  const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
+  const [selectedDevice, setSelectedDevice] = useState<string | undefined>(
+    undefined
+  );
+  const [error, setError] = useState<string | null>(null);
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { toast } = useToast();
+
+  const requestPermission = async () => {
+    try {
+      setError(null);
+
+      // Notify user that permission request is starting
+      toast({
+        title: "Requesting Permission",
+        description: "Requesting camera access from your browser...",
+      });
+
+      // Request camera permission
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      stream.getTracks().forEach(track => track.stop()); // Stop immediately after getting permission
+
+      setHasPermission(true);
+      await getVideoDevices();
+
+      toast({
+        title: "Permission Granted",
+        description:
+          "Camera access has been granted. You can now start the preview.",
+      });
+    } catch (err: unknown) {
+      setHasPermission(false);
+      const error = err as DOMException;
+      if (error.name === "NotAllowedError") {
+        setError(
+          "Camera permission denied. Please allow camera access to use this tool."
+        );
+        toast({
+          title: "Permission Denied",
+          description:
+            "Camera permission denied. Please allow camera access to use this tool.",
+          variant: "destructive",
+        });
+      } else if (error.name === "NotFoundError") {
+        setError("No camera found. Please connect a camera device.");
+        toast({
+          title: "No Camera Found",
+          description: "Please connect a camera device and try again.",
+          variant: "destructive",
+        });
+      } else {
+        setError(
+          `Failed to access camera: ${error instanceof Error ? error.message : "Unknown error"}`
+        );
+        toast({
+          title: "Camera Access Error",
+          description:
+            error instanceof Error ? error.message : "Failed to access camera",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
+  const getVideoDevices = async () => {
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const videoDevices = devices.filter(
+        device => device.kind === "videoinput"
+      );
+      setDevices(videoDevices);
+
+      // Always select the first device when devices are available
+      if (videoDevices.length > 0) {
+        const firstDevice = videoDevices[0];
+        if (firstDevice.deviceId && firstDevice.deviceId !== "") {
+          setSelectedDevice(firstDevice.deviceId);
+        }
+      }
+    } catch (err: unknown) {
+      setError(
+        `Failed to enumerate devices: ${err instanceof Error ? err.message : "Unknown error"}`
+      );
+    }
+  };
+
+  const startCamera = async () => {
+    try {
+      setError(null);
+
+      const constraints: MediaStreamConstraints = {
+        video:
+          selectedDevice && selectedDevice !== ""
+            ? { deviceId: { exact: selectedDevice } }
+            : true,
+        audio: false,
+      };
+
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      streamRef.current = stream;
+
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        await videoRef.current.play();
+      }
+
+      setIsActive(true);
+      setHasPermission(true);
+
+      // Get updated device list with labels
+      await getVideoDevices();
+
+      toast({
+        title: "Camera Started",
+        description: "Camera preview is now active.",
+      });
+    } catch (err: unknown) {
+      setError(
+        `Camera access failed: ${err instanceof Error ? err.message : "Unknown error"}`
+      );
+      setHasPermission(false);
+      setIsActive(false);
+
+      toast({
+        title: "Camera Error",
+        description:
+          err instanceof Error ? err.message : "Failed to start camera preview",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const stopCamera = useCallback(() => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current = null;
+    }
+
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
+
+    setIsActive(false);
+
+    toast({
+      title: "Camera Stopped",
+      description: "Camera preview has been stopped.",
+    });
+  }, [toast]);
+
+  const capturePhoto = () => {
+    if (!videoRef.current || !canvasRef.current) return;
+
+    const canvas = canvasRef.current;
+    const video = videoRef.current;
+    const context = canvas.getContext("2d");
+
+    if (!context) return;
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    context.drawImage(video, 0, 0);
+
+    // Create download link
+    canvas.toBlob(blob => {
+      if (!blob) return;
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `camera-capture-${Date.now()}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      toast({
+        title: "Photo Captured",
+        description: "Your snapshot has been downloaded.",
+      });
+    });
+  };
+
+  useEffect(() => {
+    // Check permission status using Permissions API
+    const checkPermissionStatus = async () => {
+      try {
+        const permissionStatus = await navigator.permissions.query({
+          name: "camera" as PermissionName,
+        });
+        if (permissionStatus.state === "granted") {
+          setHasPermission(true);
+        } else if (permissionStatus.state === "denied") {
+          setHasPermission(false);
+        }
+        // If "prompt", leave as null (Not Requested)
+      } catch {
+        // Permissions API not supported, fall back to device label check
+      }
+    };
+
+    // Get basic device info without permission on mount
+    const getBasicDevices = async () => {
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoDevices = devices.filter(
+          device => device.kind === "videoinput"
+        );
+        if (videoDevices.length > 0) {
+          setDevices(videoDevices);
+          // If devices have labels, permission was previously granted (fallback check)
+          if (videoDevices.some(device => device.label)) {
+            setHasPermission(true);
+          }
+        }
+      } catch (err: unknown) {
+        setError(
+          `Failed to get basic devices: ${err instanceof Error ? err.message : "Unknown error"}`
+        );
+      }
+    };
+
+    checkPermissionStatus();
+    getBasicDevices();
+
+    const videoEl = videoRef.current;
+    const stream = streamRef.current;
+    return () => {
+      // Clean up silently on unmount without showing a toast
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        streamRef.current = null;
+      }
+      if (videoEl) {
+        videoEl.srcObject = null;
+      }
+      setIsActive(false);
+    };
+  }, []);
+
+  const getPermissionStatus = () => {
+    if (hasPermission === null)
+      return { color: "text-gray-600", text: "Not Requested" };
+    if (hasPermission) return { color: "text-green-600", text: "Granted" };
+    return { color: "text-red-600", text: "Denied" };
+  };
+
+  const permissionStatus = getPermissionStatus();
+
+  return (
+    <div className="max-w-6xl mx-auto">
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              Camera Test
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Test your camera functionality and capture photos
+            </p>
+          </div>
+          <SecurityBanner variant="compact" />
+        </div>
+      </div>
+
+      {error ? (
+        <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
+          <AlertDescription className="text-red-800 dark:text-red-200">
+            {error}
+          </AlertDescription>
+        </Alert>
+      ) : null}
+
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            Camera Controls
+            <Badge variant="outline" className={permissionStatus.color}>
+              Permission: {permissionStatus.text}
+            </Badge>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {devices.length > 0 && devices.some(device => device.label) && (
+            <div>
+              <Label htmlFor="device-select">Camera Device</Label>
+              <Select
+                value={selectedDevice || ""}
+                onValueChange={setSelectedDevice}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select camera device..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {devices.map(device => (
+                    <SelectItem
+                      key={device.deviceId}
+                      value={
+                        device.deviceId ||
+                        `device-${Math.random().toString(36).substr(2, 9)}`
+                      }
+                    >
+                      {device.label ||
+                        `Camera ${device.deviceId?.slice(0, 8) || "Unknown"}...`}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
+          <ToolButtonGroup>
+            <ActionButtonGroup>
+              {(() => {
+                const needsPermission =
+                  !hasPermission &&
+                  !(devices.length > 0 && devices.some(device => device.label));
+                if (needsPermission) {
+                  return (
+                    <ToolButton
+                      variant="custom"
+                      onClick={requestPermission}
+                      tooltip="Request camera access permission"
+                      icon={<Camera className="w-4 h-4 mr-2" />}
+                      className="bg-blue-600 hover:bg-blue-700 text-white"
+                    >
+                      Request Camera Permission
+                    </ToolButton>
+                  );
+                }
+                if (!isActive) {
+                  return (
+                    <ToolButton
+                      variant="custom"
+                      onClick={startCamera}
+                      tooltip="Start the camera preview"
+                      icon={<Play className="w-4 h-4 mr-2" />}
+                      className="bg-green-600 hover:bg-green-700 text-white disabled:opacity-50"
+                    >
+                      Start Camera
+                    </ToolButton>
+                  );
+                }
+                return (
+                  <ToolButton
+                    variant="custom"
+                    onClick={stopCamera}
+                    tooltip="Stop the camera preview"
+                    icon={<Square className="w-4 h-4 mr-2" />}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Stop Camera
+                  </ToolButton>
+                );
+              })()}
+              <ToolButton
+                variant="custom"
+                onClick={capturePhoto}
+                disabled={!isActive}
+                tooltip="Capture and download a photo"
+                icon={<Download className="w-4 h-4 mr-2" />}
+                className="bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
+              >
+                Capture Photo
+              </ToolButton>
+            </ActionButtonGroup>
+          </ToolButtonGroup>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Camera Preview</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div
+            className="relative bg-black rounded-lg overflow-hidden"
+            style={{ aspectRatio: "16/9" }}
+          >
+            <video
+              ref={videoRef}
+              className="w-full h-full object-cover"
+              autoPlay
+              playsInline
+              muted
+            />
+            {!isActive && (
+              <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800">
+                <div className="text-center text-gray-600 dark:text-gray-400">
+                  <Camera className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                  <div>Camera preview will appear here</div>
+                  <div className="text-sm mt-2">
+                    Click &quot;Start Camera&quot; to begin
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <canvas ref={canvasRef} className="hidden" />
+
+          {isActive ? (
+            <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+              <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                <div className="font-semibold text-green-700 dark:text-green-300">
+                  Status
+                </div>
+                <div className="text-green-600 dark:text-green-400">
+                  Camera Active
+                </div>
+              </div>
+              <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                <div className="font-semibold text-blue-700 dark:text-blue-300">
+                  Resolution
+                </div>
+                <div className="text-blue-600 dark:text-blue-400">
+                  {videoRef.current?.videoWidth}x{videoRef.current?.videoHeight}
+                </div>
+              </div>
+            </div>
+          ) : null}
+        </CardContent>
+      </Card>
+
+      <ToolExplanations explanations={tool?.explanations} />
+    </div>
+  );
+}

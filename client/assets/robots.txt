@@ -1,0 +1,4 @@
+# non-prod
+
+User-agent: *
+Disallow: /

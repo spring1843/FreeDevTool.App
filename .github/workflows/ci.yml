@@ -1,0 +1,103 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: ${{ github.event_name != 'push' || github.ref != 'refs/heads/main' }}
+
+jobs:
+  ci:
+    container: ghcr.io/spring1843/freedevtool.app/e2e:v0.0.4
+    name: Continuous Integration
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - run: git config --global --add safe.directory $(pwd)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24.6.0"
+          cache: "npm"
+
+      - run: make install
+      - run: make type-check
+      - run: make test
+      - run: make format-check
+      - run: make lint
+      - run: make knip
+      - run: make build
+      - run: make format
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: dist/
+          retention-days: 7
+
+      - run: make e2e-install
+      - run: make e2e-test
+
+        # Running the above should not cause a git diff.
+        # Investigate why this file change occurred and eliminate the cause
+      - name: Check for changes
+        run: git diff --exit-code
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 7
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3.6.0
+        with:
+          registry: https://ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Images when a PR is opened
+        if: github.event_name == 'pull_request'
+        run: make build-all-images
+
+      - name: Build and Push Images when merged to main
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: make build-and-push-image
+
+      - name: Configure AWS Credentials
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: aws-actions/configure-aws-credentials@v5.1.0
+        with:
+          role-to-assume: "arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/${{ vars.AWS_ROLE_STAGE }}"
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Deploy to Stage
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: make deploy-to-stage
+
+      - name: Preload Stage Cache Few Times
+        run: |
+          make warm-cache-stage
+          make warm-cache-stage
+          make warm-cache-stage
+
+      - name: Run E2E Tests Against Stage For Cache Warming
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        continue-on-error: true
+        run: TARGET=https://stage.freedevtool.app make e2e-test

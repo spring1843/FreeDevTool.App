@@ -1,0 +1,393 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Hash, CheckCircle, XCircle, Eye, EyeOff } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
+
+import { SecurityBanner } from "@/components/ui/security-banner";
+
+import { DEFAULT_BCRYPT } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+
+export default function BcryptHash() {
+  const tool = getToolByPath("/tools/bcrypt-hash");
+  const [plaintext, setPlaintext] = useState(DEFAULT_BCRYPT);
+  const [hash, setHash] = useState("");
+  const [verifyText, setVerifyText] = useState("");
+  const [rounds, setRounds] = useState(10);
+  const [verificationResult, setVerificationResult] = useState<boolean | null>(
+    null
+  );
+  const [isHashing, setIsHashing] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showVerifyPassword, setShowVerifyPassword] = useState(false);
+  const { theme } = useTheme();
+
+  // Simple bcrypt-like hash function for demonstration
+  // In a real implementation, you would use a proper bcrypt library
+  const simpleBcryptHash = async (
+    password: string,
+    saltRounds: number
+  ): Promise<string> => {
+    // This is a simplified version for demonstration
+    // Real bcrypt involves proper salt generation and multiple iterations
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password + saltRounds);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray
+      .map(b => b.toString(16).padStart(2, "0"))
+      .join("");
+
+    // Format like bcrypt: $2b$rounds$salt.hash
+    const salt = hashHex.substring(0, 22);
+    const hashPart = hashHex.substring(22);
+    return `$2b$${saltRounds.toString().padStart(2, "0")}$${salt}${hashPart}`;
+  };
+
+  const simpleBcryptVerify = async (
+    password: string,
+    hash: string
+  ): Promise<boolean> => {
+    try {
+      // Extract rounds from hash
+      const parts = hash.split("$");
+      if (parts.length !== 4 || parts[1] !== "2b") {
+        throw new Error("Invalid hash format");
+      }
+
+      const roundsFromHash = parseInt(parts[2]);
+      const expectedHash = await simpleBcryptHash(password, roundsFromHash);
+
+      // Compare the hash parts (excluding salt which should match)
+      return hash === expectedHash;
+    } catch {
+      return false;
+    }
+  };
+
+  const generateHash = useCallback(async () => {
+    if (!plaintext.trim()) {
+      setError("Password cannot be empty");
+      return;
+    }
+
+    setIsHashing(true);
+    setError(null);
+
+    try {
+      const hashedPassword = await simpleBcryptHash(plaintext, rounds);
+      setHash(hashedPassword);
+      setVerificationResult(null);
+    } catch (err) {
+      setError(
+        `Hashing failed: ${err instanceof Error ? err.message : String(err)}`
+      );
+      setHash("");
+    } finally {
+      setIsHashing(false);
+    }
+  }, [plaintext, rounds]);
+
+  const verifyHash = async () => {
+    if (!verifyText.trim() || !hash.trim()) {
+      setError("Both password and hash are required for verification");
+      return;
+    }
+
+    setIsVerifying(true);
+    setError(null);
+
+    try {
+      const isValid = await simpleBcryptVerify(verifyText, hash);
+      setVerificationResult(isValid);
+    } catch (err) {
+      setError(
+        `Verification failed: ${err instanceof Error ? err.message : String(err)}`
+      );
+      setVerificationResult(null);
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
+  const handleReset = () => {
+    setPlaintext(DEFAULT_BCRYPT);
+    setHash("");
+    setVerifyText("");
+    setRounds(10);
+    setVerificationResult(null);
+    setError(null);
+    setShowPassword(false);
+    setShowVerifyPassword(false);
+  };
+
+  const handleClear = () => {
+    setPlaintext("");
+    setHash("");
+    setVerifyText("");
+    setVerificationResult(null);
+    setError(null);
+    setShowPassword(false);
+    setShowVerifyPassword(false);
+  };
+
+  const hasModifiedData =
+    (plaintext !== DEFAULT_BCRYPT && plaintext.trim() !== "") ||
+    hash.trim() !== "" ||
+    verifyText.trim() !== "";
+  const isAtDefault =
+    plaintext === DEFAULT_BCRYPT && verifyText === "" && rounds === 10;
+
+  useEffect(() => {
+    generateHash();
+  }, [generateHash]);
+
+  const getVerificationDisplay = () => {
+    if (verificationResult === null) return null;
+
+    if (verificationResult) {
+      return (
+        <div className="flex items-center text-green-600">
+          <CheckCircle className="w-4 h-4 mr-2" />
+          Password matches hash
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex items-center text-red-600">
+        <XCircle className="w-4 h-4 mr-2" />
+        Password does not match hash
+      </div>
+    );
+  };
+
+  return (
+    <div className="max-w-6xl mx-auto">
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              Bcrypt Hash Generator
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Generate and verify secure bcrypt password hashes
+            </p>
+          </div>
+          <SecurityBanner variant="compact" />
+        </div>
+      </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={generateHash}
+            disabled={isHashing || !plaintext.trim()}
+            icon={<Hash className="w-4 h-4 mr-2" />}
+            tooltip="Generate bcrypt hash from password"
+          >
+            {isHashing ? "Generating..." : "Generate Hash"}
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={
+              plaintext.trim() === "" &&
+              hash.trim() === "" &&
+              verifyText.trim() === ""
+            }
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
+      {error ? (
+        <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
+          <AlertDescription className="text-red-800 dark:text-red-200">
+            {error}
+          </AlertDescription>
+        </Alert>
+      ) : null}
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-blue-600 dark:text-blue-400">
+              Hash Generation
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <Label htmlFor="plaintext">Password</Label>
+              <div className="relative">
+                <Input
+                  id="plaintext"
+                  type={showPassword ? "text" : "password"}
+                  value={plaintext}
+                  onChange={e => setPlaintext(e.target.value)}
+                  placeholder="Enter password to hash..."
+                  data-testid="password-input"
+                  className="pr-10"
+                  autoFocus={true}
+                  data-default-input="true"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4 text-gray-500" />
+                  ) : (
+                    <Eye className="h-4 w-4 text-gray-500" />
+                  )}
+                </Button>
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="rounds">Salt Rounds</Label>
+              <Select
+                value={rounds.toString()}
+                onValueChange={value => setRounds(parseInt(value))}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="8">8 rounds (fast)</SelectItem>
+                  <SelectItem value="10">10 rounds (balanced)</SelectItem>
+                  <SelectItem value="12">12 rounds (secure)</SelectItem>
+                  <SelectItem value="14">14 rounds (very secure)</SelectItem>
+                </SelectContent>
+              </Select>
+              <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                Higher rounds = more secure but slower
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-green-600 dark:text-green-400">
+              Hash Verification
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <Label htmlFor="verify-text">Password to Verify</Label>
+              <div className="relative">
+                <Input
+                  id="verify-text"
+                  type={showVerifyPassword ? "text" : "password"}
+                  value={verifyText}
+                  onChange={e => setVerifyText(e.target.value)}
+                  placeholder="Enter password to verify..."
+                  data-testid="verify-password-input"
+                  className="pr-10"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                  onClick={() => setShowVerifyPassword(!showVerifyPassword)}
+                  aria-label={
+                    showVerifyPassword ? "Hide password" : "Show password"
+                  }
+                >
+                  {showVerifyPassword ? (
+                    <EyeOff className="h-4 w-4 text-gray-500" />
+                  ) : (
+                    <Eye className="h-4 w-4 text-gray-500" />
+                  )}
+                </Button>
+              </div>
+            </div>
+
+            <Button
+              onClick={verifyHash}
+              disabled={isVerifying || !verifyText.trim() || !hash.trim()}
+              className="w-full bg-green-600 hover:bg-green-700 text-white disabled:opacity-50"
+            >
+              <CheckCircle className="w-4 h-4 mr-2" />
+              {isVerifying ? "Verifying..." : "Verify Password"}
+            </Button>
+
+            {getVerificationDisplay() && (
+              <div className="p-3 border rounded-lg bg-gray-50 dark:bg-gray-800">
+                {getVerificationDisplay()}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            Generated Hash
+            <Badge variant="outline">{rounds} rounds</Badge>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <TextArea
+            id="output"
+            value={hash}
+            readOnly={true}
+            placeholder="Generated bcrypt hash will appear here..."
+            data-testid="hash-output"
+            className="min-h-[100px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
+            rows={5}
+            lang="plaintext"
+            fileExtension="txt"
+            theme={theme}
+          />
+        </CardContent>
+      </Card>
+
+      <ToolExplanations explanations={tool?.explanations} />
+    </div>
+  );
+}

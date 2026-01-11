@@ -1,0 +1,242 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { TextArea } from "@/components/ui/textarea";
+import { useTheme } from "@/providers/theme-provider";
+import { formatHTML } from "@/lib/formatters";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Code, Minimize2, AlertTriangle } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
+import { DEFAULT_HTML } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+
+import { SecurityBanner } from "@/components/ui/security-banner";
+
+interface ValidationIssue {
+  type: "error" | "warning";
+  message: string;
+  line?: number;
+  column?: number;
+}
+
+export default function HTMLFormatter() {
+  const tool = getToolByPath("/tools/html-formatter");
+  const [input, setInput] = useState(DEFAULT_HTML);
+  const [output, setOutput] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [warnings, setWarnings] = useState<ValidationIssue[]>([]);
+  const { theme } = useTheme();
+
+  const formatCode = useCallback(
+    async (minify = false) => {
+      try {
+        const {
+          formatted,
+          error: formatError,
+          warnings: formatWarnings,
+        } = await formatHTML(input, minify);
+        setOutput(formatted);
+        setError(formatError || null);
+        setWarnings(formatWarnings || []);
+      } catch (error) {
+        setError(
+          `Formatting error: ${error instanceof Error ? error.message : "Unknown error"}`
+        );
+        setOutput("");
+        setWarnings([]);
+      }
+    },
+    [input]
+  );
+
+  const handleInputChange = (value: string) => {
+    setInput(value);
+    if (output) {
+      setOutput("");
+      setWarnings([]);
+    }
+  };
+
+  const handleReset = () => {
+    setInput(DEFAULT_HTML);
+    setOutput("");
+    setError(null);
+    setWarnings([]);
+  };
+
+  const handleClear = () => {
+    setInput("");
+    setOutput("");
+    setError(null);
+    setWarnings([]);
+  };
+
+  const hasModifiedData = input !== DEFAULT_HTML && input.trim() !== "";
+  const isAtDefault = input === DEFAULT_HTML;
+
+  useEffect(() => {
+    formatCode(false); // Beautify by default
+  }, [formatCode]);
+
+  return (
+    <div className="max-w-6xl mx-auto">
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              HTML Formatter
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Format, beautify, or minify HTML code with validation
+            </p>
+          </div>
+          <SecurityBanner variant="compact" />
+        </div>
+      </div>
+
+      {error ? (
+        <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
+          <AlertDescription className="text-red-800 dark:text-red-200">
+            {error}
+          </AlertDescription>
+        </Alert>
+      ) : null}
+
+      {warnings.length > 0 && (
+        <Alert className="mb-6 border-yellow-200 bg-yellow-50 dark:bg-yellow-900/20">
+          <AlertTriangle className="h-4 w-4 text-yellow-600" />
+          <AlertDescription className="text-yellow-800 dark:text-yellow-200">
+            <div className="font-semibold mb-2">HTML Validation Issues:</div>
+            <div className="space-y-1 text-sm">
+              {warnings.slice(0, 5).map((warning, index) => (
+                <div key={index}>
+                  <span
+                    className={`font-medium ${warning.type === "error" ? "text-red-600" : "text-yellow-600"}`}
+                  >
+                    {warning.type === "error" ? "Error" : "Warning"}
+                  </span>
+                  {warning.line ? (
+                    <span className="text-gray-500">
+                      {" "}
+                      (Line {warning.line})
+                    </span>
+                  ) : null}
+                  : {warning.message}
+                </div>
+              ))}
+              {warnings.length > 5 && (
+                <div className="text-gray-600">
+                  ... and {warnings.length - 5} more issues
+                </div>
+              )}
+            </div>
+          </AlertDescription>
+        </Alert>
+      )}
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={() => formatCode(false)}
+            icon={<Code className="w-4 h-4 mr-2" />}
+            tooltip="Format and beautify HTML code"
+            className="bg-green-600 hover:bg-green-700 text-white"
+          >
+            Beautify HTML
+          </ToolButton>
+          <ToolButton
+            variant="custom"
+            onClick={() => formatCode(true)}
+            icon={<Minimize2 className="w-4 h-4 mr-2" />}
+            tooltip="Minify HTML to reduce file size"
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Minify HTML
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={input.trim() === "" && output.trim() === ""}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Input HTML</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TextArea
+              id="input"
+              value={input}
+              onChange={e => handleInputChange(e.target.value)}
+              placeholder="Paste your HTML here..."
+              data-testid="html-input"
+              className="min-h-[400px] font-mono text-sm"
+              rows={20}
+              autoFocus={true}
+              minHeight="400px"
+              fileExtension="html"
+              theme={theme}
+              lang="html"
+              data-default-input="true"
+            />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              Formatted Output
+              {warnings.length > 0 && (
+                <span className="flex items-center text-yellow-600 text-sm">
+                  <AlertTriangle className="w-4 h-4 mr-1" />
+                  {warnings.length} issues
+                </span>
+              )}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TextArea
+              id="output"
+              value={output}
+              readOnly={true}
+              placeholder="Formatted HTML will appear here..."
+              data-testid="html-output"
+              className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
+              minHeight="400px"
+              rows={20}
+              lang="html"
+              fileExtension="html"
+              theme={theme}
+            />
+          </CardContent>
+        </Card>
+      </div>
+
+      <ToolExplanations explanations={tool?.explanations} />
+    </div>
+  );
+}

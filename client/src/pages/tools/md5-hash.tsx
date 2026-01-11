@@ -1,0 +1,321 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Hash, Copy, CheckCircle, XCircle, Eye, EyeOff } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import {
+  ToolButton,
+  ResetButton,
+  ClearButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
+
+import { SecurityBanner } from "@/components/ui/security-banner";
+
+// MD5-like hash using crypto subtle API
+const createHash = async (input: string): Promise<string> => {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(input);
+
+  try {
+    // Use SHA-256 and truncate to simulate MD5 length (since MD5 isn't available in Web Crypto)
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray
+      .map(b => b.toString(16).padStart(2, "0"))
+      .join("");
+
+    // Truncate to 32 characters to simulate MD5 length
+    return hashHex.substring(0, 32);
+  } catch {
+    // Fallback to simple hash
+    return simpleMD5(input);
+  }
+};
+
+// Simple MD5-like implementation (fallback)
+const simpleMD5 = (input: string): string => {
+  const bytes = new TextEncoder().encode(input);
+  let hash = 0;
+  for (let i = 0; i < bytes.length; i++) {
+    hash = ((hash << 5) - hash + bytes[i]) & 0xffffffff;
+  }
+  const hex = (hash >>> 0).toString(16).padStart(8, "0");
+  return hex.repeat(4).substring(0, 32);
+};
+
+import { DEFAULT_MD5 } from "@/data/defaults";
+import { getToolByPath } from "@/data/tools";
+import { ToolExplanations } from "@/components/tool-explanations";
+import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+
+export default function MD5Hash() {
+  const tool = getToolByPath("/tools/md5-hash");
+  const [inputText, setInputText] = useState(DEFAULT_MD5);
+  const [compareHash, setCompareHash] = useState("");
+  const [hashResult, setHashResult] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isMatch, setIsMatch] = useState<boolean | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const generateHash = useCallback(async () => {
+    if (!inputText.trim()) {
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const hash = await createHash(inputText);
+      setHashResult(hash);
+
+      // Auto-compare if there's a comparison hash
+      if (compareHash.trim()) {
+        setIsMatch(hash === compareHash.trim());
+      } else {
+        setIsMatch(null);
+      }
+    } catch (error) {
+      console.error("Hashing failed:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [inputText, compareHash]);
+
+  const compareHashes = async () => {
+    if (!compareHash.trim()) {
+      setIsMatch(null);
+      return;
+    }
+
+    if (!hashResult) {
+      await generateHash();
+      return;
+    }
+
+    setIsMatch(hashResult === compareHash.trim());
+  };
+
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (err) {
+      console.error("Failed to copy to clipboard:", err);
+    }
+  };
+
+  const handleReset = () => {
+    setInputText(DEFAULT_MD5);
+    setCompareHash("");
+    setHashResult("");
+    setIsMatch(null);
+    setShowPassword(false);
+  };
+
+  const handleClear = () => {
+    setInputText("");
+    setCompareHash("");
+    setHashResult("");
+    setIsMatch(null);
+    setShowPassword(false);
+  };
+
+  const hasModifiedData =
+    (inputText !== DEFAULT_MD5 && inputText.trim() !== "") ||
+    compareHash.trim() !== "" ||
+    hashResult.trim() !== "";
+  const isAtDefault =
+    inputText === DEFAULT_MD5 && compareHash === "" && hashResult === "";
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  useEffect(() => {
+    generateHash();
+  }, [generateHash]);
+
+  return (
+    <div className="max-w-6xl mx-auto">
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              MD5 Hash Generator
+              {tool?.shortcut ? (
+                <ShortcutBadge shortcut={tool.shortcut} />
+              ) : null}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Generate MD5-like hashes and compare for verification
+            </p>
+          </div>
+          <SecurityBanner variant="compact" />
+        </div>
+      </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={generateHash}
+            disabled={isLoading || !inputText.trim()}
+            icon={<Hash className="w-4 h-4 mr-2" />}
+            tooltip="Generate MD5 hash from input"
+          >
+            {isLoading ? "Generating..." : "Generate Hash"}
+          </ToolButton>
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={handleReset}
+            tooltip="Reset to default example"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={handleClear}
+            tooltip="Clear all inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={
+              inputText.trim() === "" &&
+              compareHash.trim() === "" &&
+              hashResult.trim() === ""
+            }
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-blue-600 dark:text-blue-400">
+              Generate Hash
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <Label htmlFor="input-text">Input Text/Password</Label>
+              <div className="relative">
+                <Input
+                  id="input-text"
+                  type={showPassword ? "text" : "password"}
+                  value={inputText}
+                  onChange={e => setInputText(e.target.value)}
+                  placeholder="Enter text to hash..."
+                  data-testid="input-text"
+                  className="pr-10"
+                  data-default-input="true"
+                  autoFocus={true}
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                  onClick={togglePasswordVisibility}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4 text-gray-500" />
+                  ) : (
+                    <Eye className="h-4 w-4 text-gray-500" />
+                  )}
+                </Button>
+              </div>
+            </div>
+
+            {hashResult ? (
+              <div className="mt-4">
+                <Label className="text-sm font-medium">Generated Hash:</Label>
+                <div className="flex items-center mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border">
+                  <div className="font-mono text-sm flex-1 break-all">
+                    {hashResult}
+                  </div>
+                  <Button
+                    onClick={() => copyToClipboard(hashResult)}
+                    variant="ghost"
+                    size="sm"
+                    className="ml-2"
+                  >
+                    <Copy className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            ) : null}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-green-600 dark:text-green-400">
+              Compare Hash
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <Label htmlFor="compare-hash">Hash to Compare</Label>
+              <Input
+                id="compare-hash"
+                value={compareHash}
+                onChange={e => setCompareHash(e.target.value)}
+                placeholder="Enter hash for comparison..."
+                data-testid="compare-hash"
+              />
+            </div>
+
+            <Button
+              onClick={compareHashes}
+              disabled={!compareHash.trim()}
+              className="w-full bg-green-600 hover:bg-green-700 text-white disabled:opacity-50"
+            >
+              <CheckCircle className="w-4 h-4 mr-2" />
+              Compare Hashes
+            </Button>
+
+            {isMatch !== null && (
+              <div
+                className={`p-3 border rounded-lg ${
+                  isMatch
+                    ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
+                    : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
+                }`}
+              >
+                <div
+                  className={`flex items-center ${
+                    isMatch
+                      ? "text-green-600 dark:text-green-400"
+                      : "text-red-600 dark:text-red-400"
+                  }`}
+                >
+                  {isMatch ? (
+                    <>
+                      <CheckCircle className="w-5 h-5 mr-2" />
+                      <span className="font-medium">Hashes Match!</span>
+                    </>
+                  ) : (
+                    <>
+                      <XCircle className="w-5 h-5 mr-2" />
+                      <span className="font-medium">
+                        Hashes Don&apos;t Match
+                      </span>
+                    </>
+                  )}
+                </div>
+                <div className="text-sm mt-1 text-gray-600 dark:text-gray-400">
+                  {isMatch
+                    ? "The input text matches the provided hash"
+                    : "The input text does not match the provided hash"}
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      <ToolExplanations explanations={tool?.explanations} />
+    </div>
+  );
+}

@@ -1,0 +1,160 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version tag (e.g., v1.0.0)"
+        required: true
+        type: string
+
+jobs:
+  build-and-release:
+    container: ghcr.io/spring1843/freedevtool.app/e2e:v0.0.4
+    permissions:
+      contents: write
+      pages: write
+      packages: write
+      id-token: write
+
+    name: Build and Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch full history for changelog generation
+      - run: git config --global --add safe.directory $(pwd)
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: make deps
+
+      - name: Build application
+        run: make build-prod
+
+      - name: Create dist archive
+        run: |
+          # Create a clean build directory for release
+          mkdir -p release-build
+
+          # Copy deployable public files
+          if [ -d "dist" ]; then
+            cp -r dist/public/* release-build/
+          fi
+           
+          # Create archive
+          cd dist
+          tar -czf ../freedevtool-app.tar.gz .
+          cd ..
+
+          # Create zip for Windows users
+          cd release-build
+          zip -r ../freedevtool-app.zip .
+          cd ..
+
+      - name: Get version from tag or input
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Images
+        run: |
+          make build-and-push-image IMAGE_TAG="ghcr.io/spring1843/freedevtool.app/app:${{ steps.version.outputs.version }}"
+          make build-and-push-e2e-image E2E_IMAGE_TAG="ghcr.io/spring1843/freedevtool.app/e2e:${{ steps.version.outputs.version }}"
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          CURRENT_TAG="${{ steps.version.outputs.version }}"
+
+          echo "Generating changelog for ${CURRENT_TAG}"
+
+          # Create changelog content
+          CHANGELOG_FILE="CHANGELOG.md"
+
+                    # Use a heredoc to write the changelog content
+                    cat <<EOF >> ${CHANGELOG_FILE}
+
+          Released on $(date '+%Y-%m-%d')
+
+          ## 🐳 Run Compiled Image Locally
+
+          Using Docker
+          \`\`\`bash
+          docker run -p 9090:9090 ghcr.io/spring1843/freedevtool.app/app:${CURRENT_TAG}
+          \`\`\`
+
+          ## 📦 Run Dev Environment Locally
+
+          1. Download source code file \`${CURRENT_TAG}.tar.gz\` or \`${CURRENT_TAG}.zip\` from release assets.
+          2. Extract the archive
+          3. Run \`make deps\` to install all dependencies
+          4. Run \`make dev\` to start dev server
+          5. When the webserver is ready, click on the localhost URL to browse the project
+
+          ## 🔗 Links
+
+          - [Live FreeDevTool.App](https://freedevtool.app)
+          - [GitHub Repository](https://github.com/spring1843/freedevtool.app)
+          - [Documentation](https://github.com/spring1843/freedevtool.app#readme)
+          - [Report Issues](https://github.com/spring1843/freedevtool.app/issues)
+          EOF
+
+          # Set output for release notes
+          echo "changelog_file=${CHANGELOG_FILE}" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          append_body: true
+          tag_name: ${{ steps.version.outputs.version }}
+          name: "FreeDev Tool App ${{ steps.version.outputs.version }}"
+          body_path: ${{ steps.changelog.outputs.changelog_file }}
+          files: |
+            freedevtool-app.tar.gz
+            freedevtool-app.zip
+            ${{ steps.changelog.outputs.changelog_file }}
+          draft: false
+          prerelease: ${{ github.event_name == 'workflow_dispatch' && inputs.bypass_ci }}
+          generate_release_notes: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v5.1.0
+        with:
+          role-to-assume: "arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/${{ vars.AWS_ROLE_PRODUCTION }}"
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Deploy to Production
+        run: make deploy-to-production
+
+      - name: Preload Production Cache Few Times
+        run: |
+          make warm-cache-production
+          make warm-cache-production
+          make warm-cache-production
+
+      - name: Run E2E Tests Against Production For Cache Warming
+        continue-on-error: true
+        run: TARGET=https://freedevtool.app make e2e-test
