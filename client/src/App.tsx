@@ -6,7 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { DemoProvider } from "@/providers/demo-provider";
-import { Layout } from "@/components/layout/Layout";
+import { AppLayout } from "@/components/layout/AppLayout";
 import { ScrollToTop } from "@/components/ScrollToTop";
 
 // Eager load home page for fast initial load
@@ -80,7 +80,6 @@ const NotFound = lazy(() => import("@/pages/not-found"));
 
 function Router() {
   return (
-    <Layout>
       <Suspense
         fallback={
           <div className="flex items-center justify-center min-h-screen">
@@ -175,7 +174,7 @@ function Router() {
             path="/tools/color-palette-generator"
             component={ColorPaletteGenerator}
           />
-
+  
           {/* Hardware Tools */}
           <Route path="/tools/webcam-test" component={CameraTest} />
           <Route path="/tools/microphone-test" component={MicrophoneTest} />
@@ -188,7 +187,6 @@ function Router() {
           <Route component={NotFound} />
         </Switch>
       </Suspense>
-    </Layout>
   );
 }
 
@@ -200,7 +198,9 @@ function App() {
           <TooltipProvider>
             <Toaster />
             <ScrollToTop />
-            <Router />
+            <AppLayout>
+              <Router />
+            </AppLayout>
           </TooltipProvider>
         </DemoProvider>
       </QueryClientProvider>

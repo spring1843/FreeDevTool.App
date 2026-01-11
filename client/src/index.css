@@ -186,8 +186,8 @@
     color: white;
   }
 
-  /* Flat Design - Remove all rounded corners */
-  .rounded-none {
+  /* Flat Design - Disabled to allow rounded corners */
+  /* .rounded-none {
     border-radius: 0 !important;
   }
   .rounded {
@@ -213,17 +213,17 @@
   }
   .rounded-full {
     border-radius: 0 !important;
-  }
+  } */
 
-  /* Override component rounded corners */
-  .card,
+  /* Override component rounded corners - Disabled */
+  /* .card,
   .button,
   .input,
   .textarea,
   .select,
   .badge {
     border-radius: 0 !important;
-  }
+  } */
 
   /* Mind map specific styles */
   .mind-map-container {
@@ -372,10 +372,10 @@
     transform-origin: left center;
   }
 
-  /* Flat design - remove all border radius */
-  * {
+  /* Flat design - Disabled to allow rounded corners */
+  /* * {
     border-radius: 0 !important;
-  }
+  } */
 
   /* Mobile CodeMirror fix - prevent focus lock on mobile devices */
   /* Ensure CodeMirror allows touch events to propagate properly */
