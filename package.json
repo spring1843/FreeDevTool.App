@@ -4,7 +4,7 @@
   "type": "module",
   "license": "Apache-2.0",
   "scripts": {
-    "dev": " tsx dev-server/index.ts",
+    "dev": "tsx dev-server/index.ts",
     "check": "tsc",
     "build": "vite build && tsx scripts/generate-static-routes.ts",
     "knip": "knip",
