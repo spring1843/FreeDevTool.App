@@ -197,11 +197,11 @@ function App() {
     <ThemeProvider>
       <QueryClientProvider client={queryClient}>
         <DemoProvider>
-            <TooltipProvider>
-              <Toaster />
-              <ScrollToTop />
-              <Router />
-            </TooltipProvider>
+          <TooltipProvider>
+            <Toaster />
+            <ScrollToTop />
+            <Router />
+          </TooltipProvider>
         </DemoProvider>
       </QueryClientProvider>
     </ThemeProvider>

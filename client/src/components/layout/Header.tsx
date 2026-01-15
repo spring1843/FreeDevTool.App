@@ -1,4 +1,4 @@
-import { Search, Moon, Sun, Menu, X, Play, Pause, PanelLeft, PanelLeftClose } from "lucide-react";
+import { Search, Moon, Sun, X, Play, Pause, PanelLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -87,6 +87,9 @@ export function Header({ onMenuClick }: HeaderProps) {
         setShowResults(false);
         resetSelection();
         break;
+
+      default:
+        break;
     }
   };
 
@@ -101,8 +104,7 @@ export function Header({ onMenuClick }: HeaderProps) {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
@@ -132,7 +134,10 @@ export function Header({ onMenuClick }: HeaderProps) {
           </Button>
 
           {/* Search */}
-          <div className="relative flex-1 w-full max-w-[160px] sm:max-w-[240px] md:max-w-[320px] lg:max-w-[380px]" ref={searchRef}>
+          <div
+            className="relative flex-1 w-full max-w-[160px] sm:max-w-[240px] md:max-w-[320px] lg:max-w-[380px]"
+            ref={searchRef}
+          >
             <Search
               className="
                 absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4
@@ -144,11 +149,9 @@ export function Header({ onMenuClick }: HeaderProps) {
               type="text"
               placeholder={`Search ${getToolsCount()} tools... (Ctrl+S)`}
               value={searchQuery}
-              onChange={(e) => handleSearchChange(e.target.value)}
+              onChange={e => handleSearchChange(e.target.value)}
               onKeyDown={handleSearchKeyDown}
-              onFocus={() =>
-                setShowResults(searchQuery.trim().length > 0)
-              }
+              onFocus={() => setShowResults(searchQuery.trim().length > 0)}
               className="
                 pl-10 pr-8 rounded-lg
                 bg-slate-100 text-slate-900 placeholder-slate-500
@@ -158,7 +161,7 @@ export function Header({ onMenuClick }: HeaderProps) {
               "
               data-testid="search-input"
             />
-            {searchQuery && (
+            {searchQuery ? (
               <Button
                 variant="ghost"
                 size="sm"
@@ -172,9 +175,9 @@ export function Header({ onMenuClick }: HeaderProps) {
               >
                 <X className="h-3 w-3" />
               </Button>
-            )}
+            ) : null}
 
-            {showResults && (
+            {showResults ? (
               <SearchResults
                 results={searchResults}
                 selectedIndex={selectedIndex}
@@ -183,7 +186,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                   setSearchQuery("");
                 }}
               />
-            )}
+            ) : null}
           </div>
         </div>
 
@@ -208,7 +211,7 @@ export function Header({ onMenuClick }: HeaderProps) {
           )}
 
           {/* DEMO CONTROLS */}
-          {isDemoRunning && (
+          {isDemoRunning ? (
             <div className="flex items-center gap-2">
               {!isDemoPaused ? (
                 <button
@@ -245,7 +248,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                 <X className="h-4 w-4" />
               </button>
             </div>
-          )}
+          ) : null}
 
           {/* Theme Toggle */}
           <Tooltip>

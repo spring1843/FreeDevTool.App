@@ -439,7 +439,7 @@
     list-style-position: inside;
   }
 
-  .exp-block li+li {
+  .exp-block li + li {
     margin-top: 0.25rem;
   }
 
@@ -710,7 +710,7 @@
     font-size: 0.875rem;
   }
 
-  .exp-examples div+div {
+  .exp-examples div + div {
     margin-top: 0.25rem;
   }
 
@@ -905,14 +905,13 @@
     border-radius: 8px !important;
   }
 
-  .bg-color{
+  .bg-color {
     background-color: #192137 !important;
-    border: 1px solid #2A364B !important;
+    border: 1px solid #2a364b !important;
   }
 
-  .mg-bottom{
+  .mg-bottom {
     margin-bottom: 14px !important;
     margin-top: 14px !important;
   }
-
 }

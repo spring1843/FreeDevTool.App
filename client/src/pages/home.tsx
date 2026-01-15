@@ -38,15 +38,14 @@ export default function Home() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
+      setCurrentSlide(prev => (prev + 1) % slides.length);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [slides.length]);
 
   return (
     <div className="max-w-[1400px] mx-auto">
-
       {/* ================= HERO / TRUST SLIDER ================= */}
       <div className="relative mb-14">
         {/* GLASS SLIDER */}
@@ -140,7 +139,7 @@ export default function Home() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {data.tools.map((tool) => (
+              {data.tools.map(tool => (
                 <Link key={tool.path} href={tool.path}>
                   <Card
                     className="

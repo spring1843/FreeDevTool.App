@@ -1,6 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { useEffect, useState } from "react";
 import {
+  LucideIcon,
   Home,
   ChevronRight,
   ChevronDown,
@@ -64,12 +65,11 @@ import {
 } from "lucide-react";
 import { toolsData } from "@/data/tools";
 import { cn } from "@/lib/utils";
-import type { LucideIcon } from "lucide-react";
 
 interface SidebarProps {
   collapsed: boolean;
   onToolClick?: () => void;
-  onExpandRequest: (category: string) => void;
+  onExpandRequest?: (category: string) => void;
 }
 
 const CATEGORY_ICONS: Record<string, LucideIcon> = {
@@ -129,11 +129,11 @@ const TOOL_ICONS: Record<string, LucideIcon> = {
 
   // ===== Time Tools =====
   "World Clock": Globe2,
-  "Timer": Timer,
-  "Stopwatch": TimerReset,
-  "Countdown": Hourglass,
+  Timer,
+  Stopwatch: TimerReset,
+  Countdown: Hourglass,
   "Date/Time Difference": CalendarClock,
-  "Metronome": KeyboardMusic,
+  Metronome: KeyboardMusic,
 
   // ===== Financial Tools =====
   "Compound Interest": Percent,
@@ -160,7 +160,7 @@ export function Sidebar({
   // Auto-open category based on route
   useEffect(() => {
     for (const [category, data] of Object.entries(toolsData)) {
-      if (data.tools.some((tool) => tool.path === location)) {
+      if (data.tools.some(tool => tool.path === location)) {
         setOpenCategory(category);
         break;
       }
@@ -184,7 +184,7 @@ export function Sidebar({
           "border-slate-200 dark:border-slate-800"
         )}
       >
-        <div className="h-11 w-11 flex-shrink-0 rounded-xl bg-blue-500 flex items-center justify-center">
+        <div className="h-11 w-11 flex-shrink-0 rounded-lg bg-blue-500 flex items-center justify-center">
           <img
             src="/assets/favicon-32x32.png"
             alt="FreeDevTool Logo"
@@ -194,9 +194,7 @@ export function Sidebar({
 
         {!collapsed && (
           <div>
-            <div className="font-semibold leading-tight">
-              FreeDevTool
-            </div>
+            <div className="font-semibold leading-tight">FreeDevTool</div>
             <div className="text-xs text-slate-500 dark:text-slate-400">
               Secure Developer Tools
             </div>
@@ -210,7 +208,7 @@ export function Sidebar({
         <Link href="/">
           <a
             onClick={() => {
-              if (collapsed) onExpandRequest("Home");
+              if (collapsed) onExpandRequest?.("Home");
               onToolClick?.();
             }}
             className={cn(
@@ -239,7 +237,7 @@ export function Sidebar({
                 type="button"
                 onClick={() => {
                   if (collapsed) {
-                    onExpandRequest(category);
+                    onExpandRequest?.(category);
                     setOpenCategory(category);
                   } else {
                     setOpenCategory(isOpen ? null : category);
@@ -254,7 +252,7 @@ export function Sidebar({
                 )}
               >
                 <div className="flex items-center gap-3">
-                  {Icon && <Icon className="h-5 w-5" />}
+                  {Icon ? <Icon className="h-5 w-5" /> : null}
                   {!collapsed && <span>{category}</span>}
                 </div>
 
@@ -266,9 +264,9 @@ export function Sidebar({
                   ))}
               </button>
 
-              {!collapsed && isOpen && (
+              {!collapsed && isOpen ? (
                 <div className="ml-7 mt-1 space-y-1">
-                  {data.tools.map((tool) => {
+                  {data.tools.map(tool => {
                     const ToolIcon = TOOL_ICONS[tool.name];
 
                     if (!ToolIcon) {
@@ -294,7 +292,7 @@ export function Sidebar({
                     );
                   })}
                 </div>
-              )}
+              ) : null}
             </div>
           );
         })}

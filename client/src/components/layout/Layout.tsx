@@ -11,10 +11,8 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { useLocation } from "wouter";
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const [location] = useLocation();
   const [headerCollapsed, setHeaderCollapsed] = useState(false);
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -36,7 +34,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-
   return (
     <TooltipProvider>
       <div
@@ -47,12 +44,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
         "
       >
         {/* DESKTOP SIDEBAR */}
-        {isDesktop && (
+        {isDesktop ? (
           <Sidebar
             collapsed={sidebarCollapsed}
             onExpandRequest={() => setSidebarCollapsed(false)}
           />
-        )}
+        ) : null}
 
         {/* RIGHT COLUMN */}
         <div className="flex flex-col flex-1 overflow-hidden">
@@ -64,9 +61,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Header
                   onMenuClick={() => {
                     if (isDesktop) {
-                      setSidebarCollapsed((v) => !v);
+                      setSidebarCollapsed(v => !v);
                     } else {
-                      setMobileMenuOpen((v) => !v);
+                      setMobileMenuOpen(v => !v);
                     }
                   }}
                 />
@@ -75,23 +72,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
             {/* HEADER TOGGLE BUTTON */}
             <button
-              onClick={() => setHeaderCollapsed((v) => !v)}
-              className="
-      absolute
-      - right-6
-      + right-2
-      -bottom-8
-      h-8 w-8
-      flex items-center justify-center
-      rounded-lg
-      bg-white shadow
-      hover:bg-slate-100
-      border border-slate-400
-      dark:bg-slate-900 dark:hover:bg-slate-800
-      dark:border-slate-700
-      transition
-      z-20
-    "
+              onClick={() => setHeaderCollapsed(v => !v)}
+              className="absolute - right-6 + right-2 -bottom-8 h-8 w-8 flex items-center justify-center rounded-lg bg-white shadow hover:bg-slate-100 border border-slate-400 dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-slate-700 transition z-20"
               aria-label={headerCollapsed ? "Show header" : "Hide header"}
             >
               {headerCollapsed ? (
@@ -101,7 +83,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
               )}
             </button>
           </div>
-
 
           {/* MAIN CONTENT */}
           <main className="flex-1 overflow-auto p-6 lg:p-8 bg-white dark:bg-slate-950 no-scrollbar mt-[10px]">
@@ -121,15 +102,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
           >
             <SheetHeader className="sr-only">
               <SheetTitle>Navigation</SheetTitle>
-              <SheetDescription>
-                Sidebar navigation
-              </SheetDescription>
+              <SheetDescription>Sidebar navigation</SheetDescription>
             </SheetHeader>
 
             <Sidebar
               collapsed={false}
               onToolClick={() => setMobileMenuOpen(false)}
-              onExpandRequest={() => { }}
             />
           </SheetContent>
         </Sheet>
