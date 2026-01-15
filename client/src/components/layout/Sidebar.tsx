@@ -1,7 +1,8 @@
 import { Link, useLocation } from "wouter";
 import { useEffect, useState } from "react";
+
 import {
-  LucideIcon,
+  type LucideIcon,
   Home,
   ChevronRight,
   ChevronDown,
