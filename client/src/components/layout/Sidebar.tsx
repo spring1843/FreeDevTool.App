@@ -13,9 +13,58 @@ import {
   Palette,
   Settings,
   Lock,
+
+  // Conversions
+  Calendar,
+  Shuffle,
+  Globe2,
+  ArrowLeftRight,
+  Link2,
+  Table,
+  Binary,
+
+  // Formatters
+  FileJson,
+  Braces,
+
+  // Encoders / Security
+  KeyRound,
+  Hash,
+  FileLock,
+  IndentIncrease,
+
+  // Text tools
+  FileText,
+  CaseUpper,
+  Replace,
+  Baseline,
+  ScanText,
+  SquareCode,
+  AlignCenter,
+  ScanLine,
+
+  // Time tools
+  Timer,
+  TimerReset,
+  Hourglass,
+  CalendarClock,
+  KeyboardMusic,
+
+  // Financial
+  Percent,
+
+  // Color
+  Pipette,
+
+  // System
+  Camera,
+  Mic,
+  Keyboard,
+  Globe,
 } from "lucide-react";
 import { toolsData } from "@/data/tools";
 import { cn } from "@/lib/utils";
+import type { LucideIcon } from "lucide-react";
 
 interface SidebarProps {
   collapsed: boolean;
@@ -23,7 +72,7 @@ interface SidebarProps {
   onExpandRequest: (category: string) => void;
 }
 
-const CATEGORY_ICONS: Record<string, any> = {
+const CATEGORY_ICONS: Record<string, LucideIcon> = {
   Conversions: Repeat,
   Formatters: Code,
   Encoders: Shield,
@@ -32,6 +81,72 @@ const CATEGORY_ICONS: Record<string, any> = {
   "Financial Tools": DollarSign,
   "Color Tools": Palette,
   System: Settings,
+};
+
+/**
+ * Tool-level icons (temporary, sidebar-only)
+ * Restores UX expected by client
+ */
+const TOOL_ICONS: Record<string, LucideIcon> = {
+  // ===== Conversions (7) =====
+  "Date Converter": Calendar,
+  "JSON ↔ YAML": Shuffle,
+  "Timezone Converter": Globe2,
+  "Unit Converter": ArrowLeftRight,
+  "URL to JSON": Link2,
+  "CSV to JSON": Table,
+  "Number Base Converter": Binary,
+
+  // ===== Formatters =====
+  "JSON Formatter": FileJson,
+  "JSONC Formatter": Braces,
+  "HTML Beautifier": Code,
+  "YAML Formatter": FileText,
+  "Markdown Formatter": IndentIncrease, // (unique icon used once only here)
+  "CSS/LESS/SCSS Formatter": Palette,
+
+  // ===== Encoders =====
+  "Base64 Encoder": KeyRound,
+  "Base64 Decoder": Shield,
+  "JWT Decoder": Hash,
+  "TLS Certificate Decoder": Lock,
+  "MD5 Hash": FileLock, // if present, otherwise remove
+  "BCrypt Hash": Shield, // if present, otherwise remove
+
+  // ===== Text Tools =====
+  "Text Diff": FileText,
+  "Regex Tester": CaseUpper,
+  "Text Sorter": AlignCenter,
+  "Word Counter": Type,
+  "QR Generator": ScanText,
+  "Barcode Generator": ScanLine,
+  "Lorem Generator": Baseline,
+  "Unicode Characters": SquareCode,
+  "Password Generator": KeyRound,
+  "UUID Generator": Shuffle,
+  "Search & Replace": Replace,
+  "Text Split": ArrowLeftRight,
+
+  // ===== Time Tools =====
+  "World Clock": Globe2,
+  "Timer": Timer,
+  "Stopwatch": TimerReset,
+  "Countdown": Hourglass,
+  "Date/Time Difference": CalendarClock,
+  "Metronome": KeyboardMusic,
+
+  // ===== Financial Tools =====
+  "Compound Interest": Percent,
+  "Debt Repayment": DollarSign,
+
+  // ===== Color Tools =====
+  "Color Palette Generator": Pipette,
+
+  // ===== System =====
+  "Camera Test": Camera,
+  "Microphone Test": Mic,
+  "Keyboard Test": Keyboard,
+  "Browser Info": Globe,
 };
 
 export function Sidebar({
@@ -57,10 +172,8 @@ export function Sidebar({
       className={cn(
         "h-screen flex flex-col overflow-hidden transition-all duration-300 border-r",
         collapsed ? "w-16" : "w-72",
-        // LIGHT MODE
         "bg-gradient-to-b from-slate-50 to-white border-slate-200 text-slate-900",
-        // DARK MODE (unchanged)
-        "dark:bg-white dark:from-slate-900 dark:to-slate-950 dark:border-slate-800 dark:text-slate-100"
+        "dark:from-slate-900 dark:to-slate-950 dark:border-slate-800 dark:text-slate-100"
       )}
     >
       {/* LOGO */}
@@ -71,7 +184,7 @@ export function Sidebar({
           "border-slate-200 dark:border-slate-800"
         )}
       >
-        <div className="h-11 w-11 flex-shrink-0 rounded-xl bg-blue-500 flex items-center justify-center rounded-lg">
+        <div className="h-11 w-11 flex-shrink-0 rounded-xl bg-blue-500 flex items-center justify-center">
           <img
             src="/assets/favicon-32x32.png"
             alt="FreeDevTool Logo"
@@ -155,21 +268,31 @@ export function Sidebar({
 
               {!collapsed && isOpen && (
                 <div className="ml-7 mt-1 space-y-1">
-                  {data.tools.map((tool) => (
-                    <Link key={tool.path} href={tool.path}>
-                      <a
-                        onClick={onToolClick}
-                        className={cn(
-                          "h-10 flex items-center px-3 py-1.5 rounded-lg text-sm transition",
-                          location === tool.path
-                            ? "bg-slate-200 text-slate-900 dark:bg-slate-800 dark:text-white"
-                            : "text-slate-600 hover:bg-slate-200 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
-                        )}
-                      >
-                        {tool.name}
-                      </a>
-                    </Link>
-                  ))}
+                  {data.tools.map((tool) => {
+                    const ToolIcon = TOOL_ICONS[tool.name];
+
+                    if (!ToolIcon) {
+                      console.warn(`Missing icon for tool: ${tool.name}`);
+                      return null;
+                    }
+
+                    return (
+                      <Link key={tool.path} href={tool.path}>
+                        <a
+                          onClick={onToolClick}
+                          className={cn(
+                            "h-10 flex items-center gap-3 px-3 py-1.5 rounded-lg text-sm transition",
+                            location === tool.path
+                              ? "bg-slate-200 text-slate-900 dark:bg-slate-800 dark:text-white"
+                              : "text-slate-600 hover:bg-slate-200 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
+                          )}
+                        >
+                          <ToolIcon className="h-4 w-4 shrink-0 opacity-80" />
+                          <span>{tool.name}</span>
+                        </a>
+                      </Link>
+                    );
+                  })}
                 </div>
               )}
             </div>
