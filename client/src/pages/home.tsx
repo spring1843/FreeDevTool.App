@@ -84,6 +84,12 @@ export default function Home() {
                     </Badge>
                     <Badge
                       variant="outline"
+                      className="border-red-500 text-red-500 dark:text-red-400 rounded-lg"
+                    >
+                      Safe & Secure
+                    </Badge>
+                    <Badge
+                      variant="outline"
                       className="border-green-500 text-green-500 dark:text-green-400 rounded-lg"
                     >
                       Free
@@ -94,6 +100,7 @@ export default function Home() {
                     >
                       Offline
                     </Badge>
+                    
                   </div>
                 </div>
               </div>

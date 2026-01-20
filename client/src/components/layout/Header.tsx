@@ -225,9 +225,9 @@ export function Header({ onMenuClick }: HeaderProps) {
               <button
                 onClick={skipToPrevious}
                 className="
-        flex items-center px-2 py-2 rounded-lg
-        bg-white/10 text-white
-        hover:bg-white/20 transition
+        flex items-center justify-center px-2 py-2 rounded-lg h-9 w-9
+        text-slate-600 hover:text-slate-900 hover:bg-slate-300 bg-slate-100
+        dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-700 dark:bg-slate-800
       "
                 aria-label="Previous demo step"
               >
@@ -239,7 +239,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                 <button
                   onClick={pauseDemo}
                   className="
-          flex items-center px-2 py-2 rounded-lg
+          flex items-center justify-center px-2 py-2 rounded-lg h-9 w-9
           bg-yellow-500/10 text-yellow-500
           hover:bg-yellow-500/20 transition
         "
@@ -251,7 +251,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                 <button
                   onClick={resumeDemo}
                   className="
-          flex items-center px-2 py-2 rounded-lg
+          flex items-center justify-center px-2 py-2 rounded-lg h-9 w-9
           bg-green-500/10 text-green-500
           hover:bg-green-500/20 transition
         "
@@ -265,9 +265,9 @@ export function Header({ onMenuClick }: HeaderProps) {
               <button
                 onClick={skipToNext}
                 className="
-        flex items-center px-2 py-2 rounded-lg
-        bg-white/10 text-white
-        hover:bg-white/20 transition
+        flex items-center justify-center px-2 py-2 rounded-lg h-9 w-9
+        text-slate-600 hover:text-slate-900 hover:bg-slate-300 bg-slate-100
+        dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-700 dark:bg-slate-800
       "
                 aria-label="Next demo step"
               >
@@ -275,32 +275,32 @@ export function Header({ onMenuClick }: HeaderProps) {
               </button>
 
               {/* DEMO SPEED */}
-              <select
-                value={demoSpeed}
-                onChange={(e) =>
-                  setDemoSpeed(e.target.value as "slow" | "normal" | "fast" | "very-fast" | "crazy-fast")
-                }
-                className="
-    px-1 py-1 rounded-lg text-sm
-    bg-slate-800 text-slate-200
-    border border-slate-700
-    hover:bg-slate-700
-    focus:outline-none
-  "
-                aria-label="Demo speed"
-              >
-                <option value="slow">Slow</option>
-                <option value="normal">Normal</option>
-                <option value="fast">Fast</option>
-                <option value="very-fast">Very Fast</option>
-                <option value="crazy-fast">Crazy Fast</option>
-              </select>
+              <div className="
+      px-1 py-1 rounded-lg text-sm h-9 flex items-center justify-center
+      text-slate-600 hover:text-slate-900 hover:bg-slate-300 bg-slate-100
+      dark:text-slate-300 dark:hover:text-slate-400 dark:hover:bg-slate-700 dark:bg-slate-800
+    ">
+                <select
+                  value={demoSpeed}
+                  onChange={(e) =>
+                    setDemoSpeed(e.target.value as "slow" | "normal" | "fast" | "very-fast" | "crazy-fast")
+                  }
+                  className="bg-transparent focus:outline-none"
+                  aria-label="Demo speed"
+                >
+                  <option value="slow">Slow</option>
+                  <option value="normal">Normal</option>
+                  <option value="fast">Fast</option>
+                  <option value="very-fast">Very Fast</option>
+                  <option value="crazy-fast">Crazy Fast</option>
+                </select>
+              </div>
 
               {/* STOP */}
               <button
                 onClick={stopDemo}
                 className="
-        flex items-center px-2 py-2 rounded-lg
+        flex items-center justify-center px-2 py-2 rounded-lg h-9 w-9
         bg-red-500/10 text-red-500
         hover:bg-red-500/20 transition
       "
@@ -312,7 +312,6 @@ export function Header({ onMenuClick }: HeaderProps) {
           ) : null}
 
           {/* Theme Toggle */}
-          {!isDemoRunning && (
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -337,7 +336,6 @@ export function Header({ onMenuClick }: HeaderProps) {
                 <p>Toggle Theme (Ctrl+D)</p>
               </TooltipContent>
             </Tooltip>
-          )}
         </div>
       </header>
     </TooltipProvider>

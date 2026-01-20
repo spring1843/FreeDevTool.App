@@ -189,7 +189,10 @@ export function Sidebar({
           <img
             src="/assets/favicon-32x32.png"
             alt="FreeDevTool Logo"
-            className="h-6 w-6"
+            className="h-8 w-8 cursor-pointer"
+            onClick={() => {
+              window.location.href = "/";
+            }}
           />
         </div>
 
