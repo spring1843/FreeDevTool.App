@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Header } from "./Header";
 import { Sidebar } from "./Sidebar";
 import { ChevronUp, ChevronDown } from "lucide-react";
+import { useDemo } from "@/hooks/use-demo-hook";
 
 import {
   Sheet,
@@ -13,6 +14,8 @@ import {
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { isDemoRunning } = useDemo();
+
   const [headerCollapsed, setHeaderCollapsed] = useState(false);
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -44,7 +47,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         "
       >
         {/* DESKTOP SIDEBAR */}
-        {isDesktop ? (
+        {isDesktop && !sidebarCollapsed && !isDemoRunning ? (
           <Sidebar
             collapsed={sidebarCollapsed}
             onExpandRequest={() => setSidebarCollapsed(false)}
@@ -91,7 +94,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* MOBILE SIDEBAR */}
-        <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+        <Sheet open={!isDemoRunning && mobileMenuOpen} onOpenChange={(open) => {if (!isDemoRunning) setMobileMenuOpen(open);}}>
           <SheetContent
             side="left"
             className="
