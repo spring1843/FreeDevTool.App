@@ -100,7 +100,6 @@ export default function Home() {
                     >
                       Offline
                     </Badge>
-                    
                   </div>
                 </div>
               </div>

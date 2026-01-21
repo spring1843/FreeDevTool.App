@@ -1,4 +1,14 @@
-import { Search, Moon, Sun, X, Play, Pause, PanelLeft, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Search,
+  Moon,
+  Sun,
+  X,
+  Play,
+  Pause,
+  PanelLeft,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -107,7 +117,6 @@ export function Header({ onMenuClick }: HeaderProps) {
     window.addEventListener("focus-search", handler);
     return () => window.removeEventListener("focus-search", handler);
   }, []);
-
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -295,15 +304,24 @@ export function Header({ onMenuClick }: HeaderProps) {
               </button>
 
               {/* DEMO SPEED */}
-              <div className="
+              <div
+                className="
       px-1 py-1 rounded-lg text-sm h-9 flex items-center justify-center
       text-slate-600 hover:text-slate-900 hover:bg-slate-300 bg-slate-100
       dark:text-slate-300 dark:hover:text-slate-400 dark:hover:bg-slate-700 dark:bg-slate-800
-    ">
+    "
+              >
                 <select
                   value={demoSpeed}
-                  onChange={(e) =>
-                    setDemoSpeed(e.target.value as "slow" | "normal" | "fast" | "very-fast" | "crazy-fast")
+                  onChange={e =>
+                    setDemoSpeed(
+                      e.target.value as
+                        | "slow"
+                        | "normal"
+                        | "fast"
+                        | "very-fast"
+                        | "crazy-fast"
+                    )
                   }
                   className="bg-transparent focus:outline-none"
                   aria-label="Demo speed"

@@ -174,7 +174,7 @@ export function Sidebar({
                               : "text-slate-600 hover:bg-slate-200 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
                           )}
                         >
-                          {ToolIcon && <ToolIcon className="h-4 w-4 shrink-0 opacity-80" />}
+                          {ToolIcon ? <ToolIcon className="h-4 w-4 shrink-0 opacity-80" /> : null}
                           <span>{tool.name}</span>
                         </a>
                       </Link>

@@ -12,14 +12,16 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet";
-import { Tooltip, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+} from "@/components/ui/tooltip";
 import { TooltipTrigger } from "@radix-ui/react-tooltip";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { isDemoRunning } = useDemo();
   const { theme, setTheme } = useTheme();
-
-
 
   const [headerCollapsed, setHeaderCollapsed] = useState(false);
 
@@ -43,7 +45,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
           setTheme(theme === "dark" ? "light" : "dark");
           break;
 
-
         case "m":
           event.preventDefault();
           setSidebarCollapsed(prev => !prev);
@@ -62,7 +63,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [theme, setTheme, isDemoRunning]);
-
 
   useEffect(() => {
     const handleResize = () => {
@@ -126,9 +126,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   )}
                 </button>
               </TooltipTrigger>
-              <TooltipContent side="left">
-                Toggle Header
-              </TooltipContent>
+              <TooltipContent side="left">Toggle Header</TooltipContent>
             </Tooltip>
           </div>
 
@@ -139,7 +137,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* MOBILE SIDEBAR */}
-        <Sheet open={!isDemoRunning && mobileMenuOpen} onOpenChange={(open) => { if (!isDemoRunning) setMobileMenuOpen(open); }}>
+        <Sheet
+          open={!isDemoRunning && mobileMenuOpen}
+          onOpenChange={open => {
+            if (!isDemoRunning) setMobileMenuOpen(open);
+          }}
+        >
           <SheetContent
             side="left"
             className="

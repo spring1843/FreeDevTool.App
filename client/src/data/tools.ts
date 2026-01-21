@@ -56,7 +56,6 @@ import {
   Mic,
   Keyboard,
   Globe,
-  Database,
 } from "lucide-react";
 import type { ToolExplanation } from "@/components/tool-explanations";
 
