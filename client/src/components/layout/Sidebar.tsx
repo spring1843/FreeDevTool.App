@@ -15,6 +15,7 @@ import {
   Palette,
   Settings,
   Lock,
+  HelpCircle,
 } from "lucide-react";
 import { toolsData } from "@/data/tools";
 import { cn } from "@/lib/utils";
@@ -158,9 +159,10 @@ export function Sidebar({
                 <div className="ml-7 mt-1 space-y-1">
                   {data.tools.map(tool => {
                     const ToolIcon = tool.icon;
+                    const Icon = ToolIcon ?? HelpCircle;
+
                     if (!ToolIcon) {
                       console.warn(`Missing icon for tool: ${tool.name}`);
-                      return null;
                     }
 
                     return (
@@ -174,7 +176,7 @@ export function Sidebar({
                               : "text-slate-600 hover:bg-slate-200 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
                           )}
                         >
-                          {ToolIcon ? <ToolIcon className="h-4 w-4 shrink-0 opacity-80" /> : null}
+                          <Icon className="h-4 w-4 shrink-0" />
                           <span>{tool.name}</span>
                         </a>
                       </Link>

@@ -212,7 +212,7 @@
   }
 
   .rounded-lg {
-    border-radius: 0 !important;
+    border-radius: 8px !important;
   }
 
   .rounded-xl {
@@ -901,16 +901,12 @@
     /* Chrome / Safari */
   }
 
-  .rounded-lg {
-    border-radius: 8px !important;
-  }
-
   .bg-color {
     background-color: #192137 !important;
     border: 1px solid #2a364b !important;
   }
 
-  .mg-bottom {
+  .mg-vertical {
     margin-bottom: 14px !important;
     margin-top: 14px !important;
   }

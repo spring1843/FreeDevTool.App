@@ -116,7 +116,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <TooltipTrigger asChild>
                 <button
                   onClick={() => setHeaderCollapsed(v => !v)}
-                  className="absolute - right-6 + right-2 -bottom-8 h-8 w-8 flex items-center justify-center rounded-lg bg-white shadow hover:bg-slate-100 border border-slate-400 dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-slate-700 transition z-20"
+                  className="absolute right-6 -bottom-8 h-8 w-8 flex items-center justify-center rounded-lg bg-white shadow hover:bg-slate-100 border border-slate-400 dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-slate-700 transition z-20"
                   aria-label={headerCollapsed ? "Show header" : "Hide header"}
                 >
                   {headerCollapsed ? (
