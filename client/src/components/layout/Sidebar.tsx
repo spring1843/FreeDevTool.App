@@ -15,54 +15,6 @@ import {
   Palette,
   Settings,
   Lock,
-
-  // Conversions
-  Calendar,
-  Shuffle,
-  Globe2,
-  ArrowLeftRight,
-  Link2,
-  Table,
-  Binary,
-
-  // Formatters
-  FileJson,
-  Braces,
-
-  // Encoders / Security
-  KeyRound,
-  Hash,
-  FileLock,
-  IndentIncrease,
-
-  // Text tools
-  FileText,
-  CaseUpper,
-  Replace,
-  Baseline,
-  ScanText,
-  SquareCode,
-  AlignCenter,
-  ScanLine,
-
-  // Time tools
-  Timer,
-  TimerReset,
-  Hourglass,
-  CalendarClock,
-  KeyboardMusic,
-
-  // Financial
-  Percent,
-
-  // Color
-  Pipette,
-
-  // System
-  Camera,
-  Mic,
-  Keyboard,
-  Globe,
 } from "lucide-react";
 import { toolsData } from "@/data/tools";
 import { cn } from "@/lib/utils";
@@ -82,72 +34,6 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   "Financial Tools": DollarSign,
   "Color Tools": Palette,
   System: Settings,
-};
-
-/**
- * Tool-level icons (temporary, sidebar-only)
- * Restores UX expected by client
- */
-const TOOL_ICONS: Record<string, LucideIcon> = {
-  // ===== Conversions (7) =====
-  "Date Converter": Calendar,
-  "JSON ↔ YAML": Shuffle,
-  "Timezone Converter": Globe2,
-  "Unit Converter": ArrowLeftRight,
-  "URL to JSON": Link2,
-  "CSV to JSON": Table,
-  "Number Base Converter": Binary,
-
-  // ===== Formatters =====
-  "JSON Formatter": FileJson,
-  "JSONC Formatter": Braces,
-  "HTML Beautifier": Code,
-  "YAML Formatter": FileText,
-  "Markdown Formatter": IndentIncrease, // (unique icon used once only here)
-  "CSS/LESS/SCSS Formatter": Palette,
-
-  // ===== Encoders =====
-  "Base64 Encoder": KeyRound,
-  "Base64 Decoder": Shield,
-  "JWT Decoder": Hash,
-  "TLS Certificate Decoder": Lock,
-  "MD5 Hash": FileLock, // if present, otherwise remove
-  "BCrypt Hash": Shield, // if present, otherwise remove
-
-  // ===== Text Tools =====
-  "Text Diff": FileText,
-  "Regex Tester": CaseUpper,
-  "Text Sorter": AlignCenter,
-  "Word Counter": Type,
-  "QR Generator": ScanText,
-  "Barcode Generator": ScanLine,
-  "Lorem Generator": Baseline,
-  "Unicode Characters": SquareCode,
-  "Password Generator": KeyRound,
-  "UUID Generator": Shuffle,
-  "Search & Replace": Replace,
-  "Text Split": ArrowLeftRight,
-
-  // ===== Time Tools =====
-  "World Clock": Globe2,
-  Timer,
-  Stopwatch: TimerReset,
-  Countdown: Hourglass,
-  "Date/Time Difference": CalendarClock,
-  Metronome: KeyboardMusic,
-
-  // ===== Financial Tools =====
-  "Compound Interest": Percent,
-  "Debt Repayment": DollarSign,
-
-  // ===== Color Tools =====
-  "Color Palette Generator": Pipette,
-
-  // ===== System =====
-  "Camera Test": Camera,
-  "Microphone Test": Mic,
-  "Keyboard Test": Keyboard,
-  "Browser Info": Globe,
 };
 
 export function Sidebar({
@@ -271,8 +157,7 @@ export function Sidebar({
               {!collapsed && isOpen ? (
                 <div className="ml-7 mt-1 space-y-1">
                   {data.tools.map(tool => {
-                    const ToolIcon = TOOL_ICONS[tool.name];
-
+                    const ToolIcon = tool.icon;
                     if (!ToolIcon) {
                       console.warn(`Missing icon for tool: ${tool.name}`);
                       return null;
@@ -289,7 +174,7 @@ export function Sidebar({
                               : "text-slate-600 hover:bg-slate-200 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
                           )}
                         >
-                          <ToolIcon className="h-4 w-4 shrink-0 opacity-80" />
+                          {ToolIcon && <ToolIcon className="h-4 w-4 shrink-0 opacity-80" />}
                           <span>{tool.name}</span>
                         </a>
                       </Link>

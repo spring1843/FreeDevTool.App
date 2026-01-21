@@ -1,9 +1,70 @@
+import {
+  type LucideIcon,
+  Code,
+  Shield,
+  Type,
+  Clock,
+  DollarSign,
+  Palette,
+  Lock,
+
+  // Conversions
+  Calendar,
+  Shuffle,
+  Globe2,
+  ArrowLeftRight,
+  Link2,
+  Table,
+  Binary,
+
+  // Formatters
+  FileJson,
+  Braces,
+  DatabaseBackup,
+
+  // Encoders / Security
+  KeyRound,
+  FileLock,
+  IndentIncrease,
+  Link,
+
+  // Text tools
+  FileText,
+  CaseUpper,
+  Replace,
+  Baseline,
+  ScanText,
+  SquareCode,
+  AlignCenter,
+  ScanLine,
+
+  // Time tools
+  Timer,
+  TimerReset,
+  Hourglass,
+  CalendarClock,
+  KeyboardMusic,
+
+  // Financial
+  Percent,
+
+  // Color
+  Pipette,
+
+  // System
+  Camera,
+  Mic,
+  Keyboard,
+  Globe,
+  Database,
+} from "lucide-react";
 import type { ToolExplanation } from "@/components/tool-explanations";
 
 // Global tools data with keyboard shortcuts
 export interface Tool {
   name: string;
   path: string;
+  icon: LucideIcon;
   shortcut: string;
   metadata: {
     title: string;
@@ -32,6 +93,7 @@ export const toolsData: ToolData = {
       {
         name: "Date Converter",
         path: "/tools/date-converter",
+        icon: Calendar,
         shortcut: "Ctrl+Shift+1",
         metadata: {
           title: "Date Converter - Convert Between Date Formats",
@@ -180,6 +242,7 @@ export const toolsData: ToolData = {
         name: "JSON ↔ YAML",
         path: "/tools/json-yaml-converter",
         shortcut: "Ctrl+Shift+Y",
+        icon: Shuffle,
         metadata: {
           title: "JSON to YAML Converter - Bidirectional Conversion",
           description:
@@ -352,6 +415,7 @@ export const toolsData: ToolData = {
       {
         name: "Timezone Converter",
         path: "/tools/timezone-converter",
+        icon: Globe2,
         shortcut: "Ctrl+Shift+2",
         metadata: {
           title: "Timezone Converter - Convert Times Across Timezones",
@@ -495,6 +559,7 @@ export const toolsData: ToolData = {
       {
         name: "Unit Converter",
         path: "/tools/unit-converter",
+        icon: ArrowLeftRight,
         shortcut: "Ctrl+Shift+U",
         metadata: {
           title: "Unit Converter - Convert Units of Measurement",
@@ -718,6 +783,7 @@ export const toolsData: ToolData = {
       {
         name: "URL to JSON",
         path: "/tools/url-to-json",
+        icon: Link2,
         shortcut: "Ctrl+Shift+3",
         metadata: {
           title: "URL to JSON - Parse URL Query Parameters",
@@ -857,6 +923,7 @@ export const toolsData: ToolData = {
       {
         name: "CSV to JSON",
         path: "/tools/csv-to-json",
+        icon: Table,
         shortcut: "Ctrl+Shift+4",
         metadata: {
           title: "CSV to JSON Converter - Convert CSV to JSON",
@@ -989,6 +1056,7 @@ export const toolsData: ToolData = {
       {
         name: "Number Base Converter",
         path: "/tools/number-base-converter",
+        icon: Binary,
         shortcut: "Ctrl+Shift+5",
         metadata: {
           title: "Number Base Converter - Convert Between Number Systems",
@@ -1169,6 +1237,7 @@ export const toolsData: ToolData = {
       {
         name: "JSON Formatter",
         path: "/tools/json-formatter",
+        icon: FileJson,
         shortcut: "Ctrl+Shift+J",
         metadata: {
           title: "JSON Formatter - Format and Validate JSON",
@@ -1282,6 +1351,7 @@ export const toolsData: ToolData = {
       {
         name: "JSONC Formatter",
         path: "/tools/jsonc-formatter",
+        icon: Braces,
         shortcut: "Ctrl+Shift+C",
         metadata: {
           title: "JSONC Formatter - Format JSON with Comments",
@@ -1438,6 +1508,7 @@ export const toolsData: ToolData = {
       {
         name: "HTML Beautifier",
         path: "/tools/html-formatter",
+        icon: Code,
         shortcut: "Ctrl+Shift+H",
         metadata: {
           title: "HTML Formatter - Format and Beautify HTML",
@@ -1586,6 +1657,7 @@ export const toolsData: ToolData = {
       {
         name: "YAML Formatter",
         path: "/tools/yaml-formatter",
+        icon: FileText,
         shortcut: "Ctrl+Shift+6",
         metadata: {
           title: "YAML Formatter - Format and Validate YAML",
@@ -1727,6 +1799,7 @@ export const toolsData: ToolData = {
       {
         name: "Markdown Formatter",
         path: "/tools/markdown-formatter",
+        icon: IndentIncrease,
         shortcut: "Ctrl+Shift+K",
         metadata: {
           title: "Markdown Formatter - Format Markdown Files",
@@ -1801,6 +1874,7 @@ export const toolsData: ToolData = {
       {
         name: "CSS/LESS/SCSS Formatter",
         path: "/tools/css-formatter",
+        icon: Palette,
         shortcut: "Ctrl+Shift+7",
         metadata: {
           title: "CSS Formatter - Format and Beautify CSS",
@@ -1965,6 +2039,7 @@ export const toolsData: ToolData = {
       },
       {
         name: "JavaScript/TypeScript Formatter",
+        icon: Code,
         path: "/tools/typescript-formatter",
         shortcut: "Ctrl+Shift+8",
         metadata: {
@@ -2026,6 +2101,7 @@ export const toolsData: ToolData = {
       {
         name: "GraphQL Formatter",
         path: "/tools/graphql-formatter",
+        icon: DatabaseBackup,
         shortcut: "Ctrl+Shift+9",
         metadata: {
           title: "GraphQL Formatter - Format GraphQL Schemas",
@@ -2160,6 +2236,7 @@ export const toolsData: ToolData = {
       {
         name: "Time Formatter",
         path: "/tools/time-formatter",
+        icon: Clock,
         shortcut: "Ctrl+Shift+T",
         metadata: {
           title: "Time Formatter - Format Time Values",
@@ -2331,6 +2408,7 @@ export const toolsData: ToolData = {
       {
         name: "Base64 Encoder",
         path: "/tools/base64",
+        icon: KeyRound,
         shortcut: "Ctrl+Shift+B",
         metadata: {
           title: "Base64 Encoder/Decoder - Encode and Decode Base64",
@@ -2380,6 +2458,7 @@ export const toolsData: ToolData = {
       {
         name: "URL Encoder",
         path: "/tools/url-encoder",
+        icon: Link,
         shortcut: "Ctrl+Shift+~",
         metadata: {
           title: "URL Encoder/Decoder - Encode and Decode URLs",
@@ -2522,6 +2601,7 @@ export const toolsData: ToolData = {
       {
         name: "JWT Decoder",
         path: "/tools/jwt-decoder",
+        icon: KeyRound,
         shortcut: "Ctrl+Shift+A",
         metadata: {
           title: "JWT Decoder - Decode JSON Web Tokens",
@@ -2558,6 +2638,7 @@ export const toolsData: ToolData = {
       {
         name: "TLS Certificate Decoder",
         path: "/tools/tls-decoder",
+        icon: Lock,
         shortcut: "Ctrl+Shift+G",
         metadata: {
           title: "TLS Certificate Decoder - Decode SSL Certificates",
@@ -2709,6 +2790,7 @@ export const toolsData: ToolData = {
       {
         name: "MD5 Hash",
         path: "/tools/md5-hash",
+        icon: FileLock,
         shortcut: "Ctrl+Shift+R",
         metadata: {
           title: "MD5 Hash Generator - Generate MD5 Hashes",
@@ -2778,6 +2860,7 @@ export const toolsData: ToolData = {
       {
         name: "BCrypt Hash",
         path: "/tools/bcrypt-hash",
+        icon: Shield,
         shortcut: "Ctrl+Shift+F",
         metadata: {
           title: "BCrypt Hash Generator - Generate Secure Password Hashes",
@@ -2853,6 +2936,7 @@ export const toolsData: ToolData = {
       {
         name: "Text Diff",
         path: "/tools/text-diff",
+        icon: FileText,
         shortcut: "Ctrl+Shift+!",
         metadata: {
           title: "Text Diff - Compare Two Texts",
@@ -2911,6 +2995,7 @@ export const toolsData: ToolData = {
       {
         name: "Regex Tester",
         path: "/tools/regex-tester",
+        icon: CaseUpper,
         shortcut: "Ctrl+Shift+E",
         metadata: {
           title: "Regex Tester - Test Regular Expressions",
@@ -2992,6 +3077,7 @@ export const toolsData: ToolData = {
       {
         name: "Text Sorter",
         path: "/tools/text-sort",
+        icon: AlignCenter,
         shortcut: "Ctrl+Shift+O",
         metadata: {
           title: "Text Sort - Sort Lines of Text",
@@ -3063,6 +3149,7 @@ export const toolsData: ToolData = {
       {
         name: "Word Counter",
         path: "/tools/text-counter",
+        icon: Type,
         shortcut: "Ctrl+Shift+W",
         metadata: {
           title: "Text Counter - Count Characters, Words, and Lines",
@@ -3120,6 +3207,7 @@ export const toolsData: ToolData = {
       {
         name: "QR Generator",
         path: "/tools/qr-generator",
+        icon: ScanText,
         shortcut: "Ctrl+Shift+Q",
         metadata: {
           title: "QR Code Generator - Create QR Codes",
@@ -3258,6 +3346,7 @@ export const toolsData: ToolData = {
       {
         name: "Barcode Generator",
         path: "/tools/barcode-generator",
+        icon: ScanLine,
         shortcut: "Ctrl+Shift+I",
         metadata: {
           title: "Barcode Generator - Create Barcodes",
@@ -3328,6 +3417,7 @@ export const toolsData: ToolData = {
       {
         name: "Lorem Generator",
         path: "/tools/lorem-generator",
+        icon: Baseline,
         shortcut: "Ctrl+Shift+L",
         metadata: {
           title: "Lorem Ipsum Generator - Generate Placeholder Text",
@@ -3386,6 +3476,7 @@ export const toolsData: ToolData = {
       {
         name: "Unicode Characters",
         path: "/tools/unicode-characters",
+        icon: SquareCode,
         shortcut: "Ctrl+Shift+N",
         metadata: {
           title: "Unicode Characters - Browse Unicode Symbols",
@@ -3538,6 +3629,7 @@ export const toolsData: ToolData = {
       {
         name: "Password Generator",
         path: "/tools/password-generator",
+        icon: KeyRound,
         shortcut: "Ctrl+Shift+P",
         metadata: {
           title: "Password Generator - Generate Secure Passwords",
@@ -3604,6 +3696,7 @@ export const toolsData: ToolData = {
       {
         name: "UUID Generator",
         path: "/tools/uuid-generator",
+        icon: Shuffle,
         shortcut: "Ctrl+Shift+@",
         metadata: {
           title: "UUID Generator - Generate Unique Identifiers",
@@ -3686,6 +3779,7 @@ export const toolsData: ToolData = {
       {
         name: "Search & Replace",
         path: "/tools/search-replace",
+        icon: Replace,
         shortcut: "Ctrl+Shift+Z",
         metadata: {
           title: "Search and Replace - Find and Replace Text",
@@ -3762,6 +3856,7 @@ export const toolsData: ToolData = {
       {
         name: "Text Split",
         path: "/tools/text-split",
+        icon: ArrowLeftRight,
         shortcut: "Ctrl+Shift+X",
         metadata: {
           title: "Text Split - Split Text by Delimiter",
@@ -3892,6 +3987,7 @@ export const toolsData: ToolData = {
       {
         name: "World Clock",
         path: "/tools/world-clock",
+        icon: Globe2,
         shortcut: "Ctrl+Shift+0",
         metadata: {
           title: "World Clock - View Time in Multiple Timezones",
@@ -4045,6 +4141,7 @@ export const toolsData: ToolData = {
       {
         name: "Timer",
         path: "/tools/timer",
+        icon: Timer,
         shortcut: "Ctrl+Shift+V",
         metadata: {
           title: "Timer - Countdown Timer Tool",
@@ -4119,6 +4216,7 @@ export const toolsData: ToolData = {
       {
         name: "Stopwatch",
         path: "/tools/stopwatch",
+        icon: TimerReset,
         shortcut: "Ctrl+Shift+=",
         metadata: {
           title: "Stopwatch - Online Stopwatch Tool",
@@ -4167,6 +4265,7 @@ export const toolsData: ToolData = {
       {
         name: "Countdown",
         path: "/tools/countdown",
+        icon: Hourglass,
         shortcut: "Ctrl+Shift+-",
         metadata: {
           title: "Countdown - Event Countdown Timer",
@@ -4318,6 +4417,7 @@ export const toolsData: ToolData = {
       {
         name: "Date/Time Difference",
         path: "/tools/datetime-diff",
+        icon: CalendarClock,
         shortcut: "Ctrl+Shift+[",
         metadata: {
           title:
@@ -4430,6 +4530,7 @@ export const toolsData: ToolData = {
       {
         name: "Metronome",
         path: "/tools/metronome",
+        icon: KeyboardMusic,
         shortcut: "Ctrl+Shift+]",
         metadata: {
           title: "Metronome - Online Metronome Tool",
@@ -4518,6 +4619,7 @@ export const toolsData: ToolData = {
       {
         name: "Compound Interest",
         path: "/tools/compound-interest",
+        icon: Percent,
         shortcut: "Ctrl+Shift+;",
         metadata: {
           title: "Compound Interest Calculator - Calculate Investment Returns",
@@ -4695,6 +4797,7 @@ export const toolsData: ToolData = {
       {
         name: "Debt Repayment",
         path: "/tools/debt-repayment",
+        icon: DollarSign,
         shortcut: "Ctrl+Shift+'",
         metadata: {
           title: "Debt Repayment Calculator - Plan Your Debt Payoff",
@@ -4796,6 +4899,7 @@ export const toolsData: ToolData = {
       {
         name: "Color Palette Generator",
         path: "/tools/color-palette-generator",
+        icon: Pipette,
         shortcut: "Ctrl+Shift+,",
         metadata: {
           title: "Color Palette Generator - Generate Color Schemes",
@@ -4991,6 +5095,7 @@ export const toolsData: ToolData = {
       {
         name: "Camera Test",
         path: "/tools/webcam-test",
+        icon: Camera,
         shortcut: "Ctrl+Shift+.",
         metadata: {
           title: "Webcam Test - Test Your Camera",
@@ -5111,6 +5216,7 @@ export const toolsData: ToolData = {
       {
         name: "Microphone Test",
         path: "/tools/microphone-test",
+        icon: Mic,
         shortcut: "Ctrl+Shift+/",
         metadata: {
           title: "Microphone Test - Test Your Microphone",
@@ -5190,6 +5296,7 @@ export const toolsData: ToolData = {
       {
         name: "Keyboard Test",
         path: "/tools/keyboard-test",
+        icon: Keyboard,
         shortcut: "Ctrl+Shift+`",
         metadata: {
           title: "Keyboard Test - Test Keyboard Keys",
@@ -5249,6 +5356,7 @@ export const toolsData: ToolData = {
       {
         name: "Browser Info",
         path: "/tools/browser-info",
+        icon: Globe,
         shortcut: "Ctrl+Shift+\\",
         metadata: {
           title: "Browser Information - Detect Browser and Device Info",
