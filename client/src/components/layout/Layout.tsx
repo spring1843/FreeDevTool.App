@@ -12,7 +12,8 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
+import { TooltipTrigger } from "@radix-ui/react-tooltip";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { isDemoRunning } = useDemo();
@@ -111,17 +112,24 @@ export function Layout({ children }: { children: React.ReactNode }) {
             )}
 
             {/* HEADER TOGGLE BUTTON */}
-            <button
-              onClick={() => setHeaderCollapsed(v => !v)}
-              className="absolute - right-6 + right-2 -bottom-8 h-8 w-8 flex items-center justify-center rounded-lg bg-white shadow hover:bg-slate-100 border border-slate-400 dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-slate-700 transition z-20"
-              aria-label={headerCollapsed ? "Show header" : "Hide header"}
-            >
-              {headerCollapsed ? (
-                <ChevronDown className="h-4 w-4 text-slate-600 dark:text-slate-300" />
-              ) : (
-                <ChevronUp className="h-4 w-4 text-slate-600 dark:text-slate-300" />
-              )}
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => setHeaderCollapsed(v => !v)}
+                  className="absolute - right-6 + right-2 -bottom-8 h-8 w-8 flex items-center justify-center rounded-lg bg-white shadow hover:bg-slate-100 border border-slate-400 dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-slate-700 transition z-20"
+                  aria-label={headerCollapsed ? "Show header" : "Hide header"}
+                >
+                  {headerCollapsed ? (
+                    <ChevronDown className="h-4 w-4 text-slate-600 dark:text-slate-300" />
+                  ) : (
+                    <ChevronUp className="h-4 w-4 text-slate-600 dark:text-slate-300" />
+                  )}
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="left">
+                Toggle Header
+              </TooltipContent>
+            </Tooltip>
           </div>
 
           {/* MAIN CONTENT */}

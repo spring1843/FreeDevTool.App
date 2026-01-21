@@ -136,19 +136,26 @@ export function Header({ onMenuClick }: HeaderProps) {
         <div className="flex items-center gap-3 w-full max-w-xl">
           {/* Menu Button */}
           {!isDemoRunning && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onMenuClick}
-              className="
-                  h-9 w-9 p-0 rounded-lg transition
-                  text-slate-600 hover:text-slate-900 hover:bg-slate-300 bg-slate-200
-                  dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-700 dark:bg-slate-800
-                "
-              aria-label="Toggle menu"
-            >
-              <PanelLeft className="h-5 w-5" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={onMenuClick}
+                  className="
+                      h-9 w-9 p-0 rounded-lg transition
+                      text-slate-600 hover:text-slate-900 hover:bg-slate-300 bg-slate-200
+                      dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-700 dark:bg-slate-800
+                    "
+                  aria-label="Toggle menu"
+                >
+                  <PanelLeft className="h-5 w-5" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                Toggle side menu (CTRL + M)
+              </TooltipContent>
+            </Tooltip>
           )}
 
           {/* Search */}
