@@ -3,6 +3,7 @@ import { Header } from "./Header";
 import { Sidebar } from "./Sidebar";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import { useDemo } from "@/hooks/use-demo-hook";
+import { useTheme } from "@/providers/theme-provider";
 
 import {
   Sheet,
@@ -15,6 +16,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { isDemoRunning } = useDemo();
+  const { theme, setTheme } = useTheme();
+
+
 
   const [headerCollapsed, setHeaderCollapsed] = useState(false);
 
@@ -25,6 +29,39 @@ export function Layout({ children }: { children: React.ReactNode }) {
     if (typeof window === "undefined") return true;
     return window.innerWidth >= 1024;
   });
+
+  useEffect(() => {
+    const handler = (event: KeyboardEvent) => {
+      if (isDemoRunning) return;
+
+      if (!event.ctrlKey) return;
+
+      switch (event.key.toLowerCase()) {
+        case "d":
+          event.preventDefault();
+          setTheme(theme === "dark" ? "light" : "dark");
+          break;
+
+
+        case "m":
+          event.preventDefault();
+          setSidebarCollapsed(prev => !prev);
+          break;
+
+        case "s":
+          event.preventDefault();
+          window.dispatchEvent(new CustomEvent("focus-search"));
+          break;
+
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [theme, setTheme, isDemoRunning]);
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -94,7 +131,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* MOBILE SIDEBAR */}
-        <Sheet open={!isDemoRunning && mobileMenuOpen} onOpenChange={(open) => {if (!isDemoRunning) setMobileMenuOpen(open);}}>
+        <Sheet open={!isDemoRunning && mobileMenuOpen} onOpenChange={(open) => { if (!isDemoRunning) setMobileMenuOpen(open); }}>
           <SheetContent
             side="left"
             className="

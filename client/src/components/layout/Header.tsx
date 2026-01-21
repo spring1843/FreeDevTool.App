@@ -19,6 +19,8 @@ interface HeaderProps {
 }
 
 export function Header({ onMenuClick }: HeaderProps) {
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
+
   const { theme, setTheme } = useTheme();
   const {
     isDemoRunning,
@@ -98,6 +100,16 @@ export function Header({ onMenuClick }: HeaderProps) {
   };
 
   useEffect(() => {
+    const handler = () => {
+      searchInputRef.current?.focus();
+    };
+
+    window.addEventListener("focus-search", handler);
+    return () => window.removeEventListener("focus-search", handler);
+  }, []);
+
+
+  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         searchRef.current &&
@@ -122,80 +134,81 @@ export function Header({ onMenuClick }: HeaderProps) {
       >
         {/* LEFT: Menu + Search */}
         <div className="flex items-center gap-3 w-full max-w-xl">
-            {/* Menu Button */} 
-            {!isDemoRunning && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={onMenuClick}
-                className="
+          {/* Menu Button */}
+          {!isDemoRunning && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onMenuClick}
+              className="
                   h-9 w-9 p-0 rounded-lg transition
                   text-slate-600 hover:text-slate-900 hover:bg-slate-300 bg-slate-200
                   dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-700 dark:bg-slate-800
                 "
-                aria-label="Toggle menu"
-              >
-                <PanelLeft className="h-5 w-5" />
-              </Button>
-            )}
-            
-            {/* Search */}
-            {!isDemoRunning && (
-              <div
-                className="relative flex-1 w-full max-w-[160px] sm:max-w-[240px] md:max-w-[320px] lg:max-w-[380px]"
-                ref={searchRef}
-              >
-                <Search
-                  className="
+              aria-label="Toggle menu"
+            >
+              <PanelLeft className="h-5 w-5" />
+            </Button>
+          )}
+
+          {/* Search */}
+          {!isDemoRunning && (
+            <div
+              className="relative flex-1 w-full max-w-[160px] sm:max-w-[240px] md:max-w-[320px] lg:max-w-[380px]"
+              ref={searchRef}
+            >
+              <Search
+                className="
                     absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4
                     text-slate-500 dark:text-slate-400
                   "
-                />
-                <Input
-                  name="search_bar"
-                  type="text"
-                  placeholder={`Search ${getToolsCount()} tools... (Ctrl+S)`}
-                  value={searchQuery}
-                  onChange={e => handleSearchChange(e.target.value)}
-                  onKeyDown={handleSearchKeyDown}
-                  onFocus={() => setShowResults(searchQuery.trim().length > 0)}
-                  className="
+              />
+              <Input
+                name="search_bar"
+                type="text"
+                ref={searchInputRef}
+                placeholder={`Search ${getToolsCount()} tools... (Ctrl+S)`}
+                value={searchQuery}
+                onChange={e => handleSearchChange(e.target.value)}
+                onKeyDown={handleSearchKeyDown}
+                onFocus={() => setShowResults(searchQuery.trim().length > 0)}
+                className="
                     pl-10 pr-8 rounded-lg
                     bg-slate-100 text-slate-900 placeholder-slate-500
                     border border-slate-300
                     dark:bg-slate-800 dark:text-slate-100
                     dark:placeholder-slate-400 dark:border-slate-700
                   "
-                  data-testid="search-input"
-                />
-                {searchQuery ? (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={clearSearch}
-                    className="
+                data-testid="search-input"
+              />
+              {searchQuery ? (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={clearSearch}
+                  className="
                       absolute right-2 top-1/2 -translate-y-1/2
                       h-6 w-6 p-0
                       text-slate-500 hover:text-slate-900
                       dark:text-slate-400 dark:hover:text-white
                     "
-                  >
-                    <X className="h-3 w-3" />
-                  </Button>
-                ) : null}
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              ) : null}
 
-                {showResults ? (
-                  <SearchResults
-                    results={searchResults}
-                    selectedIndex={selectedIndex}
-                    onResultClick={() => {
-                      setShowResults(false);
-                      setSearchQuery("");
-                    }}
-                  />
-                ) : null}
-              </div>
-            )}
+              {showResults ? (
+                <SearchResults
+                  results={searchResults}
+                  selectedIndex={selectedIndex}
+                  onResultClick={() => {
+                    setShowResults(false);
+                    setSearchQuery("");
+                  }}
+                />
+              ) : null}
+            </div>
+          )}
         </div>
 
         {/* RIGHT: Demo + Theme */}
@@ -312,30 +325,30 @@ export function Header({ onMenuClick }: HeaderProps) {
           ) : null}
 
           {/* Theme Toggle */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={toggleTheme}
-                  className="
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={toggleTheme}
+                className="
                     h-9 w-9 p-0 rounded-lg transition
                     text-slate-600 hover:text-slate-900 hover:bg-slate-300 bg-slate-200
                     dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-700 dark:bg-slate-800
                   "
-                  aria-label="Toggle theme"
-                >
-                  {theme === "dark" ? (
-                    <Sun className="h-5 w-5" />
-                  ) : (
-                    <Moon className="h-5 w-5" />
-                  )}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Toggle Theme (Ctrl+D)</p>
-              </TooltipContent>
-            </Tooltip>
+                aria-label="Toggle theme"
+              >
+                {theme === "dark" ? (
+                  <Sun className="h-5 w-5" />
+                ) : (
+                  <Moon className="h-5 w-5" />
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Toggle Theme (Ctrl+D)</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </header>
     </TooltipProvider>
