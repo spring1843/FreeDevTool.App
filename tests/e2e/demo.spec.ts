@@ -3,6 +3,11 @@ import { getToolsCount, getAllToolPaths } from "../../client/src/data/tools"; //
 
 test.describe("Demo End-to-End Test", () => {
   test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.clear();
+      sessionStorage.clear();
+    });
+
     // Navigate to home page
     await page.goto("/");
     await page.waitForLoadState("networkidle");
@@ -12,7 +17,7 @@ test.describe("Demo End-to-End Test", () => {
     page,
   }) => {
     // Start demo
-    const startDemoButton = page.locator('[data-testid="start-demo-button"]');
+    const startDemoButton = page.getByTestId("start-demo-button");
     await startDemoButton.click();
 
     // Wait for demo to start
@@ -20,18 +25,13 @@ test.describe("Demo End-to-End Test", () => {
     await expect(demoModeActive).toBeVisible();
 
     // Change to crazy fast speed after demo starts
-    const speedSelect = page.locator('[role="combobox"]').first();
-    await speedSelect.click();
-    const crazyFastOption = page.locator(
-      '[role="option"]:has-text("Crazy Fast")'
-    );
-    await crazyFastOption.click();
+    await page.getByTestId("demo-speed-select").selectOption("crazy-fast");
 
     // Let demo run for a short time
     await page.waitForTimeout(3000);
 
     // Stop the demo
-    const stopButton = page.locator('button:has-text("Stop")');
+    const stopButton = page.getByTestId("stop-demo-button");
     await stopButton.click();
 
     // Verify demo stopped and cleaned up properly
@@ -43,7 +43,7 @@ test.describe("Demo End-to-End Test", () => {
     await expect(demoModeActive).toBeVisible();
 
     // Stop again for cleanup
-    await page.locator('button:has-text("Stop")').click();
+    await page.getByTestId("stop-demo-button").click();
   });
 
   test("should navigate through tools correctly during demo", async ({
@@ -70,12 +70,7 @@ test.describe("Demo End-to-End Test", () => {
 
     // Wait for demo to start then set crazy fast speed
     await page.waitForSelector("text=Demo Mode Active");
-    const speedSelect = page.locator('[role="combobox"]').first();
-    await speedSelect.click();
-    const crazyFastOption = page.locator(
-      '[role="option"]:has-text("Crazy Fast")'
-    );
-    await crazyFastOption.click();
+    await page.getByTestId("demo-speed-select").selectOption("crazy-fast");
 
     // Track visited tools
     const visitedTools = new Set<string>();
