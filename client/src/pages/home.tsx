@@ -147,41 +147,43 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {data.tools.map(tool => (
                 <Link key={tool.path} href={tool.path}>
-                  <Card
-                    className="
-                      group h-full cursor-pointer rounded-lg p-6 transition-all
-                      bg-white/70 backdrop-blur-lg
-                      border border-slate-200 hover:border-slate-300
-                      dark:bg-color dark:border-slate-700 dark:hover:border-slate-500
-                    "
-                  >
-                    <div className="flex items-start justify-between mb-4">
-                      <h3
-                        className="
-                          text-lg font-semibold transition-colors
-                          text-slate-900 dark:text-slate-100
-                          group-hover:text-blue-500 dark:group-hover:text-blue-400
-                        "
-                      >
-                        {tool.name}
-                      </h3>
-                      <ExternalLink className="h-4 w-4 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </div>
-
-                    <p className="text-sm mb-6 leading-relaxed text-slate-600 dark:text-slate-400">
-                      {tool.metadata.description}
-                    </p>
-
-                    <span
+                  <a href={tool.path} className="block">
+                    <Card
                       className="
-                        text-xs px-2 py-1 rounded-lg
-                        bg-slate-100 text-slate-600 border border-slate-300
-                        dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700
+                        group h-full cursor-pointer rounded-lg p-6 transition-all
+                        bg-white/70 backdrop-blur-lg
+                        border border-slate-200 hover:border-slate-300
+                        dark:bg-color dark:border-slate-700 dark:hover:border-slate-500
                       "
                     >
-                      {tool.shortcut}
-                    </span>
-                  </Card>
+                      <div className="flex items-start justify-between mb-4">
+                        <h3
+                          className="
+                            text-lg font-semibold transition-colors
+                            text-slate-900 dark:text-slate-100
+                            group-hover:text-blue-500 dark:group-hover:text-blue-400
+                          "
+                        >
+                          {tool.name}
+                        </h3>
+                        <ExternalLink className="h-4 w-4 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </div>
+
+                      <p className="text-sm mb-6 leading-relaxed text-slate-600 dark:text-slate-400">
+                        {tool.metadata.description}
+                      </p>
+
+                      <span
+                        className="
+                          text-xs px-2 py-1 rounded-lg
+                          bg-slate-100 text-slate-600 border border-slate-300
+                          dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700
+                        "
+                      >
+                        {tool.shortcut}
+                      </span>
+                    </Card>
+                  </a>
                 </Link>
               ))}
             </div>

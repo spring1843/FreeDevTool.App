@@ -18,7 +18,7 @@ test.describe("Menu Toggle Functionality", () => {
     await expect(menuButton).toBeVisible();
 
     // Verify sidebar is initially visible on desktop homepage
-    const sidebar = page.locator("aside.lg\\:block");
+    const sidebar = page.getByTestId("sidebar");
     await expect(sidebar).toBeVisible();
 
     // Click menu button to hide sidebar
@@ -39,7 +39,7 @@ test.describe("Menu Toggle Functionality", () => {
     await page.setViewportSize({ width: 1280, height: 720 });
 
     // Verify sidebar is initially visible on desktop homepage
-    const sidebar = page.locator("aside.lg\\:block");
+    const sidebar = page.getByTestId("sidebar");
     await expect(sidebar).toBeVisible();
 
     // Use keyboard shortcut to toggle sidebar
@@ -84,9 +84,9 @@ test.describe("Menu Toggle Functionality", () => {
       // This ensures each click is processed and avoids race conditions
       // We alternate expectation based on even/odd click
       if (i % 2 === 0) {
-        await expect(page.locator("aside.lg\\:block")).not.toBeVisible();
+        await expect(page.getByTestId("sidebar")).not.toBeVisible();
       } else {
-        await expect(page.locator("aside.lg\\:block")).toBeVisible();
+        await expect(page.getByTestId("sidebar")).toBeVisible();
       }
     }
 
@@ -120,7 +120,7 @@ test.describe("Menu Toggle Functionality", () => {
     await page.setViewportSize({ width: 1280, height: 720 });
 
     const menuButton = page.locator('[data-testid="menu-button"]');
-    const sidebar = page.locator("aside.lg\\:block");
+    const sidebar = page.getByTestId("sidebar");
 
     // Verify sidebar is visible on desktop
     await expect(sidebar).toBeVisible();

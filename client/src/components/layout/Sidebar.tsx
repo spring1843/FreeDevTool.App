@@ -57,6 +57,9 @@ export function Sidebar({
 
   return (
     <aside
+      id="app-sidebar"
+      data-testid="sidebar"
+      data-collapsed={collapsed ? "true" : "false"}
       className={cn(
         "h-screen flex flex-col overflow-hidden transition-all duration-300 border-r",
         collapsed ? "w-16" : "w-72",

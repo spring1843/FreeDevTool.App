@@ -148,7 +148,10 @@ export function Header({ onMenuClick }: HeaderProps) {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
+                  data-testid="menu-button"
+                  aria-label="Toggle navigation menu"
                   variant="ghost"
+                  aria-controls="app-sidebar"
                   size="sm"
                   onClick={onMenuClick}
                   className="
@@ -156,13 +159,12 @@ export function Header({ onMenuClick }: HeaderProps) {
                       text-slate-600 hover:text-slate-900 hover:bg-slate-300 bg-slate-200
                       dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-700 dark:bg-slate-800
                     "
-                  aria-label="Toggle menu"
                 >
                   <PanelLeft className="h-5 w-5" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                Toggle side menu (CTRL + M)
+                Toggle Menu (Ctrl+M)
               </TooltipContent>
             </Tooltip>
           )}
@@ -174,6 +176,7 @@ export function Header({ onMenuClick }: HeaderProps) {
               ref={searchRef}
             >
               <Search
+                data-testid="search-input"
                 className="
                     absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4
                     text-slate-500 dark:text-slate-400
@@ -314,16 +317,16 @@ export function Header({ onMenuClick }: HeaderProps) {
     "
               >
                 <select
-                data-testid="demo-speed-select"
+                  data-testid="demo-speed-select"
                   value={demoSpeed}
                   onChange={e =>
                     setDemoSpeed(
                       e.target.value as
-                        | "slow"
-                        | "normal"
-                        | "fast"
-                        | "very-fast"
-                        | "crazy-fast"
+                      | "slow"
+                      | "normal"
+                      | "fast"
+                      | "very-fast"
+                      | "crazy-fast"
                     )
                   }
                   className="bg-transparent focus:outline-none"

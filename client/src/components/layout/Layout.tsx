@@ -4,6 +4,9 @@ import { Sidebar } from "./Sidebar";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import { useDemo } from "@/hooks/use-demo-hook";
 import { useTheme } from "@/providers/theme-provider";
+import { useLocation } from "wouter";
+import { toolsData } from "@/data/tools";
+
 
 import {
   Sheet,
@@ -22,6 +25,12 @@ import { TooltipTrigger } from "@radix-ui/react-tooltip";
 export function Layout({ children }: { children: React.ReactNode }) {
   const { isDemoRunning } = useDemo();
   const { theme, setTheme } = useTheme();
+  const [location] = useLocation();
+
+  const allTools = Object.values(toolsData)
+    .flatMap(category => category.tools);
+
+  const [isSidebarOpen] = useState(true);
 
   const [headerCollapsed, setHeaderCollapsed] = useState(false);
 
@@ -32,6 +41,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
     if (typeof window === "undefined") return true;
     return window.innerWidth >= 1024;
   });
+
+  useEffect(() => {
+    // Desktop pe sirf homepage par sidebar expanded rahe
+    if (isDesktop) {
+      setSidebarCollapsed(location !== "/");
+    }
+  }, [location, isDesktop]);
+
+
+  useEffect(() => {
+    if (isDesktop && mobileMenuOpen) {
+      setMobileMenuOpen(false);
+    }
+  }, [isDesktop, mobileMenuOpen]);
 
   useEffect(() => {
     const handler = (event: KeyboardEvent) => {
@@ -66,14 +89,30 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 1024);
+      const desktop = window.innerWidth >= 1024;
+      setIsDesktop(desktop);
+
+      // ✅ IMPORTANT: when going to desktop, force-close the mobile sheet
+      if (desktop) setMobileMenuOpen(false);
     };
 
-    handleResize(); // ensure correct on first load
+    handleResize();
     window.addEventListener("resize", handleResize);
-
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    const tool = allTools.find(t => t.path === location);
+
+    if (tool?.metadata.title) {
+      document.title = `${tool.metadata.title} | FreeDevTool.App`;
+    } else {
+      document.title = "FreeDevTool.App | Free Developer Tools";
+    }
+  }, [location]);
+
+
+
 
   return (
     <TooltipProvider>
@@ -85,7 +124,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         "
       >
         {/* DESKTOP SIDEBAR */}
-        {isDesktop && !sidebarCollapsed && !isDemoRunning ? (
+        {isDesktop && !sidebarCollapsed && !isDemoRunning && isSidebarOpen ? (
           <Sidebar
             collapsed={sidebarCollapsed}
             onExpandRequest={() => setSidebarCollapsed(false)}
@@ -137,31 +176,33 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* MOBILE SIDEBAR */}
-        <Sheet
-          open={!isDemoRunning && mobileMenuOpen}
-          onOpenChange={open => {
-            if (!isDemoRunning) setMobileMenuOpen(open);
-          }}
-        >
-          <SheetContent
-            side="left"
-            className="
-              w-72 p-0 border-0
-              bg-white
-              dark:bg-slate-950
-            "
+        {!isDesktop && (
+          <Sheet
+            open={!isDemoRunning && mobileMenuOpen}
+            onOpenChange={open => {
+              if (!isDemoRunning) setMobileMenuOpen(open);
+            }}
           >
-            <SheetHeader className="sr-only">
-              <SheetTitle>Navigation</SheetTitle>
-              <SheetDescription>Sidebar navigation</SheetDescription>
-            </SheetHeader>
+            <SheetContent
+              side="left"
+              className="
+                w-72 p-0 border-0
+                bg-white
+                dark:bg-slate-950
+              "
+            >
+              <SheetHeader className="sr-only">
+                <SheetTitle>Navigation</SheetTitle>
+                <SheetDescription>Sidebar navigation</SheetDescription>
+              </SheetHeader>
 
-            <Sidebar
-              collapsed={false}
-              onToolClick={() => setMobileMenuOpen(false)}
-            />
-          </SheetContent>
-        </Sheet>
+              <Sidebar
+                collapsed={false}
+                onToolClick={() => setMobileMenuOpen(false)}
+              />
+            </SheetContent>
+          </Sheet>
+        )}
       </div>
     </TooltipProvider>
   );
