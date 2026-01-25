@@ -176,13 +176,13 @@ export function Header({ onMenuClick }: HeaderProps) {
               ref={searchRef}
             >
               <Search
-                data-testid="search-input"
                 className="
                     absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4
                     text-slate-500 dark:text-slate-400
                   "
               />
               <Input
+                data-testid="search-input"
                 name="search_bar"
                 type="text"
                 ref={searchInputRef}
@@ -198,7 +198,6 @@ export function Header({ onMenuClick }: HeaderProps) {
                     dark:bg-slate-800 dark:text-slate-100
                     dark:placeholder-slate-400 dark:border-slate-700
                   "
-                data-testid="search-input"
               />
               {searchQuery ? (
                 <Button
