@@ -359,15 +359,16 @@ export function Header({ onMenuClick }: HeaderProps) {
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
+                data-testid="theme-toggle"
                 variant="ghost"
                 size="sm"
                 onClick={toggleTheme}
                 className="
                     h-9 w-9 p-0 rounded-lg transition
                     text-slate-600 hover:text-slate-900 hover:bg-slate-300 bg-slate-200
-                    dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-700 dark:bg-slate-800
+                    dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-700 dark:bg-slate-800 sm:touch-manipulation md:touch-manipulation
                   "
-                aria-label="Toggle theme"
+                aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
               >
                 {theme === "dark" ? (
                   <Sun className="h-5 w-5" />
