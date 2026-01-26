@@ -17,6 +17,8 @@ import { go } from "@codemirror/lang-go";
 import { java } from "@codemirror/lang-java";
 import { cpp } from "@codemirror/lang-cpp";
 import { json } from "@codemirror/lang-json";
+import { keymap } from "@codemirror/view";
+import { selectAll } from "@codemirror/commands";
 import {
   Copy,
   Download,
@@ -284,499 +286,504 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
       [maxHeightPx]
     );
 
+    const ctrlASelectAll = keymap.of([
+      { key: "Ctrl-a", run: selectAll },
+    ]);
+
     const extensions = [
+      ctrlASelectAll,
       ...(Array.isArray(langExt) ? langExt : [langExt]),
       ...(isWrapping ? [EditorView.lineWrapping] : []),
       ...(isFixedHeight ? [heightLimitExtension] : []),
     ];
-    const { toast } = useToast();
+const { toast } = useToast();
 
-    const handleCopy = async () => {
-      try {
-        await navigator.clipboard.writeText(value || "");
-        toast({
-          title: "Copied to clipboard",
-          description: `The content has been copied (${formatBytes(contentSize)}).`,
-          duration: 2000,
-        });
-      } catch {
-        // Provide a gentle failure notice without breaking flow
-        toast({
-          title: "Copy failed",
-          description: "Unable to copy content to clipboard.",
-          variant: "destructive",
-          duration: 2500,
-        });
+const handleCopy = async () => {
+  try {
+    await navigator.clipboard.writeText(value || "");
+    toast({
+      title: "Copied to clipboard",
+      description: `The content has been copied (${formatBytes(contentSize)}).`,
+      duration: 2000,
+    });
+  } catch {
+    // Provide a gentle failure notice without breaking flow
+    toast({
+      title: "Copy failed",
+      description: "Unable to copy content to clipboard.",
+      variant: "destructive",
+      duration: 2500,
+    });
+  }
+};
+
+// Download handler
+const handleDownload = () => {
+  // Prevent downloading empty content
+  if (!value || value.trim() === "") {
+    toast({
+      title: "Nothing to download",
+      description: "Generate some content first before downloading.",
+      variant: "destructive",
+      duration: 2500,
+    });
+    return;
+  }
+  const extension = props.fileExtension
+    ? props.fileExtension.replace(/^\./, "")
+    : "txt";
+  const randomName = `file_${Math.random().toString(36).slice(2, 10)}.${extension}`;
+  try {
+    const blob = new Blob([value], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = randomName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast({
+      title: "Download started",
+      description: `Saved as ${randomName} (${formatBytes(contentSize)})`,
+      duration: 2000,
+    });
+  } catch {
+    toast({
+      title: "Download failed",
+      description: "Could not create or save the file.",
+      variant: "destructive",
+      duration: 2500,
+    });
+  }
+};
+
+// Ref for hidden file input
+const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+// Handler for upload button click
+const handleUploadClick = () => {
+  try {
+    fileInputRef.current?.click();
+  } catch {
+    toast({
+      title: "Upload failed",
+      description: "Could not open file picker.",
+      variant: "destructive",
+      duration: 2500,
+    });
+  }
+};
+
+// Handler for file input change
+const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (!file) {
+    // User canceled or no file selected; no toast needed
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      if (onChange) {
+        onChange(createSyntheticChangeEvent(reader.result as string));
       }
-    };
+      toast({
+        title: "File uploaded",
+        description: `Loaded ${file.name} (${formatBytes(file.size)})`,
+        duration: 2000,
+      });
+    } catch {
+      toast({
+        title: "Upload failed",
+        description: "Could not read the selected file.",
+        variant: "destructive",
+        duration: 2500,
+      });
+    }
+  };
+  reader.onerror = () => {
+    toast({
+      title: "Upload failed",
+      description: "An error occurred while reading the file.",
+      variant: "destructive",
+      duration: 2500,
+    });
+  };
+  reader.readAsText(file);
+  // Reset input value so same file can be uploaded again
+  e.target.value = "";
+};
 
-    // Download handler
-    const handleDownload = () => {
-      // Prevent downloading empty content
-      if (!value || value.trim() === "") {
-        toast({
-          title: "Nothing to download",
-          description: "Generate some content first before downloading.",
-          variant: "destructive",
-          duration: 2500,
-        });
-        return;
+// State for cursor position and content size
+const [cursor, setCursor] = React.useState({ line: 1, ch: 1 });
+const [contentSize, setContentSize] = React.useState(0);
+
+// Ref to track pending cursor update for debouncing
+const cursorUpdateRef = React.useRef<number | null>(null);
+const pendingCursorRef = React.useRef<{ line: number; ch: number } | null>(
+  null
+);
+
+// Format bytes to human readable string
+const formatBytes = (bytes: number): string => {
+  // Use full unit names for clarity
+  if (bytes < 1024) return `${bytes} Bytes`;
+  const units = [
+    "Kilobytes",
+    "Megabytes",
+    "Gigabytes",
+    "Terabytes",
+  ] as const;
+  let i = -1;
+  let size = bytes;
+  do {
+    size /= 1024;
+    i++;
+  } while (size >= 1024 && i < units.length - 1);
+  return `${size.toFixed(2)} ${units[i]}`;
+};
+
+// Update content size when value changes
+React.useEffect(() => {
+  setContentSize(new Blob([value || ""]).size);
+}, [value]);
+
+// Cleanup pending animation frame on unmount
+React.useEffect(
+  () => () => {
+    if (cursorUpdateRef.current !== null) {
+      cancelAnimationFrame(cursorUpdateRef.current);
+    }
+  },
+  []
+);
+
+// Handler for CodeMirror view updates - debounced to prevent mobile performance issues
+const handleEditorUpdate = React.useCallback((view: ViewUpdate) => {
+  const pos = view.state.selection.main.head;
+  const line = view.state.doc.lineAt(pos);
+  const newCursor = {
+    line: line.number,
+    ch: pos - line.from + 1,
+  };
+
+  // Store the latest cursor position
+  pendingCursorRef.current = newCursor;
+
+  // Only schedule an update if one isn't already pending
+  if (cursorUpdateRef.current === null) {
+    cursorUpdateRef.current = requestAnimationFrame(() => {
+      cursorUpdateRef.current = null;
+      if (pendingCursorRef.current) {
+        setCursor(pendingCursorRef.current);
       }
-      const extension = props.fileExtension
-        ? props.fileExtension.replace(/^\./, "")
-        : "txt";
-      const randomName = `file_${Math.random().toString(36).slice(2, 10)}.${extension}`;
-      try {
-        const blob = new Blob([value], { type: "text/plain" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = randomName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        toast({
-          title: "Download started",
-          description: `Saved as ${randomName} (${formatBytes(contentSize)})`,
-          duration: 2000,
-        });
-      } catch {
-        toast({
-          title: "Download failed",
-          description: "Could not create or save the file.",
-          variant: "destructive",
-          duration: 2500,
-        });
-      }
-    };
+    });
+  }
+}, []);
 
-    // Ref for hidden file input
-    const fileInputRef = React.useRef<HTMLInputElement>(null);
+// Use theme prop for CodeMirror theme
+const codeMirrorTheme = theme === "dark" ? "dark" : "light";
 
-    // Handler for upload button click
-    const handleUploadClick = () => {
-      try {
-        fileInputRef.current?.click();
-      } catch {
-        toast({
-          title: "Upload failed",
-          description: "Could not open file picker.",
-          variant: "destructive",
-          duration: 2500,
-        });
-      }
-    };
+// Drag-and-drop state for visual feedback
+const [isDragOver, setIsDragOver] = React.useState(false);
 
-    // Handler for file input change
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (!file) {
-        // User canceled or no file selected; no toast needed
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = () => {
-        try {
-          if (onChange) {
-            onChange(createSyntheticChangeEvent(reader.result as string));
-          }
-          toast({
-            title: "File uploaded",
-            description: `Loaded ${file.name} (${formatBytes(file.size)})`,
-            duration: 2000,
-          });
-        } catch {
-          toast({
-            title: "Upload failed",
-            description: "Could not read the selected file.",
-            variant: "destructive",
-            duration: 2500,
-          });
-        }
-      };
-      reader.onerror = () => {
-        toast({
-          title: "Upload failed",
-          description: "An error occurred while reading the file.",
-          variant: "destructive",
-          duration: 2500,
-        });
-      };
-      reader.readAsText(file);
-      // Reset input value so same file can be uploaded again
-      e.target.value = "";
-    };
+// Drag-and-drop handlers
+const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+  if (props.readOnly) return;
+  e.preventDefault();
+  setIsDragOver(true);
+};
 
-    // State for cursor position and content size
-    const [cursor, setCursor] = React.useState({ line: 1, ch: 1 });
-    const [contentSize, setContentSize] = React.useState(0);
+const handleDragLeave = () => {
+  if (props.readOnly) return;
+  setIsDragOver(false);
+};
 
-    // Ref to track pending cursor update for debouncing
-    const cursorUpdateRef = React.useRef<number | null>(null);
-    const pendingCursorRef = React.useRef<{ line: number; ch: number } | null>(
-      null
-    );
+const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  if (props.readOnly) return;
+  e.preventDefault();
+  setIsDragOver(false);
+  const file = e.dataTransfer.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    if (onChange) {
+      onChange(createSyntheticChangeEvent(reader.result as string));
+    }
+  };
+  reader.readAsText(file);
+};
 
-    // Format bytes to human readable string
-    const formatBytes = (bytes: number): string => {
-      // Use full unit names for clarity
-      if (bytes < 1024) return `${bytes} Bytes`;
-      const units = [
-        "Kilobytes",
-        "Megabytes",
-        "Gigabytes",
-        "Terabytes",
-      ] as const;
-      let i = -1;
-      let size = bytes;
-      do {
-        size /= 1024;
-        i++;
-      } while (size >= 1024 && i < units.length - 1);
-      return `${size.toFixed(2)} ${units[i]}`;
-    };
-
-    // Update content size when value changes
-    React.useEffect(() => {
-      setContentSize(new Blob([value || ""]).size);
-    }, [value]);
-
-    // Cleanup pending animation frame on unmount
-    React.useEffect(
-      () => () => {
-        if (cursorUpdateRef.current !== null) {
-          cancelAnimationFrame(cursorUpdateRef.current);
-        }
-      },
-      []
-    );
-
-    // Handler for CodeMirror view updates - debounced to prevent mobile performance issues
-    const handleEditorUpdate = React.useCallback((view: ViewUpdate) => {
-      const pos = view.state.selection.main.head;
-      const line = view.state.doc.lineAt(pos);
-      const newCursor = {
-        line: line.number,
-        ch: pos - line.from + 1,
-      };
-
-      // Store the latest cursor position
-      pendingCursorRef.current = newCursor;
-
-      // Only schedule an update if one isn't already pending
-      if (cursorUpdateRef.current === null) {
-        cursorUpdateRef.current = requestAnimationFrame(() => {
-          cursorUpdateRef.current = null;
-          if (pendingCursorRef.current) {
-            setCursor(pendingCursorRef.current);
-          }
-        });
-      }
-    }, []);
-
-    // Use theme prop for CodeMirror theme
-    const codeMirrorTheme = theme === "dark" ? "dark" : "light";
-
-    // Drag-and-drop state for visual feedback
-    const [isDragOver, setIsDragOver] = React.useState(false);
-
-    // Drag-and-drop handlers
-    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-      if (props.readOnly) return;
-      e.preventDefault();
-      setIsDragOver(true);
-    };
-
-    const handleDragLeave = () => {
-      if (props.readOnly) return;
-      setIsDragOver(false);
-    };
-
-    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-      if (props.readOnly) return;
-      e.preventDefault();
-      setIsDragOver(false);
-      const file = e.dataTransfer.files?.[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (onChange) {
-          onChange(createSyntheticChangeEvent(reader.result as string));
-        }
-      };
-      reader.readAsText(file);
-    };
-
-    return (
+return (
+  <div
+    className={cn(
+      "relative",
+      isDragOver && !props.readOnly ? "border-blue-500 border-2" : ""
+    )}
+    onDragOver={handleDragOver}
+    onDragLeave={handleDragLeave}
+    onDrop={handleDrop}
+    data-testid="textarea-drop-area"
+    ref={wrapperRef}
+    // Forward common data-* test hook attributes (e.g. data-default-input) to outer wrapper for e2e selectors
+    data-default-input={
+      (props as Record<string, string | number | boolean | undefined>)[
+      "data-default-input"
+      ] as string | undefined
+    }
+  >
+    {/* Toolbar / Navbar above the editor */}
+    <div className="flex justify-end">
       <div
         className={cn(
-          "relative",
-          isDragOver && !props.readOnly ? "border-blue-500 border-2" : ""
+          // Compact toolbar sized to its contents (no full-width stretch)
+          "inline-flex items-center gap-2 text-xs text-muted-foreground",
+          // Remove outer spacing so the toolbar borders align flush with editor borders
+          "bg-muted rounded-t-md border px-1 py-0"
         )}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        data-testid="textarea-drop-area"
-        ref={wrapperRef}
-        // Forward common data-* test hook attributes (e.g. data-default-input) to outer wrapper for e2e selectors
-        data-default-input={
-          (props as Record<string, string | number | boolean | undefined>)[
-            "data-default-input"
-          ] as string | undefined
-        }
+        data-testid="textarea-toolbar"
       >
-        {/* Toolbar / Navbar above the editor */}
-        <div className="flex justify-end">
-          <div
-            className={cn(
-              // Compact toolbar sized to its contents (no full-width stretch)
-              "inline-flex items-center gap-2 text-xs text-muted-foreground",
-              // Remove outer spacing so the toolbar borders align flush with editor borders
-              "bg-muted rounded-t-md border px-1 py-0"
-            )}
-            data-testid="textarea-toolbar"
+        {/* Toggle word wrapping */}
+        <div className="relative group">
+          <Button
+            onClick={() => {
+              setIsWrapping(v => !v);
+              toast({
+                title: isWrapping
+                  ? "Word wrapping disabled"
+                  : "Word wrapping enabled",
+                description: isWrapping
+                  ? "Text will not wrap; long lines may require horizontal scroll."
+                  : "Text will wrap, so you can read long lines without horizontal scrolling.",
+                duration: 2000,
+              });
+            }}
+            size="sm"
+            variant="ghost"
+            aria-label="Toggle word wrapping"
+            title={
+              isWrapping ? "Disable word wrapping" : "Enable word wrapping"
+            }
+            data-testid="toggle-wrap-button"
+            className="p-0 h-5 w-5"
           >
-            {/* Toggle word wrapping */}
-            <div className="relative group">
-              <Button
-                onClick={() => {
-                  setIsWrapping(v => !v);
-                  toast({
-                    title: isWrapping
-                      ? "Word wrapping disabled"
-                      : "Word wrapping enabled",
-                    description: isWrapping
-                      ? "Text will not wrap; long lines may require horizontal scroll."
-                      : "Text will wrap, so you can read long lines without horizontal scrolling.",
-                    duration: 2000,
-                  });
-                }}
-                size="sm"
-                variant="ghost"
-                aria-label="Toggle word wrapping"
-                title={
-                  isWrapping ? "Disable word wrapping" : "Enable word wrapping"
-                }
-                data-testid="toggle-wrap-button"
-                className="p-0 h-5 w-5"
-              >
-                <WrapText className="w-3.5 h-3.5" />
-              </Button>
-              <span
-                className={cn(
-                  "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
-                  "border"
-                )}
-              >
-                {isWrapping ? "Unwrap" : "Wrap"}
-              </span>
-            </div>
-            {/* Toggle fixed/full height */}
-            <div className="relative group">
-              <Button
-                onClick={() => {
-                  setIsFixedHeight(v => !v);
-                  toast({
-                    title: isFixedHeight
-                      ? "Full height enabled"
-                      : "Fixed height enabled",
-                    description: isFixedHeight
-                      ? "Editor will use full height; horizontal scrollbar goes away when combined with wrapping."
-                      : "Editor height is capped to keep the layout compact; overflow will scroll vertically.",
-                    duration: 2000,
-                  });
-                }}
-                size="sm"
-                variant="ghost"
-                aria-label="Toggle fixed height"
-                title={isFixedHeight ? "Use full height" : "Use fixed height"}
-                data-testid="toggle-height-button"
-                className="p-0 h-5 w-5"
-              >
-                {isFixedHeight ? (
-                  <Expand className="w-3.5 h-3.5" />
-                ) : (
-                  <Minimize2 className="w-3.5 h-3.5" />
-                )}
-              </Button>
-              <span
-                className={cn(
-                  "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
-                  "border"
-                )}
-              >
-                {isFixedHeight ? "Full height" : "Fixed height"}
-              </span>
-            </div>
-            <div className="relative group">
-              <Button
-                onClick={handleCopy}
-                size="sm"
-                variant="ghost"
-                aria-label="Copy content to clipboard"
-                title="Copy content to clipboard"
-                data-testid="copy-all-button"
-                className="p-0 h-5 w-5"
-              >
-                <Copy className="w-3.5 h-3.5" />
-              </Button>
-              <span
-                className={cn(
-                  "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
-                  "border"
-                )}
-              >
-                Copy
-              </span>
-            </div>
-            <div className="relative group">
-              <Button
-                onClick={handleDownload}
-                size="sm"
-                variant="ghost"
-                aria-label="Download content as a file"
-                title="Download content as a file"
-                data-testid="download-button"
-                className="p-0 h-5 w-5"
-              >
-                <Download className="w-3.5 h-3.5" />
-              </Button>
-              <span
-                className={cn(
-                  "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
-                  "border"
-                )}
-              >
-                Download
-              </span>
-            </div>
-            {/* Only show upload if not readOnly */}
-            {!props.readOnly && (
-              <>
-                <div className="relative group">
-                  <Button
-                    onClick={handleUploadClick}
-                    size="sm"
-                    variant="ghost"
-                    aria-label="Import from a file"
-                    title="Import from a file"
-                    data-testid="upload-button"
-                    className="p-0 h-5 w-5"
-                  >
-                    <Upload className="w-3.5 h-3.5" />
-                  </Button>
-                  <span
-                    className={cn(
-                      "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
-                      "border"
-                    )}
-                  >
-                    Upload
-                  </span>
-                </div>
-                {/* Hidden file input for upload */}
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept={
-                    props.fileExtension
-                      ? `.${props.fileExtension.replace(/^\./, "")}`
-                      : undefined
-                  }
-                  style={{ display: "none" }}
-                  onChange={handleFileChange}
-                  data-testid="upload-input"
-                />
-              </>
+            <WrapText className="w-3.5 h-3.5" />
+          </Button>
+          <span
+            className={cn(
+              "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
+              "border"
             )}
-          </div>
-        </div>
-
-        <CodeMirror
-          className={baseClassName}
-          value={value}
-          extensions={
-            isMobile
-              ? [
-                  ...extensions,
-                  mobileThemeExtension,
-                  releasePointerCaptureExtension,
-                ]
-              : extensions
-          }
-          basicSetup={
-            isMobile
-              ? {
-                  // Minimal setup for mobile - disable expensive features
-                  lineNumbers: true,
-                  foldGutter: false,
-                  highlightActiveLine: false,
-                  highlightSelectionMatches: false,
-                  closeBrackets: false,
-                  autocompletion: false,
-                  rectangularSelection: false,
-                  crosshairCursor: false,
-                  dropCursor: false,
-                  allowMultipleSelections: false,
-                  indentOnInput: false,
-                  bracketMatching: false,
-                  closeBracketsKeymap: false,
-                  searchKeymap: false,
-                  foldKeymap: false,
-                  completionKeymap: false,
-                  lintKeymap: false,
-                }
-              : {
-                  lineNumbers: true,
-                  foldGutter: true,
-                }
-          }
-          theme={codeMirrorTheme}
-          onChange={val => {
-            if (onChange) onChange(createSyntheticChangeEvent(val));
-          }}
-          minHeight={props.minHeight}
-          lang={props.lang}
-          placeholder={props.placeholder}
-          readOnly={props.readOnly}
-          id={props.id}
-          autoFocus={props.autoFocus}
-          onUpdate={isMobile ? undefined : handleEditorUpdate}
-        />
-        {/* Status bar below editor with status on the left and language selector on the right */}
-        <div
-          className="w-full flex justify-between items-center px-2 py-1 text-xs text-muted-foreground bg-muted rounded-b-md border-t"
-          style={{ fontFamily: "monospace" }}
-          data-testid="textarea-status-bar"
-        >
-          <span>
-            Line {cursor.line}, Char {cursor.ch}, Size{" "}
-            {formatBytes(contentSize)}
+          >
+            {isWrapping ? "Unwrap" : "Wrap"}
           </span>
-          <label className="flex items-center gap-1">
-            <span className="sr-only">Select language</span>
-            <select
-              aria-label="Select language"
-              title="Language"
-              value={currentLang || LANGUAGES.javascript.value}
-              onChange={e => setCurrentLang(e.target.value)}
-              className={cn(
-                "h-5 rounded border bg-background px-1 text-xs",
-                "focus:outline-none"
-              )}
-              data-testid="language-select"
-            >
-              {LANGUAGE_OPTIONS.map(opt => (
-                <option key={opt.value} value={opt.value} className="text-xs">
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-          </label>
         </div>
+        {/* Toggle fixed/full height */}
+        <div className="relative group">
+          <Button
+            onClick={() => {
+              setIsFixedHeight(v => !v);
+              toast({
+                title: isFixedHeight
+                  ? "Full height enabled"
+                  : "Fixed height enabled",
+                description: isFixedHeight
+                  ? "Editor will use full height; horizontal scrollbar goes away when combined with wrapping."
+                  : "Editor height is capped to keep the layout compact; overflow will scroll vertically.",
+                duration: 2000,
+              });
+            }}
+            size="sm"
+            variant="ghost"
+            aria-label="Toggle fixed height"
+            title={isFixedHeight ? "Use full height" : "Use fixed height"}
+            data-testid="toggle-height-button"
+            className="p-0 h-5 w-5"
+          >
+            {isFixedHeight ? (
+              <Expand className="w-3.5 h-3.5" />
+            ) : (
+              <Minimize2 className="w-3.5 h-3.5" />
+            )}
+          </Button>
+          <span
+            className={cn(
+              "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
+              "border"
+            )}
+          >
+            {isFixedHeight ? "Full height" : "Fixed height"}
+          </span>
+        </div>
+        <div className="relative group">
+          <Button
+            onClick={handleCopy}
+            size="sm"
+            variant="ghost"
+            aria-label="Copy content to clipboard"
+            title="Copy content to clipboard"
+            data-testid="copy-all-button"
+            className="p-0 h-5 w-5"
+          >
+            <Copy className="w-3.5 h-3.5" />
+          </Button>
+          <span
+            className={cn(
+              "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
+              "border"
+            )}
+          >
+            Copy
+          </span>
+        </div>
+        <div className="relative group">
+          <Button
+            onClick={handleDownload}
+            size="sm"
+            variant="ghost"
+            aria-label="Download content as a file"
+            title="Download content as a file"
+            data-testid="download-button"
+            className="p-0 h-5 w-5"
+          >
+            <Download className="w-3.5 h-3.5" />
+          </Button>
+          <span
+            className={cn(
+              "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
+              "border"
+            )}
+          >
+            Download
+          </span>
+        </div>
+        {/* Only show upload if not readOnly */}
+        {!props.readOnly && (
+          <>
+            <div className="relative group">
+              <Button
+                onClick={handleUploadClick}
+                size="sm"
+                variant="ghost"
+                aria-label="Import from a file"
+                title="Import from a file"
+                data-testid="upload-button"
+                className="p-0 h-5 w-5"
+              >
+                <Upload className="w-3.5 h-3.5" />
+              </Button>
+              <span
+                className={cn(
+                  "pointer-events-none absolute -top-7 right-0 hidden rounded bg-popover px-2 py-0.5 text-[10px] text-muted-foreground shadow group-hover:block",
+                  "border"
+                )}
+              >
+                Upload
+              </span>
+            </div>
+            {/* Hidden file input for upload */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept={
+                props.fileExtension
+                  ? `.${props.fileExtension.replace(/^\./, "")}`
+                  : undefined
+              }
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+              data-testid="upload-input"
+            />
+          </>
+        )}
       </div>
-    );
+    </div>
+
+    <CodeMirror
+      className={baseClassName}
+      value={value}
+      extensions={
+        isMobile
+          ? [
+            ...extensions,
+            mobileThemeExtension,
+            releasePointerCaptureExtension,
+          ]
+          : extensions
+      }
+      basicSetup={
+        isMobile
+          ? {
+            // Minimal setup for mobile - disable expensive features
+            lineNumbers: true,
+            foldGutter: false,
+            highlightActiveLine: false,
+            highlightSelectionMatches: false,
+            closeBrackets: false,
+            autocompletion: false,
+            rectangularSelection: false,
+            crosshairCursor: false,
+            dropCursor: false,
+            allowMultipleSelections: false,
+            indentOnInput: false,
+            bracketMatching: false,
+            closeBracketsKeymap: false,
+            searchKeymap: false,
+            foldKeymap: false,
+            completionKeymap: false,
+            lintKeymap: false,
+          }
+          : {
+            lineNumbers: true,
+            foldGutter: true,
+          }
+      }
+      theme={codeMirrorTheme}
+      onChange={val => {
+        if (onChange) onChange(createSyntheticChangeEvent(val));
+      }}
+      minHeight={props.minHeight}
+      lang={props.lang}
+      placeholder={props.placeholder}
+      readOnly={props.readOnly}
+      id={props.id}
+      autoFocus={props.autoFocus}
+      onUpdate={isMobile ? undefined : handleEditorUpdate}
+    />
+    {/* Status bar below editor with status on the left and language selector on the right */}
+    <div
+      className="w-full flex justify-between items-center px-2 py-1 text-xs text-muted-foreground bg-muted rounded-b-md border-t"
+      style={{ fontFamily: "monospace" }}
+      data-testid="textarea-status-bar"
+    >
+      <span>
+        Line {cursor.line}, Char {cursor.ch}, Size{" "}
+        {formatBytes(contentSize)}
+      </span>
+      <label className="flex items-center gap-1">
+        <span className="sr-only">Select language</span>
+        <select
+          aria-label="Select language"
+          title="Language"
+          value={currentLang || LANGUAGES.javascript.value}
+          onChange={e => setCurrentLang(e.target.value)}
+          className={cn(
+            "h-5 rounded border bg-background px-1 text-xs",
+            "focus:outline-none"
+          )}
+          data-testid="language-select"
+        >
+          {LANGUAGE_OPTIONS.map(opt => (
+            <option key={opt.value} value={opt.value} className="text-xs">
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      </label>
+    </div>
+  </div>
+);
   }
 );
 
