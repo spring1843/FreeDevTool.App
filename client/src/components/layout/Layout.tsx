@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Header } from "./Header";
 import { Sidebar } from "./Sidebar";
 import { ChevronUp, ChevronDown } from "lucide-react";
@@ -6,7 +6,6 @@ import { useDemo } from "@/hooks/use-demo-hook";
 import { useTheme } from "@/providers/theme-provider";
 import { useLocation } from "wouter";
 import { toolsData } from "@/data/tools";
-
 
 import {
   Sheet,
@@ -27,8 +26,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const { theme, setTheme } = useTheme();
   const [location] = useLocation();
 
-  const allTools = Object.values(toolsData)
-    .flatMap(category => category.tools);
+  const allTools = useMemo(
+    () => Object.values(toolsData).flatMap(category => category.tools),
+    []
+  );
 
   const [isSidebarOpen] = useState(true);
 
@@ -48,7 +49,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
       setSidebarCollapsed(location !== "/");
     }
   }, [location, isDesktop]);
-
 
   useEffect(() => {
     if (isDesktop && mobileMenuOpen) {
@@ -109,10 +109,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     } else {
       document.title = "FreeDevTool.App | Free Developer Tools";
     }
-  }, [location]);
-
-
-
+  }, [location, allTools]);
 
   return (
     <TooltipProvider>

@@ -93,7 +93,6 @@ export default function SearchReplace() {
     }
   }, [text, searchText, replaceText, isRegex, isCaseSensitive, isGlobal]);
 
-
   const handleReset = () => {
     setText(DEFAULT_SEARCH_REPLACE_TEXT);
     setSearchText(DEFAULT_SEARCH_REPLACE_SEARCH);

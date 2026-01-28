@@ -45,9 +45,7 @@ test.describe("Search Functionality", () => {
 
     // Verify navigation to text diff tool
     await expect(page).toHaveURL("/tools/text-diff");
-    await expect(
-      page.locator("h2", { hasText: "Text Diff" })
-    ).toBeVisible();
+    await expect(page.locator("h2", { hasText: "Text Diff" })).toBeVisible();
   });
 
   test("should clear search results when input is cleared", async ({

@@ -253,7 +253,9 @@ export function Header({ onMenuClick }: HeaderProps) {
           {/* DEMO CONTROLS */}
           {isDemoRunning ? (
             <div className="flex items-center gap-1">
-              <span className="flex items-center justify-center px-2 py-2 rounded-lg h-9 text-slate-600 dark:text-slate-300 dark:bg-slate-800">Demo Mode Active</span>
+              <span className="flex items-center justify-center px-2 py-2 rounded-lg h-9 text-slate-600 dark:text-slate-300 dark:bg-slate-800">
+                Demo Mode Active
+              </span>
               {/* PREVIOUS */}
               <button
                 onClick={skipToPrevious}
@@ -321,11 +323,11 @@ export function Header({ onMenuClick }: HeaderProps) {
                   onChange={e =>
                     setDemoSpeed(
                       e.target.value as
-                      | "slow"
-                      | "normal"
-                      | "fast"
-                      | "very-fast"
-                      | "crazy-fast"
+                        | "slow"
+                        | "normal"
+                        | "fast"
+                        | "very-fast"
+                        | "crazy-fast"
                     )
                   }
                   className="bg-transparent focus:outline-none"
@@ -368,7 +370,11 @@ export function Header({ onMenuClick }: HeaderProps) {
                     text-slate-600 hover:text-slate-900 hover:bg-slate-300 bg-slate-200
                     dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-700 dark:bg-slate-800 sm:touch-manipulation md:touch-manipulation
                   "
-                aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+                aria-label={
+                  theme === "dark"
+                    ? "Switch to light mode"
+                    : "Switch to dark mode"
+                }
               >
                 {theme === "dark" ? (
                   <Sun className="h-5 w-5" />
