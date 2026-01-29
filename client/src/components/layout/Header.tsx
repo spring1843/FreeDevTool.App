@@ -1,4 +1,14 @@
-import { Search, Moon, Sun, Menu, X } from "lucide-react";
+import {
+  Search,
+  Moon,
+  Sun,
+  X,
+  Play,
+  Pause,
+  PanelLeft,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -8,18 +18,33 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useTheme } from "@/providers/theme-provider";
-import { Link } from "wouter";
 import { useSearch } from "@/hooks/use-search";
 import { SearchResults } from "@/components/ui/search-results";
 import { getToolsCount } from "@/data/tools";
 import { useState, useRef, useEffect } from "react";
+import { useDemo } from "@/hooks/use-demo-hook";
 
 interface HeaderProps {
   onMenuClick: () => void;
 }
 
 export function Header({ onMenuClick }: HeaderProps) {
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
+
   const { theme, setTheme } = useTheme();
+  const {
+    isDemoRunning,
+    isDemoPaused,
+    startDemo,
+    stopDemo,
+    pauseDemo,
+    resumeDemo,
+    skipToNext,
+    skipToPrevious,
+    demoSpeed,
+    setDemoSpeed,
+  } = useDemo();
+
   const {
     searchQuery,
     setSearchQuery,
@@ -29,28 +54,18 @@ export function Header({ onMenuClick }: HeaderProps) {
     selectResult,
     resetSelection,
   } = useSearch();
+
   const [showResults, setShowResults] = useState(false);
-  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
 
   const toggleTheme = () => {
-    if (theme === "dark") {
-      setTheme("light");
-    } else {
-      setTheme("dark");
-    }
+    setTheme(theme === "dark" ? "light" : "dark");
   };
 
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
     setShowResults(value.trim().length > 0);
-    resetSelection(); // Reset selection when search changes
-  };
-
-  const handleResultClick = () => {
-    setShowResults(false);
-    setSearchQuery("");
-    setIsMobileSearchOpen(false);
+    resetSelection();
   };
 
   const clearSearch = () => {
@@ -59,32 +74,6 @@ export function Header({ onMenuClick }: HeaderProps) {
     resetSelection();
   };
 
-  const focusSearch = () => {
-    const searchInput = document.querySelector(
-      '[data-testid="search-input"]'
-    ) as HTMLInputElement;
-    if (searchInput) {
-      searchInput.focus();
-      searchInput.select();
-    }
-  };
-
-  // Close search results when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        searchRef.current &&
-        !searchRef.current.contains(event.target as Node)
-      ) {
-        setShowResults(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  // Handle keyboard navigation in search
   const handleSearchKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>
   ) => {
@@ -103,9 +92,9 @@ export function Header({ onMenuClick }: HeaderProps) {
         event.preventDefault();
         const selected = selectResult();
         if (selected) {
-          // Navigate to the selected result
           window.location.href = selected.path;
-          handleResultClick();
+          setShowResults(false);
+          setSearchQuery("");
         }
         break;
       }
@@ -113,234 +102,291 @@ export function Header({ onMenuClick }: HeaderProps) {
         event.preventDefault();
         setShowResults(false);
         resetSelection();
-        (event.target as HTMLInputElement).blur();
         break;
-      default: {
-        // Handle default case
-      }
+
+      default:
+        break;
     }
   };
 
-  // Add Ctrl+S keyboard shortcut for search
   useEffect(() => {
-    const handleKeydown = (event: KeyboardEvent) => {
-      if (event.ctrlKey && event.key === "s") {
-        event.preventDefault();
-        focusSearch();
+    const handler = () => {
+      searchInputRef.current?.focus();
+    };
+
+    window.addEventListener("focus-search", handler);
+    return () => window.removeEventListener("focus-search", handler);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
+        setShowResults(false);
       }
     };
 
-    document.addEventListener("keydown", handleKeydown);
-    return () => document.removeEventListener("keydown", handleKeydown);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
     <TooltipProvider>
-      <header className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-sm relative">
-        <div className="w-full px-4">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo and Title - Always leftmost */}
-            <div className="flex items-center space-x-3 flex-shrink-0">
-              <div className="flex items-center space-x-3">
-                {/* Blue FD Logo - toggles menu */}
-                <div
-                  className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center flex-shrink-0 cursor-pointer transition-all duration-300 hover:scale-110 hover:rotate-12 hover:shadow-lg active:scale-95"
-                  onClick={onMenuClick}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={e => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      onMenuClick();
-                    }
-                  }}
+      <header
+        className="
+          h-16 px-6 flex items-center justify-between
+          bg-white text-slate-900
+          dark:bg-slate-950 dark:text-white dark:border-slate-800 gap-2
+        "
+      >
+        {/* LEFT: Menu + Search */}
+        <div className="flex items-center gap-3 w-full max-w-xl">
+          {/* Menu Button */}
+          {!isDemoRunning && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  data-testid="menu-button"
                   aria-label="Toggle navigation menu"
-                  data-testid="logo-menu-toggle"
+                  variant="ghost"
+                  aria-controls="app-sidebar"
+                  size="sm"
+                  onClick={onMenuClick}
+                  className="
+                      h-9 w-9 p-0 rounded-lg transition
+                      text-slate-600 hover:text-slate-900 hover:bg-slate-300 bg-slate-200
+                      dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-700 dark:bg-slate-800
+                    "
                 >
-                  <span className="text-white text-sm font-bold transition-transform duration-300">
-                    <img
-                      src="/assets/favicon-32x32.png"
-                      alt="FD"
-                      title="Click to toggle menu"
-                      className="h-5 w-5"
-                    />
-                  </span>
-                </div>
+                  <PanelLeft className="h-5 w-5" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                Toggle Menu (Ctrl+M)
+              </TooltipContent>
+            </Tooltip>
+          )}
 
-                {/* Text Logo - links to homepage */}
-                <div className="hidden sm:block">
-                  <Link href="/">
-                    <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-100 whitespace-nowrap cursor-pointer hover:opacity-80 transition-opacity">
-                      FreeDevTool.App
-                    </h1>
-                  </Link>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
-                    <a
-                      href="https://github.com/spring1843/FreeDevTool.App/blob/main/SECURITY.md"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="hover:underline"
-                    >
-                      Secure
-                    </a>{" "}
-                    Developer Tools
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Search and Actions */}
-            <div className="flex items-center space-x-3">
-              {/* Desktop Search */}
-              <div className="hidden md:block relative z-50" ref={searchRef}>
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4 z-10" />
-                <Input
-                  type="text"
-                  placeholder={`Search ${getToolsCount()} tools... (Ctrl+S)`}
-                  value={searchQuery}
-                  onChange={e => handleSearchChange(e.target.value)}
-                  onKeyDown={handleSearchKeyDown}
-                  className="pl-10 pr-8 w-64 bg-slate-50 dark:bg-slate-700 border-slate-300 dark:border-slate-600"
-                  data-testid="search-input"
-                  onFocus={() => setShowResults(searchQuery.trim().length > 0)}
-                />
-                {searchQuery ? (
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={clearSearch}
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 hover:bg-transparent"
-                        data-testid="desktop-clear-search"
-                      >
-                        <X className="h-3 w-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Clear Search</p>
-                    </TooltipContent>
-                  </Tooltip>
-                ) : null}
-                {showResults ? (
-                  <SearchResults
-                    results={searchResults}
-                    onResultClick={handleResultClick}
-                    selectedIndex={selectedIndex}
-                  />
-                ) : null}
-              </div>
-
-              {/* Mobile Search Toggle */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="md:hidden h-10 w-10 p-0 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors touch-manipulation"
-                    onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
-                    data-testid="mobile-search-toggle"
-                    aria-label="Toggle search"
-                  >
-                    <Search className="h-5 w-5" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Open Search (Ctrl+S)</p>
-                </TooltipContent>
-              </Tooltip>
-
-              {/* Theme Toggle */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={toggleTheme}
-                    className="h-10 w-10 p-0 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors touch-manipulation"
-                    data-testid="theme-toggle"
-                    aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode (CTRL+D)`}
-                  >
-                    {theme === "dark" ? (
-                      <Sun className="h-5 w-5" />
-                    ) : (
-                      <Moon className="h-5 w-5" />
-                    )}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Switch to {theme === "dark" ? "Light" : "Dark"} Mode</p>
-                </TooltipContent>
-              </Tooltip>
-
-              {/* Hamburger Menu - Always visible */}
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-10 w-10 p-0 rounded-md bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors touch-manipulation"
-                    onClick={onMenuClick}
-                    data-testid="menu-button"
-                    aria-label="Toggle navigation menu"
-                  >
-                    <Menu className="h-5 w-5 text-slate-700 dark:text-slate-300" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Toggle Menu (Ctrl+M)</p>
-                </TooltipContent>
-              </Tooltip>
-            </div>
-          </div>
-
-          {/* Mobile Search Bar */}
-          {isMobileSearchOpen ? (
+          {/* Search */}
+          {!isDemoRunning && (
             <div
-              className="md:hidden border-t border-slate-200 dark:border-slate-700 p-4 relative z-50"
+              className="relative flex-1 w-full max-w-[160px] sm:max-w-[240px] md:max-w-[320px] lg:max-w-[380px]"
               ref={searchRef}
             >
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4 z-10" />
-                <Input
-                  type="text"
-                  placeholder={`Search ${getToolsCount()} tools... (Ctrl+S)`}
-                  value={searchQuery}
-                  onChange={e => handleSearchChange(e.target.value)}
-                  onKeyDown={handleSearchKeyDown}
-                  className="pl-10 pr-8 w-full bg-slate-50 dark:bg-slate-700 border-slate-300 dark:border-slate-600"
-                  data-testid="mobile-search-input"
-                  autoFocus
-                />
-                {searchQuery ? (
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={clearSearch}
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 hover:bg-transparent"
-                        data-testid="mobile-clear-search"
-                      >
-                        <X className="h-3 w-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Clear Search</p>
-                    </TooltipContent>
-                  </Tooltip>
-                ) : null}
-              </div>
+              <Search
+                className="
+                    absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4
+                    text-slate-500 dark:text-slate-400
+                  "
+              />
+              <Input
+                data-testid="search-input"
+                name="search_bar"
+                type="text"
+                ref={searchInputRef}
+                placeholder={`Search ${getToolsCount()} tools... (Ctrl+S)`}
+                value={searchQuery}
+                onChange={e => handleSearchChange(e.target.value)}
+                onKeyDown={handleSearchKeyDown}
+                onFocus={() => setShowResults(searchQuery.trim().length > 0)}
+                className="
+                    pl-10 pr-8 rounded-lg
+                    bg-slate-100 text-slate-900 placeholder-slate-500
+                    border border-slate-300
+                    dark:bg-slate-800 dark:text-slate-100
+                    dark:placeholder-slate-400 dark:border-slate-700
+                  "
+              />
+              {searchQuery ? (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={clearSearch}
+                  className="
+                      absolute right-2 top-1/2 -translate-y-1/2
+                      h-6 w-6 p-0
+                      text-slate-500 hover:text-slate-900
+                      dark:text-slate-400 dark:hover:text-white
+                    "
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              ) : null}
+
               {showResults ? (
                 <SearchResults
                   results={searchResults}
-                  onResultClick={handleResultClick}
                   selectedIndex={selectedIndex}
-                  className="mt-2 relative"
+                  onResultClick={() => {
+                    setShowResults(false);
+                    setSearchQuery("");
+                  }}
                 />
               ) : null}
             </div>
+          )}
+        </div>
+
+        {/* RIGHT: Demo + Theme */}
+        <div className="flex items-center gap-3">
+          {/* Demo Tour */}
+          {!isDemoRunning && (
+            <Button
+              data-testid="start-demo-button"
+              size="sm"
+              onClick={startDemo}
+              className="
+                bg-gradient-to-r from-indigo-500 to-purple-600
+                hover:from-indigo-600 hover:to-purple-700
+                text-white rounded-lg
+              "
+            >
+              <Play className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">
+                Demo Tour ({getToolsCount()} tools)
+              </span>
+            </Button>
+          )}
+
+          {/* DEMO CONTROLS */}
+          {isDemoRunning ? (
+            <div className="flex items-center gap-1">
+              <span className="flex items-center justify-center px-2 py-2 rounded-lg h-9 text-slate-600 dark:text-slate-300 dark:bg-slate-800">
+                Demo Mode Active
+              </span>
+              {/* PREVIOUS */}
+              <button
+                onClick={skipToPrevious}
+                className="
+        flex items-center justify-center px-2 py-2 rounded-lg h-9 w-9
+        text-slate-600 hover:text-slate-900 hover:bg-slate-300 bg-slate-100
+        dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-700 dark:bg-slate-800
+      "
+                aria-label="Previous demo step"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+
+              {/* PLAY / PAUSE */}
+              {!isDemoPaused ? (
+                <button
+                  onClick={pauseDemo}
+                  className="
+          flex items-center justify-center px-2 py-2 rounded-lg h-9 w-9
+          bg-yellow-500/10 text-yellow-500
+          hover:bg-yellow-500/20 transition
+        "
+                  aria-label="Pause demo"
+                >
+                  <Pause className="h-4 w-4" />
+                </button>
+              ) : (
+                <button
+                  onClick={resumeDemo}
+                  className="
+          flex items-center justify-center px-2 py-2 rounded-lg h-9 w-9
+          bg-green-500/10 text-green-500
+          hover:bg-green-500/20 transition
+        "
+                  aria-label="Resume demo"
+                >
+                  <Play className="h-4 w-4" />
+                </button>
+              )}
+
+              {/* NEXT */}
+              <button
+                onClick={skipToNext}
+                className="
+        flex items-center justify-center px-2 py-2 rounded-lg h-9 w-9
+        text-slate-600 hover:text-slate-900 hover:bg-slate-300 bg-slate-100
+        dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-700 dark:bg-slate-800
+      "
+                aria-label="Next demo step"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+
+              {/* DEMO SPEED */}
+              <div
+                className="
+      px-1 py-1 rounded-lg text-sm h-9 flex items-center justify-center
+      text-slate-600 hover:text-slate-900 hover:bg-slate-300 bg-slate-100
+      dark:text-slate-300 dark:hover:text-slate-400 dark:hover:bg-slate-700 dark:bg-slate-800
+    "
+              >
+                <select
+                  data-testid="demo-speed-select"
+                  value={demoSpeed}
+                  onChange={e =>
+                    setDemoSpeed(
+                      e.target.value as
+                        | "slow"
+                        | "normal"
+                        | "fast"
+                        | "very-fast"
+                        | "crazy-fast"
+                    )
+                  }
+                  className="bg-transparent focus:outline-none"
+                  aria-label="Demo speed"
+                >
+                  <option value="slow">Slow</option>
+                  <option value="normal">Normal</option>
+                  <option value="fast">Fast</option>
+                  <option value="very-fast">Very Fast</option>
+                  <option value="crazy-fast">Crazy Fast</option>
+                </select>
+              </div>
+
+              {/* STOP */}
+              <button
+                data-testid="stop-demo-button"
+                onClick={stopDemo}
+                className="
+        flex items-center justify-center px-2 py-2 rounded-lg h-9 w-9
+        bg-red-500/10 text-red-500
+        hover:bg-red-500/20 transition
+      "
+                aria-label="Stop demo"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
           ) : null}
+
+          {/* Theme Toggle */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                data-testid="theme-toggle"
+                variant="ghost"
+                size="sm"
+                onClick={toggleTheme}
+                className="
+                    h-9 w-9 p-0 rounded-lg transition
+                    text-slate-600 hover:text-slate-900 hover:bg-slate-300 bg-slate-200
+                    dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-700 dark:bg-slate-800 sm:touch-manipulation md:touch-manipulation
+                  "
+                aria-label={
+                  theme === "dark"
+                    ? "Switch to light mode"
+                    : "Switch to dark mode"
+                }
+              >
+                {theme === "dark" ? (
+                  <Sun className="h-5 w-5" />
+                ) : (
+                  <Moon className="h-5 w-5" />
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Toggle Theme (Ctrl+D)</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </header>
     </TooltipProvider>

@@ -35,7 +35,8 @@ test.describe("Search & Replace Tool", () => {
 
     // Clear default values and set test data for input (CodeMirror editor)
     await inputEditor.click();
-    await page.keyboard.press("Control+a");
+    const selectAllKey = process.platform === "darwin" ? "Meta+a" : "Control+a";
+    await page.keyboard.press(selectAllKey);
     await page.keyboard.type("Price: $100.00");
 
     // Set search and replace values (regular inputs)
@@ -69,7 +70,8 @@ test.describe("Search & Replace Tool", () => {
 
     // Clear default values and set test data for input (CodeMirror editor)
     await inputEditor.click();
-    await page.keyboard.press("Control+a");
+    const selectAllKey = process.platform === "darwin" ? "Meta+a" : "Control+a";
+    await page.keyboard.press(selectAllKey);
     await page.keyboard.type("Hello World");
 
     // Set search and replace values (regular inputs)

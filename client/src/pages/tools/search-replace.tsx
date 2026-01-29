@@ -50,13 +50,13 @@ export default function SearchReplace() {
         return;
       }
 
-      let searchPattern: string | RegExp = searchText;
+      let flags = "";
+      if (!isCaseSensitive) flags += "i";
+      if (isGlobal) flags += "g";
+
+      let searchPattern: RegExp;
 
       if (isRegex) {
-        let flags = "";
-        if (!isCaseSensitive) flags += "i";
-        if (isGlobal) flags += "g";
-
         try {
           searchPattern = new RegExp(searchText, flags);
         } catch (regexError) {
@@ -66,12 +66,9 @@ export default function SearchReplace() {
           return;
         }
       } else {
-        // Escape special regex characters for literal search
-        const escapedSearch = searchText.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-        let flags = "";
-        if (!isCaseSensitive) flags += "i";
-        if (isGlobal) flags += "g";
-        searchPattern = new RegExp(escapedSearch, flags);
+        // Escape regex characters for literal search
+        const escaped = searchText.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        searchPattern = new RegExp(escaped, flags);
       }
 
       // Count matches
@@ -79,14 +76,18 @@ export default function SearchReplace() {
       setMatchCount(matches ? matches.length : 0);
 
       // Perform replacement
-      // When not in regex mode, escape $ in replacement to prevent special replacement patterns
-      const safeReplaceText = isRegex
-        ? replaceText
-        : replaceText.replace(/\$/g, "$$$$");
-      const replacedText = text.replace(searchPattern, safeReplaceText);
+      // When not in regex mode, use a replacement function so $ sequences
+      // in the replacement text are treated literally and not interpreted
+      // as replacement patterns (e.g. $&, $1).
+      let replacedText: string;
+      if (isRegex) {
+        replacedText = text.replace(searchPattern, replaceText);
+      } else {
+        replacedText = text.replace(searchPattern, () => replaceText);
+      }
       setResult(replacedText);
     } catch (err) {
-      setError(`Error: ${err instanceof Error ? err.message : String(err)}`);
+      setError(err instanceof Error ? err.message : String(err));
       setResult("");
       setMatchCount(0);
     }

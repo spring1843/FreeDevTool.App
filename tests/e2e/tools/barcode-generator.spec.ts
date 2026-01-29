@@ -40,16 +40,15 @@ test.describe("Barcode Generator Tool", () => {
     // Wait for download to start
     const download = await downloadPromise;
 
-    // Verify download properties
+    // Verify filename (this already exists in test)
     expect(download.suggestedFilename()).toMatch(
       /^barcode-[a-zA-Z0-9]+-\d+\.png$/
     );
 
-    // Verify the file can be saved (this tests the download worked)
-    const path = await download.path();
-    expect(path).toBeTruthy();
+    // Save locally
+    await download.saveAs(`./test-results/${download.suggestedFilename()}`);
 
-    // Verify no errors occurred
+    // No JS errors
     await expectNoErrors(page);
   });
 
@@ -84,13 +83,15 @@ test.describe("Barcode Generator Tool", () => {
     await downloadButton.click();
     const download = await downloadPromise;
 
-    // Verify download works for different format
+    // Verify filename (this already exists in test)
     expect(download.suggestedFilename()).toMatch(
       /^barcode-[a-zA-Z0-9]+-\d+\.png$/
     );
-    const path = await download.path();
-    expect(path).toBeTruthy();
 
+    // Save locally
+    await download.saveAs(`./test-results/${download.suggestedFilename()}`);
+
+    // No JS errors
     await expectNoErrors(page);
   });
 });

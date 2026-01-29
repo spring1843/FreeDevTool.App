@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import CodeMirror from "@uiw/react-codemirror";
-import { EditorView, type ViewUpdate } from "@codemirror/view";
+import { EditorView, type ViewUpdate, keymap } from "@codemirror/view";
 import { javascript } from "@codemirror/lang-javascript";
 import { cn } from "@/lib/utils";
 import { css } from "@codemirror/lang-css";
@@ -17,6 +17,7 @@ import { go } from "@codemirror/lang-go";
 import { java } from "@codemirror/lang-java";
 import { cpp } from "@codemirror/lang-cpp";
 import { json } from "@codemirror/lang-json";
+import { selectAll } from "@codemirror/commands";
 import {
   Copy,
   Download,
@@ -284,7 +285,10 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
       [maxHeightPx]
     );
 
+    const ctrlASelectAll = keymap.of([{ key: "Ctrl-a", run: selectAll }]);
+
     const extensions = [
+      ctrlASelectAll,
       ...(Array.isArray(langExt) ? langExt : [langExt]),
       ...(isWrapping ? [EditorView.lineWrapping] : []),
       ...(isFixedHeight ? [heightLimitExtension] : []),

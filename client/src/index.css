@@ -23,7 +23,7 @@
   --border: hsl(214 32% 91%);
   --input: hsl(214 32% 91%);
   --ring: hsl(217 91% 60%);
-  --radius: 0rem;
+  --radius: 0.5rem;
 
   /* Custom colors matching design */
   --slate-50: hsl(210 40% 98%);
@@ -126,15 +126,19 @@
   .hljs-keyword {
     color: #c792ea;
   }
+
   .hljs-string {
     color: #c3e88d;
   }
+
   .hljs-number {
     color: #f78c6c;
   }
+
   .hljs-attr {
     color: #82b1ff;
   }
+
   .hljs-punctuation {
     color: #89ddff;
   }
@@ -142,15 +146,19 @@
   .dark .hljs-keyword {
     color: #bb9af7;
   }
+
   .dark .hljs-string {
     color: #9ece6a;
   }
+
   .dark .hljs-number {
     color: #ff9e64;
   }
+
   .dark .hljs-attr {
     color: #7aa2f7;
   }
+
   .dark .hljs-punctuation {
     color: #73daca;
   }
@@ -190,27 +198,35 @@
   .rounded-none {
     border-radius: 0 !important;
   }
+
   .rounded {
     border-radius: 0 !important;
   }
+
   .rounded-sm {
     border-radius: 0 !important;
   }
+
   .rounded-md {
     border-radius: 0 !important;
   }
+
   .rounded-lg {
-    border-radius: 0 !important;
+    border-radius: 8px !important;
   }
+
   .rounded-xl {
     border-radius: 0 !important;
   }
+
   .rounded-2xl {
     border-radius: 0 !important;
   }
+
   .rounded-3xl {
     border-radius: 0 !important;
   }
+
   .rounded-full {
     border-radius: 0 !important;
   }
@@ -399,28 +415,34 @@
     grid-template-columns: 1fr;
     gap: 1rem;
   }
+
   @media (min-width: 768px) {
     .exp-grid {
       grid-template-columns: repeat(2, 1fr);
     }
   }
+
   .exp-block {
     padding: 1rem;
     border-width: 1px;
   }
+
   .exp-block h3,
   .exp-block h4 {
     font-weight: 600;
     margin-bottom: 0.5rem;
   }
+
   .exp-block ul {
     font-size: 0.875rem;
     list-style-type: disc;
     list-style-position: inside;
   }
+
   .exp-block li + li {
     margin-top: 0.25rem;
   }
+
   .exp-block kbd {
     padding: 0.25rem 0.5rem;
     border-width: 1px;
@@ -433,23 +455,28 @@
     background-color: hsl(213 94% 96%);
     border-color: hsl(213 94% 82%);
   }
+
   .exp-blue h3,
   .exp-blue h4 {
     color: hsl(213 94% 30%);
   }
+
   .exp-blue ul,
   .exp-blue li,
   .exp-blue span {
     color: hsl(213 94% 35%);
   }
+
   .dark .exp-blue {
     background-color: hsl(213 94% 30% / 0.2);
     border-color: hsl(213 94% 30%);
   }
+
   .dark .exp-blue h3,
   .dark .exp-blue h4 {
     color: hsl(213 94% 80%);
   }
+
   .dark .exp-blue ul,
   .dark .exp-blue li,
   .dark .exp-blue span {
@@ -460,33 +487,40 @@
     background-color: hsl(270 67% 96%);
     border-color: hsl(270 67% 82%);
   }
+
   .exp-purple h3,
   .exp-purple h4 {
     color: hsl(270 67% 30%);
   }
+
   .exp-purple ul,
   .exp-purple li,
   .exp-purple span {
     color: hsl(270 67% 35%);
   }
+
   .exp-purple kbd {
     background-color: hsl(270 67% 92%);
     border-color: hsl(270 67% 72%);
     color: hsl(270 67% 30%);
   }
+
   .dark .exp-purple {
     background-color: hsl(270 67% 30% / 0.2);
     border-color: hsl(270 67% 30%);
   }
+
   .dark .exp-purple h3,
   .dark .exp-purple h4 {
     color: hsl(270 67% 80%);
   }
+
   .dark .exp-purple ul,
   .dark .exp-purple li,
   .dark .exp-purple span {
     color: hsl(270 67% 75%);
   }
+
   .dark .exp-purple kbd {
     background-color: hsl(270 67% 30% / 0.5);
     border-color: hsl(270 67% 40%);
@@ -497,22 +531,27 @@
     background-color: hsl(152 76% 96%);
     border-color: hsl(152 76% 72%);
   }
+
   .exp-emerald h3,
   .exp-emerald h4 {
     color: hsl(152 76% 25%);
   }
+
   .exp-emerald ul,
   .exp-emerald li {
     color: hsl(152 76% 30%);
   }
+
   .dark .exp-emerald {
     background-color: hsl(152 76% 30% / 0.2);
     border-color: hsl(152 76% 30%);
   }
+
   .dark .exp-emerald h3,
   .dark .exp-emerald h4 {
     color: hsl(152 76% 75%);
   }
+
   .dark .exp-emerald ul,
   .dark .exp-emerald li {
     color: hsl(152 76% 70%);
@@ -522,22 +561,27 @@
     background-color: hsl(45 93% 96%);
     border-color: hsl(45 93% 72%);
   }
+
   .exp-amber h3,
   .exp-amber h4 {
     color: hsl(45 93% 25%);
   }
+
   .exp-amber ul,
   .exp-amber li {
     color: hsl(45 93% 30%);
   }
+
   .dark .exp-amber {
     background-color: hsl(45 93% 30% / 0.2);
     border-color: hsl(45 93% 30%);
   }
+
   .dark .exp-amber h3,
   .dark .exp-amber h4 {
     color: hsl(45 93% 75%);
   }
+
   .dark .exp-amber ul,
   .dark .exp-amber li {
     color: hsl(45 93% 70%);
@@ -547,22 +591,27 @@
     background-color: hsl(188 78% 96%);
     border-color: hsl(188 78% 72%);
   }
+
   .exp-cyan h3,
   .exp-cyan h4 {
     color: hsl(188 78% 25%);
   }
+
   .exp-cyan ul,
   .exp-cyan li {
     color: hsl(188 78% 30%);
   }
+
   .dark .exp-cyan {
     background-color: hsl(188 78% 30% / 0.2);
     border-color: hsl(188 78% 30%);
   }
+
   .dark .exp-cyan h3,
   .dark .exp-cyan h4 {
     color: hsl(188 78% 75%);
   }
+
   .dark .exp-cyan ul,
   .dark .exp-cyan li {
     color: hsl(188 78% 70%);
@@ -572,22 +621,27 @@
     background-color: hsl(350 89% 96%);
     border-color: hsl(350 89% 82%);
   }
+
   .exp-rose h3,
   .exp-rose h4 {
     color: hsl(350 89% 30%);
   }
+
   .exp-rose ul,
   .exp-rose li {
     color: hsl(350 89% 35%);
   }
+
   .dark .exp-rose {
     background-color: hsl(350 89% 30% / 0.2);
     border-color: hsl(350 89% 30%);
   }
+
   .dark .exp-rose h3,
   .dark .exp-rose h4 {
     color: hsl(350 89% 80%);
   }
+
   .dark .exp-rose ul,
   .dark .exp-rose li {
     color: hsl(350 89% 75%);
@@ -600,6 +654,7 @@
     gap: 0.75rem;
     font-size: 0.875rem;
   }
+
   @media (min-width: 768px) {
     .exp-shortcuts-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -610,9 +665,11 @@
   .exp-reveal-mobile {
     display: none;
   }
+
   .exp-reveal-desktop {
     display: none;
   }
+
   @media (min-width: 768px) {
     .exp-reveal-mobile {
       display: block;
@@ -634,13 +691,16 @@
     cursor: pointer;
     border: none;
   }
+
   #ssr-show-more:hover {
     background-color: hsl(210 40% 92%);
   }
+
   .dark #ssr-show-more {
     background-color: hsl(217 33% 17%);
     color: hsl(215 20% 65%);
   }
+
   .dark #ssr-show-more:hover {
     background-color: hsl(215 25% 27%);
   }
@@ -649,14 +709,17 @@
   .exp-examples {
     font-size: 0.875rem;
   }
+
   .exp-examples div + div {
     margin-top: 0.25rem;
   }
+
   .exp-examples code {
     font-family: var(--font-mono);
     padding: 0.125rem 0.25rem;
     background-color: white;
   }
+
   .dark .exp-examples code {
     background-color: hsl(217 33% 17%);
   }
@@ -678,6 +741,7 @@
     color: hsl(215 25% 15%);
     margin-bottom: 0.25rem;
   }
+
   .dark .ssr-directory-title {
     color: hsl(210 40% 98%);
   }
@@ -686,6 +750,7 @@
     font-size: 0.875rem;
     color: hsl(215 16% 47%);
   }
+
   .dark .ssr-directory-subtitle {
     color: hsl(215 20% 65%);
   }
@@ -712,6 +777,7 @@
     font-weight: 700;
     color: hsl(215 25% 15%);
   }
+
   .dark .ssr-category-title {
     color: hsl(210 40% 98%);
   }
@@ -721,6 +787,7 @@
     font-size: 0.875rem;
     color: hsl(215 16% 47%);
   }
+
   .dark .ssr-category-count {
     color: hsl(215 20% 65%);
   }
@@ -730,11 +797,13 @@
     grid-template-columns: 1fr;
     gap: 1rem;
   }
+
   @media (min-width: 768px) {
     .ssr-tools-grid {
       grid-template-columns: repeat(2, 1fr);
     }
   }
+
   @media (min-width: 1024px) {
     .ssr-tools-grid {
       grid-template-columns: repeat(3, 1fr);
@@ -753,14 +822,17 @@
       border-color 0.2s;
     border-left: 4px solid transparent;
   }
+
   .ssr-tool-card:hover {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     border-left-color: hsl(215 16% 65%);
   }
+
   .dark .ssr-tool-card {
     background-color: hsl(217 33% 17%);
     border-color: hsl(217 33% 25%);
   }
+
   .dark .ssr-tool-card:hover {
     border-left-color: hsl(215 16% 55%);
   }
@@ -771,12 +843,15 @@
     color: hsl(215 25% 15%);
     margin-bottom: 0.5rem;
   }
+
   .ssr-tool-card:hover .ssr-tool-name {
     color: hsl(217 91% 60%);
   }
+
   .dark .ssr-tool-name {
     color: hsl(210 40% 98%);
   }
+
   .dark .ssr-tool-card:hover .ssr-tool-name {
     color: hsl(217 91% 70%);
   }
@@ -787,6 +862,7 @@
     margin-bottom: 0.75rem;
     line-height: 1.5;
   }
+
   .dark .ssr-tool-desc {
     color: hsl(215 20% 65%);
   }
@@ -800,13 +876,38 @@
     border-radius: 0.25rem;
     color: hsl(215 19% 35%);
   }
+
   @media (min-width: 768px) {
     .ssr-tool-shortcut {
       display: inline-block;
     }
   }
+
   .dark .ssr-tool-shortcut {
     background-color: hsl(217 33% 25%);
     color: hsl(215 20% 75%);
+  }
+
+  /* Hide scrollbar but keep scroll (Sidebar) */
+  .no-scrollbar {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE / Edge */
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+    /* Chrome / Safari */
+  }
+
+  .bg-color {
+    background-color: #192137 !important;
+    border: 1px solid #2a364b !important;
+  }
+
+  .mg-vertical {
+    margin-bottom: 14px !important;
+    margin-top: 14px !important;
   }
 }
