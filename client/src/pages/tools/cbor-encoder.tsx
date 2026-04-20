@@ -102,10 +102,13 @@ export default function CborEncoder() {
       : 0;
 
   const isAtDefault =
-    jsonInput === DEFAULT_CBOR_JSON && cborHex === DEFAULT_CBOR_HEX;
+    jsonInput === DEFAULT_CBOR_JSON &&
+    cborHex === DEFAULT_CBOR_HEX &&
+    cborBase64 === DEFAULT_CBOR_BASE64;
   const hasModifiedData =
     jsonInput !== DEFAULT_CBOR_JSON ||
-    (cborHex !== DEFAULT_CBOR_HEX && cborHex.trim() !== "");
+    (cborHex !== DEFAULT_CBOR_HEX && cborHex.trim() !== "") ||
+    (cborBase64 !== DEFAULT_CBOR_BASE64 && cborBase64.trim() !== "");
   const outputEmpty = cborHex.trim() === "" && cborBase64.trim() === "";
 
   let savingsLabel = "";
