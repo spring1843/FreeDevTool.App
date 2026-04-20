@@ -217,12 +217,12 @@ export function hexToUint8Array(hex: string): Uint8Array {
   if (clean.length % 2 !== 0) {
     throw new Error("Invalid hex string: odd number of characters");
   }
+  if (!/^[0-9a-fA-F]*$/.test(clean)) {
+    throw new Error("Invalid hex string: contains non-hex characters");
+  }
   const bytes = new Uint8Array(clean.length / 2);
   for (let i = 0; i < bytes.length; i++) {
     const byte = parseInt(clean.substring(i * 2, i * 2 + 2), 16);
-    if (isNaN(byte)) {
-      throw new Error(`Invalid hex character at position ${i * 2}`);
-    }
     bytes[i] = byte;
   }
   return bytes;
