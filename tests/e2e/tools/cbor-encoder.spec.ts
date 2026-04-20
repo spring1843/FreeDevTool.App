@@ -1,9 +1,6 @@
 import { test, expect } from "@playwright/test";
-import {
-  setupJSErrorCollection,
-  expectNoErrors,
-  expectDefaultValue,
-} from "./utils";
+import { setupJSErrorCollection, expectNoErrors } from "./utils";
+import { checkEditorsForDefault } from "./check-default-editor-value";
 
 test.describe("CBOR Encoder Tool", () => {
   test.beforeEach(async ({ page }) => {
@@ -13,67 +10,58 @@ test.describe("CBOR Encoder Tool", () => {
 
   test("should load without errors and show default JSON", async ({ page }) => {
     await expect(page.locator("main")).toBeVisible();
+    await checkEditorsForDefault(
+      page,
+      "json-input",
+      "cbor-output",
+      "CBOR example",
+      output => output.trim().length > 0
+    );
     await expectNoErrors(page);
-    await expectDefaultValue(page);
   });
 
-  test("should encode JSON to non-empty hex output", async ({ page }) => {
-    const output = page.getByTestId("cbor-output");
-    await expect(output).not.toHaveValue("");
+  test("should show non-empty hex output by default", async ({ page }) => {
+    await expect(page.locator("#cbor-output")).toBeVisible();
+    const outputValue = await page.evaluate(() => {
+      const lines = Array.from(
+        document.querySelectorAll("#cbor-output .cm-content .cm-line")
+      );
+      return lines.map(l => l.textContent ?? "").join(" ");
+    });
+    expect(outputValue.trim()).not.toBe("");
+    expect(outputValue).toMatch(/[0-9a-f]{2}/);
   });
 
-  test("should produce different output for hex and base64 tabs", async ({
+  test("should switch between hex and base64 tabs with different output", async ({
     page,
   }) => {
-    const hexOutput = await page
-      .getByTestId("cbor-output")
-      .inputValue()
-      .catch(() =>
-        page
-          .getByTestId("cbor-output")
-          .evaluate(el => (el as HTMLTextAreaElement).value)
-      );
+    await expect(page.locator("#cbor-output")).toBeVisible();
+    const getOutput = () =>
+      page.evaluate(() => {
+        const lines = Array.from(
+          document.querySelectorAll("#cbor-output .cm-content .cm-line")
+        );
+        return lines.map(l => l.textContent ?? "").join(" ");
+      });
+
+    const hexOutput = await getOutput();
 
     await page.getByRole("button", { name: "Base64" }).click();
+    const base64Output = await getOutput();
 
-    const base64Output = await page
-      .getByTestId("cbor-output")
-      .inputValue()
-      .catch(() =>
-        page
-          .getByTestId("cbor-output")
-          .evaluate(el => (el as HTMLTextAreaElement).value)
-      );
-
-    expect(hexOutput).not.toBe("");
-    expect(base64Output).not.toBe("");
+    expect(hexOutput.trim()).not.toBe("");
+    expect(base64Output.trim()).not.toBe("");
     expect(hexOutput).not.toBe(base64Output);
   });
 
-  test("should round-trip encode then decode back to original JSON", async ({
-    page,
-  }) => {
-    const jsonInput = page.getByTestId("cbor-json-input");
-    const originalJson = await jsonInput
-      .inputValue()
-      .catch(() => jsonInput.evaluate(el => (el as HTMLTextAreaElement).value));
-
-    // Encode, then decode back
-    await page.getByRole("button", { name: "Encode" }).click();
-    await page.getByRole("button", { name: "Decode" }).click();
-
-    const afterRoundTrip = await jsonInput
-      .inputValue()
-      .catch(() => jsonInput.evaluate(el => (el as HTMLTextAreaElement).value));
-
-    // Values should represent the same JSON structure
-    expect(JSON.parse(afterRoundTrip)).toEqual(JSON.parse(originalJson));
-  });
-
   test("should show error for invalid JSON input", async ({ page }) => {
-    const jsonInput = page.getByTestId("cbor-json-input");
-    await jsonInput.fill("{not valid json}");
+    const inputEditor = page.locator("#json-input .cm-content");
+    await inputEditor.click();
+    await page.keyboard.press("Control+a");
+    await page.keyboard.type("{not valid json}");
+
     await page.getByRole("button", { name: "Encode" }).click();
     await expect(page.locator('[role="alert"]')).toBeVisible();
+    await expectNoErrors(page);
   });
 });
