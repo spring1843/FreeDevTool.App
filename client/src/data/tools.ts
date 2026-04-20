@@ -27,6 +27,7 @@ import {
   FileLock,
   IndentIncrease,
   Link,
+  Layers,
 
   // Text tools
   FileText,
@@ -2921,6 +2922,109 @@ export const toolsData: ToolData = {
                 "Next 2 digits = cost factor (10 = 2¹⁰ = 1024 iterations)",
                 "Next 22 chars = salt (128-bit, base64 encoded)",
                 "Remaining 31 chars = actual hash (184-bit, base64 encoded)",
+              ],
+            },
+          ],
+        },
+      },
+      {
+        name: "CBOR Encoder",
+        path: "/tools/cbor-encoder",
+        icon: Layers,
+        shortcut: "Ctrl+Shift+D",
+        metadata: {
+          title: "CBOR Encoder/Decoder - Encode and Decode CBOR Binary",
+          description:
+            "Encode JSON to CBOR binary format and decode CBOR back to JSON. View output as hex or Base64. Smaller and faster than JSON.",
+          keywords: [
+            "CBOR encoder",
+            "CBOR decoder",
+            "binary JSON",
+            "RFC 8949",
+            "Concise Binary Object Representation",
+            "MessagePack alternative",
+          ],
+        },
+        explanations: {
+          notice: {
+            type: "tips",
+            title: "How CBOR Works",
+            items: [
+              "CBOR = Concise Binary Object Representation (RFC 8949) — a binary superset of JSON's data model",
+              "Type+length prefix: each value is tagged with its type and size, so no quotes, commas, or braces needed",
+              "Result: typically 15–50% smaller than equivalent JSON and faster to parse",
+              "NOT encryption — anyone who has the bytes can decode them instantly",
+            ],
+          },
+          examples: [
+            {
+              from: '{"ok":true}',
+              to: "a1 62 6f 6b f5  (5 bytes vs 10 bytes JSON)",
+            },
+            {
+              from: '{"n":42}',
+              to: "a1 61 6e 18 2a  (5 bytes vs 8 bytes JSON)",
+            },
+          ],
+          sections: [
+            {
+              title: "Common Uses",
+              items: [
+                "IoT sensors: Constrained devices (MQTT, CoAP) use CBOR to minimise bandwidth and battery",
+                "APIs: CBOR over HTTP with Content-Type: application/cbor for tighter payloads",
+                "Storage: Cache or persist structured data more compactly than JSON in IndexedDB/localStorage",
+                "WebAuthn / FIDO2: Browser authentication data is CBOR-encoded (attestation objects, client data)",
+                "COSE: CBOR Object Signing and Encryption — the binary equivalent of JOSE/JWT",
+              ],
+            },
+            {
+              title: "CBOR vs JSON vs MessagePack",
+              items: [
+                {
+                  label: "JSON:",
+                  text: "Human-readable, universally supported, largest size, slowest parse",
+                },
+                {
+                  label: "MessagePack:",
+                  text: "Binary JSON superset, very compact, great ecosystem, no schema",
+                },
+                {
+                  label: "CBOR:",
+                  text: "IETF standard (RFC 8949), self-describing, supports tags/bignum/dates natively",
+                },
+                {
+                  label: "Rule of thumb:",
+                  text: "Use JSON for APIs humans debug, CBOR/MessagePack when bytes or speed matter",
+                },
+              ],
+            },
+            {
+              title: "CBOR Tags (Bonus Features)",
+              items: [
+                "Tag 0 / 1: Date/time — encode timestamps natively, not as strings",
+                "Tag 2 / 3: Bignum — integers larger than 64-bit without loss",
+                "Tag 21–23: Base64url / Base64 / Hex encoding hints for embedded byte strings",
+                "Tag 37: UUID — compact 16-byte representation",
+                "Application-defined tags let you annotate values with semantic meaning",
+              ],
+            },
+            {
+              title: "Watch Out For",
+              items: [
+                "CBOR is NOT human-readable — always keep the JSON source if you need to edit values",
+                "Float precision: CBOR encodes floats as IEEE 754 — round-trip may change decimal representation",
+                "Map key ordering: CBOR maps are unordered; key order may differ after decode",
+                "Byte strings (not text): CBOR has a distinct bytes type — this tool uses the text/map/array subset that maps to JSON",
+                "Indefinite-length encoding: some CBOR generators produce indefinite-length items; this tool uses definite-length only",
+              ],
+            },
+            {
+              title: "Debugging CBOR by Hand",
+              items: [
+                "First byte tells you everything: 0xa1 = map(1), 0x62 = text(2 bytes), 0xf5 = true",
+                "Major types (top 3 bits): 0=uint, 1=negint, 2=bytes, 3=text, 4=array, 5=map, 6=tag, 7=float/simple",
+                "Additional info (bottom 5 bits): 24=1-byte follows, 25=2-byte, 26=4-byte, 27=8-byte",
+                "Online reference: cbor.me lets you paste hex and see the decoded structure",
               ],
             },
           ],

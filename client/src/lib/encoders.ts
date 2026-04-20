@@ -1,4 +1,5 @@
 import * as yaml from "js-yaml";
+import { encode as cborXEncode, decode as cborXDecode } from "cbor-x";
 
 export function encodeBase64(input: string): string {
   try {
@@ -178,5 +179,73 @@ export function decodeTLSCertificate(input: string): {
       isValid: false,
       error: `Certificate parsing error: ${error instanceof Error ? error.message : "Unknown error"}`,
     };
+  }
+}
+
+// ── CBOR ──────────────────────────────────────────────────────────────────────
+
+export function encodeToCBOR(jsonString: string): Uint8Array {
+  try {
+    const value = JSON.parse(jsonString);
+    return new Uint8Array(cborXEncode(value));
+  } catch (error: unknown) {
+    throw new Error(
+      `Failed to encode CBOR: ${error instanceof Error ? error.message : "Unknown error"}`
+    );
+  }
+}
+
+export function decodeCBORBytes(bytes: Uint8Array): string {
+  try {
+    const value = cborXDecode(bytes);
+    return JSON.stringify(value, null, 2);
+  } catch (error: unknown) {
+    throw new Error(
+      `Failed to decode CBOR: ${error instanceof Error ? error.message : "Unknown error"}`
+    );
+  }
+}
+
+export function uint8ArrayToHex(bytes: Uint8Array): string {
+  return Array.from(bytes)
+    .map(b => b.toString(16).padStart(2, "0"))
+    .join(" ");
+}
+
+export function hexToUint8Array(hex: string): Uint8Array {
+  const clean = hex.replace(/\s+/g, "");
+  if (clean.length % 2 !== 0) {
+    throw new Error("Invalid hex string: odd number of characters");
+  }
+  const bytes = new Uint8Array(clean.length / 2);
+  for (let i = 0; i < bytes.length; i++) {
+    const byte = parseInt(clean.substring(i * 2, i * 2 + 2), 16);
+    if (isNaN(byte)) {
+      throw new Error(`Invalid hex character at position ${i * 2}`);
+    }
+    bytes[i] = byte;
+  }
+  return bytes;
+}
+
+export function uint8ArrayToBase64(bytes: Uint8Array): string {
+  const binary = Array.from(bytes)
+    .map(b => String.fromCharCode(b))
+    .join("");
+  return btoa(binary);
+}
+
+export function base64ToUint8Array(base64: string): Uint8Array {
+  try {
+    const binary = atob(base64.trim());
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    return bytes;
+  } catch (error: unknown) {
+    throw new Error(
+      `Invalid Base64 string: ${error instanceof Error ? error.message : "Unknown error"}`
+    );
   }
 }

@@ -8,6 +8,12 @@ import {
   yamlToJson,
   decodeJWT,
   decodeTLSCertificate,
+  encodeToCBOR,
+  decodeCBORBytes,
+  uint8ArrayToHex,
+  hexToUint8Array,
+  uint8ArrayToBase64,
+  base64ToUint8Array,
 } from "../../client/src/lib/encoders";
 
 describe("Base64 Encoding/Decoding", () => {
@@ -217,6 +223,88 @@ BAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBX
     expect(result.isValid).toBe(false);
     expect(result.error).toBe(
       "Invalid certificate format. Please provide a PEM encoded certificate."
+    );
+  });
+});
+
+describe("CBOR Encoding/Decoding", () => {
+  it("should encode JSON and round-trip back to the same value", () => {
+    const json = '{"name":"CBOR","active":true,"count":42}';
+    const bytes = encodeToCBOR(json);
+    expect(bytes).toBeInstanceOf(Uint8Array);
+    expect(bytes.length).toBeGreaterThan(0);
+    const decoded = decodeCBORBytes(bytes);
+    const parsedDecoded = JSON.parse(decoded);
+    const parsedOriginal = JSON.parse(json);
+    expect(parsedDecoded).toEqual(parsedOriginal);
+  });
+
+  it("should produce output smaller than or similar in size to JSON for typical objects", () => {
+    const json =
+      '{"name":"Alice","role":"admin","active":true,"score":9999,"tags":["a","b","c"]}';
+    const bytes = encodeToCBOR(json);
+    expect(bytes.length).toBeLessThan(json.length);
+  });
+
+  it("should encode and decode arrays", () => {
+    const json = '[1,2,3,"hello",true,null]';
+    const bytes = encodeToCBOR(json);
+    const decoded = decodeCBORBytes(bytes);
+    expect(JSON.parse(decoded)).toEqual(JSON.parse(json));
+  });
+
+  it("should throw on invalid JSON input to encode", () => {
+    expect(() => encodeToCBOR("{not valid json}")).toThrow(
+      "Failed to encode CBOR"
+    );
+  });
+
+  it("should throw on garbage bytes to decode", () => {
+    const garbage = new Uint8Array([0xff, 0xff, 0xff]);
+    expect(() => decodeCBORBytes(garbage)).toThrow("Failed to decode CBOR");
+  });
+});
+
+describe("uint8ArrayToHex / hexToUint8Array", () => {
+  it("should convert bytes to space-separated hex", () => {
+    const bytes = new Uint8Array([0xa1, 0x62, 0x6f, 0x6b, 0xf5]);
+    expect(uint8ArrayToHex(bytes)).toBe("a1 62 6f 6b f5");
+  });
+
+  it("should round-trip hex back to original bytes", () => {
+    const bytes = new Uint8Array([0x00, 0x7f, 0x80, 0xff]);
+    const hex = uint8ArrayToHex(bytes);
+    const back = hexToUint8Array(hex);
+    expect(Array.from(back)).toEqual([0x00, 0x7f, 0x80, 0xff]);
+  });
+
+  it("should tolerate extra whitespace in hex input", () => {
+    const result = hexToUint8Array("  a1  62  ");
+    expect(Array.from(result)).toEqual([0xa1, 0x62]);
+  });
+
+  it("should throw on odd-length hex string", () => {
+    expect(() => hexToUint8Array("abc")).toThrow(
+      "Invalid hex string: odd number of characters"
+    );
+  });
+
+  it("should throw on invalid hex characters", () => {
+    expect(() => hexToUint8Array("zz")).toThrow("Invalid hex character");
+  });
+});
+
+describe("uint8ArrayToBase64 / base64ToUint8Array", () => {
+  it("should round-trip bytes through base64", () => {
+    const bytes = new Uint8Array([0xa1, 0x62, 0x6f, 0x6b, 0xf5]);
+    const b64 = uint8ArrayToBase64(bytes);
+    const back = base64ToUint8Array(b64);
+    expect(Array.from(back)).toEqual(Array.from(bytes));
+  });
+
+  it("should throw on invalid base64 input", () => {
+    expect(() => base64ToUint8Array("!!!not-base64!!!")).toThrow(
+      "Invalid Base64 string"
     );
   });
 });
