@@ -290,7 +290,9 @@ describe("uint8ArrayToHex / hexToUint8Array", () => {
   });
 
   it("should throw on invalid hex characters", () => {
-    expect(() => hexToUint8Array("zz")).toThrow("Invalid hex character");
+    expect(() => hexToUint8Array("zz")).toThrow(
+      "Invalid hex string: contains non-hex characters"
+    );
   });
 });
 

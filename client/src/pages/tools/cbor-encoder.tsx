@@ -39,6 +39,7 @@ export default function CborEncoder() {
   const [jsonInput, setJsonInput] = useState(DEFAULT_CBOR_JSON);
   const [cborHex, setCborHex] = useState(DEFAULT_CBOR_HEX);
   const [cborBase64, setCborBase64] = useState(DEFAULT_CBOR_BASE64);
+  const [cborByteLength, setCborByteLength] = useState(DEFAULT_BYTES.length);
   const [outputTab, setOutputTab] = useState<OutputTab>("hex");
   const [error, setError] = useState<string | null>(null);
   const { theme } = useTheme();
@@ -58,6 +59,7 @@ export default function CborEncoder() {
       const bytes = encodeToCBOR(jsonInput);
       setCborHex(uint8ArrayToHex(bytes));
       setCborBase64(uint8ArrayToBase64(bytes));
+      setCborByteLength(bytes.length);
       setError(null);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Encoding failed");
@@ -82,6 +84,7 @@ export default function CborEncoder() {
     setJsonInput(DEFAULT_CBOR_JSON);
     setCborHex(DEFAULT_CBOR_HEX);
     setCborBase64(DEFAULT_CBOR_BASE64);
+    setCborByteLength(DEFAULT_BYTES.length);
     setError(null);
   };
 
@@ -89,13 +92,12 @@ export default function CborEncoder() {
     setJsonInput("");
     setCborHex("");
     setCborBase64("");
+    setCborByteLength(0);
     setError(null);
   };
 
   const jsonBytes = new TextEncoder().encode(jsonInput).length;
-  const cborBytes = cborHex
-    ? Math.floor(cborHex.replace(/\s+/g, "").length / 2)
-    : 0;
+  const cborBytes = cborByteLength;
   const savings =
     jsonBytes > 0 && cborBytes > 0
       ? Math.round((1 - cborBytes / jsonBytes) * 100)
@@ -221,11 +223,6 @@ export default function CborEncoder() {
                 </Button>
               </div>
             </div>
-            {cborBytes > 0 && (
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                JSON: {jsonBytes} B → CBOR: {cborBytes} B{savingsLabel}
-              </p>
-            )}
           </CardHeader>
           <CardContent>
             <TextArea
@@ -246,6 +243,11 @@ export default function CborEncoder() {
               lineWrapping={true}
               theme={theme}
             />
+            {cborBytes > 0 && (
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
+                JSON: {jsonBytes} B → CBOR: {cborBytes} B{savingsLabel}
+              </p>
+            )}
           </CardContent>
         </Card>
       </div>
