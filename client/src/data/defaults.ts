@@ -538,6 +538,13 @@ export const DEFAULT_BASE64 = `Hello, World! This is a sample text for Base64 en
 It contains multiple lines and various characters: !@#$%^&*()
 UTF-8 characters are also supported: 你好, мир, 🌍`;
 
+export const DEFAULT_CBOR_JSON = `{
+  "name": "CBOR example",
+  "version": 1,
+  "active": true,
+  "tags": ["binary", "compact", "RFC 8949"]
+}`;
+
 export const DEFAULT_URL_ENCODER = `https://example.com/search?q=hello world&category=tech&date=2024-01-01`;
 
 // Text Tools

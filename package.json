@@ -58,6 +58,7 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "eslint-plugin-unused-imports": "^4.1.4",
     "express": "^4.21.2",
+    "cbor-x": "^1.5.9",
     "js-yaml": "^4.1.0",
     "jsbarcode": "^3.12.1",
     "jsdom": "^26.1.0",
