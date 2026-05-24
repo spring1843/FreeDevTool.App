@@ -6,6 +6,7 @@ import { useDemo } from "@/hooks/use-demo-hook";
 import { useTheme } from "@/providers/theme-provider";
 import { useLocation } from "wouter";
 import { toolsData } from "@/data/tools";
+import { shortcutKeyToCode } from "@/lib/shortcut-key-to-code";
 
 import {
   Sheet,
@@ -20,33 +21,6 @@ import {
   TooltipProvider,
 } from "@/components/ui/tooltip";
 import { TooltipTrigger } from "@radix-ui/react-tooltip";
-
-// Maps the key segment of a "Ctrl+Shift+X" shortcut string to a KeyboardEvent.code value.
-// Using event.code (physical key) is layout-independent, so Ctrl+Shift+1 works on all layouts.
-// Only base (unshifted) key representations are mapped here — shifted-symbol aliases
-// (e.g. "!" for Digit1, "@" for Digit2, "~" for Backquote) are intentionally omitted to
-// prevent two different shortcut strings from colliding on the same physical key.
-function shortcutKeyToCode(key: string): string {
-  if (key.length === 1) {
-    const upper = key.toUpperCase();
-    if (upper >= "A" && upper <= "Z") return `Key${upper}`;
-    if (key >= "0" && key <= "9") return `Digit${key}`;
-  }
-  const map: Record<string, string> = {
-    "`": "Backquote",
-    "-": "Minus",
-    "=": "Equal",
-    "[": "BracketLeft",
-    "]": "BracketRight",
-    "\\": "Backslash",
-    ";": "Semicolon",
-    "'": "Quote",
-    ",": "Comma",
-    ".": "Period",
-    "/": "Slash",
-  };
-  return map[key] ?? "";
-}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { isDemoRunning } = useDemo();
@@ -89,10 +63,26 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
       if (!event.ctrlKey) return;
 
-      // Ctrl+Shift+* → navigate to tool by shortcut
       if (event.shiftKey) {
+        // Ctrl+Shift+Alt+* → navigate to tool (three-modifier shortcuts)
+        if (event.altKey) {
+          const matchedTool = allTools.find(t => {
+            if (!t.shortcut.startsWith("Ctrl+Shift+Alt+")) return false;
+            const key = t.shortcut.slice("Ctrl+Shift+Alt+".length);
+            return shortcutKeyToCode(key) === event.code;
+          });
+          if (matchedTool) {
+            event.preventDefault();
+            navigate(matchedTool.path);
+          }
+          // Don't fall through to Ctrl-only shortcuts
+          return;
+        }
+
+        // Ctrl+Shift+* → navigate to tool by shortcut
         const matchedTool = allTools.find(t => {
-          if (!t.shortcut?.startsWith("Ctrl+Shift+")) return false;
+          if (!t.shortcut.startsWith("Ctrl+Shift+")) return false;
+          if (t.shortcut.startsWith("Ctrl+Shift+Alt+")) return false;
           const key = t.shortcut.slice("Ctrl+Shift+".length);
           return shortcutKeyToCode(key) === event.code;
         });

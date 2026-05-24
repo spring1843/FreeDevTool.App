@@ -4,7 +4,7 @@ import { toolsData, type ToolData } from "@/data/tools";
 export interface SearchResult {
   name: string;
   path: string;
-  shortcut?: string;
+  shortcut: string;
   description: string;
   section: string;
   color: string;
@@ -26,8 +26,7 @@ export function useSearch() {
         const descriptionMatch = tool.metadata.description
           .toLowerCase()
           .includes(query);
-        const shortcutMatch =
-          tool.shortcut?.toLowerCase().includes(query) ?? false;
+        const shortcutMatch = tool.shortcut.toLowerCase().includes(query);
 
         if (nameMatch || descriptionMatch || shortcutMatch) {
           results.push({
@@ -62,7 +61,7 @@ export function useSearch() {
         return (
           tool.name.toLowerCase().includes(query) ||
           tool.metadata.description.toLowerCase().includes(query) ||
-          (tool.shortcut?.toLowerCase().includes(query) ?? false)
+          tool.shortcut.toLowerCase().includes(query)
         );
       });
 

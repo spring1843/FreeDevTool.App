@@ -5,7 +5,7 @@ function renderToolCard(tool: Tool): string {
   return `<a href="${escapeHtml(tool.path)}" class="ssr-tool-card">
       <div class="ssr-tool-name">${escapeHtml(tool.name)}</div>
       <p class="ssr-tool-desc">${escapeHtml(tool.metadata.description)}</p>
-      ${tool.shortcut ? `<span class="ssr-tool-shortcut">${escapeHtml(tool.shortcut)}</span>` : ""}
+      <span class="ssr-tool-shortcut">${escapeHtml(tool.shortcut)}</span>
     </a>`;
 }
 
