@@ -293,4 +293,21 @@ test.describe("URL to JSON Tool", () => {
     expect(parsed.queryParams).toEqual({ id: "123" });
     await expectNoErrors(page);
   });
+
+  test("should show 'unknown' protocol when no protocol is entered", async ({
+    page,
+  }) => {
+    const urlInput = page.getByTestId("url-input");
+
+    await urlInput.fill("example.com");
+
+    const jsonOutput = page.locator("#output .cm-content");
+    await expect(jsonOutput).toBeVisible();
+    const outputText = await jsonOutput.textContent();
+    const parsed = JSON.parse(outputText || "{}");
+
+    expect(parsed.protocol).toBe("unknown");
+    expect(parsed.hostname).toBe("example.com");
+    await expectNoErrors(page);
+  });
 });

@@ -127,10 +127,18 @@ describe("parseURL", () => {
   });
 
   describe("protocol handling", () => {
-    it("adds https:// when protocol is missing", () => {
+    it("shows 'unknown' when protocol is missing", () => {
       const result = parseURL("example.com");
       expect(result.success).toBe(true);
-      expect(result.components.protocol).toBe("https");
+      expect(result.components.protocol).toBe("unknown");
+    });
+
+    it("still parses hostname and TLD when protocol is missing", () => {
+      const result = parseURL("example.com");
+      expect(result.success).toBe(true);
+      expect(result.components.hostname).toBe("example.com");
+      expect(result.components.domain).toBe("example");
+      expect(result.components.tld).toBe("com");
     });
 
     it("preserves http protocol", () => {
