@@ -33,10 +33,11 @@ test.describe("Number Base Converter Tool", () => {
     await expect(inputSummary).toBeVisible();
 
     // The page should not have horizontal scrollbar (scrollWidth <= clientWidth)
-    const hasHorizontalOverflow = await page.evaluate(() => {
-      return document.documentElement.scrollWidth >
-        document.documentElement.clientWidth;
-    });
+    const hasHorizontalOverflow = await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth >
+        document.documentElement.clientWidth
+    );
     expect(hasHorizontalOverflow).toBe(false);
 
     await expectNoErrors(page);

@@ -21,10 +21,45 @@ import {
 } from "@/components/ui/tooltip";
 import { TooltipTrigger } from "@radix-ui/react-tooltip";
 
+// Maps the key segment of a "Ctrl+Shift+X" shortcut string to a KeyboardEvent.code value.
+// Using event.code (physical key) is layout-independent, so Ctrl+Shift+1 works on all layouts.
+function shortcutKeyToCode(key: string): string {
+  if (key.length === 1) {
+    const upper = key.toUpperCase();
+    if (upper >= "A" && upper <= "Z") return `Key${upper}`;
+    if (key >= "0" && key <= "9") return `Digit${key}`;
+  }
+  const map: Record<string, string> = {
+    "`": "Backquote",
+    "~": "Backquote",
+    "-": "Minus",
+    "=": "Equal",
+    "[": "BracketLeft",
+    "]": "BracketRight",
+    "\\": "Backslash",
+    ";": "Semicolon",
+    "'": "Quote",
+    ",": "Comma",
+    ".": "Period",
+    "/": "Slash",
+    "!": "Digit1",
+    "@": "Digit2",
+    "#": "Digit3",
+    $: "Digit4",
+    "%": "Digit5",
+    "^": "Digit6",
+    "&": "Digit7",
+    "*": "Digit8",
+    "(": "Digit9",
+    ")": "Digit0",
+  };
+  return map[key] ?? "";
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
   const { isDemoRunning } = useDemo();
   const { theme, setTheme } = useTheme();
-  const [location] = useLocation();
+  const [location, navigate] = useLocation();
 
   const allTools = useMemo(
     () => Object.values(toolsData).flatMap(category => category.tools),
@@ -62,6 +97,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
       if (!event.ctrlKey) return;
 
+      // Ctrl+Shift+* → navigate to tool by shortcut
+      if (event.shiftKey) {
+        const matchedTool = allTools.find(t => {
+          if (!t.shortcut.startsWith("Ctrl+Shift+")) return false;
+          const key = t.shortcut.slice("Ctrl+Shift+".length);
+          return shortcutKeyToCode(key) === event.code;
+        });
+        if (matchedTool) {
+          event.preventDefault();
+          navigate(matchedTool.path);
+        }
+        // Don't fall through to Ctrl-only shortcuts
+        return;
+      }
+
       switch (event.key.toLowerCase()) {
         case "d":
           event.preventDefault();
@@ -85,7 +135,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [theme, setTheme, isDemoRunning]);
+  }, [theme, setTheme, isDemoRunning, allTools, navigate]);
 
   useEffect(() => {
     const handleResize = () => {
