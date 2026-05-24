@@ -23,7 +23,7 @@
   --border: hsl(214 32% 91%);
   --input: hsl(214 32% 91%);
   --ring: hsl(217 91% 60%);
-  /* Flat design: 0 radius cascades to rounded-sm/md/lg/xl via tailwind.config.ts */
+  /* Flat design: 0 radius cascades to rounded-sm/md/lg via tailwind.config.ts */
   --radius: 0rem;
 
   /* Custom colors matching design */
