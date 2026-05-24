@@ -23,7 +23,8 @@
   --border: hsl(214 32% 91%);
   --input: hsl(214 32% 91%);
   --ring: hsl(217 91% 60%);
-  --radius: 0.5rem;
+  /* Flat design: 0 radius cascades to rounded-sm/md/lg/xl via tailwind.config.ts */
+  --radius: 0rem;
 
   /* Custom colors matching design */
   --slate-50: hsl(210 40% 98%);
@@ -44,6 +45,13 @@
   --font-mono:
     "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New",
     monospace;
+
+  /* Syntax highlighting token colors */
+  --hljs-keyword: #c792ea;
+  --hljs-string: #c3e88d;
+  --hljs-number: #f78c6c;
+  --hljs-attr: #82b1ff;
+  --hljs-punctuation: #89ddff;
 }
 
 .dark {
@@ -66,6 +74,13 @@
   --border: hsl(215 25% 27%);
   --input: hsl(215 25% 27%);
   --ring: hsl(217 91% 60%);
+
+  /* Syntax highlighting token colors (dark) */
+  --hljs-keyword: #bb9af7;
+  --hljs-string: #9ece6a;
+  --hljs-number: #ff9e64;
+  --hljs-attr: #7aa2f7;
+  --hljs-punctuation: #73daca;
 }
 
 @layer base {
@@ -124,43 +139,31 @@
   }
 
   .hljs-keyword {
-    color: #c792ea;
+    color: var(--hljs-keyword);
   }
 
   .hljs-string {
-    color: #c3e88d;
+    color: var(--hljs-string);
   }
 
   .hljs-number {
-    color: #f78c6c;
+    color: var(--hljs-number);
   }
 
   .hljs-attr {
-    color: #82b1ff;
+    color: var(--hljs-attr);
   }
 
   .hljs-punctuation {
-    color: #89ddff;
+    color: var(--hljs-punctuation);
   }
 
-  .dark .hljs-keyword {
-    color: #bb9af7;
-  }
-
-  .dark .hljs-string {
-    color: #9ece6a;
-  }
-
-  .dark .hljs-number {
-    color: #ff9e64;
-  }
-
-  .dark .hljs-attr {
-    color: #7aa2f7;
-  }
-
+  .dark .hljs-keyword,
+  .dark .hljs-string,
+  .dark .hljs-number,
+  .dark .hljs-attr,
   .dark .hljs-punctuation {
-    color: #73daca;
+    /* Values already updated via .dark CSS variables above */
   }
 
   /* Diff styles */
@@ -227,68 +230,22 @@
     background-color: hsl(0 84% 22%);
   }
 
-  /* Flat Design - Remove all rounded corners */
-  .rounded-none {
-    border-radius: 0 !important;
-  }
-
-  .rounded {
-    border-radius: 0 !important;
-  }
-
-  .rounded-sm {
-    border-radius: 0 !important;
-  }
-
-  .rounded-md {
-    border-radius: 0 !important;
-  }
-
-  .rounded-lg {
-    border-radius: 8px !important;
-  }
-
-  .rounded-xl {
-    border-radius: 0 !important;
-  }
-
-  .rounded-2xl {
-    border-radius: 0 !important;
-  }
-
-  .rounded-3xl {
-    border-radius: 0 !important;
-  }
-
-  .rounded-full {
-    border-radius: 0 !important;
-  }
-
-  /* Override component rounded corners */
-  .card,
-  .button,
-  .input,
-  .textarea,
-  .select,
-  .badge {
-    border-radius: 0 !important;
-  }
-
-  /* Mind map specific styles */
+  /* Mind map styles */
   .mind-map-container {
     position: relative;
     width: 100%;
-    height: 500px;
+    height: 600px;
     overflow: hidden;
-    border-radius: 0 !important;
   }
 
   .mind-map-center {
     position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 120px;
     height: 120px;
     border: 3px solid;
-    border-radius: 0 !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -310,7 +267,6 @@
     min-width: 100px;
     height: 80px;
     border: 2px solid;
-    border-radius: 0 !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -319,7 +275,7 @@
     font-size: 12px;
     z-index: 5;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s ease;
     padding: 8px;
   }
 
@@ -328,7 +284,6 @@
     min-width: 80px;
     height: 60px;
     border: 1px solid;
-    border-radius: 0 !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -336,14 +291,14 @@
     text-align: center;
     z-index: 4;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s ease;
     padding: 6px;
   }
 
   .mind-map-line {
     position: absolute;
     height: 2px;
-    background-color: currentColor;
+    background: currentColor;
     transform-origin: left center;
     z-index: 1;
     opacity: 0.5;
@@ -359,71 +314,6 @@
   .dark .diff-word-modified {
     background-color: hsl(142 76% 30%);
     color: white;
-  }
-
-  /* Mind map styles */
-  .mind-map-container {
-    position: relative;
-    width: 100%;
-    height: 600px;
-    overflow: hidden;
-  }
-
-  .mind-map-center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 120px;
-    height: 120px;
-    border: 3px solid;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 14px;
-    text-align: center;
-  }
-
-  .mind-map-section {
-    position: absolute;
-    width: 100px;
-    height: 80px;
-    border: 2px solid;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 12px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .mind-map-tool {
-    position: absolute;
-    width: 80px;
-    height: 60px;
-    border: 1px solid;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .mind-map-line {
-    position: absolute;
-    background: currentColor;
-    height: 2px;
-    transform-origin: left center;
-  }
-
-  /* Flat design - remove all border radius */
-  * {
-    border-radius: 0 !important;
   }
 
   /* Mobile CodeMirror fix - prevent focus lock on mobile devices */
