@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { GitCompare } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import {
@@ -18,106 +19,77 @@ import { DEFAULT_TEXT_DIFF_1, DEFAULT_TEXT_DIFF_2 } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { diffLines, createTwoFilesPatch } from "diff";
+import {
+  parseDiff,
+  Diff,
+  Hunk,
+  type FileData,
+  type ViewType,
+} from "react-diff-view";
+import "react-diff-view/style/index.css";
 
-interface DiffLine {
-  type: "added" | "removed" | "unchanged" | "modified";
-  line1?: string;
-  line2?: string;
-  lineNumber1?: number;
-  lineNumber2?: number;
+interface DiffStats {
+  linesAdded: number;
+  linesRemoved: number;
+  charactersAdded: number;
+  charactersRemoved: number;
 }
 
 export default function TextDiff() {
   const tool = getToolByPath("/tools/text-diff");
   const [text1, setText1] = useState(DEFAULT_TEXT_DIFF_1);
   const [text2, setText2] = useState(DEFAULT_TEXT_DIFF_2);
-  const [diffResult, setDiffResult] = useState<DiffLine[]>([]);
-  const [diffStats, setDiffStats] = useState<{
-    linesAdded: number;
-    linesRemoved: number;
-    linesModified: number;
-    charactersAdded: number;
-    charactersRemoved: number;
-    charactersModified: number;
-  } | null>(null);
+  const [diffFile, setDiffFile] = useState<FileData | null>(null);
+  const [diffStats, setDiffStats] = useState<DiffStats | null>(null);
+  const [viewType, setViewType] = useState<ViewType>("split");
   const { theme } = useTheme();
 
   const calculateDiff = useCallback(() => {
-    const lines1 = text1.split("\n");
-    const lines2 = text2.split("\n");
-    const result: DiffLine[] = [];
-
-    const stats = {
+    const changes = diffLines(text1, text2);
+    const stats: DiffStats = {
       linesAdded: 0,
       linesRemoved: 0,
-      linesModified: 0,
       charactersAdded: 0,
       charactersRemoved: 0,
-      charactersModified: 0,
     };
-
-    const maxLines = Math.max(lines1.length, lines2.length);
-
-    for (let i = 0; i < maxLines; i++) {
-      const line1 = lines1[i];
-      const line2 = lines2[i];
-
-      if (line1 === undefined) {
-        // Line added in text2
-        result.push({
-          type: "added",
-          line2,
-          lineNumber2: i + 1,
-        });
-        stats.linesAdded++;
-        stats.charactersAdded += line2.length;
-      } else if (line2 === undefined) {
-        // Line removed from text1
-        result.push({
-          type: "removed",
-          line1,
-          lineNumber1: i + 1,
-        });
-        stats.linesRemoved++;
-        stats.charactersRemoved += line1.length;
-      } else if (line1 === line2) {
-        // Lines are identical
-        result.push({
-          type: "unchanged",
-          line1,
-          line2,
-          lineNumber1: i + 1,
-          lineNumber2: i + 1,
-        });
-      } else {
-        // Lines are different
-        result.push({
-          type: "modified",
-          line1,
-          line2,
-          lineNumber1: i + 1,
-          lineNumber2: i + 1,
-        });
-        stats.linesModified++;
-        stats.charactersModified += Math.abs(line1.length - line2.length);
+    for (const change of changes) {
+      if (change.added) {
+        stats.linesAdded += change.count ?? 0;
+        stats.charactersAdded += change.value.length;
+      } else if (change.removed) {
+        stats.linesRemoved += change.count ?? 0;
+        stats.charactersRemoved += change.value.length;
       }
     }
-
-    setDiffResult(result);
     setDiffStats(stats);
+
+    const rawPatch = createTwoFilesPatch(
+      "Text 1",
+      "Text 2",
+      text1,
+      text2,
+      "",
+      "",
+      { context: 3 }
+    );
+    // createTwoFilesPatch prepends "===...===\n" which parseDiff doesn't expect
+    const patch = rawPatch.replace(/^=+\n/, "");
+    const files = parseDiff(patch);
+    setDiffFile(files[0] ?? null);
   }, [text1, text2]);
 
   const handleReset = () => {
     setText1(DEFAULT_TEXT_DIFF_1);
     setText2(DEFAULT_TEXT_DIFF_2);
-    setDiffResult([]);
+    setDiffFile(null);
     setDiffStats(null);
   };
 
   const handleClear = () => {
     setText1("");
     setText2("");
-    setDiffResult([]);
+    setDiffFile(null);
     setDiffStats(null);
   };
 
@@ -130,40 +102,6 @@ export default function TextDiff() {
   useEffect(() => {
     calculateDiff();
   }, [calculateDiff]);
-
-  const renderDiffLine = (diff: DiffLine, index: number) => {
-    const getLineClass = (type: string) => {
-      switch (type) {
-        case "added":
-          return "bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500";
-        case "removed":
-          return "bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500";
-        case "modified":
-          return "bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500";
-        default:
-          return "bg-gray-50 dark:bg-gray-800";
-      }
-    };
-
-    return (
-      <div key={index} className={`p-2 ${getLineClass(diff.type)}`}>
-        <div className="grid grid-cols-2 gap-4 text-sm font-mono">
-          <div>
-            {diff.lineNumber1 ? (
-              <span className="text-gray-500 mr-2">{diff.lineNumber1}:</span>
-            ) : null}
-            {diff.line1 || ""}
-          </div>
-          <div>
-            {diff.lineNumber2 ? (
-              <span className="text-gray-500 mr-2">{diff.lineNumber2}:</span>
-            ) : null}
-            {diff.line2 || ""}
-          </div>
-        </div>
-      </div>
-    );
-  };
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -262,24 +200,52 @@ export default function TextDiff() {
         </Card>
       </div>
 
-      {diffResult.length > 0 && (
+      {diffFile ? (
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle>Diff Results</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="border rounded-lg overflow-hidden">
-              <div className="grid grid-cols-2 gap-4 p-3 bg-gray-100 dark:bg-gray-800 border-b font-semibold text-sm">
-                <div>Original (Text 1)</div>
-                <div>Modified (Text 2)</div>
-              </div>
-              <div className="max-h-96 overflow-y-auto">
-                {diffResult.map((diff, index) => renderDiffLine(diff, index))}
+            <div className="flex items-center justify-between">
+              <CardTitle>Diff Results</CardTitle>
+              <div className="flex gap-1">
+                <Button
+                  variant={viewType === "split" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setViewType("split")}
+                  title="Side-by-side view"
+                >
+                  Split
+                </Button>
+                <Button
+                  variant={viewType === "unified" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setViewType("unified")}
+                  title="Unified single-column view"
+                >
+                  Unified
+                </Button>
               </div>
             </div>
+          </CardHeader>
+          <CardContent>
+            {(diffFile.hunks?.length ?? 0) > 0 ? (
+              <div className="border rounded-lg overflow-auto max-h-[600px]">
+                <Diff
+                  viewType={viewType}
+                  diffType="modify"
+                  hunks={diffFile.hunks}
+                >
+                  {hunks =>
+                    hunks.map(hunk => <Hunk key={hunk.content} hunk={hunk} />)
+                  }
+                </Diff>
+              </div>
+            ) : (
+              <p className="text-center text-slate-500 dark:text-slate-400 py-8">
+                Texts are identical — no differences found.
+              </p>
+            )}
           </CardContent>
         </Card>
-      )}
+      ) : null}
 
       {diffStats ? (
         <Card className="mb-6">
@@ -302,18 +268,10 @@ export default function TextDiff() {
               </Badge>
               <Badge
                 variant="outline"
-                className="bg-yellow-50 text-yellow-700 border-yellow-200"
-              >
-                ~{diffStats.linesModified} modified
-              </Badge>
-              <Badge
-                variant="outline"
                 className="bg-blue-50 text-blue-700 border-blue-200"
               >
-                {diffStats.charactersAdded +
-                  diffStats.charactersRemoved +
-                  diffStats.charactersModified}{" "}
-                chars changed
+                {diffStats.charactersAdded + diffStats.charactersRemoved} chars
+                changed
               </Badge>
             </div>
           </CardContent>

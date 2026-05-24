@@ -194,6 +194,39 @@
     color: white;
   }
 
+  /* react-diff-view dark mode overrides */
+  /* Use html.dark for specificity 0-1-1, beating :root (0-1-0) regardless of load order */
+  html.dark {
+    --diff-text-color: hsl(210 40% 98%);
+    --diff-gutter-insert-background-color: hsl(142 76% 10%);
+    --diff-gutter-delete-background-color: hsl(0 84% 10%);
+    --diff-code-insert-background-color: hsl(142 76% 7%);
+    --diff-code-delete-background-color: hsl(0 84% 7%);
+    --diff-code-insert-edit-background-color: hsl(142 76% 22%);
+    --diff-code-delete-edit-background-color: hsl(0 84% 22%);
+    --diff-omit-gutter-line-color: hsl(0 84% 50%);
+  }
+
+  /* Class-based fallbacks for react-diff-view dark mode (specificity 0-2-0) */
+  .dark .diff-gutter-insert {
+    background-color: hsl(142 76% 10%);
+  }
+  .dark .diff-gutter-delete {
+    background-color: hsl(0 84% 10%);
+  }
+  .dark .diff-code-insert {
+    background-color: hsl(142 76% 7%);
+  }
+  .dark .diff-code-delete {
+    background-color: hsl(0 84% 7%);
+  }
+  .dark .diff-code-insert .diff-code-edit {
+    background-color: hsl(142 76% 22%);
+  }
+  .dark .diff-code-delete .diff-code-edit {
+    background-color: hsl(0 84% 22%);
+  }
+
   /* Flat Design - Remove all rounded corners */
   .rounded-none {
     border-radius: 0 !important;
