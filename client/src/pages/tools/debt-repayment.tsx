@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/tool-button";
 import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
+import { useTheme } from "@/providers/theme-provider";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
@@ -50,6 +51,8 @@ interface DebtResult {
 
 export default function DebtRepaymentCalculator() {
   const tool = getToolByPath("/tools/debt-repayment");
+  const { theme } = useTheme();
+  const labelColor = theme === "dark" ? "#fff" : "#000";
   const [principal, setPrincipal] = useState(DEFAULT_DEBT_PRINCIPAL);
   const [annualRate, setAnnualRate] = useState(DEFAULT_DEBT_ANNUAL_RATE);
   const [monthlyPayment, setMonthlyPayment] = useState(
@@ -404,7 +407,7 @@ export default function DebtRepaymentCalculator() {
                         `$${value.toLocaleString()}`,
                         "",
                       ]}
-                      labelStyle={{ color: "#000" }}
+                      labelStyle={{ color: labelColor }}
                     />
                     <Line
                       type="monotone"
@@ -442,7 +445,7 @@ export default function DebtRepaymentCalculator() {
                           `$${value.toLocaleString()}`,
                           "",
                         ]}
-                        labelStyle={{ color: "#000" }}
+                        labelStyle={{ color: labelColor }}
                       />
                       <Bar dataKey="Principal" stackId="a" fill="#10b981" />
                       <Bar dataKey="Interest" stackId="a" fill="#f59e0b" />

@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/tool-button";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
+import { useTheme } from "@/providers/theme-provider";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
@@ -55,6 +56,8 @@ interface CompoundInterestResult {
 
 export default function CompoundInterestCalculator() {
   const tool = getToolByPath("/tools/compound-interest");
+  const { theme } = useTheme();
+  const labelColor = theme === "dark" ? "#fff" : "#000";
   const [principal, setPrincipal] = useState(DEFAULT_COMPOUND_PRINCIPAL);
   const [annualRate, setAnnualRate] = useState(DEFAULT_COMPOUND_ANNUAL_RATE);
   const [years, setYears] = useState(DEFAULT_COMPOUND_YEARS);
@@ -492,7 +495,7 @@ export default function CompoundInterestCalculator() {
                       `$${value.toLocaleString()}`,
                       "",
                     ]}
-                    labelStyle={{ color: "#000" }}
+                    labelStyle={{ color: labelColor }}
                   />
                   <Area
                     type="monotone"
