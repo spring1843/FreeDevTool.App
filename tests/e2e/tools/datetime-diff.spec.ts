@@ -218,9 +218,15 @@ test.describe("Date/Time Difference Tool", () => {
     const nowButtons = page.getByTestId("now-button");
     await nowButtons.first().click();
 
-    // Verify toast appears
-    const toast = page.locator("text=Start time updated");
-    await expect(toast).toBeVisible();
+    // Verify toast appears (match the visible toast title element specifically)
+    const toast = page.locator('[data-testid="toast-title"]').filter({
+      hasText: "Start time updated",
+    });
+    // Fall back to the visible toast div if no testid exists
+    const toastFallback = page
+      .locator("div.text-sm.font-semibold", { hasText: "Start time updated" })
+      .first();
+    await expect(toast.or(toastFallback)).toBeVisible();
 
     // Verify start date is no longer empty
     const startDateInput = page.getByTestId("start-date-input");
