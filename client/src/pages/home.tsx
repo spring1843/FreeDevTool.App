@@ -173,15 +173,17 @@ export default function Home() {
                         {tool.metadata.description}
                       </p>
 
-                      <span
-                        className="
+                      {tool.shortcut ? (
+                        <span
+                          className="
                           text-xs px-2 py-1 rounded-lg
                           bg-slate-100 text-slate-600 border border-slate-300
                           dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700
                         "
-                      >
-                        {tool.shortcut}
-                      </span>
+                        >
+                          {tool.shortcut}
+                        </span>
+                      ) : null}
                     </Card>
                   </a>
                 </Link>

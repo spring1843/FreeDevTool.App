@@ -23,6 +23,9 @@ import { TooltipTrigger } from "@radix-ui/react-tooltip";
 
 // Maps the key segment of a "Ctrl+Shift+X" shortcut string to a KeyboardEvent.code value.
 // Using event.code (physical key) is layout-independent, so Ctrl+Shift+1 works on all layouts.
+// Only base (unshifted) key representations are mapped here — shifted-symbol aliases
+// (e.g. "!" for Digit1, "@" for Digit2, "~" for Backquote) are intentionally omitted to
+// prevent two different shortcut strings from colliding on the same physical key.
 function shortcutKeyToCode(key: string): string {
   if (key.length === 1) {
     const upper = key.toUpperCase();
@@ -31,7 +34,6 @@ function shortcutKeyToCode(key: string): string {
   }
   const map: Record<string, string> = {
     "`": "Backquote",
-    "~": "Backquote",
     "-": "Minus",
     "=": "Equal",
     "[": "BracketLeft",
@@ -42,16 +44,6 @@ function shortcutKeyToCode(key: string): string {
     ",": "Comma",
     ".": "Period",
     "/": "Slash",
-    "!": "Digit1",
-    "@": "Digit2",
-    "#": "Digit3",
-    $: "Digit4",
-    "%": "Digit5",
-    "^": "Digit6",
-    "&": "Digit7",
-    "*": "Digit8",
-    "(": "Digit9",
-    ")": "Digit0",
   };
   return map[key] ?? "";
 }
@@ -100,7 +92,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       // Ctrl+Shift+* → navigate to tool by shortcut
       if (event.shiftKey) {
         const matchedTool = allTools.find(t => {
-          if (!t.shortcut.startsWith("Ctrl+Shift+")) return false;
+          if (!t.shortcut?.startsWith("Ctrl+Shift+")) return false;
           const key = t.shortcut.slice("Ctrl+Shift+".length);
           return shortcutKeyToCode(key) === event.code;
         });

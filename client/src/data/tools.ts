@@ -65,7 +65,7 @@ export interface Tool {
   name: string;
   path: string;
   icon: LucideIcon;
-  shortcut: string;
+  shortcut?: string;
   metadata: {
     title: string;
     description: string;
@@ -2459,7 +2459,6 @@ export const toolsData: ToolData = {
         name: "URL Encoder",
         path: "/tools/url-encoder",
         icon: Link,
-        shortcut: "Ctrl+Shift+~",
         metadata: {
           title: "URL Encoder/Decoder - Encode and Decode URLs",
           description:
@@ -3040,7 +3039,7 @@ export const toolsData: ToolData = {
         name: "Text Diff",
         path: "/tools/text-diff",
         icon: FileText,
-        shortcut: "Ctrl+Shift+!",
+        shortcut: "Ctrl+Shift+M",
         metadata: {
           title: "Text Diff - Compare Two Texts",
           description:
@@ -3800,7 +3799,6 @@ export const toolsData: ToolData = {
         name: "UUID Generator",
         path: "/tools/uuid-generator",
         icon: Shuffle,
-        shortcut: "Ctrl+Shift+@",
         metadata: {
           title: "UUID Generator - Generate Unique Identifiers",
           description:

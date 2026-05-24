@@ -36,7 +36,7 @@ test.describe("Number Base Converter Tool", () => {
     // Assert overflow on the summary element itself with a small tolerance for
     // browser rounding/sub-pixel layout differences.
     const hasHorizontalOverflow = await inputSummary.evaluate(
-      (element) => element.scrollWidth - element.clientWidth > 1
+      element => element.scrollWidth - element.clientWidth > 1
     );
     expect(hasHorizontalOverflow).toBe(false);
 

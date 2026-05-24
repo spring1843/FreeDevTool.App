@@ -81,9 +81,11 @@ export function SearchResults({
                 <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 line-clamp-2">
                   {result.description}
                 </p>
-                <p className="text-xs text-slate-500 dark:text-slate-500 mt-1 font-mono">
-                  {result.shortcut}
-                </p>
+                {result.shortcut ? (
+                  <p className="text-xs text-slate-500 dark:text-slate-500 mt-1 font-mono">
+                    {result.shortcut}
+                  </p>
+                ) : null}
               </div>
               <ExternalLink
                 className={`w-4 h-4 ml-2 transition-opacity ${
