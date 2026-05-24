@@ -32,7 +32,8 @@ export function parseURL(inputUrl: string): ParseURLResult {
 
     let urlToParse = inputUrl.trim();
 
-    if (!KNOWN_PROTOCOLS_REGEX.test(urlToParse)) {
+    const userProvidedProtocol = KNOWN_PROTOCOLS_REGEX.test(urlToParse);
+    if (!userProvidedProtocol) {
       urlToParse = `https://${urlToParse}`;
     }
 
@@ -47,7 +48,7 @@ export function parseURL(inputUrl: string): ParseURLResult {
     });
 
     const components: URLComponents = {
-      protocol: url.protocol.slice(0, -1),
+      protocol: userProvidedProtocol ? url.protocol.slice(0, -1) : "unknown",
       hostname: url.hostname,
       port: url.port || undefined,
       pathname: url.pathname,
