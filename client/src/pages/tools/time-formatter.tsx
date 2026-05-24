@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TimezoneSelector } from "@/components/ui/timezone-selector";
 import { getUserTimezone } from "@/lib/time-tools";
-import { Clock, Copy, Check } from "lucide-react";
+import { Clock, Copy, Check, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   ResetButton,
@@ -31,6 +31,7 @@ export default function TimeFormatter() {
   const [inputTimezone, setInputTimezone] = useState(getUserTimezone());
   const [formats, setFormats] = useState<TimeFormat[]>([]);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [yearError, setYearError] = useState<string>("");
 
   // Set current date and time on load
   useEffect(() => {
@@ -45,12 +46,25 @@ export default function TimeFormatter() {
   useEffect(() => {
     if (inputDate && inputTime) {
       formatTime();
+    } else {
+      setYearError("");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputDate, inputTime, inputTimezone]);
 
   const formatTime = useCallback(() => {
     try {
+      // Reject years with more than 4 digits (> 9999)
+      const yearPart = inputDate.split("-")[0];
+      if (yearPart && yearPart.length > 4) {
+        setYearError(
+          "Invalid year: year must be 4 digits or fewer (max 9999)."
+        );
+        setFormats([]);
+        return;
+      }
+      setYearError("");
+
       // Create date object from input
       const dateTime = new Date(`${inputDate}T${inputTime}`);
 
@@ -291,6 +305,7 @@ export default function TimeFormatter() {
     setInputDate("");
     setInputTime("");
     setFormats([]);
+    setYearError("");
   };
 
   const hasModifiedData = inputDate.trim() !== "" && inputTime.trim() !== "";
@@ -384,6 +399,17 @@ export default function TimeFormatter() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Year validation error */}
+      {yearError ? (
+        <div
+          data-testid="year-error"
+          className="flex items-center gap-2 mb-6 px-4 py-3 rounded-lg border border-red-300 bg-red-50 text-red-700 dark:border-red-700 dark:bg-red-950 dark:text-red-400"
+        >
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          <span className="text-sm">{yearError}</span>
+        </div>
+      ) : null}
 
       {/* Formatted Times */}
       {formats.length > 0 && (
