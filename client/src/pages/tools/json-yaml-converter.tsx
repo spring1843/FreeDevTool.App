@@ -19,6 +19,14 @@ import { DEFAULT_JSON } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const DEFAULT_YAML = convertJSONToYAML(DEFAULT_JSON).converted;
 
@@ -27,6 +35,7 @@ export default function JSONYAMLConverter() {
   const [jsonText, setJsonText] = useState(DEFAULT_JSON);
   const [yamlText, setYamlText] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [autoProcess, setAutoProcess] = useState(true);
   const { theme } = useTheme();
 
   const convertToYAML = useCallback(() => {
@@ -68,6 +77,13 @@ export default function JSONYAMLConverter() {
     const { converted } = convertJSONToYAML(DEFAULT_JSON);
     setYamlText(converted);
   }, []);
+
+  // Auto-convert JSON to YAML when input changes, if autoProcess enabled
+  useEffect(() => {
+    if (autoProcess) {
+      convertToYAML();
+    }
+  }, [autoProcess, convertToYAML]);
 
   const hasModifiedData =
     (jsonText !== DEFAULT_JSON && jsonText.trim() !== "") ||
@@ -120,6 +136,29 @@ export default function JSONYAMLConverter() {
           >
             YAML → JSON
           </ToolButton>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="json-yaml-auto-process"
+                    checked={autoProcess}
+                    onCheckedChange={setAutoProcess}
+                    data-testid="auto-process-switch"
+                  />
+                  <Label
+                    htmlFor="json-yaml-auto-process"
+                    className="cursor-pointer"
+                  >
+                    Auto process
+                  </Label>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Automatically convert JSON to YAML when input changes</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

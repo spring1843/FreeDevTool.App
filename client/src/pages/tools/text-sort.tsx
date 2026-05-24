@@ -27,6 +27,12 @@ import { DEFAULT_TEXT_SORT } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type SortType = "alphabetical" | "numerical" | "length" | "reverse" | "random";
 type SortOrder = "asc" | "desc";
@@ -40,6 +46,7 @@ export default function TextSort() {
   const [unique, setUnique] = useState(false);
   const [trimLines, setTrimLines] = useState(false);
   const [sortedOutput, setSortedOutput] = useState("");
+  const [autoProcess, setAutoProcess] = useState(true);
   const { theme } = useTheme();
 
   const sortText = useCallback(() => {
@@ -130,8 +137,10 @@ export default function TextSort() {
     trimLines === false;
 
   useEffect(() => {
-    sortText();
-  }, [sortText]);
+    if (autoProcess) {
+      sortText();
+    }
+  }, [autoProcess, sortText]);
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -164,6 +173,29 @@ export default function TextSort() {
           >
             Sort Text
           </ToolButton>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="text-sort-auto-process"
+                    checked={autoProcess}
+                    onCheckedChange={setAutoProcess}
+                    data-testid="auto-process-switch"
+                  />
+                  <Label
+                    htmlFor="text-sort-auto-process"
+                    className="cursor-pointer"
+                  >
+                    Auto process
+                  </Label>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Automatically process the input when it changes</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

@@ -2,6 +2,13 @@ import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   Select,
   SelectContent,
@@ -155,6 +162,7 @@ export default function QRGenerator() {
   const [qrUrl, setQrUrl] = useState("");
   const [svgData, setSvgData] = useState("");
   const [error, setError] = useState("");
+  const [autoProcess, setAutoProcess] = useState(true);
 
   const { toast } = useToast();
   // Theme no longer needed after switching to native textarea
@@ -194,15 +202,16 @@ export default function QRGenerator() {
 
   // Auto-generate on input change
   useEffect(() => {
-    if (inputText.trim()) {
+    if (autoProcess && inputText.trim()) {
       const timer = setTimeout(generateQR, 500);
       return () => clearTimeout(timer);
     }
+    if (!autoProcess) return undefined;
     setQrUrl("");
     setSvgData("");
     setError("");
     return undefined;
-  }, [inputText, qrType, qrSize, generateQR]);
+  }, [inputText, qrType, qrSize, generateQR, autoProcess]);
 
   // Download QR code
   const downloadQR = () => {
@@ -360,6 +369,26 @@ export default function QRGenerator() {
               </ToolButton>
             </>
           ) : null}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="qr-auto-process"
+                    checked={autoProcess}
+                    onCheckedChange={setAutoProcess}
+                    data-testid="auto-process-switch"
+                  />
+                  <Label htmlFor="qr-auto-process" className="cursor-pointer">
+                    Auto process
+                  </Label>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Automatically process the input when it changes</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

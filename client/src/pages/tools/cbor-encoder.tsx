@@ -12,7 +12,7 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Lock, Unlock } from "lucide-react";
 import { SecurityBanner } from "@/components/ui/security-banner";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   ToolButton,
   ResetButton,
@@ -26,6 +26,14 @@ import { DEFAULT_CBOR_JSON } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type OutputTab = "hex" | "base64";
 
@@ -42,6 +50,7 @@ export default function CborEncoder() {
   const [cborByteLength, setCborByteLength] = useState(DEFAULT_BYTES.length);
   const [outputTab, setOutputTab] = useState<OutputTab>("hex");
   const [error, setError] = useState<string | null>(null);
+  const [autoProcess, setAutoProcess] = useState(true);
   const { theme } = useTheme();
 
   const currentOutput = outputTab === "hex" ? cborHex : cborBase64;
@@ -54,7 +63,7 @@ export default function CborEncoder() {
     }
   };
 
-  const encode = () => {
+  const encode = useCallback(() => {
     try {
       const bytes = encodeToCBOR(jsonInput);
       setCborHex(uint8ArrayToHex(bytes));
@@ -64,7 +73,7 @@ export default function CborEncoder() {
     } catch (e) {
       setError(e instanceof Error ? e.message : "Encoding failed");
     }
-  };
+  }, [jsonInput]);
 
   const decode = () => {
     try {
@@ -117,6 +126,12 @@ export default function CborEncoder() {
   if (savings > 0) savingsLabel = ` (${savings}% smaller)`;
   else if (savings < 0) savingsLabel = ` (${Math.abs(savings)}% larger)`;
 
+  useEffect(() => {
+    if (autoProcess && jsonInput.trim()) {
+      encode();
+    }
+  }, [autoProcess, encode, jsonInput]);
+
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
@@ -160,6 +175,26 @@ export default function CborEncoder() {
           >
             Decode
           </ToolButton>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="cbor-auto-process"
+                    checked={autoProcess}
+                    onCheckedChange={setAutoProcess}
+                    data-testid="auto-process-switch"
+                  />
+                  <Label htmlFor="cbor-auto-process" className="cursor-pointer">
+                    Auto process
+                  </Label>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Automatically encode input when it changes</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

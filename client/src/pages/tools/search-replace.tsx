@@ -25,6 +25,12 @@ import {
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function SearchReplace() {
   const tool = getToolByPath("/tools/search-replace");
@@ -39,6 +45,7 @@ export default function SearchReplace() {
   const [result, setResult] = useState("");
   const [matchCount, setMatchCount] = useState(0);
   const [error, setError] = useState("");
+  const [autoProcess, setAutoProcess] = useState(true);
   const { theme } = useTheme();
 
   const performSearchReplace = useCallback(() => {
@@ -129,8 +136,10 @@ export default function SearchReplace() {
     isGlobal === true;
 
   useEffect(() => {
-    performSearchReplace();
-  }, [performSearchReplace]);
+    if (autoProcess) {
+      performSearchReplace();
+    }
+  }, [autoProcess, performSearchReplace]);
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -162,6 +171,29 @@ export default function SearchReplace() {
           >
             Search & Replace
           </ToolButton>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="search-replace-auto-process"
+                    checked={autoProcess}
+                    onCheckedChange={setAutoProcess}
+                    data-testid="auto-process-switch"
+                  />
+                  <Label
+                    htmlFor="search-replace-auto-process"
+                    className="cursor-pointer"
+                  >
+                    Auto process
+                  </Label>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Automatically process the input when it changes</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

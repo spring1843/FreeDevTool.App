@@ -30,6 +30,9 @@ test.describe("JSON ↔ YAML Converter Tool", () => {
   test("should convert JSON to YAML when button is clicked", async ({
     page,
   }) => {
+    // Disable auto-process so YAML doesn't populate automatically
+    await page.getByTestId("auto-process-switch").click();
+
     // Clear both inputs first
     await page.getByTestId("clear-button").click();
 
@@ -38,7 +41,7 @@ test.describe("JSON ↔ YAML Converter Tool", () => {
     await jsonInput.click();
     await page.keyboard.type('{"test": "value"}');
 
-    // YAML should still be empty (no auto-convert)
+    // YAML should still be empty (auto-process is disabled)
     const yamlOutput = page.locator("#yaml-input");
     const yamlBeforeClick = await yamlOutput
       .locator(".cm-content")

@@ -18,11 +18,20 @@ import { DEFAULT_URL_ENCODER } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function URLEncoder() {
   const tool = getToolByPath("/tools/url-encoder");
   const [plainText, setPlainText] = useState(DEFAULT_URL_ENCODER);
   const [encodedText, setEncodedText] = useState("");
+  const [autoProcess, setAutoProcess] = useState(true);
   const { theme } = useTheme();
   const { toast } = useToast();
 
@@ -102,8 +111,10 @@ export default function URLEncoder() {
   const isAtDefault = plainText === DEFAULT_URL_ENCODER;
 
   useEffect(() => {
-    encodeURL();
-  }, [encodeURL]);
+    if (autoProcess) {
+      encodeURL();
+    }
+  }, [autoProcess, encodeURL]);
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -144,6 +155,29 @@ export default function URLEncoder() {
           >
             Decode URL
           </ToolButton>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="url-encoder-auto-process"
+                    checked={autoProcess}
+                    onCheckedChange={setAutoProcess}
+                    data-testid="auto-process-switch"
+                  />
+                  <Label
+                    htmlFor="url-encoder-auto-process"
+                    className="cursor-pointer"
+                  >
+                    Auto process
+                  </Label>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Automatically encode input when it changes</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

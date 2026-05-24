@@ -5,7 +5,7 @@ import { encodeBase64, decodeBase64 } from "@/lib/encoders";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Lock, Unlock, ArrowRightLeft } from "lucide-react";
 import { SecurityBanner } from "@/components/ui/security-banner";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   ToolButton,
   ResetButton,
@@ -18,6 +18,14 @@ import { DEFAULT_BASE64 } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 // Pre-compute the default encoded value for comparison
 const DEFAULT_BASE64_ENCODED = encodeBase64(DEFAULT_BASE64);
@@ -27,6 +35,7 @@ export default function Base64Encoder() {
   const [plainText, setPlainText] = useState(DEFAULT_BASE64);
   const [encodedText, setEncodedText] = useState(DEFAULT_BASE64_ENCODED);
   const [error, setError] = useState<string | null>(null);
+  const [autoProcess, setAutoProcess] = useState(true);
   const { theme } = useTheme();
 
   const encode = useCallback(() => {
@@ -94,6 +103,12 @@ export default function Base64Encoder() {
     plainText === DEFAULT_BASE64 &&
     (encodedText === "" || encodedText === DEFAULT_BASE64_ENCODED);
 
+  useEffect(() => {
+    if (autoProcess && plainText.trim()) {
+      encode();
+    }
+  }, [autoProcess, encode, plainText]);
+
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
@@ -145,6 +160,29 @@ export default function Base64Encoder() {
           >
             Swap
           </ToolButton>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="base64-auto-process"
+                    checked={autoProcess}
+                    onCheckedChange={setAutoProcess}
+                    data-testid="auto-process-switch"
+                  />
+                  <Label
+                    htmlFor="base64-auto-process"
+                    className="cursor-pointer"
+                  >
+                    Auto process
+                  </Label>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Automatically encode input when it changes</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

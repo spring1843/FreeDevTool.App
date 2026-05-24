@@ -416,7 +416,7 @@ export default function ColorPaletteGenerator() {
               <Select value={selectedType} onValueChange={handleTypeChange}>
                 <SelectTrigger
                   data-testid="palette-type-select"
-                  className="w-[140px]"
+                  className="w-[220px]"
                 >
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
