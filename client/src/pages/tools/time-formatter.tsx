@@ -403,11 +403,7 @@ export default function TimeFormatter() {
 
       {/* Year validation error */}
       {yearError ? (
-        <Alert
-          variant="destructive"
-          data-testid="year-error"
-          className="mb-6"
-        >
+        <Alert variant="destructive" data-testid="year-error" className="mb-6">
           <AlertDescription>{yearError}</AlertDescription>
         </Alert>
       ) : null}
