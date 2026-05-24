@@ -2459,7 +2459,7 @@ export const toolsData: ToolData = {
         name: "URL Encoder",
         path: "/tools/url-encoder",
         icon: Link,
-        shortcut: "Ctrl+Shift+~",
+        shortcut: "Ctrl+Shift+Alt+U",
         metadata: {
           title: "URL Encoder/Decoder - Encode and Decode URLs",
           description:
@@ -3040,7 +3040,7 @@ export const toolsData: ToolData = {
         name: "Text Diff",
         path: "/tools/text-diff",
         icon: FileText,
-        shortcut: "Ctrl+Shift+!",
+        shortcut: "Ctrl+Shift+M",
         metadata: {
           title: "Text Diff - Compare Two Texts",
           description:
@@ -3253,7 +3253,7 @@ export const toolsData: ToolData = {
         name: "Word Counter",
         path: "/tools/text-counter",
         icon: Type,
-        shortcut: "Ctrl+Shift+W",
+        shortcut: "Ctrl+Shift+S",
         metadata: {
           title: "Text Counter - Count Characters, Words, and Lines",
           description:
@@ -3800,7 +3800,7 @@ export const toolsData: ToolData = {
         name: "UUID Generator",
         path: "/tools/uuid-generator",
         icon: Shuffle,
-        shortcut: "Ctrl+Shift+@",
+        shortcut: "Ctrl+Shift+Alt+G",
         metadata: {
           title: "UUID Generator - Generate Unique Identifiers",
           description:

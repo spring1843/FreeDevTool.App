@@ -6,6 +6,7 @@ import { useDemo } from "@/hooks/use-demo-hook";
 import { useTheme } from "@/providers/theme-provider";
 import { useLocation } from "wouter";
 import { toolsData } from "@/data/tools";
+import { shortcutKeyToCode } from "@/lib/shortcut-key-to-code";
 
 import {
   Sheet,
@@ -24,7 +25,7 @@ import { TooltipTrigger } from "@radix-ui/react-tooltip";
 export function Layout({ children }: { children: React.ReactNode }) {
   const { isDemoRunning } = useDemo();
   const { theme, setTheme } = useTheme();
-  const [location] = useLocation();
+  const [location, navigate] = useLocation();
 
   const allTools = useMemo(
     () => Object.values(toolsData).flatMap(category => category.tools),
@@ -62,6 +63,37 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
       if (!event.ctrlKey) return;
 
+      if (event.shiftKey) {
+        // Ctrl+Shift+Alt+* → navigate to tool (three-modifier shortcuts)
+        if (event.altKey) {
+          const matchedTool = allTools.find(t => {
+            if (!t.shortcut.startsWith("Ctrl+Shift+Alt+")) return false;
+            const key = t.shortcut.slice("Ctrl+Shift+Alt+".length);
+            return shortcutKeyToCode(key) === event.code;
+          });
+          if (matchedTool) {
+            event.preventDefault();
+            navigate(matchedTool.path);
+          }
+          // Don't fall through to Ctrl-only shortcuts
+          return;
+        }
+
+        // Ctrl+Shift+* → navigate to tool by shortcut
+        const matchedTool = allTools.find(t => {
+          if (!t.shortcut.startsWith("Ctrl+Shift+")) return false;
+          if (t.shortcut.startsWith("Ctrl+Shift+Alt+")) return false;
+          const key = t.shortcut.slice("Ctrl+Shift+".length);
+          return shortcutKeyToCode(key) === event.code;
+        });
+        if (matchedTool) {
+          event.preventDefault();
+          navigate(matchedTool.path);
+        }
+        // Don't fall through to Ctrl-only shortcuts
+        return;
+      }
+
       switch (event.key.toLowerCase()) {
         case "d":
           event.preventDefault();
@@ -85,7 +117,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [theme, setTheme, isDemoRunning]);
+  }, [theme, setTheme, isDemoRunning, allTools, navigate]);
 
   useEffect(() => {
     const handleResize = () => {

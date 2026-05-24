@@ -549,11 +549,11 @@ export default function NumberBaseConverter() {
                 <div className="space-y-3">
                   {/* Input Summary */}
                   <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-blue-700 dark:text-blue-400">
+                    <div className="flex flex-wrap items-start gap-x-4 gap-y-1">
+                      <span className="text-sm font-medium text-blue-700 dark:text-blue-400 break-all min-w-0">
                         Input: {inputNumber} (Base {inputBase})
                       </span>
-                      <span className="text-sm text-blue-600 dark:text-blue-300">
+                      <span className="text-sm text-blue-600 dark:text-blue-300 shrink-0">
                         Decimal:{" "}
                         {(() => {
                           try {

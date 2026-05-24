@@ -30,6 +30,10 @@ export default function Base64Encoder() {
   const { theme } = useTheme();
 
   const encode = useCallback(() => {
+    if (!plainText.trim()) {
+      setError("Nothing to encode. Enter some text first.");
+      return;
+    }
     try {
       const result = encodeBase64(plainText);
       setEncodedText(result);
@@ -40,6 +44,10 @@ export default function Base64Encoder() {
   }, [plainText]);
 
   const decode = () => {
+    if (!encodedText.trim()) {
+      setError("Nothing to decode. Enter some Base64 encoded text first.");
+      return;
+    }
     try {
       const result = decodeBase64(encodedText);
       setPlainText(result);
