@@ -8,8 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TimezoneSelector } from "@/components/ui/timezone-selector";
 import { getUserTimezone } from "@/lib/time-tools";
-import { Clock, Copy, Check, AlertCircle } from "lucide-react";
+import { Clock, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   ResetButton,
   ClearButton,
@@ -402,13 +403,13 @@ export default function TimeFormatter() {
 
       {/* Year validation error */}
       {yearError ? (
-        <div
+        <Alert
+          variant="destructive"
           data-testid="year-error"
-          className="flex items-center gap-2 mb-6 px-4 py-3 rounded-lg border border-red-300 bg-red-50 text-red-700 dark:border-red-700 dark:bg-red-950 dark:text-red-400"
+          className="mb-6"
         >
-          <AlertCircle className="h-4 w-4 shrink-0" />
-          <span className="text-sm">{yearError}</span>
-        </div>
+          <AlertDescription>{yearError}</AlertDescription>
+        </Alert>
       ) : null}
 
       {/* Formatted Times */}
