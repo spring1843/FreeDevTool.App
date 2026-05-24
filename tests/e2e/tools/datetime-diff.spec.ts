@@ -218,15 +218,12 @@ test.describe("Date/Time Difference Tool", () => {
     const nowButtons = page.getByTestId("now-button");
     await nowButtons.first().click();
 
-    // Verify toast appears (match the visible toast title element specifically)
-    const toast = page.locator('[data-testid="toast-title"]').filter({
-      hasText: "Start time updated",
-    });
-    // Fall back to the visible toast div if no testid exists
-    const toastFallback = page
-      .locator("div.text-sm.font-semibold", { hasText: "Start time updated" })
+    // Verify toast appears via the aria-live status region
+    const toast = page
+      .locator('[role="status"]')
+      .filter({ hasText: "Start time updated" })
       .first();
-    await expect(toast.or(toastFallback)).toBeVisible();
+    await expect(toast).toBeVisible();
 
     // Verify start date is no longer empty
     const startDateInput = page.getByTestId("start-date-input");
