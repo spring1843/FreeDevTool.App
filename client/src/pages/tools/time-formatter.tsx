@@ -10,6 +10,7 @@ import { TimezoneSelector } from "@/components/ui/timezone-selector";
 import { getUserTimezone } from "@/lib/time-tools";
 import { Clock, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   ResetButton,
   ClearButton,
@@ -31,6 +32,7 @@ export default function TimeFormatter() {
   const [inputTimezone, setInputTimezone] = useState(getUserTimezone());
   const [formats, setFormats] = useState<TimeFormat[]>([]);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [yearError, setYearError] = useState<string>("");
 
   // Set current date and time on load
   useEffect(() => {
@@ -45,12 +47,25 @@ export default function TimeFormatter() {
   useEffect(() => {
     if (inputDate && inputTime) {
       formatTime();
+    } else {
+      setYearError("");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputDate, inputTime, inputTimezone]);
 
   const formatTime = useCallback(() => {
     try {
+      // Reject years with more than 4 digits (> 9999)
+      const yearPart = inputDate.split("-")[0];
+      if (yearPart && yearPart.length > 4) {
+        setYearError(
+          "Invalid year: year must be 4 digits or fewer (max 9999)."
+        );
+        setFormats([]);
+        return;
+      }
+      setYearError("");
+
       // Create date object from input
       const dateTime = new Date(`${inputDate}T${inputTime}`);
 
@@ -291,6 +306,7 @@ export default function TimeFormatter() {
     setInputDate("");
     setInputTime("");
     setFormats([]);
+    setYearError("");
   };
 
   const hasModifiedData = inputDate.trim() !== "" && inputTime.trim() !== "";
@@ -384,6 +400,13 @@ export default function TimeFormatter() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Year validation error */}
+      {yearError ? (
+        <Alert variant="destructive" data-testid="year-error" className="mb-6">
+          <AlertDescription>{yearError}</AlertDescription>
+        </Alert>
+      ) : null}
 
       {/* Formatted Times */}
       {formats.length > 0 && (
