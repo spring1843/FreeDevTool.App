@@ -3253,7 +3253,7 @@ export const toolsData: ToolData = {
         name: "Word Counter",
         path: "/tools/text-counter",
         icon: Type,
-        shortcut: "Ctrl+Shift+W",
+        shortcut: "Ctrl+Shift+S",
         metadata: {
           title: "Text Counter - Count Characters, Words, and Lines",
           description:
