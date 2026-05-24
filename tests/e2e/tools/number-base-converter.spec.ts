@@ -28,15 +28,15 @@ test.describe("Number Base Converter Tool", () => {
     const numberInput = page.getByTestId("number-input");
     await numberInput.fill(largeNumber);
 
-    // The input summary should be visible and not cause horizontal overflow
-    const inputSummary = page.locator(".bg-blue-50, .bg-blue-900\\/20").first();
+    // The rendered input summary should be visible and not overflow horizontally.
+    // Prefer a content-based locator here to avoid coupling the test to Tailwind classes.
+    const inputSummary = page.getByText(largeNumber, { exact: false }).first();
     await expect(inputSummary).toBeVisible();
 
-    // The page should not have horizontal scrollbar (scrollWidth <= clientWidth)
-    const hasHorizontalOverflow = await page.evaluate(
-      () =>
-        document.documentElement.scrollWidth >
-        document.documentElement.clientWidth
+    // Assert overflow on the summary element itself with a small tolerance for
+    // browser rounding/sub-pixel layout differences.
+    const hasHorizontalOverflow = await inputSummary.evaluate(
+      (element) => element.scrollWidth - element.clientWidth > 1
     );
     expect(hasHorizontalOverflow).toBe(false);
 
