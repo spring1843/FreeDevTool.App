@@ -5,6 +5,14 @@ import { formatJSONC } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   ToolButton,
   ResetButton,
@@ -26,6 +34,7 @@ export default function JSONCFormatter() {
   const [input, setInput] = useState(DEFAULT_JSONC);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [autoFormat, setAutoFormat] = useState(true);
   const { theme } = useTheme();
 
   const formatCode = useCallback(async () => {
@@ -64,8 +73,10 @@ export default function JSONCFormatter() {
 
   useEffect(() => {
     document.title = "JSONC Formatter - FreeDevTool.App";
-    formatCode();
-  }, [formatCode]);
+    if (autoFormat) {
+      formatCode();
+    }
+  }, [autoFormat, formatCode]);
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -96,6 +107,26 @@ export default function JSONCFormatter() {
           >
             Format JSONC
           </ToolButton>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="jsonc-auto-format"
+                    checked={autoFormat}
+                    onCheckedChange={setAutoFormat}
+                    data-testid="auto-process-switch"
+                  />
+                  <Label htmlFor="jsonc-auto-format" className="cursor-pointer">
+                    Auto Format
+                  </Label>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Automatically format the input when it changes</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

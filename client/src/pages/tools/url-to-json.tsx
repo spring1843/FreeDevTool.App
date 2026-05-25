@@ -25,6 +25,13 @@ import { Input } from "@/components/ui/input";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { Switch } from "@/components/ui/switch";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 export default function URLToJSON() {
@@ -33,6 +40,7 @@ export default function URLToJSON() {
   const [urlComponents, setUrlComponents] = useState<URLComponents>({});
   const [jsonOutput, setJsonOutput] = useState("");
   const [error, setError] = useState("");
+  const [autoProcess, setAutoProcess] = useState(true);
   const { toast } = useToast();
   const { theme } = useTheme();
 
@@ -47,10 +55,12 @@ export default function URLToJSON() {
   }, []);
 
   useEffect(() => {
-    handleParseURL();
+    if (autoProcess) {
+      handleParseURL();
+    }
     updateURL({ url: inputUrl });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inputUrl]);
+  }, [inputUrl, autoProcess]);
 
   const handleParseURL = useCallback(() => {
     const result = parseURL(inputUrl);
@@ -138,6 +148,29 @@ export default function URLToJSON() {
             onClick={shareConverter}
             tooltip="Copy shareable URL to clipboard"
           />
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="url-to-json-auto-process"
+                    checked={autoProcess}
+                    onCheckedChange={setAutoProcess}
+                    data-testid="auto-process-switch"
+                  />
+                  <Label
+                    htmlFor="url-to-json-auto-process"
+                    className="cursor-pointer"
+                  >
+                    Auto Process
+                  </Label>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Automatically process the input when it changes</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

@@ -44,6 +44,13 @@ import { DEFAULT_CSV_TO_JSON } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { Switch } from "@/components/ui/switch";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 export default function CSVToJSON() {
@@ -55,6 +62,7 @@ export default function CSVToJSON() {
   const [headers, setHeaders] = useState<string[]>([]);
   const [error, setError] = useState("");
   const [rowCount, setRowCount] = useState(0);
+  const [autoProcess, setAutoProcess] = useState(true);
 
   const { toast } = useToast();
   const { theme: resolvedTheme } = useTheme();
@@ -86,9 +94,11 @@ export default function CSVToJSON() {
 
   // Parse CSV when input changes
   useEffect(() => {
-    convertCSV();
+    if (autoProcess) {
+      convertCSV();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [csvInput, selectedDelimiter]);
+  }, [csvInput, selectedDelimiter, autoProcess]);
 
   const parseCSVLine = (line: string, delimiter: string): string[] => {
     const result: string[] = [];
@@ -295,6 +305,29 @@ Jane Smith      jane@example.com        25      Marketing`,
             tooltip="Copy shareable URL to clipboard"
             data-testid="share-converter-button"
           />
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="csv-to-json-auto-process"
+                    checked={autoProcess}
+                    onCheckedChange={setAutoProcess}
+                    data-testid="auto-process-switch"
+                  />
+                  <Label
+                    htmlFor="csv-to-json-auto-process"
+                    className="cursor-pointer"
+                  >
+                    Auto Process
+                  </Label>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Automatically process the input when it changes</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

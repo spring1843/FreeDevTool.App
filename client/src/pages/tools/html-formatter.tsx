@@ -17,6 +17,14 @@ import { DEFAULT_HTML } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -33,6 +41,7 @@ export default function HTMLFormatter() {
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [warnings, setWarnings] = useState<ValidationIssue[]>([]);
+  const [autoFormat, setAutoFormat] = useState(true);
   const { theme } = useTheme();
 
   const formatCode = useCallback(
@@ -83,8 +92,10 @@ export default function HTMLFormatter() {
   const isAtDefault = input === DEFAULT_HTML;
 
   useEffect(() => {
-    formatCode(false); // Beautify by default
-  }, [formatCode]);
+    if (autoFormat) {
+      formatCode(false);
+    }
+  }, [autoFormat, formatCode]);
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -165,6 +176,26 @@ export default function HTMLFormatter() {
           >
             Minify HTML
           </ToolButton>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="html-auto-format"
+                    checked={autoFormat}
+                    onCheckedChange={setAutoFormat}
+                    data-testid="auto-process-switch"
+                  />
+                  <Label htmlFor="html-auto-format" className="cursor-pointer">
+                    Auto Format
+                  </Label>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Automatically format the input when it changes</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

@@ -22,6 +22,12 @@ import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { CopyButton } from "@/components/ui/copy-button";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function TextSplit() {
   const tool = getToolByPath("/tools/text-split");
@@ -30,6 +36,7 @@ export default function TextSplit() {
   const [removeEmpty, setRemoveEmpty] = useState(true);
   const [trimWhitespace, setTrimWhitespace] = useState(true);
   const [splitResult, setSplitResult] = useState<string[]>([]);
+  const [autoProcess, setAutoProcess] = useState(true);
   const { theme } = useTheme();
 
   const splitText = useCallback(() => {
@@ -81,8 +88,10 @@ export default function TextSplit() {
     trimWhitespace === true;
 
   useEffect(() => {
-    splitText();
-  }, [splitText]);
+    if (autoProcess) {
+      splitText();
+    }
+  }, [autoProcess, splitText]);
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -114,6 +123,29 @@ export default function TextSplit() {
           >
             Split Text
           </ToolButton>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="text-split-auto-process"
+                    checked={autoProcess}
+                    onCheckedChange={setAutoProcess}
+                    data-testid="auto-process-switch"
+                  />
+                  <Label
+                    htmlFor="text-split-auto-process"
+                    className="cursor-pointer"
+                  >
+                    Auto Process
+                  </Label>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Automatically process the input when it changes</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

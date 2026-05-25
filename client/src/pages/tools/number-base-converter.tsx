@@ -29,6 +29,13 @@ import { useToast } from "@/hooks/use-toast";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { Switch } from "@/components/ui/switch";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 interface ConversionResult {
@@ -63,6 +70,7 @@ export default function NumberBaseConverter() {
   const [customBase, setCustomBase] = useState("");
   const [results, setResults] = useState<ConversionResult[]>([]);
   const [error, setError] = useState("");
+  const [autoProcess, setAutoProcess] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -97,7 +105,9 @@ export default function NumberBaseConverter() {
   }, []);
 
   useEffect(() => {
-    convertNumber();
+    if (autoProcess) {
+      convertNumber();
+    }
     // Update URL when input changes
     updateURL({
       num: inputNumber,
@@ -105,7 +115,7 @@ export default function NumberBaseConverter() {
       to: outputBases.join(","),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inputNumber, inputBase, outputBases]);
+  }, [inputNumber, inputBase, outputBases, autoProcess]);
 
   const getBaseCharacters = (base: number): string => {
     const commonBase = commonBases.find(b => b.value === base);
@@ -355,6 +365,29 @@ export default function NumberBaseConverter() {
             tooltip="Copy shareable URL to clipboard"
             data-testid="share-converter-button"
           />
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="number-base-auto-process"
+                    checked={autoProcess}
+                    onCheckedChange={setAutoProcess}
+                    data-testid="auto-process-switch"
+                  />
+                  <Label
+                    htmlFor="number-base-auto-process"
+                    className="cursor-pointer"
+                  >
+                    Auto Process
+                  </Label>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Automatically process the input when it changes</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

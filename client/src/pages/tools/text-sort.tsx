@@ -9,7 +9,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ArrowUpDown } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
@@ -27,6 +26,12 @@ import { DEFAULT_TEXT_SORT } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type SortType = "alphabetical" | "numerical" | "length" | "reverse" | "random";
 type SortOrder = "asc" | "desc";
@@ -40,6 +45,7 @@ export default function TextSort() {
   const [unique, setUnique] = useState(false);
   const [trimLines, setTrimLines] = useState(false);
   const [sortedOutput, setSortedOutput] = useState("");
+  const [autoProcess, setAutoProcess] = useState(true);
   const { theme } = useTheme();
 
   const sortText = useCallback(() => {
@@ -130,8 +136,10 @@ export default function TextSort() {
     trimLines === false;
 
   useEffect(() => {
-    sortText();
-  }, [sortText]);
+    if (autoProcess) {
+      sortText();
+    }
+  }, [autoProcess, sortText]);
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -164,6 +172,29 @@ export default function TextSort() {
           >
             Sort Text
           </ToolButton>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="text-sort-auto-process"
+                    checked={autoProcess}
+                    onCheckedChange={setAutoProcess}
+                    data-testid="auto-process-switch"
+                  />
+                  <Label
+                    htmlFor="text-sort-auto-process"
+                    className="cursor-pointer"
+                  >
+                    Auto Process
+                  </Label>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Automatically process the input when it changes</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton
@@ -235,16 +266,16 @@ export default function TextSort() {
 
           <div className="border-t pt-4 mt-4 space-y-4">
             <div className="flex items-start space-x-2">
-              <Checkbox
+              <Switch
                 id="trim-lines"
                 checked={trimLines}
-                onCheckedChange={checked => setTrimLines(checked === true)}
+                onCheckedChange={setTrimLines}
                 data-testid="checkbox-trim-lines"
               />
               <div className="grid gap-1.5 leading-none">
                 <Label
                   htmlFor="trim-lines"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="cursor-pointer text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   Trim lines before processing
                 </Label>
@@ -255,10 +286,10 @@ export default function TextSort() {
               </div>
             </div>
             <div className="flex items-start space-x-2">
-              <Checkbox
+              <Switch
                 id="unique"
                 checked={unique}
-                onCheckedChange={checked => setUnique(checked === true)}
+                onCheckedChange={setUnique}
                 data-testid="checkbox-unique"
               />
               <div className="grid gap-1.5 leading-none">

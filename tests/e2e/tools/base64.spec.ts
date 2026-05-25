@@ -17,6 +17,9 @@ test.describe("Base64 Encoder Tool", () => {
   test("should show error when Decode is clicked with empty encoded field", async ({
     page,
   }) => {
+    // Disable auto-process so encoding doesn't fire automatically
+    await page.getByTestId("auto-process-switch").click();
+
     // Clear empties both fields; then only type in plain text to leave encoded empty
     await page.getByTestId("clear-button").click();
 

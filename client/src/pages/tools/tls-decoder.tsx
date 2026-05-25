@@ -19,6 +19,14 @@ import { DEFAULT_TLS_DECODER } from "@/data/defaults";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { Switch } from "@/components/ui/switch";
+import { Label as SwitchLabel } from "@/components/ui/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface CertificateInfo {
   subject: string;
@@ -43,6 +51,7 @@ export default function TLSDecoder() {
   const [certificateInfo, setCertificateInfo] =
     useState<CertificateInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [autoProcess, setAutoProcess] = useState(true);
   const { theme } = useTheme();
 
   const decodeCertificate = useCallback(() => {
@@ -121,8 +130,10 @@ export default function TLSDecoder() {
   const isAtDefault = certificate === DEFAULT_TLS_DECODER;
 
   useEffect(() => {
-    decodeCertificate();
-  }, [decodeCertificate]);
+    if (autoProcess) {
+      decodeCertificate();
+    }
+  }, [autoProcess, decodeCertificate]);
 
   const formatDate = (dateString: string) => {
     try {
@@ -189,6 +200,29 @@ export default function TLSDecoder() {
           >
             Decode Certificate
           </ToolButton>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="tls-auto-process"
+                    checked={autoProcess}
+                    onCheckedChange={setAutoProcess}
+                    data-testid="auto-process-switch"
+                  />
+                  <SwitchLabel
+                    htmlFor="tls-auto-process"
+                    className="cursor-pointer"
+                  >
+                    Auto Process
+                  </SwitchLabel>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Automatically process the input when it changes</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

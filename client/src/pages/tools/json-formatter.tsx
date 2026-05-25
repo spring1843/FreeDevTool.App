@@ -4,6 +4,14 @@ import { useTheme } from "@/providers/theme-provider";
 import { formatJSON } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, Lightbulb } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useState, useEffect, useCallback } from "react";
@@ -26,6 +34,7 @@ export default function JsonFormatter() {
   const [input, setInput] = useState(DEFAULT_JSON);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [autoFormat, setAutoFormat] = useState(true);
   const { theme } = useTheme();
 
   const formatCode = useCallback(async () => {
@@ -84,10 +93,12 @@ export default function JsonFormatter() {
   const hasModifiedData = input !== DEFAULT_JSON && input.trim() !== "";
   const isAtDefault = input === DEFAULT_JSON;
 
-  // Execute formatting with default value on component mount
+  // Execute formatting with default value on component mount; re-run on input changes when autoFormat is on
   useEffect(() => {
-    formatCode();
-  }, [input, formatCode]);
+    if (autoFormat) {
+      formatCode();
+    }
+  }, [autoFormat, formatCode]);
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -144,6 +155,26 @@ export default function JsonFormatter() {
           >
             Validate
           </ToolButton>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="json-auto-format"
+                    checked={autoFormat}
+                    onCheckedChange={setAutoFormat}
+                    data-testid="auto-process-switch"
+                  />
+                  <Label htmlFor="json-auto-format" className="cursor-pointer">
+                    Auto Format
+                  </Label>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Automatically format the input when it changes</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

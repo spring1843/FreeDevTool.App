@@ -17,6 +17,14 @@ import { useTheme } from "@/providers/theme-provider";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function JWTDecoder() {
   const tool = getToolByPath("/tools/jwt-decoder");
@@ -26,6 +34,7 @@ export default function JWTDecoder() {
   const [signature, setSignature] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [autoProcess, setAutoProcess] = useState(true);
   const { theme } = useTheme();
 
   const decodeToken = useCallback(() => {
@@ -103,8 +112,10 @@ export default function JWTDecoder() {
   const isAtDefault = token === DEFAULT_JWT;
 
   useEffect(() => {
-    decodeToken();
-  }, [decodeToken]);
+    if (autoProcess) {
+      decodeToken();
+    }
+  }, [autoProcess, decodeToken]);
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -135,6 +146,26 @@ export default function JWTDecoder() {
           >
             Decode
           </ToolButton>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="jwt-auto-process"
+                    checked={autoProcess}
+                    onCheckedChange={setAutoProcess}
+                    data-testid="auto-process-switch"
+                  />
+                  <Label htmlFor="jwt-auto-process" className="cursor-pointer">
+                    Auto Process
+                  </Label>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Automatically process the input when it changes</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

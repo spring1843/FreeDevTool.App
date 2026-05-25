@@ -1,6 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   Select,
   SelectContent,
@@ -36,6 +43,7 @@ export default function BarcodeGenerator() {
   const [height, setHeight] = useState(100);
   const [displayValue, setDisplayValue] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [autoProcess, setAutoProcess] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const barcodeFormats = [
@@ -193,8 +201,10 @@ export default function BarcodeGenerator() {
   };
 
   useEffect(() => {
-    generateBarcode();
-  }, [generateBarcode]);
+    if (autoProcess) {
+      generateBarcode();
+    }
+  }, [autoProcess, generateBarcode]);
 
   const inputError = validateInput(text, format);
 
@@ -235,6 +245,29 @@ export default function BarcodeGenerator() {
             disabled={!!error || !!inputError}
             tooltip="Download barcode as PNG"
           />
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="barcode-auto-process"
+                    checked={autoProcess}
+                    onCheckedChange={setAutoProcess}
+                    data-testid="auto-process-switch"
+                  />
+                  <Label
+                    htmlFor="barcode-auto-process"
+                    className="cursor-pointer"
+                  >
+                    Auto Process
+                  </Label>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Automatically process the input when it changes</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton
@@ -340,14 +373,14 @@ export default function BarcodeGenerator() {
             </div>
 
             <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
+              <Switch
                 id="display-value"
                 checked={displayValue}
-                onChange={e => setDisplayValue(e.target.checked)}
-                className="rounded"
+                onCheckedChange={setDisplayValue}
               />
-              <Label htmlFor="display-value">Display text below barcode</Label>
+              <Label htmlFor="display-value" className="cursor-pointer">
+                Display text below barcode
+              </Label>
             </div>
           </CardContent>
         </Card>
