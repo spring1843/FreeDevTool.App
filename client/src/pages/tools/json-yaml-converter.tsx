@@ -150,7 +150,7 @@ export default function JSONYAMLConverter() {
                     htmlFor="json-yaml-auto-process"
                     className="cursor-pointer"
                   >
-                    Auto process
+                    Auto Process
                   </Label>
                 </div>
               </TooltipTrigger>

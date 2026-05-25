@@ -128,7 +128,7 @@ export default function MarkdownFormatter() {
                     htmlFor="markdown-auto-format"
                     className="cursor-pointer"
                   >
-                    Auto format
+                    Auto Format
                   </Label>
                 </div>
               </TooltipTrigger>

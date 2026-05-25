@@ -319,7 +319,7 @@ Jane Smith      jane@example.com        25      Marketing`,
                     htmlFor="csv-to-json-auto-process"
                     className="cursor-pointer"
                   >
-                    Auto process
+                    Auto Process
                   </Label>
                 </div>
               </TooltipTrigger>

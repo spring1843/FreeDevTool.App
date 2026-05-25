@@ -223,7 +223,7 @@ export default function CSSFormatter() {
                     data-testid="auto-process-switch"
                   />
                   <Label htmlFor="css-auto-format" className="cursor-pointer">
-                    Auto format
+                    Auto Format
                   </Label>
                 </div>
               </TooltipTrigger>

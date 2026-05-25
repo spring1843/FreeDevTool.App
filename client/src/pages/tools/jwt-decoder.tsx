@@ -157,7 +157,7 @@ export default function JWTDecoder() {
                     data-testid="auto-process-switch"
                   />
                   <Label htmlFor="jwt-auto-process" className="cursor-pointer">
-                    Auto process
+                    Auto Process
                   </Label>
                 </div>
               </TooltipTrigger>

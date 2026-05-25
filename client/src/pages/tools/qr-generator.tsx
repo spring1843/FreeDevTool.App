@@ -380,7 +380,7 @@ export default function QRGenerator() {
                     data-testid="auto-process-switch"
                   />
                   <Label htmlFor="qr-auto-process" className="cursor-pointer">
-                    Auto process
+                    Auto Process
                   </Label>
                 </div>
               </TooltipTrigger>

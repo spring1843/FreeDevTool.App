@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
@@ -356,14 +357,12 @@ export default function LoremGenerator() {
             </div>
 
             <div className="flex items-center space-x-2 pt-6">
-              <input
-                type="checkbox"
+              <Switch
                 id="start-with-lorem"
                 checked={startWithLorem}
-                onChange={e => setStartWithLorem(e.target.checked)}
-                className="rounded"
+                onCheckedChange={setStartWithLorem}
               />
-              <Label htmlFor="start-with-lorem">
+              <Label htmlFor="start-with-lorem" className="cursor-pointer">
                 Start with &quot;Lorem ipsum&quot;
               </Label>
             </div>

@@ -186,7 +186,7 @@ export default function CborEncoder() {
                     data-testid="auto-process-switch"
                   />
                   <Label htmlFor="cbor-auto-process" className="cursor-pointer">
-                    Auto process
+                    Auto Process
                   </Label>
                 </div>
               </TooltipTrigger>

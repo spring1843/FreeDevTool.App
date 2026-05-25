@@ -124,7 +124,7 @@ export default function YAMLFormatter() {
                     data-testid="auto-process-switch"
                   />
                   <Label htmlFor="yaml-auto-format" className="cursor-pointer">
-                    Auto format
+                    Auto Format
                   </Label>
                 </div>
               </TooltipTrigger>

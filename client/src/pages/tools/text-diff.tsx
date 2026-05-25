@@ -158,7 +158,7 @@ export default function TextDiff() {
                     htmlFor="text-diff-auto-process"
                     className="cursor-pointer"
                   >
-                    Auto process
+                    Auto Process
                   </Label>
                 </div>
               </TooltipTrigger>

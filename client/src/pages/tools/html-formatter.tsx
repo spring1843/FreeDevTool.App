@@ -187,7 +187,7 @@ export default function HTMLFormatter() {
                     data-testid="auto-process-switch"
                   />
                   <Label htmlFor="html-auto-format" className="cursor-pointer">
-                    Auto format
+                    Auto Format
                   </Label>
                 </div>
               </TooltipTrigger>

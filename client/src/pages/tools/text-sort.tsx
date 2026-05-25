@@ -9,7 +9,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ArrowUpDown } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
@@ -187,7 +186,7 @@ export default function TextSort() {
                     htmlFor="text-sort-auto-process"
                     className="cursor-pointer"
                   >
-                    Auto process
+                    Auto Process
                   </Label>
                 </div>
               </TooltipTrigger>
@@ -267,16 +266,16 @@ export default function TextSort() {
 
           <div className="border-t pt-4 mt-4 space-y-4">
             <div className="flex items-start space-x-2">
-              <Checkbox
+              <Switch
                 id="trim-lines"
                 checked={trimLines}
-                onCheckedChange={checked => setTrimLines(checked === true)}
+                onCheckedChange={setTrimLines}
                 data-testid="checkbox-trim-lines"
               />
               <div className="grid gap-1.5 leading-none">
                 <Label
                   htmlFor="trim-lines"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="cursor-pointer text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   Trim lines before processing
                 </Label>
@@ -287,10 +286,10 @@ export default function TextSort() {
               </div>
             </div>
             <div className="flex items-start space-x-2">
-              <Checkbox
+              <Switch
                 id="unique"
                 checked={unique}
-                onCheckedChange={checked => setUnique(checked === true)}
+                onCheckedChange={setUnique}
                 data-testid="checkbox-unique"
               />
               <div className="grid gap-1.5 leading-none">

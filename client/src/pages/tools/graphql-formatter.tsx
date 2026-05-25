@@ -130,7 +130,7 @@ export default function GraphQLFormatter() {
                     htmlFor="graphql-auto-format"
                     className="cursor-pointer"
                   >
-                    Auto format
+                    Auto Format
                   </Label>
                 </div>
               </TooltipTrigger>

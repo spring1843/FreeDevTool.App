@@ -174,7 +174,7 @@ export default function Base64Encoder() {
                     htmlFor="base64-auto-process"
                     className="cursor-pointer"
                   >
-                    Auto process
+                    Auto Process
                   </Label>
                 </div>
               </TooltipTrigger>

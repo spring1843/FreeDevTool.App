@@ -166,7 +166,7 @@ export default function JsonFormatter() {
                     data-testid="auto-process-switch"
                   />
                   <Label htmlFor="json-auto-format" className="cursor-pointer">
-                    Auto format
+                    Auto Format
                   </Label>
                 </div>
               </TooltipTrigger>

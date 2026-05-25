@@ -118,7 +118,7 @@ export default function JSONCFormatter() {
                     data-testid="auto-process-switch"
                   />
                   <Label htmlFor="jsonc-auto-format" className="cursor-pointer">
-                    Auto format
+                    Auto Format
                   </Label>
                 </div>
               </TooltipTrigger>

@@ -259,7 +259,7 @@ export default function BarcodeGenerator() {
                     htmlFor="barcode-auto-process"
                     className="cursor-pointer"
                   >
-                    Auto process
+                    Auto Process
                   </Label>
                 </div>
               </TooltipTrigger>
@@ -373,14 +373,14 @@ export default function BarcodeGenerator() {
             </div>
 
             <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
+              <Switch
                 id="display-value"
                 checked={displayValue}
-                onChange={e => setDisplayValue(e.target.checked)}
-                className="rounded"
+                onCheckedChange={setDisplayValue}
               />
-              <Label htmlFor="display-value">Display text below barcode</Label>
+              <Label htmlFor="display-value" className="cursor-pointer">
+                Display text below barcode
+              </Label>
             </div>
           </CardContent>
         </Card>

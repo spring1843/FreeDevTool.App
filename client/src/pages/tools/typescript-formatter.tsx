@@ -145,7 +145,7 @@ export default function TypeScriptFormatter() {
                     htmlFor="typescript-auto-format"
                     className="cursor-pointer"
                   >
-                    Auto format
+                    Auto Format
                   </Label>
                 </div>
               </TooltipTrigger>

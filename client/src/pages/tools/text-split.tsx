@@ -137,7 +137,7 @@ export default function TextSplit() {
                     htmlFor="text-split-auto-process"
                     className="cursor-pointer"
                   >
-                    Auto process
+                    Auto Process
                   </Label>
                 </div>
               </TooltipTrigger>

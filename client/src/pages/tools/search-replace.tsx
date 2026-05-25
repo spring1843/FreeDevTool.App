@@ -185,7 +185,7 @@ export default function SearchReplace() {
                     htmlFor="search-replace-auto-process"
                     className="cursor-pointer"
                   >
-                    Auto process
+                    Auto Process
                   </Label>
                 </div>
               </TooltipTrigger>

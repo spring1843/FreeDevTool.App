@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { Copy, Check, RefreshCw, Shield, Eye, EyeOff } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
@@ -382,79 +381,87 @@ export default function PasswordGenerator() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-3">
               <div className="flex items-center space-x-2">
-                <Checkbox
+                <Switch
                   id="uppercase"
                   checked={includeUppercase}
                   onCheckedChange={checked =>
-                    updateField("includeUppercase", checked as boolean)
+                    updateField("includeUppercase", checked)
                   }
                   data-testid="uppercase-checkbox"
                 />
-                <Label htmlFor="uppercase">Uppercase Letters (A-Z)</Label>
+                <Label htmlFor="uppercase" className="cursor-pointer">
+                  Uppercase Letters (A-Z)
+                </Label>
               </div>
 
               <div className="flex items-center space-x-2">
-                <Checkbox
+                <Switch
                   id="lowercase"
                   checked={includeLowercase}
                   onCheckedChange={checked =>
-                    updateField("includeLowercase", checked as boolean)
+                    updateField("includeLowercase", checked)
                   }
                   data-testid="lowercase-checkbox"
                 />
-                <Label htmlFor="lowercase">Lowercase Letters (a-z)</Label>
+                <Label htmlFor="lowercase" className="cursor-pointer">
+                  Lowercase Letters (a-z)
+                </Label>
               </div>
 
               <div className="flex items-center space-x-2">
-                <Checkbox
+                <Switch
                   id="numbers"
                   checked={includeNumbers}
                   onCheckedChange={checked =>
-                    updateField("includeNumbers", checked as boolean)
+                    updateField("includeNumbers", checked)
                   }
                   data-testid="numbers-checkbox"
                 />
-                <Label htmlFor="numbers">Numbers (0-9)</Label>
+                <Label htmlFor="numbers" className="cursor-pointer">
+                  Numbers (0-9)
+                </Label>
               </div>
 
               <div className="flex items-center space-x-2">
-                <Checkbox
+                <Switch
                   id="symbols"
                   checked={includeSymbols}
                   onCheckedChange={checked =>
-                    updateField("includeSymbols", checked as boolean)
+                    updateField("includeSymbols", checked)
                   }
                   data-testid="symbols-checkbox"
                 />
-                <Label htmlFor="symbols">Symbols (!@#$%^&*)</Label>
+                <Label htmlFor="symbols" className="cursor-pointer">
+                  Symbols (!@#$%^&*)
+                </Label>
               </div>
             </div>
 
             <div className="space-y-3">
               <div className="flex items-center space-x-2">
-                <Checkbox
+                <Switch
                   id="exclude-similar"
                   checked={excludeSimilar}
                   onCheckedChange={checked =>
-                    updateField("excludeSimilar", checked as boolean)
+                    updateField("excludeSimilar", checked)
                   }
                   data-testid="exclude-similar-checkbox"
                 />
-                <Label htmlFor="exclude-similar">
+                <Label htmlFor="exclude-similar" className="cursor-pointer">
                   Exclude Similar Characters (i, l, 1, L, o, 0, O)
                 </Label>
               </div>
 
               <div className="flex items-center space-x-2">
-                <Checkbox
+                <Switch
                   id="exclude-ambiguous"
                   checked={excludeAmbiguous}
                   onCheckedChange={checked =>
-                    updateField("excludeAmbiguous", checked as boolean)
+                    updateField("excludeAmbiguous", checked)
                   }
                   data-testid="exclude-ambiguous-checkbox"
                 />
-                <Label htmlFor="exclude-ambiguous">
+                <Label htmlFor="exclude-ambiguous" className="cursor-pointer">
                   Exclude Ambiguous Characters ({}, [ ], ( ), etc.)
                 </Label>
               </div>

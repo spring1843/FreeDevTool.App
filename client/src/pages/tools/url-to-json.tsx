@@ -162,7 +162,7 @@ export default function URLToJSON() {
                     htmlFor="url-to-json-auto-process"
                     className="cursor-pointer"
                   >
-                    Auto process
+                    Auto Process
                   </Label>
                 </div>
               </TooltipTrigger>

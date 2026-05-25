@@ -379,7 +379,7 @@ export default function NumberBaseConverter() {
                     htmlFor="number-base-auto-process"
                     className="cursor-pointer"
                   >
-                    Auto process
+                    Auto Process
                   </Label>
                 </div>
               </TooltipTrigger>

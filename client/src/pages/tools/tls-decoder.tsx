@@ -214,7 +214,7 @@ export default function TLSDecoder() {
                     htmlFor="tls-auto-process"
                     className="cursor-pointer"
                   >
-                    Auto process
+                    Auto Process
                   </SwitchLabel>
                 </div>
               </TooltipTrigger>

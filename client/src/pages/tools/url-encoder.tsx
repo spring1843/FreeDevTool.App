@@ -169,7 +169,7 @@ export default function URLEncoder() {
                     htmlFor="url-encoder-auto-process"
                     className="cursor-pointer"
                   >
-                    Auto process
+                    Auto Process
                   </Label>
                 </div>
               </TooltipTrigger>
