@@ -25,6 +25,7 @@ import {
   SkipForward,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useShareTool } from "@/hooks/use-share-tool";
 import {
   ToolButton,
   ToolButtonGroup,
@@ -203,6 +204,7 @@ export default function UnicodeCharacters() {
   const MAX_UNICODE = 0x10ffff; // Maximum Unicode code point
 
   const { toast } = useToast();
+  const { handleShare } = useShareTool();
   const characterGridRef = useRef<HTMLDivElement>(null);
 
   // Get characters from selected block
@@ -431,22 +433,6 @@ export default function UnicodeCharacters() {
       html: `&#${codePoint};`,
       htmlHex: `&#x${codePoint.toString(16).toUpperCase()};`,
     };
-  };
-
-  const handleShare = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      toast({
-        title: "Link copied!",
-        description: "Tool URL copied to clipboard",
-      });
-    } catch {
-      toast({
-        title: "Share failed",
-        description: "Could not copy URL to clipboard",
-        variant: "destructive",
-      });
-    }
   };
 
   return (

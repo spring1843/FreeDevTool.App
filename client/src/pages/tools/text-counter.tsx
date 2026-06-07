@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { countTextStats } from "@/lib/text-tools";
 import { FileText, Hash, Type, List, FileIcon, BarChart3 } from "lucide-react";
 import { usePersistentForm } from "@/hooks/use-persistent-state";
-import { useToast } from "@/hooks/use-toast";
+import { useShareTool } from "@/hooks/use-share-tool";
 import {
   ToolButton,
   ResetButton,
@@ -25,7 +25,7 @@ const defaultFields = {
 };
 
 export default function TextCounter() {
-  const { toast } = useToast();
+  const { handleShare } = useShareTool();
   const tool = getToolByPath("/tools/text-counter");
   const { fields, updateField, resetFields } = usePersistentForm(
     "text-counter",
@@ -87,22 +87,6 @@ export default function TextCounter() {
       description: "UTF-8 bytes (Unicode support)",
     },
   ];
-
-  const handleShare = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      toast({
-        title: "Link copied!",
-        description: "Tool URL copied to clipboard",
-      });
-    } catch {
-      toast({
-        title: "Share failed",
-        description: "Could not copy URL to clipboard",
-        variant: "destructive",
-      });
-    }
-  };
 
   return (
     <div className="max-w-6xl mx-auto">

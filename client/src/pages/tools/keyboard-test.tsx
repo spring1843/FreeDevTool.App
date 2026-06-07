@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
+import { useShareTool } from "@/hooks/use-share-tool";
 import { Keyboard, Info, Play, Square } from "lucide-react";
 import {
   ToolButton,
@@ -24,6 +25,7 @@ interface KeyPress {
 
 export default function KeyboardTest() {
   const { toast } = useToast();
+  const { handleShare } = useShareTool();
   const tool = getToolByPath("/tools/keyboard-test");
   const [pressedKeys, setPressedKeys] = useState<Set<string>>(new Set());
   const [keyHistory, setKeyHistory] = useState<KeyPress[]>([]);
@@ -152,22 +154,6 @@ export default function KeyboardTest() {
       other: "bg-slate-500 text-white",
     };
     return colors[category as keyof typeof colors] || colors.other;
-  };
-
-  const handleShare = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      toast({
-        title: "Link copied!",
-        description: "Tool URL copied to clipboard",
-      });
-    } catch {
-      toast({
-        title: "Share failed",
-        description: "Could not copy URL to clipboard",
-        variant: "destructive",
-      });
-    }
   };
 
   return (

@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Monitor, Globe, HardDrive, Cpu, RefreshCw, Copy } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useShareTool } from "@/hooks/use-share-tool";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
@@ -107,6 +108,7 @@ export default function BrowserInfo() {
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [refreshCount, setRefreshCount] = useState<number>(0);
   const { toast } = useToast();
+  const { handleShare } = useShareTool();
 
   const detectSystemTheme = (): "dark" | "light" | "no-preference" => {
     if (
@@ -369,22 +371,6 @@ export default function BrowserInfo() {
       </div>
     );
   }
-
-  const handleShare = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      toast({
-        title: "Link copied!",
-        description: "Tool URL copied to clipboard",
-      });
-    } catch {
-      toast({
-        title: "Share failed",
-        description: "Could not copy URL to clipboard",
-        variant: "destructive",
-      });
-    }
-  };
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">

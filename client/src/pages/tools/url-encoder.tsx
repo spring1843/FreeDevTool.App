@@ -4,6 +4,7 @@ import { useTheme } from "@/providers/theme-provider";
 import { Link, Unlink } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useShareTool } from "@/hooks/use-share-tool";
 import {
   ToolButton,
   ResetButton,
@@ -34,6 +35,7 @@ export default function URLEncoder() {
   const [autoProcess, setAutoProcess] = useState(true);
   const { theme } = useTheme();
   const { toast } = useToast();
+  const { handleShare } = useShareTool();
 
   const encodeURL = useCallback(() => {
     try {
@@ -115,22 +117,6 @@ export default function URLEncoder() {
       encodeURL();
     }
   }, [autoProcess, encodeURL]);
-
-  const handleShare = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      toast({
-        title: "Link copied!",
-        description: "Tool URL copied to clipboard",
-      });
-    } catch {
-      toast({
-        title: "Share failed",
-        description: "Could not copy URL to clipboard",
-        variant: "destructive",
-      });
-    }
-  };
 
   return (
     <div className="max-w-6xl mx-auto">

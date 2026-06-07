@@ -35,6 +35,7 @@ import {
   DataButtonGroup,
 } from "@/components/ui/tool-button";
 import { useToast } from "@/hooks/use-toast";
+import { useShareTool } from "@/hooks/use-share-tool";
 
 import QRCodeLib from "qrcode-generator";
 import { DEFAULT_QR_GENERATOR } from "@/data/defaults";
@@ -165,6 +166,7 @@ export default function QRGenerator() {
   const [autoProcess, setAutoProcess] = useState(true);
 
   const { toast } = useToast();
+  const { handleShare } = useShareTool();
   // Theme no longer needed after switching to native textarea
 
   const currentPreset = qrPresets.find(p => p.type === qrType) || qrPresets[0];
@@ -318,22 +320,6 @@ export default function QRGenerator() {
     };
 
     return presets[qrType] || [];
-  };
-
-  const handleShare = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      toast({
-        title: "Link copied!",
-        description: "Tool URL copied to clipboard",
-      });
-    } catch {
-      toast({
-        title: "Share failed",
-        description: "Could not copy URL to clipboard",
-        variant: "destructive",
-      });
-    }
   };
 
   return (

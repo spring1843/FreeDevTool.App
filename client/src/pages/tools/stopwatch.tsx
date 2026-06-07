@@ -1,4 +1,4 @@
-import { useToast } from "@/hooks/use-toast";
+import { useShareTool } from "@/hooks/use-share-tool";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -24,7 +24,7 @@ interface LapTime {
 }
 
 export default function Stopwatch() {
-  const { toast } = useToast();
+  const { handleShare } = useShareTool();
   const tool = getToolByPath("/tools/stopwatch");
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
@@ -187,22 +187,6 @@ export default function Stopwatch() {
     laps.length > 0 ? Math.min(...laps.map(lap => lap.lapTime)) : 0;
   const slowestLap =
     laps.length > 0 ? Math.max(...laps.map(lap => lap.lapTime)) : 0;
-
-  const handleShare = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      toast({
-        title: "Link copied!",
-        description: "Tool URL copied to clipboard",
-      });
-    } catch {
-      toast({
-        title: "Share failed",
-        description: "Could not copy URL to clipboard",
-        variant: "destructive",
-      });
-    }
-  };
 
   return (
     <div className="max-w-6xl mx-auto">

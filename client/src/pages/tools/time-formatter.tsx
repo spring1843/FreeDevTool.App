@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { getToolByPath } from "@/data/tools";
-import { useToast } from "@/hooks/use-toast";
+import { useShareTool } from "@/hooks/use-share-tool";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 import { SecurityBanner } from "@/components/ui/security-banner";
@@ -29,7 +29,7 @@ interface TimeFormat {
 }
 
 export default function TimeFormatter() {
-  const { toast } = useToast();
+  const { handleShare } = useShareTool();
   const tool = getToolByPath("/tools/time-formatter");
   const [inputTime, setInputTime] = useState("");
   const [inputDate, setInputDate] = useState("");
@@ -315,22 +315,6 @@ export default function TimeFormatter() {
 
   const hasModifiedData = inputDate.trim() !== "" && inputTime.trim() !== "";
   const isAtDefault = false; // Time formatter always starts with current time
-
-  const handleShare = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      toast({
-        title: "Link copied!",
-        description: "Tool URL copied to clipboard",
-      });
-    } catch {
-      toast({
-        title: "Share failed",
-        description: "Could not copy URL to clipboard",
-        variant: "destructive",
-      });
-    }
-  };
 
   return (
     <div className="max-w-6xl mx-auto">

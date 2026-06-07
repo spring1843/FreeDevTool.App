@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/tool-button";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useToast } from "@/hooks/use-toast";
+import { useShareTool } from "@/hooks/use-share-tool";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
@@ -122,6 +123,7 @@ export default function LoremGenerator() {
   const [generated, setGenerated] = useState("");
   const { theme } = useTheme();
   const { toast } = useToast();
+  const { handleShare } = useShareTool();
 
   const generateRandom = () => {
     const randomIndex = Math.floor(Math.random() * loremWords.length);
@@ -263,22 +265,6 @@ export default function LoremGenerator() {
   useEffect(() => {
     generateLorem();
   }, [generateLorem]);
-
-  const handleShare = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      toast({
-        title: "Link copied!",
-        description: "Tool URL copied to clipboard",
-      });
-    } catch {
-      toast({
-        title: "Share failed",
-        description: "Could not copy URL to clipboard",
-        variant: "destructive",
-      });
-    }
-  };
 
   return (
     <div className="max-w-6xl mx-auto">

@@ -1,4 +1,4 @@
-import { useToast } from "@/hooks/use-toast";
+import { useShareTool } from "@/hooks/use-share-tool";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/tooltip";
 
 export default function MarkdownFormatter() {
-  const { toast } = useToast();
+  const { handleShare } = useShareTool();
   const tool = getToolByPath("/tools/markdown-formatter");
   const [input, setInput] = useState(DEFAULT_MARKDOWN);
   const [output, setOutput] = useState("");
@@ -77,22 +77,6 @@ export default function MarkdownFormatter() {
       formatCode();
     }
   }, [autoFormat, formatCode]);
-
-  const handleShare = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      toast({
-        title: "Link copied!",
-        description: "Tool URL copied to clipboard",
-      });
-    } catch {
-      toast({
-        title: "Share failed",
-        description: "Could not copy URL to clipboard",
-        variant: "destructive",
-      });
-    }
-  };
 
   return (
     <div className="max-w-6xl mx-auto">

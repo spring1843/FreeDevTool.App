@@ -1,4 +1,4 @@
-import { useToast } from "@/hooks/use-toast";
+import { useShareTool } from "@/hooks/use-share-tool";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -56,7 +56,7 @@ interface CompoundInterestResult {
 }
 
 export default function CompoundInterestCalculator() {
-  const { toast } = useToast();
+  const { handleShare } = useShareTool();
   const tool = getToolByPath("/tools/compound-interest");
   const { theme } = useTheme();
   const labelColor = theme === "dark" ? "#fff" : "#000";
@@ -248,22 +248,6 @@ export default function CompoundInterestCalculator() {
     }
 
     return nxResults;
-  };
-
-  const handleShare = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      toast({
-        title: "Link copied!",
-        description: "Tool URL copied to clipboard",
-      });
-    } catch {
-      toast({
-        title: "Share failed",
-        description: "Could not copy URL to clipboard",
-        variant: "destructive",
-      });
-    }
   };
 
   return (

@@ -18,6 +18,7 @@ import {
   DataButtonGroup,
 } from "@/components/ui/tool-button";
 import { useToast } from "@/hooks/use-toast";
+import { useShareTool } from "@/hooks/use-share-tool";
 import { usePersistentForm } from "@/hooks/use-persistent-state";
 import { getUserTimezone } from "@/lib/time-tools";
 
@@ -78,6 +79,7 @@ export default function DateTimeDiff() {
   const [copiedField, setCopiedField] = useState<string>("");
 
   const { toast } = useToast();
+  const { handleShare } = useShareTool();
 
   // Preset configurations for time differences
   const presets = [
@@ -361,22 +363,6 @@ export default function DateTimeDiff() {
     if (parts.length === 2) return `${parts[0]} and ${parts[1]}`;
 
     return `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1]}`;
-  };
-
-  const handleShare = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      toast({
-        title: "Link copied!",
-        description: "Tool URL copied to clipboard",
-      });
-    } catch {
-      toast({
-        title: "Share failed",
-        description: "Could not copy URL to clipboard",
-        variant: "destructive",
-      });
-    }
   };
 
   return (

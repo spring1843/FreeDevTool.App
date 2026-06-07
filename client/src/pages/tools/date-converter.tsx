@@ -24,6 +24,7 @@ import {
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useToast } from "@/hooks/use-toast";
+import { useShareTool } from "@/hooks/use-share-tool";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
@@ -334,6 +335,7 @@ export default function DateConverter() {
   const [inputFormat, setInputFormat] = useState("unix");
   const [formats, setFormats] = useState<DateFormat[]>([]);
   const { toast } = useToast();
+  const { handleShare } = useShareTool();
 
   const parseInputDate = (input: string, format: string): Date | null => {
     const trimmed = input.trim();
@@ -819,22 +821,6 @@ export default function DateConverter() {
       toast({
         title: "Copy failed",
         description: `Could not copy to clipboard: ${error instanceof Error ? error.message : "Unknown error"}`,
-        variant: "destructive",
-      });
-    }
-  };
-
-  const handleShare = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      toast({
-        title: "Link copied!",
-        description: "Tool URL copied to clipboard",
-      });
-    } catch {
-      toast({
-        title: "Share failed",
-        description: "Could not copy URL to clipboard",
         variant: "destructive",
       });
     }

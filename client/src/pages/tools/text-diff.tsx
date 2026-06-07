@@ -1,4 +1,4 @@
-import { useToast } from "@/hooks/use-toast";
+import { useShareTool } from "@/hooks/use-share-tool";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
@@ -46,7 +46,7 @@ interface DiffStats {
 }
 
 export default function TextDiff() {
-  const { toast } = useToast();
+  const { handleShare } = useShareTool();
   const tool = getToolByPath("/tools/text-diff");
   const [text1, setText1] = useState(DEFAULT_TEXT_DIFF_1);
   const [text2, setText2] = useState(DEFAULT_TEXT_DIFF_2);
@@ -115,22 +115,6 @@ export default function TextDiff() {
       calculateDiff();
     }
   }, [autoProcess, calculateDiff]);
-
-  const handleShare = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      toast({
-        title: "Link copied!",
-        description: "Tool URL copied to clipboard",
-      });
-    } catch {
-      toast({
-        title: "Share failed",
-        description: "Could not copy URL to clipboard",
-        variant: "destructive",
-      });
-    }
-  };
 
   return (
     <div className="max-w-6xl mx-auto">
