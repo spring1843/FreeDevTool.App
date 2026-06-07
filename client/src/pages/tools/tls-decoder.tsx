@@ -272,10 +272,10 @@ export default function TLSDecoder() {
       );
 
       // Subject Alternative Names (full list for dedicated section)
-      interface SanExt {
-        names: { items: Array<{ type: string; value: string }> };
-      }
-      const sanExt = cert.getExtension("2.5.29.17") as unknown as SanExt | null;
+      const sanExt = cert.extensions.find(
+        e => e instanceof SubjectAlternativeNameExtension
+      ) as SubjectAlternativeNameExtension | undefined;
+
       const subjectAltNames = sanExt
         ? sanExt.names.items.map(n => `${n.type}: ${n.value}`)
         : [];
