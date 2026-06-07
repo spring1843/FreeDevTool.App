@@ -368,7 +368,10 @@ export default function DateConverter() {
       if (!/^-?\d+$/.test(trimmed)) return null;
       try {
         const ns = BigInt(trimmed);
-        const msBig = ns / 1_000_000n - (ns < 0n && ns % 1_000_000n !== 0n ? 1n : 0n);
+        const ms1M = BigInt(1_000_000);
+        const msBig =
+          ns / ms1M -
+          (ns < BigInt(0) && ns % ms1M !== BigInt(0) ? BigInt(1) : BigInt(0));
         const d = new Date(Number(msBig));
         return isNaN(d.getTime()) ? null : d;
       } catch {
@@ -536,7 +539,10 @@ export default function DateConverter() {
     if (/^-?\d{19}$/.test(trimmed)) {
       try {
         const ns = BigInt(trimmed);
-        const msBig = ns / 1_000_000n - (ns < 0n && ns % 1_000_000n !== 0n ? 1n : 0n);
+        const ms1M = BigInt(1_000_000);
+        const msBig =
+          ns / ms1M -
+          (ns < BigInt(0) && ns % ms1M !== BigInt(0) ? BigInt(1) : BigInt(0));
         const d = new Date(Number(msBig));
         if (!isNaN(d.getTime())) return d;
       } catch {
