@@ -48,6 +48,11 @@ const INPUT_FORMATS = [
     label: "Unix Epoch (milliseconds)",
     description: "e.g., 1699123456000",
   },
+  {
+    value: "unixns",
+    label: "Unix Epoch (nanoseconds)",
+    description: "e.g., 1699123456000000000",
+  },
   // ISO Standards
   {
     value: "iso",
@@ -120,6 +125,13 @@ const DATE_FORMATS = [
     format: "unixms",
     pattern: "Epoch (milliseconds)",
     description: "Milliseconds since Jan 1, 1970",
+    category: "Timestamp",
+  },
+  {
+    name: "Unix Nanoseconds",
+    format: "unixns",
+    pattern: "Epoch (nanoseconds)",
+    description: "Nanoseconds since Jan 1, 1970",
     category: "Timestamp",
   },
 
@@ -341,13 +353,26 @@ export default function DateConverter() {
     if (format === "unix") {
       const num = parseInt(trimmed, 10);
       if (isNaN(num)) return null;
-      return new Date(num * 1000);
+      const d = new Date(num * 1000);
+      return isNaN(d.getTime()) ? null : d;
     }
 
     if (format === "unixms") {
       const num = parseInt(trimmed, 10);
       if (isNaN(num)) return null;
-      return new Date(num);
+      const d = new Date(num);
+      return isNaN(d.getTime()) ? null : d;
+    }
+
+    if (format === "unixns") {
+      if (!/^-?\d+$/.test(trimmed)) return null;
+      try {
+        const ms = Number(BigInt(trimmed) / BigInt(1_000_000));
+        const d = new Date(ms);
+        return isNaN(d.getTime()) ? null : d;
+      } catch {
+        return null;
+      }
     }
 
     if (format === "iso") {
@@ -506,6 +531,17 @@ export default function DateConverter() {
       return new Date(parseInt(trimmed));
     }
 
+    // Try Unix timestamp (nanoseconds)
+    if (/^-?\d{19}$/.test(trimmed)) {
+      try {
+        const ms = Number(BigInt(trimmed) / BigInt(1_000_000));
+        const d = new Date(ms);
+        if (!isNaN(d.getTime())) return d;
+      } catch {
+        // fall through
+      }
+    }
+
     // Try standard date parsing
     const date = new Date(trimmed);
     if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
@@ -530,6 +566,8 @@ export default function DateConverter() {
         return Math.floor(date.getTime() / 1000).toString();
       case "unixms":
         return date.getTime().toString();
+      case "unixns":
+        return (BigInt(date.getTime()) * BigInt(1_000_000)).toString();
       case "iso":
         return date.toISOString();
       case "isodate":
@@ -757,7 +795,7 @@ export default function DateConverter() {
   const convertDate = useCallback(() => {
     const date = parseInputDate(inputDate, inputFormat);
 
-    if (!date) {
+    if (!date || isNaN(date.getTime())) {
       const selectedFormat = INPUT_FORMATS.find(f => f.value === inputFormat);
       setFormats([
         {
@@ -799,8 +837,13 @@ export default function DateConverter() {
 
   const handleCurrentTime = () => {
     const now = new Date();
-    // Use the user's timezone for current time display
-    setInputDate(Math.floor(now.getTime() / 1000).toString());
+    // Map input format values that differ from their formatDate key
+    const inputFormatToFormatKey: Record<string, string> = {
+      shorttext: "short",
+      fulltext: "full",
+    };
+    const formatKey = inputFormatToFormatKey[inputFormat] ?? inputFormat;
+    setInputDate(formatDate(now, formatKey));
   };
 
   useEffect(() => {

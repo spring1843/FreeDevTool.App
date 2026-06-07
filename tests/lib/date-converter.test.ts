@@ -8,13 +8,26 @@ const parseInputDate = (input: string, format = "auto"): Date | null => {
   if (format === "unix") {
     const num = parseInt(trimmed, 10);
     if (isNaN(num)) return null;
-    return new Date(num * 1000);
+    const d = new Date(num * 1000);
+    return isNaN(d.getTime()) ? null : d;
   }
 
   if (format === "unixms") {
     const num = parseInt(trimmed, 10);
     if (isNaN(num)) return null;
-    return new Date(num);
+    const d = new Date(num);
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  if (format === "unixns") {
+    if (!/^-?\d+$/.test(trimmed)) return null;
+    try {
+      const ms = Number(BigInt(trimmed) / BigInt(1_000_000));
+      const d = new Date(ms);
+      return isNaN(d.getTime()) ? null : d;
+    } catch {
+      return null;
+    }
   }
 
   if (format === "iso") {
@@ -163,6 +176,16 @@ const parseInputDate = (input: string, format = "auto"): Date | null => {
     return new Date(parseInt(trimmed));
   }
 
+  if (/^-?\d{19}$/.test(trimmed)) {
+    try {
+      const ms = Number(BigInt(trimmed) / BigInt(1_000_000));
+      const d = new Date(ms);
+      if (!isNaN(d.getTime())) return d;
+    } catch {
+      // fall through
+    }
+  }
+
   const date = new Date(trimmed);
   if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
     const [y, m, d] = trimmed.split("-").map(Number);
@@ -185,6 +208,8 @@ const formatDate = (date: Date, format: string): string => {
       return Math.floor(date.getTime() / 1000).toString();
     case "unixms":
       return date.getTime().toString();
+    case "unixns":
+      return (BigInt(date.getTime()) * BigInt(1_000_000)).toString();
     case "iso":
       return date.toISOString();
     case "isodate":
@@ -432,6 +457,23 @@ describe("Date Converter", () => {
         const result = parseInputDate("1705329045123", "unixms");
         expect(result).toBeInstanceOf(Date);
         expect(result!.toISOString()).toBe("2024-01-15T14:30:45.123Z");
+      });
+
+      it("should parse Unix timestamp (nanoseconds) with explicit format", () => {
+        const result = parseInputDate("1705329045123000000", "unixns");
+        expect(result).toBeInstanceOf(Date);
+        expect(result!.toISOString()).toBe("2024-01-15T14:30:45.123Z");
+      });
+
+      it("should parse Unix nanoseconds via auto-detect (19 digits)", () => {
+        const result = parseInputDate("1705329045123000000");
+        expect(result).toBeInstanceOf(Date);
+        expect(result!.toISOString()).toBe("2024-01-15T14:30:45.123Z");
+      });
+
+      it("should return null for nanosecond format with non-numeric input", () => {
+        const result = parseInputDate("not-a-number", "unixns");
+        expect(result).toBeNull();
       });
 
       it("should parse negative Unix timestamp for pre-epoch dates", () => {
@@ -688,6 +730,11 @@ describe("Date Converter", () => {
       it("should format Unix milliseconds correctly", () => {
         const result = formatDate(testDate, "unixms");
         expect(result).toBe("1705329045123");
+      });
+
+      it("should format Unix nanoseconds correctly", () => {
+        const result = formatDate(testDate, "unixns");
+        expect(result).toBe("1705329045123000000");
       });
     });
 
