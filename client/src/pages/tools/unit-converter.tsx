@@ -10,7 +10,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowLeftRight, Copy, Check, Calculator } from "lucide-react";
+import {
+  ArrowLeftRight,
+  Copy,
+  Check,
+  Calculator,
+  RefreshCw,
+} from "lucide-react";
 import {
   ToolButton,
   ResetButton,
@@ -588,6 +594,25 @@ export default function UnitConverter() {
 
       <ToolButtonGroup className="mb-6">
         <ActionButtonGroup>
+          {!autoConvert ? (
+            <ToolButton
+              variant="custom"
+              onClick={() => {
+                convertUnits();
+                updateURL({
+                  cat: selectedCategory,
+                  from: fromUnit,
+                  to: toUnit,
+                  val: inputValue,
+                });
+              }}
+              icon={<RefreshCw className="w-4 h-4 mr-2" />}
+              tooltip="Convert units"
+              data-testid="convert-button"
+            >
+              Convert
+            </ToolButton>
+          ) : null}
           <ToolButton
             variant="share"
             onClick={shareConversion}
