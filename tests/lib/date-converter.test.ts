@@ -478,6 +478,12 @@ describe("Date Converter", () => {
         expect(result).toBeNull();
       });
 
+      it("should floor negative Unix nanoseconds when converting to milliseconds", () => {
+        const result = parseInputDate("-1", "unixns");
+        expect(result).toBeInstanceOf(Date);
+        expect(result!.getTime()).toBe(-1);
+      });
+
       it("should parse negative Unix timestamp for pre-epoch dates", () => {
         const result = parseInputDate("-1000000000");
         expect(result).toBeInstanceOf(Date);
