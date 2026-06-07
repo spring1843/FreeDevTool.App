@@ -433,6 +433,22 @@ export default function UnicodeCharacters() {
     };
   };
 
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "Link copied!",
+        description: "Tool URL copied to clipboard",
+      });
+    } catch {
+      toast({
+        title: "Share failed",
+        description: "Could not copy URL to clipboard",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
@@ -453,6 +469,16 @@ export default function UnicodeCharacters() {
           <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
+        </ActionButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Controls */}

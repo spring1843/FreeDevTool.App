@@ -1,9 +1,11 @@
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Play, Pause, Square, Flag } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import {
+  ToolButton,
   ToolButtonGroup,
   ActionButtonGroup,
   DataButtonGroup,
@@ -22,6 +24,7 @@ interface LapTime {
 }
 
 export default function Stopwatch() {
+  const { toast } = useToast();
   const tool = getToolByPath("/tools/stopwatch");
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
@@ -185,6 +188,22 @@ export default function Stopwatch() {
   const slowestLap =
     laps.length > 0 ? Math.max(...laps.map(lap => lap.lapTime)) : 0;
 
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "Link copied!",
+        description: "Tool URL copied to clipboard",
+      });
+    } catch {
+      toast({
+        title: "Share failed",
+        description: "Could not copy URL to clipboard",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto">
       <div className="mb-6">
@@ -252,6 +271,11 @@ export default function Stopwatch() {
             <Square className="w-5 h-5 mr-2" />
             Stop <span className="text-xs opacity-75 ml-2">(Esc)</span>
           </Button>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

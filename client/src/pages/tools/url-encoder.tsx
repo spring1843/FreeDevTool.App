@@ -116,6 +116,22 @@ export default function URLEncoder() {
     }
   }, [autoProcess, encodeURL]);
 
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "Link copied!",
+        description: "Tool URL copied to clipboard",
+      });
+    } catch {
+      toast({
+        title: "Share failed",
+        description: "Could not copy URL to clipboard",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto">
       <div className="mb-6">
@@ -155,6 +171,11 @@ export default function URLEncoder() {
           >
             Decode URL
           </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>

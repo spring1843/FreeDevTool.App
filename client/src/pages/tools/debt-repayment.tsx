@@ -1,3 +1,4 @@
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -50,6 +51,7 @@ interface DebtResult {
 }
 
 export default function DebtRepaymentCalculator() {
+  const { toast } = useToast();
   const tool = getToolByPath("/tools/debt-repayment");
   const { theme } = useTheme();
   const labelColor = theme === "dark" ? "#fff" : "#000";
@@ -151,6 +153,22 @@ export default function DebtRepaymentCalculator() {
 
   const minimumPayment = principal * (annualRate / 100 / 12);
 
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "Link copied!",
+        description: "Tool URL copied to clipboard",
+      });
+    } catch {
+      toast({
+        title: "Share failed",
+        description: "Could not copy URL to clipboard",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto overflow-hidden">
       <div className="mb-6">
@@ -181,6 +199,11 @@ export default function DebtRepaymentCalculator() {
           >
             Calculate
           </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

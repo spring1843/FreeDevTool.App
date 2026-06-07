@@ -370,6 +370,22 @@ export default function BrowserInfo() {
     );
   }
 
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "Link copied!",
+        description: "Tool URL copied to clipboard",
+      });
+    } catch {
+      toast({
+        title: "Share failed",
+        description: "Could not copy URL to clipboard",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       {/* Header */}
@@ -412,6 +428,11 @@ export default function BrowserInfo() {
           >
             Copy All
           </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
         </ActionButtonGroup>
       </ToolButtonGroup>
 

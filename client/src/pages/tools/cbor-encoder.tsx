@@ -1,3 +1,4 @@
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
@@ -43,6 +44,7 @@ const DEFAULT_CBOR_HEX = uint8ArrayToHex(DEFAULT_BYTES);
 const DEFAULT_CBOR_BASE64 = uint8ArrayToBase64(DEFAULT_BYTES);
 
 export default function CborEncoder() {
+  const { toast } = useToast();
   const tool = getToolByPath("/tools/cbor-encoder");
   const [jsonInput, setJsonInput] = useState(DEFAULT_CBOR_JSON);
   const [cborHex, setCborHex] = useState(DEFAULT_CBOR_HEX);
@@ -132,6 +134,22 @@ export default function CborEncoder() {
     }
   }, [autoProcess, encode, jsonInput]);
 
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "Link copied!",
+        description: "Tool URL copied to clipboard",
+      });
+    } catch {
+      toast({
+        title: "Share failed",
+        description: "Could not copy URL to clipboard",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
@@ -175,6 +193,11 @@ export default function CborEncoder() {
           >
             Decode
           </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>

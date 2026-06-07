@@ -1,3 +1,4 @@
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,6 +33,7 @@ import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function BcryptHash() {
+  const { toast } = useToast();
   const tool = getToolByPath("/tools/bcrypt-hash");
   const [plaintext, setPlaintext] = useState(DEFAULT_BCRYPT);
   const [hash, setHash] = useState("");
@@ -187,6 +189,22 @@ export default function BcryptHash() {
     );
   };
 
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "Link copied!",
+        description: "Tool URL copied to clipboard",
+      });
+    } catch {
+      toast({
+        title: "Share failed",
+        description: "Could not copy URL to clipboard",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto">
       <div className="mb-6">
@@ -217,6 +235,11 @@ export default function BcryptHash() {
           >
             {isHashing ? "Generating..." : "Generate Hash"}
           </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

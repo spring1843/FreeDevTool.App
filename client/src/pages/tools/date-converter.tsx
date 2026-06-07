@@ -13,6 +13,7 @@ import {
 import { Copy, Clock } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import {
+  ToolButton,
   ResetButton,
   ClearButton,
   NowButton,
@@ -823,6 +824,22 @@ export default function DateConverter() {
     }
   };
 
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "Link copied!",
+        description: "Tool URL copied to clipboard",
+      });
+    } catch {
+      toast({
+        title: "Share failed",
+        description: "Could not copy URL to clipboard",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto">
       <div className="mb-6">
@@ -850,6 +867,11 @@ export default function DateConverter() {
             tooltip="Set to current time"
             toastTitle="Time updated"
             toastDescription="Set to current timestamp"
+          />
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
           />
         </ActionButtonGroup>
         <DataButtonGroup>

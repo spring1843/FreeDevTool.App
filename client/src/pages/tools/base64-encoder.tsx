@@ -1,3 +1,4 @@
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
@@ -31,6 +32,7 @@ import {
 const DEFAULT_BASE64_ENCODED = encodeBase64(DEFAULT_BASE64);
 
 export default function Base64Encoder() {
+  const { toast } = useToast();
   const tool = getToolByPath("/tools/base64");
   const [plainText, setPlainText] = useState(DEFAULT_BASE64);
   const [encodedText, setEncodedText] = useState(DEFAULT_BASE64_ENCODED);
@@ -109,6 +111,22 @@ export default function Base64Encoder() {
     }
   }, [autoProcess, encode, plainText]);
 
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "Link copied!",
+        description: "Tool URL copied to clipboard",
+      });
+    } catch {
+      toast({
+        title: "Share failed",
+        description: "Could not copy URL to clipboard",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
@@ -160,6 +178,11 @@ export default function Base64Encoder() {
           >
             Swap
           </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>

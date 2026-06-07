@@ -1,3 +1,4 @@
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -33,6 +34,7 @@ import {
 } from "@/components/ui/tooltip";
 
 export default function SearchReplace() {
+  const { toast } = useToast();
   const tool = getToolByPath("/tools/search-replace");
   const [text, setText] = useState(DEFAULT_SEARCH_REPLACE_TEXT);
   const [searchText, setSearchText] = useState(DEFAULT_SEARCH_REPLACE_SEARCH);
@@ -141,6 +143,22 @@ export default function SearchReplace() {
     }
   }, [autoProcess, performSearchReplace]);
 
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "Link copied!",
+        description: "Tool URL copied to clipboard",
+      });
+    } catch {
+      toast({
+        title: "Share failed",
+        description: "Could not copy URL to clipboard",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto">
       <div className="mb-6">
@@ -171,6 +189,11 @@ export default function SearchReplace() {
           >
             Search & Replace
           </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>

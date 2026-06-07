@@ -17,6 +17,7 @@ import {
 
 import { useToolDefault } from "@/hooks/use-tool-default";
 import { usePersistentForm } from "@/hooks/use-persistent-state";
+import { useToast } from "@/hooks/use-toast";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
@@ -30,6 +31,7 @@ interface PasswordStrength {
 }
 
 export default function PasswordGenerator() {
+  const { toast } = useToast();
   const tool = getToolByPath("/tools/password-generator");
   const { fields, updateField, resetFields } = usePersistentForm(
     "password-generator",
@@ -274,6 +276,22 @@ export default function PasswordGenerator() {
     setVisiblePasswords(newVisible);
   };
 
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "Link copied!",
+        description: "Tool URL copied to clipboard",
+      });
+    } catch {
+      toast({
+        title: "Share failed",
+        description: "Could not copy URL to clipboard",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
@@ -312,6 +330,11 @@ export default function PasswordGenerator() {
             Generate{" "}
             {passwordCount === 1 ? "Password" : `${passwordCount} Passwords`}
           </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

@@ -16,6 +16,7 @@ import {
 } from "@/lib/time-tools";
 import { Clock, Globe, Plus, X } from "lucide-react";
 import {
+  ToolButton,
   ClearButton,
   ToolButtonGroup,
   ActionButtonGroup,
@@ -163,6 +164,22 @@ export default function WorldClock() {
     });
   };
 
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "Link copied!",
+        description: "Tool URL copied to clipboard",
+      });
+    } catch {
+      toast({
+        title: "Share failed",
+        description: "Could not copy URL to clipboard",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
@@ -193,6 +210,11 @@ export default function WorldClock() {
             <Plus className="w-4 h-4 mr-2" />
             Add Clock
           </Button>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
         </ActionButtonGroup>
         {displayedCities.length > 0 && (
           <DataButtonGroup>

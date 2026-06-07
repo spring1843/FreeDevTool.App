@@ -16,8 +16,16 @@ import {
   ResetButton,
   ClearButton,
   ToolButtonGroup,
+  ActionButtonGroup,
   DataButtonGroup,
 } from "@/components/ui/tool-button";
+import { Switch } from "@/components/ui/switch";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   updateURL,
   copyShareableURL,
@@ -353,6 +361,7 @@ export default function UnitConverter() {
   const [inputValue, setInputValue] = useState(DEFAULT_UNIT_CONVERTER);
   const [result, setResult] = useState("");
   const [copied, setCopied] = useState(false);
+  const [autoConvert, setAutoConvert] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -460,7 +469,7 @@ export default function UnitConverter() {
 
   // Convert units when inputs change
   useEffect(() => {
-    if (inputValue && fromUnit && toUnit) {
+    if (autoConvert && inputValue && fromUnit && toUnit) {
       convertUnits();
       updateURL({
         cat: selectedCategory,
@@ -469,7 +478,14 @@ export default function UnitConverter() {
         val: inputValue,
       });
     }
-  }, [inputValue, fromUnit, toUnit, selectedCategory, convertUnits]);
+  }, [
+    inputValue,
+    fromUnit,
+    toUnit,
+    selectedCategory,
+    convertUnits,
+    autoConvert,
+  ]);
 
   const shareConversion = async () => {
     const success = await copyShareableURL({
@@ -570,7 +586,38 @@ export default function UnitConverter() {
         </div>
       </div>
 
-      <ToolButtonGroup className="mb-6 justify-end">
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="share"
+            onClick={shareConversion}
+            tooltip="Copy shareable URL to clipboard"
+            data-testid="share-conversion-button"
+          />
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="unit-converter-auto-convert"
+                    checked={autoConvert}
+                    onCheckedChange={setAutoConvert}
+                    data-testid="auto-process-switch"
+                  />
+                  <Label
+                    htmlFor="unit-converter-auto-convert"
+                    className="cursor-pointer"
+                  >
+                    Auto Convert
+                  </Label>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Automatically convert when inputs change</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton
             onClick={handleReset}
@@ -704,16 +751,10 @@ export default function UnitConverter() {
               </div>
 
               <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700">
-                <ToolButton
-                  variant="share"
-                  onClick={shareConversion}
-                  size="sm"
-                  className="w-full flex items-center justify-center space-x-2"
-                  tooltip="Copy shareable URL to clipboard"
-                  data-testid="share-conversion-button"
-                >
-                  Share Conversion
-                </ToolButton>
+                <p className="text-xs text-slate-500 dark:text-slate-400 text-center">
+                  {inputValue} {currentCategory.units[fromUnit]?.symbol} ={" "}
+                  {formatResult(result)} {currentCategory.units[toUnit]?.symbol}
+                </p>
               </div>
             </div>
           ) : null}

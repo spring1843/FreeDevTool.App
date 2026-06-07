@@ -1,3 +1,4 @@
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
@@ -29,6 +30,7 @@ import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function GraphQLFormatter() {
+  const { toast } = useToast();
   const tool = getToolByPath("/tools/graphql-formatter");
   const [input, setInput] = useState(DEFAULT_GRAPHQL);
   const [output, setOutput] = useState("");
@@ -77,6 +79,22 @@ export default function GraphQLFormatter() {
     }
   }, [autoFormat, formatCode]);
 
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "Link copied!",
+        description: "Tool URL copied to clipboard",
+      });
+    } catch {
+      toast({
+        title: "Share failed",
+        description: "Could not copy URL to clipboard",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto">
       <div className="mb-6">
@@ -116,6 +134,11 @@ export default function GraphQLFormatter() {
           >
             Format GraphQL
           </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>

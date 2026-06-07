@@ -9,9 +9,11 @@ import { Label } from "@/components/ui/label";
 import { CalendarDays, Calculator, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
+  ToolButton,
   ResetButton,
   ClearButton,
   NowButton,
+  ActionButtonGroup,
   ToolButtonGroup,
   DataButtonGroup,
 } from "@/components/ui/tool-button";
@@ -361,6 +363,22 @@ export default function DateTimeDiff() {
     return `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1]}`;
   };
 
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "Link copied!",
+        description: "Tool URL copied to clipboard",
+      });
+    } catch {
+      toast({
+        title: "Share failed",
+        description: "Could not copy URL to clipboard",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
@@ -382,6 +400,30 @@ export default function DateTimeDiff() {
           <SecurityBanner variant="compact" className="flex-shrink-0" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ResetButton
+            onClick={clearAll}
+            tooltip="Reset to default values"
+            hasModifiedData={hasModifiedData}
+            disabled={isAtDefault}
+          />
+          <ClearButton
+            onClick={clearAll}
+            tooltip="Clear all date inputs"
+            hasModifiedData={hasModifiedData}
+            disabled={!hasModifiedData}
+          />
+        </DataButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Input Section */}
@@ -564,24 +606,6 @@ export default function DateTimeDiff() {
               </p>
             </CardContent>
           </Card>
-
-          {/* Controls */}
-          <ToolButtonGroup>
-            <DataButtonGroup>
-              <ResetButton
-                onClick={clearAll}
-                tooltip="Reset to default values"
-                hasModifiedData={hasModifiedData}
-                disabled={isAtDefault}
-              />
-              <ClearButton
-                onClick={clearAll}
-                tooltip="Clear all date inputs"
-                hasModifiedData={hasModifiedData}
-                disabled={!hasModifiedData}
-              />
-            </DataButtonGroup>
-          </ToolButtonGroup>
         </div>
 
         {/* Results Section */}

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { getToolByPath } from "@/data/tools";
+import { useToast } from "@/hooks/use-toast";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 import { SecurityBanner } from "@/components/ui/security-banner";
@@ -12,9 +13,11 @@ import { Clock, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
+  ToolButton,
   ResetButton,
   ClearButton,
   NowButton,
+  ActionButtonGroup,
   ToolButtonGroup,
   DataButtonGroup,
 } from "@/components/ui/tool-button";
@@ -26,6 +29,7 @@ interface TimeFormat {
 }
 
 export default function TimeFormatter() {
+  const { toast } = useToast();
   const tool = getToolByPath("/tools/time-formatter");
   const [inputTime, setInputTime] = useState("");
   const [inputDate, setInputDate] = useState("");
@@ -312,6 +316,22 @@ export default function TimeFormatter() {
   const hasModifiedData = inputDate.trim() !== "" && inputTime.trim() !== "";
   const isAtDefault = false; // Time formatter always starts with current time
 
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "Link copied!",
+        description: "Tool URL copied to clipboard",
+      });
+    } catch {
+      toast({
+        title: "Share failed",
+        description: "Could not copy URL to clipboard",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
@@ -332,14 +352,21 @@ export default function TimeFormatter() {
         </div>
       </div>
 
-      <ToolButtonGroup className="mb-6 justify-end">
-        <DataButtonGroup>
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
           <NowButton
             onClick={setCurrentDateTime}
             tooltip="Set to current date and time"
             toastTitle="Time updated"
             toastDescription="Set to current date and time"
           />
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
+        </ActionButtonGroup>
+        <DataButtonGroup>
           <ResetButton
             onClick={setCurrentDateTime}
             tooltip="Reset to current time"
