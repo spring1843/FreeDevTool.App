@@ -236,25 +236,10 @@ export default function TLSDecoder() {
         .join(":")
         .toUpperCase();
 
-      // Version: ASN.1 uses 0-indexed (2 = v3). The serial number length heuristic
-      // lets us detect v1/v2/v3 without accessing the protected .asn property.
-      // X509Certificate doesn't expose version directly, but well-formed certs
-      // with extensions are always v3; fall back to reading the raw PEM.
-      let versionNum = 3;
-      try {
-        // The version octet is at a predictable offset in DER; parse it from rawData.
-        const raw = new Uint8Array(cert.rawData);
-        // SEQUENCE { SEQUENCE { [0] EXPLICIT INTEGER (version) ... } }
-        // Offset 4 = tag [0] (0xa0), offset 5 = length, offset 6 = tag INTEGER (0x02),
-        // offset 7 = length (0x01), offset 8 = value (0=v1, 1=v2, 2=v3)
-        if (raw[4] === 0xa0 && raw[6] === 0x02 && raw[7] === 0x01) {
-          versionNum = raw[8] + 1;
-        }
-      } catch {
-        // fallback
-      }
-      const version = `v${versionNum}`;
-
+      // X509Certificate doesn't expose the version directly. v3 certificates have
+      // extensions; if none are present, the exact version isn't distinguishable here.
+      const version =
+        cert.extensions.length > 0 ? "v3" : "v1/v2 (unknown)";
       // Algorithms
       const signatureAlgorithm = formatSigAlgorithm(cert.signatureAlgorithm);
       const cryptoKey = await cert.publicKey.export();
