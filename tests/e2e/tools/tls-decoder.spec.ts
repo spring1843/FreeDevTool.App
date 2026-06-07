@@ -3,6 +3,12 @@ import { setupJSErrorCollection, expectNoErrors } from "./utils";
 import { DEFAULT_TLS_DECODER } from "../../../client/src/data/defaults";
 import { checkInputForDefault } from "./check-default-editor-value";
 
+// The cert is long enough that CodeMirror only renders visible lines.
+// Use the first recognisable portion as the expected value in checks.
+const DEFAULT_TLS_DECODER_START = DEFAULT_TLS_DECODER.split("\n")
+  .slice(0, 6)
+  .join("\n");
+
 test.describe("TLS Certificate Decoder Tool", () => {
   test.beforeEach(async ({ page }) => {
     await setupJSErrorCollection(page);
@@ -14,7 +20,7 @@ test.describe("TLS Certificate Decoder Tool", () => {
   }) => {
     await expect(page.locator("main")).toBeVisible();
 
-    await checkInputForDefault(page, "input", DEFAULT_TLS_DECODER);
+    await checkInputForDefault(page, "input", DEFAULT_TLS_DECODER_START);
 
     await expectNoErrors(page);
   });
@@ -79,7 +85,7 @@ test.describe("TLS Certificate Decoder Tool", () => {
 
     await expect(confirmDialog).not.toBeVisible();
 
-    await checkInputForDefault(page, "input", DEFAULT_TLS_DECODER);
+    await checkInputForDefault(page, "input", DEFAULT_TLS_DECODER_START);
     await expectNoErrors(page);
   });
 
