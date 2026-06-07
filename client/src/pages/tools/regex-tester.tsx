@@ -1,3 +1,4 @@
+import { useShareTool } from "@/hooks/use-share-tool";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,6 +36,7 @@ interface RegexMatch {
 }
 
 export default function RegexTester() {
+  const { handleShare } = useShareTool();
   const tool = getToolByPath("/tools/regex-tester");
   const [pattern, setPattern] = useState(DEFAULT_REGEX_PATTERN);
   const [text, setText] = useState(DEFAULT_REGEX_TEXT);
@@ -182,6 +184,11 @@ export default function RegexTester() {
           >
             Test Regex
           </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

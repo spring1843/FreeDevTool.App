@@ -5,9 +5,12 @@ import { Badge } from "@/components/ui/badge";
 import { countTextStats } from "@/lib/text-tools";
 import { FileText, Hash, Type, List, FileIcon, BarChart3 } from "lucide-react";
 import { usePersistentForm } from "@/hooks/use-persistent-state";
+import { useShareTool } from "@/hooks/use-share-tool";
 import {
+  ToolButton,
   ResetButton,
   ClearButton,
+  ActionButtonGroup,
   ToolButtonGroup,
   DataButtonGroup,
 } from "@/components/ui/tool-button";
@@ -22,6 +25,7 @@ const defaultFields = {
 };
 
 export default function TextCounter() {
+  const { handleShare } = useShareTool();
   const tool = getToolByPath("/tools/text-counter");
   const { fields, updateField, resetFields } = usePersistentForm(
     "text-counter",
@@ -104,7 +108,14 @@ export default function TextCounter() {
         </div>
       </div>
 
-      <ToolButtonGroup className="mb-6 justify-end">
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
+        </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton
             onClick={resetFields}

@@ -1,3 +1,4 @@
+import { useShareTool } from "@/hooks/use-share-tool";
 import "reflect-metadata";
 import {
   X509Certificate,
@@ -207,6 +208,7 @@ function formatExtensionDetail(ext: Extension): ExtensionDetail {
 }
 
 export default function TLSDecoder() {
+  const { handleShare } = useShareTool();
   const tool = getToolByPath("/tools/tls-decoder");
   const [certificate, setCertificate] = useState(DEFAULT_TLS_DECODER);
   // Incrementing key to force CodeMirror remount on reset/clear preventing residual merged content
@@ -394,6 +396,11 @@ export default function TLSDecoder() {
           >
             Decode Certificate
           </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>

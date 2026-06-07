@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Monitor, Globe, HardDrive, Cpu, RefreshCw, Copy } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useShareTool } from "@/hooks/use-share-tool";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
@@ -107,6 +108,7 @@ export default function BrowserInfo() {
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [refreshCount, setRefreshCount] = useState<number>(0);
   const { toast } = useToast();
+  const { handleShare } = useShareTool();
 
   const detectSystemTheme = (): "dark" | "light" | "no-preference" => {
     if (
@@ -412,6 +414,11 @@ export default function BrowserInfo() {
           >
             Copy All
           </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
         </ActionButtonGroup>
       </ToolButtonGroup>
 

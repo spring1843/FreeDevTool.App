@@ -13,6 +13,7 @@ import {
 import { Copy, Clock } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import {
+  ToolButton,
   ResetButton,
   ClearButton,
   NowButton,
@@ -23,6 +24,7 @@ import {
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useToast } from "@/hooks/use-toast";
+import { useShareTool } from "@/hooks/use-share-tool";
 import { getToolByPath } from "@/data/tools";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
@@ -345,6 +347,7 @@ export default function DateConverter() {
   const [inputFormat, setInputFormat] = useState("unix");
   const [formats, setFormats] = useState<DateFormat[]>([]);
   const { toast } = useToast();
+  const { handleShare } = useShareTool();
 
   const parseInputDate = (input: string, format: string): Date | null => {
     const trimmed = input.trim();
@@ -902,6 +905,11 @@ export default function DateConverter() {
             tooltip="Set to current time"
             toastTitle="Time updated"
             toastDescription="Set to current timestamp"
+          />
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
           />
         </ActionButtonGroup>
         <DataButtonGroup>

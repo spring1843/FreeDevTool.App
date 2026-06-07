@@ -1,3 +1,4 @@
+import { useShareTool } from "@/hooks/use-share-tool";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -36,6 +37,7 @@ import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function BarcodeGenerator() {
+  const { handleShare } = useShareTool();
   const tool = getToolByPath("/tools/barcode-generator");
   const [text, setText] = useState(DEFAULT_BARCODE_GENERATOR);
   const [format, setFormat] = useState("CODE128");
@@ -244,6 +246,11 @@ export default function BarcodeGenerator() {
             onClick={downloadBarcode}
             disabled={!!error || !!inputError}
             tooltip="Download barcode as PNG"
+          />
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
           />
           <TooltipProvider>
             <Tooltip>

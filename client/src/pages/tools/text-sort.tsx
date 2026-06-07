@@ -1,3 +1,4 @@
+import { useShareTool } from "@/hooks/use-share-tool";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
@@ -37,6 +38,7 @@ type SortType = "alphabetical" | "numerical" | "length" | "reverse" | "random";
 type SortOrder = "asc" | "desc";
 
 export default function TextSort() {
+  const { handleShare } = useShareTool();
   const tool = getToolByPath("/tools/text-sort");
   const [input, setInput] = useState(DEFAULT_TEXT_SORT);
   const [sortType, setSortType] = useState<SortType>("alphabetical");
@@ -172,6 +174,11 @@ export default function TextSort() {
           >
             Sort Text
           </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>

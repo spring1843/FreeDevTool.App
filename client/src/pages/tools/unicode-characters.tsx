@@ -25,6 +25,7 @@ import {
   SkipForward,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useShareTool } from "@/hooks/use-share-tool";
 import {
   ToolButton,
   ToolButtonGroup,
@@ -203,6 +204,7 @@ export default function UnicodeCharacters() {
   const MAX_UNICODE = 0x10ffff; // Maximum Unicode code point
 
   const { toast } = useToast();
+  const { handleShare } = useShareTool();
   const characterGridRef = useRef<HTMLDivElement>(null);
 
   // Get characters from selected block
@@ -453,6 +455,16 @@ export default function UnicodeCharacters() {
           <SecurityBanner variant="compact" />
         </div>
       </div>
+
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
+        </ActionButtonGroup>
+      </ToolButtonGroup>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Controls */}

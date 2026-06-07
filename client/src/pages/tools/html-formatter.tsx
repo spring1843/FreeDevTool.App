@@ -1,3 +1,4 @@
+import { useShareTool } from "@/hooks/use-share-tool";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
@@ -36,6 +37,7 @@ interface ValidationIssue {
 }
 
 export default function HTMLFormatter() {
+  const { handleShare } = useShareTool();
   const tool = getToolByPath("/tools/html-formatter");
   const [input, setInput] = useState(DEFAULT_HTML);
   const [output, setOutput] = useState("");
@@ -176,6 +178,11 @@ export default function HTMLFormatter() {
           >
             Minify HTML
           </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>

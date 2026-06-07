@@ -6,9 +6,15 @@ import { SecurityBanner } from "@/components/ui/security-banner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { toast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
+import { useShareTool } from "@/hooks/use-share-tool";
 import { Keyboard, Info, Play, Square } from "lucide-react";
-import { ToolButton } from "@/components/ui/tool-button";
+import {
+  ToolButton,
+  ToolButtonGroup,
+  ActionButtonGroup,
+  DataButtonGroup,
+} from "@/components/ui/tool-button";
 
 interface KeyPress {
   key: string;
@@ -18,6 +24,8 @@ interface KeyPress {
 }
 
 export default function KeyboardTest() {
+  const { toast } = useToast();
+  const { handleShare } = useShareTool();
   const tool = getToolByPath("/tools/keyboard-test");
   const [pressedKeys, setPressedKeys] = useState<Set<string>>(new Set());
   const [keyHistory, setKeyHistory] = useState<KeyPress[]>([]);
@@ -170,35 +178,44 @@ export default function KeyboardTest() {
       </div>
 
       {/* Controls */}
+      <ToolButtonGroup className="mb-6">
+        <ActionButtonGroup>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
+        </ActionButtonGroup>
+        <DataButtonGroup>
+          <ToolButton
+            variant="custom"
+            onClick={toggleTesting}
+            tooltip={
+              isActive ? "Stop keyboard testing" : "Start keyboard testing"
+            }
+            icon={
+              isActive ? (
+                <Square className="w-4 h-4 mr-2" />
+              ) : (
+                <Play className="w-4 h-4 mr-2" />
+              )
+            }
+            className={
+              isActive
+                ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                : ""
+            }
+          >
+            {isActive ? "Stop Testing" : "Start Testing"}
+          </ToolButton>
+        </DataButtonGroup>
+      </ToolButtonGroup>
+
       <Card className="mb-6">
         <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center">
-              <Keyboard className="w-5 h-5 mr-2" />
-              Keyboard Testing
-            </div>
-            <ToolButton
-              variant="custom"
-              onClick={toggleTesting}
-              tooltip={
-                isActive ? "Stop keyboard testing" : "Start keyboard testing"
-              }
-              icon={
-                isActive ? (
-                  <Square className="w-4 h-4 mr-2" />
-                ) : (
-                  <Play className="w-4 h-4 mr-2" />
-                )
-              }
-              className={
-                isActive
-                  ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                  : ""
-              }
-              size="sm"
-            >
-              {isActive ? "Stop Testing" : "Start Testing"}
-            </ToolButton>
+          <CardTitle className="flex items-center">
+            <Keyboard className="w-5 h-5 mr-2" />
+            Keyboard Testing
           </CardTitle>
         </CardHeader>
         <CardContent>

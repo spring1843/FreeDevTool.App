@@ -35,6 +35,7 @@ import {
   DataButtonGroup,
 } from "@/components/ui/tool-button";
 import { useToast } from "@/hooks/use-toast";
+import { useShareTool } from "@/hooks/use-share-tool";
 
 import QRCodeLib from "qrcode-generator";
 import { DEFAULT_QR_GENERATOR } from "@/data/defaults";
@@ -165,6 +166,7 @@ export default function QRGenerator() {
   const [autoProcess, setAutoProcess] = useState(true);
 
   const { toast } = useToast();
+  const { handleShare } = useShareTool();
   // Theme no longer needed after switching to native textarea
 
   const currentPreset = qrPresets.find(p => p.type === qrType) || qrPresets[0];
@@ -369,6 +371,11 @@ export default function QRGenerator() {
               </ToolButton>
             </>
           ) : null}
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>

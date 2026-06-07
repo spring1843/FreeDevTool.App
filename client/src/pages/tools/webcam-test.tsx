@@ -12,6 +12,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Camera, Square, Download, Play } from "lucide-react";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useShareTool } from "@/hooks/use-share-tool";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { getToolByPath } from "@/data/tools";
@@ -36,6 +37,7 @@ export default function WebcamTest() {
   const streamRef = useRef<MediaStream | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { toast } = useToast();
+  const { handleShare } = useShareTool();
 
   const requestPermission = async () => {
     try {
@@ -398,6 +400,11 @@ export default function WebcamTest() {
               >
                 Capture Photo
               </ToolButton>
+              <ToolButton
+                variant="share"
+                onClick={handleShare}
+                tooltip="Copy link to this tool"
+              />
             </ActionButtonGroup>
           </ToolButtonGroup>
         </CardContent>

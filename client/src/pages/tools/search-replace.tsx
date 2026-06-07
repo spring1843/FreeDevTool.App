@@ -1,3 +1,4 @@
+import { useShareTool } from "@/hooks/use-share-tool";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -33,6 +34,7 @@ import {
 } from "@/components/ui/tooltip";
 
 export default function SearchReplace() {
+  const { handleShare } = useShareTool();
   const tool = getToolByPath("/tools/search-replace");
   const [text, setText] = useState(DEFAULT_SEARCH_REPLACE_TEXT);
   const [searchText, setSearchText] = useState(DEFAULT_SEARCH_REPLACE_SEARCH);
@@ -171,6 +173,11 @@ export default function SearchReplace() {
           >
             Search & Replace
           </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>

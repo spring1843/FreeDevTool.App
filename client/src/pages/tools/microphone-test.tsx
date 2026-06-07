@@ -11,6 +11,7 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Mic, Play, Square, Download, Pause } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useShareTool } from "@/hooks/use-share-tool";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { getToolByPath } from "@/data/tools";
@@ -44,6 +45,7 @@ export default function MicrophoneTest() {
   const animationFrameRef = useRef<number | null>(null);
   const isRecordingRef = useRef<boolean>(false);
   const { toast } = useToast();
+  const { handleShare } = useShareTool();
 
   const requestPermission = async () => {
     try {
@@ -516,6 +518,11 @@ export default function MicrophoneTest() {
                   </ToolButton>
                 );
               })()}
+              <ToolButton
+                variant="share"
+                onClick={handleShare}
+                tooltip="Copy link to this tool"
+              />
             </ActionButtonGroup>
           </ToolButtonGroup>
 

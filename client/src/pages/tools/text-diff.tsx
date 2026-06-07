@@ -1,3 +1,4 @@
+import { useShareTool } from "@/hooks/use-share-tool";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
@@ -45,6 +46,7 @@ interface DiffStats {
 }
 
 export default function TextDiff() {
+  const { handleShare } = useShareTool();
   const tool = getToolByPath("/tools/text-diff");
   const [text1, setText1] = useState(DEFAULT_TEXT_DIFF_1);
   const [text2, setText2] = useState(DEFAULT_TEXT_DIFF_2);
@@ -167,6 +169,11 @@ export default function TextDiff() {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

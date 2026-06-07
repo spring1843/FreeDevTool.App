@@ -4,6 +4,7 @@ import { useTheme } from "@/providers/theme-provider";
 import { Link, Unlink } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useShareTool } from "@/hooks/use-share-tool";
 import {
   ToolButton,
   ResetButton,
@@ -34,6 +35,7 @@ export default function URLEncoder() {
   const [autoProcess, setAutoProcess] = useState(true);
   const { theme } = useTheme();
   const { toast } = useToast();
+  const { handleShare } = useShareTool();
 
   const encodeURL = useCallback(() => {
     try {
@@ -155,6 +157,11 @@ export default function URLEncoder() {
           >
             Decode URL
           </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>

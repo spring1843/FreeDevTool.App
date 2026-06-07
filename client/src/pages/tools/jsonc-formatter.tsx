@@ -1,3 +1,4 @@
+import { useShareTool } from "@/hooks/use-share-tool";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
@@ -30,6 +31,7 @@ import { ToolExplanations } from "@/components/tool-explanations";
 import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 
 export default function JSONCFormatter() {
+  const { handleShare } = useShareTool();
   const tool = getToolByPath("/tools/jsonc-formatter");
   const [input, setInput] = useState(DEFAULT_JSONC);
   const [output, setOutput] = useState("");
@@ -107,6 +109,11 @@ export default function JSONCFormatter() {
           >
             Format JSONC
           </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>

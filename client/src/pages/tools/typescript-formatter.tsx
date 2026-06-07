@@ -1,3 +1,4 @@
+import { useShareTool } from "@/hooks/use-share-tool";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
@@ -29,6 +30,7 @@ import {
 } from "@/components/ui/tooltip";
 
 export default function TypeScriptFormatter() {
+  const { handleShare } = useShareTool();
   const tool = getToolByPath("/tools/typescript-formatter");
   const [input, setInput] = useState(DEFAULT_TYPESCRIPT);
   const [output, setOutput] = useState("");
@@ -131,6 +133,11 @@ export default function TypeScriptFormatter() {
           >
             Minify Code
           </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>

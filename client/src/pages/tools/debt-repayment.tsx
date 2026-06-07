@@ -1,3 +1,4 @@
+import { useShareTool } from "@/hooks/use-share-tool";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -50,6 +51,7 @@ interface DebtResult {
 }
 
 export default function DebtRepaymentCalculator() {
+  const { handleShare } = useShareTool();
   const tool = getToolByPath("/tools/debt-repayment");
   const { theme } = useTheme();
   const labelColor = theme === "dark" ? "#fff" : "#000";
@@ -181,6 +183,11 @@ export default function DebtRepaymentCalculator() {
           >
             Calculate
           </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
         </ActionButtonGroup>
         <DataButtonGroup>
           <ResetButton

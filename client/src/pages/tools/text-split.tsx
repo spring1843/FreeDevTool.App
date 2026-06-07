@@ -1,3 +1,4 @@
+import { useShareTool } from "@/hooks/use-share-tool";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,6 +31,7 @@ import {
 } from "@/components/ui/tooltip";
 
 export default function TextSplit() {
+  const { handleShare } = useShareTool();
   const tool = getToolByPath("/tools/text-split");
   const [text, setText] = useState(DEFAULT_TEXT_SPLIT);
   const [delimiter, setDelimiter] = useState(",");
@@ -123,6 +125,11 @@ export default function TextSplit() {
           >
             Split Text
           </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>

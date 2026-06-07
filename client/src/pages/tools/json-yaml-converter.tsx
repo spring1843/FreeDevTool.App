@@ -1,3 +1,4 @@
+import { useShareTool } from "@/hooks/use-share-tool";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TextArea } from "@/components/ui/textarea";
 import { useTheme } from "@/providers/theme-provider";
@@ -31,6 +32,7 @@ import {
 const DEFAULT_YAML = convertJSONToYAML(DEFAULT_JSON).converted;
 
 export default function JSONYAMLConverter() {
+  const { handleShare } = useShareTool();
   const tool = getToolByPath("/tools/json-yaml-converter");
   const [jsonText, setJsonText] = useState(DEFAULT_JSON);
   const [yamlText, setYamlText] = useState("");
@@ -136,6 +138,11 @@ export default function JSONYAMLConverter() {
           >
             YAML → JSON
           </ToolButton>
+          <ToolButton
+            variant="share"
+            onClick={handleShare}
+            tooltip="Copy link to this tool"
+          />
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
