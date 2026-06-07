@@ -238,8 +238,7 @@ export default function TLSDecoder() {
 
       // X509Certificate doesn't expose the version directly. v3 certificates have
       // extensions; if none are present, the exact version isn't distinguishable here.
-      const version =
-        cert.extensions.length > 0 ? "v3" : "v1/v2 (unknown)";
+      const version = cert.extensions.length > 0 ? "v3" : "v1/v2 (unknown)";
       // Algorithms
       const signatureAlgorithm = formatSigAlgorithm(cert.signatureAlgorithm);
       const cryptoKey = await cert.publicKey.export();
