@@ -179,8 +179,9 @@ const parseInputDate = (input: string, format = "auto"): Date | null => {
 
   if (/^-?\d{19}$/.test(trimmed)) {
     try {
-      const ms = Number(BigInt(trimmed) / BigInt(1_000_000));
-      const d = new Date(ms);
+      const ns = BigInt(trimmed);
+      const msBig = ns / 1_000_000n - (ns < 0n && ns % 1_000_000n !== 0n ? 1n : 0n);
+      const d = new Date(Number(msBig));
       if (!isNaN(d.getTime())) return d;
     } catch {
       // fall through
