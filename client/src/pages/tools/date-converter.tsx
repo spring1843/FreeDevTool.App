@@ -110,7 +110,7 @@ const INPUT_FORMATS = [
   },
 ];
 
-// 20 Essential Date Formats for Developers
+// Essential Date Formats for Developers
 const DATE_FORMATS = [
   // Unix & Timestamps
   {
@@ -886,8 +886,9 @@ export default function DateConverter() {
               ) : null}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
-              Convert between 20 essential date formats: Unix timestamps, ISO
-              standards, RFC formats, regional formats, and database formats
+              Convert between {DATE_FORMATS.length} essential date formats: Unix
+              timestamps, ISO standards, RFC formats, regional formats, and
+              database formats
             </p>
           </div>
           <SecurityBanner variant="compact" />
