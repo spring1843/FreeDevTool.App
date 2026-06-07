@@ -8,13 +8,30 @@ const parseInputDate = (input: string, format = "auto"): Date | null => {
   if (format === "unix") {
     const num = parseInt(trimmed, 10);
     if (isNaN(num)) return null;
-    return new Date(num * 1000);
+    const d = new Date(num * 1000);
+    return isNaN(d.getTime()) ? null : d;
   }
 
   if (format === "unixms") {
     const num = parseInt(trimmed, 10);
     if (isNaN(num)) return null;
-    return new Date(num);
+    const d = new Date(num);
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  if (format === "unixns") {
+    if (!/^-?\d+$/.test(trimmed)) return null;
+    try {
+      const ns = BigInt(trimmed);
+      const ms1M = BigInt(1_000_000);
+      const msBig =
+        ns / ms1M -
+        (ns < BigInt(0) && ns % ms1M !== BigInt(0) ? BigInt(1) : BigInt(0));
+      const d = new Date(Number(msBig));
+      return isNaN(d.getTime()) ? null : d;
+    } catch {
+      return null;
+    }
   }
 
   if (format === "iso") {
@@ -163,6 +180,20 @@ const parseInputDate = (input: string, format = "auto"): Date | null => {
     return new Date(parseInt(trimmed));
   }
 
+  if (/^-?\d{19}$/.test(trimmed)) {
+    try {
+      const ns = BigInt(trimmed);
+      const ms1M = BigInt(1_000_000);
+      const msBig =
+        ns / ms1M -
+        (ns < BigInt(0) && ns % ms1M !== BigInt(0) ? BigInt(1) : BigInt(0));
+      const d = new Date(Number(msBig));
+      if (!isNaN(d.getTime())) return d;
+    } catch {
+      // fall through
+    }
+  }
+
   const date = new Date(trimmed);
   if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
     const [y, m, d] = trimmed.split("-").map(Number);
@@ -185,6 +216,8 @@ const formatDate = (date: Date, format: string): string => {
       return Math.floor(date.getTime() / 1000).toString();
     case "unixms":
       return date.getTime().toString();
+    case "unixns":
+      return (BigInt(date.getTime()) * BigInt(1_000_000)).toString();
     case "iso":
       return date.toISOString();
     case "isodate":
@@ -434,8 +467,71 @@ describe("Date Converter", () => {
         expect(result!.toISOString()).toBe("2024-01-15T14:30:45.123Z");
       });
 
+      it("should parse Unix timestamp (nanoseconds) with explicit format", () => {
+        const result = parseInputDate("1705329045123000000", "unixns");
+        expect(result).toBeInstanceOf(Date);
+        expect(result!.toISOString()).toBe("2024-01-15T14:30:45.123Z");
+      });
+
+      it("should parse Unix nanoseconds via auto-detect (19 digits)", () => {
+        const result = parseInputDate("1705329045123000000");
+        expect(result).toBeInstanceOf(Date);
+        expect(result!.toISOString()).toBe("2024-01-15T14:30:45.123Z");
+      });
+
+      it("should return null for nanosecond format with non-numeric input", () => {
+        const result = parseInputDate("not-a-number", "unixns");
+        expect(result).toBeNull();
+      });
+
+      it("should floor negative Unix nanoseconds when converting to milliseconds", () => {
+        const result = parseInputDate("-1", "unixns");
+        expect(result).toBeInstanceOf(Date);
+        expect(result!.getTime()).toBe(-1);
+      });
+
+      it("should parse negative unix nanoseconds (explicit format) for pre-epoch dates", () => {
+        // -1000000000000000000 ns = -1000000000 s = 1938-04-24
+        const result = parseInputDate("-1000000000000000000", "unixns");
+        expect(result).toBeInstanceOf(Date);
+        expect(result!.getFullYear()).toBe(1938);
+      });
+
+      it("should parse negative unix nanoseconds via auto-detect (19 digits)", () => {
+        const result = parseInputDate("-1000000000000000000");
+        expect(result).toBeInstanceOf(Date);
+        expect(result!.getFullYear()).toBe(1938);
+      });
+
+      it("should floor negative nanoseconds with remainder correctly", () => {
+        // -1 ns → floor(-0.000001 ms) = -1 ms
+        const result = parseInputDate("-1000000", "unixns");
+        expect(result).toBeInstanceOf(Date);
+        expect(result!.getTime()).toBe(-1);
+      });
+
+      it("should handle exact negative millisecond boundary in nanoseconds", () => {
+        // -1000000000 ns = exactly -1000 ms
+        const result = parseInputDate("-1000000000", "unixns");
+        expect(result).toBeInstanceOf(Date);
+        expect(result!.getTime()).toBe(-1000);
+      });
+
       it("should parse negative Unix timestamp for pre-epoch dates", () => {
         const result = parseInputDate("-1000000000");
+        expect(result).toBeInstanceOf(Date);
+        expect(result!.getFullYear()).toBe(1938);
+      });
+
+      it("should parse negative Unix milliseconds (explicit format) for pre-epoch dates", () => {
+        // -1000000000000 ms = -1000000000 s = 1938-04-24
+        const result = parseInputDate("-1000000000000", "unixms");
+        expect(result).toBeInstanceOf(Date);
+        expect(result!.getFullYear()).toBe(1938);
+      });
+
+      it("should parse negative Unix seconds (explicit format) for pre-epoch dates", () => {
+        const result = parseInputDate("-1000000000", "unix");
         expect(result).toBeInstanceOf(Date);
         expect(result!.getFullYear()).toBe(1938);
       });
@@ -688,6 +784,17 @@ describe("Date Converter", () => {
       it("should format Unix milliseconds correctly", () => {
         const result = formatDate(testDate, "unixms");
         expect(result).toBe("1705329045123");
+      });
+
+      it("should format Unix nanoseconds correctly", () => {
+        const result = formatDate(testDate, "unixns");
+        expect(result).toBe("1705329045123000000");
+      });
+
+      it("should format negative Unix nanoseconds for pre-epoch dates", () => {
+        const preEpoch = new Date(-1000000000000); // -1000000000 s
+        const result = formatDate(preEpoch, "unixns");
+        expect(result).toBe("-1000000000000000000");
       });
     });
 
