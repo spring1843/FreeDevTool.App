@@ -282,8 +282,10 @@ export default function TLSDecoder() {
 
       // Validity
       const isValid = cert.notBefore <= now && now <= cert.notAfter;
-      const daysUntilExpiry = Math.floor(
-        (cert.notAfter.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+      const msPerDay = 1000 * 60 * 60 * 24;
+      const daysUntilExpiry = Math.max(
+        0,
+        Math.floor((cert.notAfter.getTime() - now.getTime()) / msPerDay)
       );
 
       setCertificateInfo({
