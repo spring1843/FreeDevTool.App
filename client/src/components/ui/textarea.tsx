@@ -285,17 +285,13 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
       [maxHeightPx]
     );
 
-    const ctrlASelectAll = keymap.of([{ key: "Ctrl-a", run: selectAll }]);
-
     const extensions = React.useMemo(
       () => [
-        ctrlASelectAll,
+        keymap.of([{ key: "Ctrl-a", run: selectAll }]),
         ...(Array.isArray(langExt) ? langExt : [langExt]),
         ...(isWrapping ? [EditorView.lineWrapping] : []),
         ...(isFixedHeight ? [heightLimitExtension] : []),
       ],
-      // ctrlASelectAll is stable (created outside useMemo), include the rest
-      // eslint-disable-next-line react-hooks/exhaustive-deps
       [langExt, isWrapping, isFixedHeight, heightLimitExtension]
     );
     const { toast } = useToast();
