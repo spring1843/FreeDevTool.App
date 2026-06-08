@@ -285,14 +285,15 @@ const TextArea = React.forwardRef<HTMLDivElement, TextAreaProps>(
       [maxHeightPx]
     );
 
-    const ctrlASelectAll = keymap.of([{ key: "Ctrl-a", run: selectAll }]);
-
-    const extensions = [
-      ctrlASelectAll,
-      ...(Array.isArray(langExt) ? langExt : [langExt]),
-      ...(isWrapping ? [EditorView.lineWrapping] : []),
-      ...(isFixedHeight ? [heightLimitExtension] : []),
-    ];
+    const extensions = React.useMemo(
+      () => [
+        keymap.of([{ key: "Ctrl-a", run: selectAll }]),
+        ...(Array.isArray(langExt) ? langExt : [langExt]),
+        ...(isWrapping ? [EditorView.lineWrapping] : []),
+        ...(isFixedHeight ? [heightLimitExtension] : []),
+      ],
+      [langExt, isWrapping, isFixedHeight, heightLimitExtension]
+    );
     const { toast } = useToast();
 
     const handleCopy = async () => {
