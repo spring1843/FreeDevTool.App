@@ -507,22 +507,14 @@ export async function formatYAML(
         }
       }
 
-      // Basic whitespace-normalisation fallback that preserves comments
-      const lines = input.split("\n");
-      const formatted = lines
-        .map(line => line.trim())
-        .filter(line => line.length > 0)
-        .map(line => {
-          const depth = (input.match(
-            new RegExp(
-              `^( *)${line.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`,
-              "m"
-            )
-          ) || ["", ""])[1].length;
-          const indentLevel = Math.floor(depth / 2);
-          return "  ".repeat(indentLevel) + line.trim();
-        })
-        .join("\n");
+      // Basic whitespace-normalisation fallback that preserves comments.
+      // Avoid trimming leading whitespace to prevent breaking indentation-sensitive YAML (e.g. block scalars).
+      const formatted = input
+        .split("\n")
+        .map(line => line.replace(/\s+$/g, ""))
+        .filter(line => line.trim().length > 0)
+        .join("\n")
+        .trim();
 
       return { formatted };
     }
