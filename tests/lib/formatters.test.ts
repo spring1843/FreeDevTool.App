@@ -234,6 +234,34 @@ describe("YAML Formatting", () => {
     expect(result.formatted).toContain("items:");
     expect(result.formatted).toContain("apple");
   });
+
+  it("should preserve comments when keepComments is true", async () => {
+    const input =
+      "# Top-level comment\nname: John\n# Inline-ish comment\nage: 30";
+    const result = await formatYAML(input, { keepComments: true });
+
+    expect(result.error).toBeUndefined();
+    expect(result.formatted).toContain("# Top-level comment");
+    expect(result.formatted).toContain("name: John");
+    expect(result.formatted).toContain("age: 30");
+  });
+
+  it("should still format correctly when keepComments is false", async () => {
+    const input = "name: John\nage: 30";
+    const result = await formatYAML(input, { keepComments: false });
+
+    expect(result.error).toBeUndefined();
+    expect(result.formatted).toContain("name");
+    expect(result.formatted).toContain("age");
+  });
+
+  it("keepComments defaults to false and does not break basic formatting", async () => {
+    const input = "name: John\nage: 30";
+    const result = await formatYAML(input);
+
+    expect(result.error).toBeUndefined();
+    expect(result.formatted).toContain("name");
+  });
 });
 
 describe("Markdown Formatting", () => {

@@ -35,11 +35,14 @@ export default function YAMLFormatter() {
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [autoFormat, setAutoFormat] = useState(true);
+  const [keepComments, setKeepComments] = useState(true);
   const { theme } = useTheme();
 
   const formatCode = useCallback(async () => {
     try {
-      const { formatted, error: formatError } = await formatYAML(input);
+      const { formatted, error: formatError } = await formatYAML(input, {
+        keepComments,
+      });
       setOutput(formatted);
       setError(formatError || null);
     } catch (error) {
@@ -47,7 +50,7 @@ export default function YAMLFormatter() {
         `Formatting error: ${error instanceof Error ? error.message : "Unknown error"}`
       );
     }
-  }, [input]);
+  }, [input, keepComments]);
 
   const handleInputChange = (value: string) => {
     setInput(value);
@@ -120,6 +123,29 @@ export default function YAMLFormatter() {
             onClick={handleShare}
             tooltip="Copy link to this tool"
           />
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="yaml-keep-comments"
+                    checked={keepComments}
+                    onCheckedChange={setKeepComments}
+                    data-testid="keep-comments-switch"
+                  />
+                  <Label
+                    htmlFor="yaml-keep-comments"
+                    className="cursor-pointer"
+                  >
+                    Keep the Comments
+                  </Label>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Preserve comments in the formatted output</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
