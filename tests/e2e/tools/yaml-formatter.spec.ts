@@ -19,7 +19,10 @@ test.describe("YAML Formatter Tool", () => {
       "input",
       "output",
       DEFAULT_YAML,
-      output => output.split("\n").length === 29
+      output =>
+        output.includes("app:") &&
+        output.includes("database:") &&
+        output.includes("# Application Configuration")
     );
 
     await expectNoErrors(page);

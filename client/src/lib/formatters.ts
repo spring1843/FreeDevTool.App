@@ -469,7 +469,10 @@ export async function formatCSS(
   }
 }
 
-export async function formatYAML(input: string): Promise<{
+export async function formatYAML(
+  input: string,
+  { keepComments = false }: { keepComments?: boolean } = {}
+): Promise<{
   formatted: string;
   error?: string;
 }> {
@@ -478,7 +481,7 @@ export async function formatYAML(input: string): Promise<{
     const parsed = yaml.load(input);
 
     try {
-      // Use Prettier for professional YAML formatting
+      // Use Prettier for professional YAML formatting — Prettier preserves comments natively
       const formatted = await prettier.format(input, {
         parser: "yaml",
         printWidth: 80,
@@ -488,35 +491,40 @@ export async function formatYAML(input: string): Promise<{
       });
       return { formatted: formatted.trim() };
     } catch {
-      // Fallback to js-yaml for formatting
-      try {
-        const yamlFormatted = yaml.dump(parsed, {
-          indent: 2,
-          lineWidth: 80,
-          noRefs: true,
-          sortKeys: false,
-        });
-        return { formatted: yamlFormatted.trim() };
-      } catch {
-        // Basic YAML formatting fallback
-        const lines = input.split("\n");
-        const formatted = lines
-          .map(line => line.trim())
-          .filter(line => line.length > 0)
-          .map(line => {
-            const depth = (input.match(
-              new RegExp(
-                `^( *)${line.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`,
-                "m"
-              )
-            ) || ["", ""])[1].length;
-            const indentLevel = Math.floor(depth / 2);
-            return "  ".repeat(indentLevel) + line.trim();
-          })
-          .join("\n");
-
-        return { formatted };
+      // Fallback to js-yaml for formatting — note: yaml.dump strips comments.
+      // When keepComments is true, skip this fallback so comments are preserved.
+      if (!keepComments) {
+        try {
+          const yamlFormatted = yaml.dump(parsed, {
+            indent: 2,
+            lineWidth: 80,
+            noRefs: true,
+            sortKeys: false,
+          });
+          return { formatted: yamlFormatted.trim() };
+        } catch {
+          // fall through to basic fallback below
+        }
       }
+
+      // Basic whitespace-normalisation fallback that preserves comments
+      const lines = input.split("\n");
+      const formatted = lines
+        .map(line => line.trim())
+        .filter(line => line.length > 0)
+        .map(line => {
+          const depth = (input.match(
+            new RegExp(
+              `^( *)${line.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`,
+              "m"
+            )
+          ) || ["", ""])[1].length;
+          const indentLevel = Math.floor(depth / 2);
+          return "  ".repeat(indentLevel) + line.trim();
+        })
+        .join("\n");
+
+      return { formatted };
     }
   } catch (error) {
     return {
