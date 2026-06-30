@@ -83,7 +83,12 @@ export const useWakeLock = () => {
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       document.removeEventListener("fullscreenchange", handleVisibilityChange);
-      void release();
+
+      shouldHoldLock.current = false;
+      const sentinel = wakeLock.current;
+      wakeLock.current = null;
+      requestInFlight.current = false;
+      void sentinel?.release();
     };
   }, [request, release, isLocked]);
 
