@@ -9,12 +9,20 @@ export const useWakeLock = () => {
   const wakeLock = useRef<WakeLockSentinel | null>(null);
   const shouldHoldLock = useRef(false);
   const requestInFlight = useRef(false);
+  const wakeLockSupported = useRef<boolean | null>(null);
   const [isLocked, setIsLocked] = useState(false);
 
   const request = useCallback(async () => {
-    if (!("wakeLock" in navigator)) {
-      console.warn("Screen Wake Lock API not supported");
+    if (wakeLockSupported.current === false) {
       return;
+    }
+
+    if (wakeLockSupported.current === null) {
+      wakeLockSupported.current = "wakeLock" in navigator;
+      if (!wakeLockSupported.current) {
+        console.warn("Screen Wake Lock API not supported");
+        return;
+      }
     }
 
     shouldHoldLock.current = true;
