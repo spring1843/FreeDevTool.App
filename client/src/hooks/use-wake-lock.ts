@@ -18,23 +18,31 @@ export const useWakeLock = () => {
 
     shouldHoldLock.current = true;
 
+    if (wakeLock.current || requestInFlight.current) {
+      return;
+    }
+
+    requestInFlight.current = true;
+
     try {
       const sentinel = await navigator.wakeLock.request("screen");
       wakeLock.current = sentinel;
       setIsLocked(true);
+      requestInFlight.current = false;
 
       sentinel.addEventListener(
         "release",
         () => {
           if (wakeLock.current === sentinel) {
             wakeLock.current = null;
+            setIsLocked(false);
           }
-          setIsLocked(false);
         },
         { once: true }
       );
     } catch (err) {
-      console.error(`Wake Lock request failed: ${err}`);
+      requestInFlight.current = false;
+      console.error("Wake Lock request failed:", err);
       setIsLocked(false);
     }
   }, []);
