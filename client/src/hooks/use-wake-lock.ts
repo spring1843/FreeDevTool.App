@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 /**
  * A custom hook to manage a screen wake lock.
  *
- * @returns {Object} An object with a `wakeLockEnabled` boolean and a `toggleWakeLock` function.
+ * @returns An object with an `isLocked` boolean and `request`/`release` functions.
  */
 export const useWakeLock = () => {
   const wakeLock = useRef<WakeLockSentinel | null>(null);
