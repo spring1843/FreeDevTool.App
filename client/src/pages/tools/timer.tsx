@@ -80,9 +80,7 @@ export default function Timer() {
     const hasRunningTimers = timers.some(timer => timer.isRunning);
 
     if (hasRunningTimers) {
-      if (!isLocked) {
-        void requestWakeLock();
-      }
+      void requestWakeLock();
     } else {
       void releaseWakeLock();
     }
