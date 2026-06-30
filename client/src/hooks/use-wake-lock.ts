@@ -14,12 +14,24 @@ export const useWakeLock = () => {
       console.warn("Screen Wake Lock API not supported");
       return;
     }
+
+    shouldHoldLock.current = true;
+
     try {
-      wakeLock.current = await navigator.wakeLock.request("screen");
+      const sentinel = await navigator.wakeLock.request("screen");
+      wakeLock.current = sentinel;
       setIsLocked(true);
-      wakeLock.current.addEventListener("release", () => {
-        setIsLocked(false);
-      });
+
+      sentinel.addEventListener(
+        "release",
+        () => {
+          if (wakeLock.current === sentinel) {
+            wakeLock.current = null;
+          }
+          setIsLocked(false);
+        },
+        { once: true }
+      );
     } catch (err) {
       console.error(`Wake Lock request failed: ${err}`);
       setIsLocked(false);
