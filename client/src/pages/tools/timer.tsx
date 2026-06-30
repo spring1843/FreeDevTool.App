@@ -31,6 +31,7 @@ import {
 } from "@/lib/time-tools";
 import { getParam, updateURL, copyShareableURL } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
+import { useWakeLock } from "@/hooks/use-wake-lock";
 import {
   ToolButton,
   ResetButton,
@@ -68,6 +69,22 @@ export default function Timer() {
   const audioContextRef = useRef<AudioContext | null>(null);
   const alarmIntervalsRef = useRef<Map<string, NodeJS.Timeout>>(new Map());
   const { toast } = useToast();
+  const {
+    isLocked,
+    request: requestWakeLock,
+    release: releaseWakeLock,
+  } = useWakeLock();
+
+  // Effect to manage the wake lock
+  useEffect(() => {
+    const hasRunningTimers = timers.some(timer => timer.isRunning);
+
+    if (hasRunningTimers) {
+      void requestWakeLock();
+    } else {
+      void releaseWakeLock();
+    }
+  }, [timers, isLocked, requestWakeLock, releaseWakeLock]);
 
   // Clear any alarm handle (interval or timeout) robustly
   const clearAlarmHandle = useCallback((handle: NodeJS.Timeout) => {
