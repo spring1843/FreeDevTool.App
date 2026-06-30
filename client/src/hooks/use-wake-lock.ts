@@ -35,9 +35,16 @@ export const useWakeLock = () => {
 
     try {
       const sentinel = await navigator.wakeLock.request("screen");
+
+      // If release() was called while the request was in flight,
+      // release the new sentinel immediately and do nothing.
+      if (!shouldHoldLock.current) {
+        void sentinel.release();
+        return;
+      }
+
       wakeLock.current = sentinel;
       setIsLocked(true);
-      requestInFlight.current = false;
 
       sentinel.addEventListener(
         "release",
@@ -50,9 +57,10 @@ export const useWakeLock = () => {
         { once: true }
       );
     } catch (err) {
-      requestInFlight.current = false;
       console.error("Wake Lock request failed:", err);
       setIsLocked(false);
+    } finally {
+      requestInFlight.current = false;
     }
   }, []);
 
