@@ -82,7 +82,7 @@ export const useWakeLock = () => {
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       document.removeEventListener("fullscreenchange", handleVisibilityChange);
-      release();
+      void release();
     };
   }, [request, release, isLocked]);
 
