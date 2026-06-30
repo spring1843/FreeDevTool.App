@@ -39,8 +39,18 @@ export const useWakeLock = () => {
   }, []);
 
   const release = useCallback(async () => {
-    if (wakeLock.current) {
+    shouldHoldLock.current = false;
+
+    if (!wakeLock.current) {
+      setIsLocked(false);
+      return;
+    }
+
+    try {
       await wakeLock.current.release();
+    } catch {
+      // ignore (it may have already been released by the browser)
+    } finally {
       wakeLock.current = null;
       setIsLocked(false);
     }
