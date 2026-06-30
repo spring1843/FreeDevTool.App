@@ -48,8 +48,12 @@ export const useWakeLock = () => {
 
   useEffect(() => {
     const handleVisibilityChange = () => {
-      if (wakeLock.current && document.visibilityState === "visible") {
-        request();
+      if (
+        shouldHoldLock.current &&
+        !isLocked &&
+        document.visibilityState === "visible"
+      ) {
+        void request();
       }
     };
 
@@ -61,7 +65,7 @@ export const useWakeLock = () => {
       document.removeEventListener("fullscreenchange", handleVisibilityChange);
       release();
     };
-  }, [request, release]);
+  }, [request, release, isLocked]);
 
   return { isLocked, request, release };
 };
