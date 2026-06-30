@@ -78,9 +78,12 @@ export default function Timer() {
   // Effect to manage the wake lock
   useEffect(() => {
     const hasRunningTimers = timers.some(timer => timer.isRunning);
-    if (hasRunningTimers && !isLocked) {
-      void requestWakeLock();
-    } else if (!hasRunningTimers && isLocked) {
+
+    if (hasRunningTimers) {
+      if (!isLocked) {
+        void requestWakeLock();
+      }
+    } else {
       void releaseWakeLock();
     }
   }, [timers, isLocked, requestWakeLock, releaseWakeLock]);
