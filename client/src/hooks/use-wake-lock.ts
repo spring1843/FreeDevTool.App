@@ -8,6 +8,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 export const useWakeLock = () => {
   const wakeLock = useRef<WakeLockSentinel | null>(null);
   const shouldHoldLock = useRef(false);
+  const requestInFlight = useRef(false);
   const [isLocked, setIsLocked] = useState(false);
 
   const request = useCallback(async () => {
