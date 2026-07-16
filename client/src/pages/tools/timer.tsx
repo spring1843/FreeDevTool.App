@@ -71,7 +71,7 @@ export default function Timer() {
   const [newTimerName, setNewTimerName] = useState("");
   const [newTimerAlarmCount, setNewTimerAlarmCount] = useState(3);
   const [newTimerOverrunEnabled, setNewTimerOverrunEnabled] = useState(false);
-  const [newTimerLeadTime, setNewTimerLeadTime] = useState(0);
+  const [newTimerLeadTime, setNewTimerLeadTime] = useState(5);
   const [newTimerBeepAtQuartiles, setNewTimerBeepAtQuartiles] = useState(true);
   const [timers, setTimers] = useState<TimerInstance[]>([]);
   const [showAddTimer, setShowAddTimer] = useState(false);
@@ -80,10 +80,16 @@ export default function Timer() {
   );
   // Track which timers were paused by the global pause so we can resume only those
   const [pausedByGlobal, setPausedByGlobal] = useState<Set<string>>(new Set());
+  // Track which timers are currently flashing red (milestone or finish)
+  const [flashingTimers, setFlashingTimers] = useState<Set<string>>(new Set());
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const alarmIntervalsRef = useRef<Map<string, NodeJS.Timeout>>(new Map());
+  const flashClearTimeoutsRef = useRef<Map<string, NodeJS.Timeout>>(new Map());
+  const prevTimerStateRef = useRef<
+    Map<string, { quartileLength: number; isFinished: boolean }>
+  >(new Map());
   const { toast } = useToast();
   const { theme } = useTheme();
   const {
@@ -264,7 +270,7 @@ export default function Timer() {
     setNewTimerSeconds(0);
     setNewTimerAlarmCount(3);
     setNewTimerOverrunEnabled(false);
-    setNewTimerLeadTime(0);
+    setNewTimerLeadTime(5);
     setNewTimerBeepAtQuartiles(true);
     setShowAddTimer(false);
 
@@ -504,8 +510,53 @@ export default function Timer() {
       // Clear all alarm intervals using captured ref value
       intervals.forEach(interval => clearAlarmHandle(interval));
       intervals.clear();
+      // Clear all flash timeouts using captured ref value
+      const flashTimeouts = flashClearTimeoutsRef.current;
+      flashTimeouts.forEach(t => clearTimeout(t as unknown as number));
+      flashTimeouts.clear();
     };
   }, [clearAlarmHandle]);
+
+  // Detect milestone/finish transitions and trigger a 1-second red flash
+  useEffect(() => {
+    timers.forEach(timer => {
+      const prev = prevTimerStateRef.current.get(timer.id);
+      const prevLen = prev?.quartileLength ?? 0;
+      const prevFinished = prev?.isFinished ?? false;
+
+      const justHitMilestone = timer.quartilesBeeped.length > prevLen;
+      const justFinished = !prevFinished && timer.isFinished;
+
+      if (justHitMilestone || justFinished) {
+        // Cancel any in-progress flash clear for this timer
+        const existing = flashClearTimeoutsRef.current.get(timer.id);
+        if (existing) {
+          clearTimeout(existing as unknown as number);
+          flashClearTimeoutsRef.current.delete(timer.id);
+        }
+
+        setFlashingTimers(prev => new Set(Array.from(prev).concat(timer.id)));
+
+        // Milestones clear after 1s; finished state stays red permanently via isFinished
+        if (!justFinished) {
+          const t = setTimeout(() => {
+            setFlashingTimers(prev => {
+              const next = new Set(prev);
+              next.delete(timer.id);
+              return next;
+            });
+            flashClearTimeoutsRef.current.delete(timer.id);
+          }, 1000) as unknown as NodeJS.Timeout;
+          flashClearTimeoutsRef.current.set(timer.id, t);
+        }
+      }
+
+      prevTimerStateRef.current.set(timer.id, {
+        quartileLength: timer.quartilesBeeped.length,
+        isFinished: timer.isFinished,
+      });
+    });
+  }, [timers]);
 
   // Main timer update loop
   useEffect(() => {
@@ -752,7 +803,7 @@ export default function Timer() {
     setNewTimerName("");
     setNewTimerAlarmCount(3);
     setNewTimerOverrunEnabled(false);
-    setNewTimerLeadTime(0);
+    setNewTimerLeadTime(5);
     setNewTimerBeepAtQuartiles(true);
     setShowAddTimer(false);
     toast({
@@ -778,7 +829,7 @@ export default function Timer() {
     newTimerSeconds === 0 &&
     newTimerName === "" &&
     newTimerAlarmCount === 3 &&
-    newTimerLeadTime === 0 &&
+    newTimerLeadTime === 5 &&
     !newTimerOverrunEnabled &&
     newTimerBeepAtQuartiles &&
     !showAddTimer;
@@ -801,8 +852,9 @@ export default function Timer() {
             )
           )
         : 0;
+    const fsIsFlashing = flashingTimers.has(fullscreenTimer.id);
     let fsProgressColor = theme === "dark" ? "#3b82f6" : "#2563eb";
-    if (fullscreenTimer.isFinished) fsProgressColor = "#ef4444";
+    if (fullscreenTimer.isFinished || fsIsFlashing) fsProgressColor = "#ef4444";
     else if (fullscreenTimer.leadTimeRemaining > 0) fsProgressColor = "#f59e0b";
     const fsTrackColor = theme === "dark" ? "#334155" : "#e2e8f0";
 
@@ -1136,8 +1188,9 @@ export default function Timer() {
                   )
                 )
               : 0;
+          const isFlashing = flashingTimers.has(timer.id);
           let progressColor = theme === "dark" ? "#3b82f6" : "#2563eb";
-          if (timer.isFinished) progressColor = "#ef4444";
+          if (timer.isFinished || isFlashing) progressColor = "#ef4444";
           else if (timer.leadTimeRemaining > 0) progressColor = "#f59e0b";
           const trackColor = theme === "dark" ? "#334155" : "#e2e8f0";
 
@@ -1246,7 +1299,7 @@ export default function Timer() {
                         ) : (
                           <div
                             className={`text-6xl font-mono font-bold ${
-                              timer.isFinished
+                              timer.isFinished || isFlashing
                                 ? "text-red-600"
                                 : "text-slate-900 dark:text-slate-100"
                             }`}
