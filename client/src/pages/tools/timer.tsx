@@ -486,7 +486,7 @@ export default function Timer() {
     const urlSeconds = getParam("s", 0);
     const urlName = getParam("name", "");
     const urlOverrun = getParam("overrun", false);
-    const urlLead = getParam("lead", 5);
+    const urlLead = getParam("lead", 0);
     const urlBeep = getParam("beep", true);
     const urlAlarm = getParam("alarm", 3);
 
