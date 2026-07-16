@@ -25,10 +25,14 @@ import {
   VolumeX,
   Expand,
 } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { useTheme } from "@/providers/theme-provider";
+import { PieChart, Pie, Cell } from "recharts";
 import {
   formatTimerTime,
   createTimerSound,
   playTimerBeep,
+  playMilestoneBeep,
 } from "@/lib/time-tools";
 import { getParam, updateURL, copyShareableURL } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
@@ -51,6 +55,11 @@ interface TimerInstance {
   isFinished: boolean;
   alarmCount: number; // 1, 2, 3, or -1 for manual stop
   currentAlarmPlays: number;
+  overrunEnabled: boolean; // keep counting negative after timer ends
+  leadTime: number; // seconds to count down before timer starts
+  leadTimeRemaining: number; // current lead time countdown
+  beepAtQuartiles: boolean; // beep at 25%, 50%, 75% milestones
+  quartilesBeeped: number[]; // which % milestones have beeped [25, 50, 75]
 }
 
 export default function Timer() {
@@ -61,6 +70,10 @@ export default function Timer() {
   const [newTimerSeconds, setNewTimerSeconds] = useState(0);
   const [newTimerName, setNewTimerName] = useState("");
   const [newTimerAlarmCount, setNewTimerAlarmCount] = useState(3);
+  const [newTimerOverrunEnabled, setNewTimerOverrunEnabled] = useState(false);
+  const [newTimerLeadTime, setNewTimerLeadTime] = useState(0);
+  const [newTimerBeepAtQuartiles, setNewTimerBeepAtQuartiles] = useState(true);
+  const [showPieChart, setShowPieChart] = useState(true);
   const [timers, setTimers] = useState<TimerInstance[]>([]);
   const [showAddTimer, setShowAddTimer] = useState(false);
   const [fullscreenTimerId, setFullscreenTimerId] = useState<string | null>(
@@ -73,6 +86,7 @@ export default function Timer() {
   const audioContextRef = useRef<AudioContext | null>(null);
   const alarmIntervalsRef = useRef<Map<string, NodeJS.Timeout>>(new Map());
   const { toast } = useToast();
+  const { theme } = useTheme();
   const {
     isLocked,
     request: requestWakeLock,
@@ -235,6 +249,11 @@ export default function Timer() {
       isFinished: false,
       alarmCount: newTimerAlarmCount,
       currentAlarmPlays: 0,
+      overrunEnabled: newTimerOverrunEnabled,
+      leadTime: newTimerLeadTime,
+      leadTimeRemaining: newTimerLeadTime,
+      beepAtQuartiles: newTimerBeepAtQuartiles,
+      quartilesBeeped: [],
     };
 
     setTimers(prev => [...prev, newTimer]);
@@ -245,6 +264,9 @@ export default function Timer() {
     setNewTimerMinutes(5);
     setNewTimerSeconds(0);
     setNewTimerAlarmCount(3);
+    setNewTimerOverrunEnabled(false);
+    setNewTimerLeadTime(0);
+    setNewTimerBeepAtQuartiles(true);
     setShowAddTimer(false);
 
     // Update URL with latest timer
@@ -265,6 +287,9 @@ export default function Timer() {
     newTimerSeconds,
     newTimerName,
     newTimerAlarmCount,
+    newTimerOverrunEnabled,
+    newTimerLeadTime,
+    newTimerBeepAtQuartiles,
     toast,
   ]);
 
@@ -273,33 +298,55 @@ export default function Timer() {
       const target = timers.find(t => t.id === id);
       const wasRunning = target?.isRunning ?? false;
       const wasFinished = target?.isFinished ?? false;
+      const hasOverrun = target?.overrunEnabled ?? false;
 
-      setTimers(prev =>
-        prev.map(timer =>
-          timer.id === id
-            ? { ...timer, isRunning: !timer.isRunning, isFinished: false }
-            : timer
-        )
-      );
-
-      if (wasFinished) {
+      if (wasFinished && !hasOverrun) {
+        // Non-overrun finished timer: restart from the beginning
+        const handle = alarmIntervalsRef.current.get(id);
+        if (handle) {
+          clearAlarmHandle(handle);
+          alarmIntervalsRef.current.delete(id);
+        }
+        setTimers(prev =>
+          prev.map(timer =>
+            timer.id === id
+              ? {
+                  ...timer,
+                  isRunning: true,
+                  isFinished: false,
+                  timeLeft: timer.duration,
+                  leadTimeRemaining: timer.leadTime,
+                  quartilesBeeped: [],
+                  currentAlarmPlays: 0,
+                }
+              : timer
+          )
+        );
         toast({
           title: "Timer Restarted",
           description: `${target?.name ?? "Timer"} restarted.`,
         });
-      } else if (wasRunning) {
-        toast({
-          title: "Timer Paused",
-          description: `${target?.name ?? "Timer"} paused.`,
-        });
       } else {
-        toast({
-          title: "Timer Started",
-          description: `${target?.name ?? "Timer"} started.`,
-        });
+        // Normal toggle (running ↔ paused), or overrun timer pause/continue
+        setTimers(prev =>
+          prev.map(timer =>
+            timer.id === id ? { ...timer, isRunning: !timer.isRunning } : timer
+          )
+        );
+        if (wasRunning) {
+          toast({
+            title: "Timer Paused",
+            description: `${target?.name ?? "Timer"} paused.`,
+          });
+        } else {
+          toast({
+            title: wasFinished ? "Timer Continued" : "Timer Started",
+            description: `${target?.name ?? "Timer"} ${wasFinished ? "continued" : "started"}.`,
+          });
+        }
       }
     },
-    [timers, toast]
+    [timers, toast, clearAlarmHandle]
   );
 
   const stopAllTimers = useCallback(() => {
@@ -312,7 +359,10 @@ export default function Timer() {
         ...timer,
         isRunning: false,
         isFinished: false,
+        // Reset negative time from overrun
+        timeLeft: timer.timeLeft < 0 ? timer.duration : timer.timeLeft,
         currentAlarmPlays: 0,
+        quartilesBeeped: [],
       }))
     );
     // Clear any global paused tracking
@@ -348,7 +398,8 @@ export default function Timer() {
   const continueAllTimers = useCallback(() => {
     setTimers(prev =>
       prev.map(timer =>
-        pausedByGlobal.has(timer.id) && !timer.isFinished
+        pausedByGlobal.has(timer.id) &&
+        (!timer.isFinished || timer.overrunEnabled)
           ? { ...timer, isRunning: true }
           : timer
       )
@@ -399,6 +450,8 @@ export default function Timer() {
         isFinished: false,
         timeLeft: timer.duration,
         currentAlarmPlays: 0,
+        leadTimeRemaining: timer.leadTime,
+        quartilesBeeped: [],
       }))
     );
 
@@ -436,6 +489,11 @@ export default function Timer() {
         isFinished: false,
         alarmCount: 3,
         currentAlarmPlays: 0,
+        overrunEnabled: false,
+        leadTime: 0,
+        leadTimeRemaining: 0,
+        beepAtQuartiles: true,
+        quartilesBeeped: [],
       };
       setTimers([defaultTimer]);
     }
@@ -456,21 +514,78 @@ export default function Timer() {
       intervalRef.current = setInterval(() => {
         setTimers(prevTimers =>
           prevTimers.map(timer => {
-            if (!timer.isRunning || timer.timeLeft <= 0) return timer;
+            if (!timer.isRunning) return timer;
+
+            // Lead time countdown: count down before the main timer starts
+            if (timer.leadTimeRemaining > 0) {
+              const newLeadTimeRemaining = timer.leadTimeRemaining - 1;
+              if (newLeadTimeRemaining === 0 && audioContextRef.current) {
+                // Signal that the timer is about to start
+                playTimerBeep(audioContextRef.current);
+              }
+              return { ...timer, leadTimeRemaining: newLeadTimeRemaining };
+            }
+
+            // Overrun: keep counting negative after the timer has finished
+            if (timer.isFinished && timer.overrunEnabled) {
+              return { ...timer, timeLeft: timer.timeLeft - 1 };
+            }
+
+            // Normal timer: guard against already-expired timer
+            if (timer.timeLeft <= 0) return timer;
 
             const newTimeLeft = timer.timeLeft - 1;
+
+            // Check quartile milestones (only for timers long enough to matter)
+            let updatedQuartilesBeeped = timer.quartilesBeeped;
+            if (timer.beepAtQuartiles && timer.duration >= 4) {
+              const milestones = [
+                { pct: 25, threshold: Math.round(timer.duration * 0.75) },
+                { pct: 50, threshold: Math.round(timer.duration * 0.5) },
+                { pct: 75, threshold: Math.round(timer.duration * 0.25) },
+              ];
+              for (const { pct, threshold } of milestones) {
+                if (
+                  threshold > 0 &&
+                  newTimeLeft === threshold &&
+                  !timer.quartilesBeeped.includes(pct)
+                ) {
+                  updatedQuartilesBeeped = [...updatedQuartilesBeeped, pct];
+                  if (audioContextRef.current) {
+                    playMilestoneBeep(audioContextRef.current);
+                  }
+                  break; // Only one milestone beep per tick
+                }
+              }
+            }
+
             if (newTimeLeft <= 0) {
               // Timer finished
               startAlarm(timer);
+              if (timer.overrunEnabled) {
+                // Keep running, counting negative
+                return {
+                  ...timer,
+                  timeLeft: 0,
+                  isFinished: true,
+                  isRunning: true,
+                  quartilesBeeped: updatedQuartilesBeeped,
+                };
+              }
               return {
                 ...timer,
                 timeLeft: 0,
                 isRunning: false,
                 isFinished: true,
+                quartilesBeeped: updatedQuartilesBeeped,
               };
             }
 
-            return { ...timer, timeLeft: newTimeLeft };
+            return {
+              ...timer,
+              timeLeft: newTimeLeft,
+              quartilesBeeped: updatedQuartilesBeeped,
+            };
           })
         );
       }, 1000);
@@ -545,6 +660,8 @@ export default function Timer() {
                 isFinished: false,
                 timeLeft: timer.duration,
                 currentAlarmPlays: 0,
+                leadTimeRemaining: timer.leadTime,
+                quartilesBeeped: [],
               }
             : timer
         )
@@ -635,6 +752,9 @@ export default function Timer() {
     setNewTimerSeconds(0);
     setNewTimerName("");
     setNewTimerAlarmCount(3);
+    setNewTimerOverrunEnabled(false);
+    setNewTimerLeadTime(0);
+    setNewTimerBeepAtQuartiles(true);
     setShowAddTimer(false);
     toast({
       title: "Reset",
@@ -659,6 +779,9 @@ export default function Timer() {
     newTimerSeconds === 0 &&
     newTimerName === "" &&
     newTimerAlarmCount === 3 &&
+    newTimerLeadTime === 0 &&
+    !newTimerOverrunEnabled &&
+    newTimerBeepAtQuartiles &&
     !showAddTimer;
 
   // Check if there's modified data
@@ -674,7 +797,8 @@ export default function Timer() {
       >
         <div className="text-center space-y-4">
           <div className="text-[20rem] leading-none font-mono font-bold text-slate-900 dark:text-slate-100">
-            {formatTimerTime(fullscreenTimer.timeLeft)}
+            {fullscreenTimer.timeLeft < 0 ? "-" : ""}
+            {formatTimerTime(Math.abs(fullscreenTimer.timeLeft))}
           </div>
           <div className="text-5xl text-slate-600 dark:text-slate-400">
             {fullscreenTimer.name}
@@ -725,7 +849,7 @@ export default function Timer() {
               t => !t.isRunning && !t.isFinished && t.timeLeft === t.duration
             );
 
-            const allFinished = timers.every(t => t.isFinished);
+            const allFinished = timers.every(t => t.isFinished && !t.isRunning);
 
             if (noneStarted) {
               return (
@@ -798,6 +922,22 @@ export default function Timer() {
           />
         </DataButtonGroup>
       </ToolButtonGroup>
+
+      {/* Display options */}
+      <div className="flex items-center gap-2 mb-4">
+        <Switch
+          id="show-pie-chart"
+          checked={showPieChart}
+          onCheckedChange={setShowPieChart}
+          data-testid="show-pie-chart-switch"
+        />
+        <Label
+          htmlFor="show-pie-chart"
+          className="text-sm font-normal cursor-pointer"
+        >
+          Show progress chart
+        </Label>
+      </div>
 
       {/* Add Timer Form */}
       {showAddTimer ? (
@@ -889,6 +1029,64 @@ export default function Timer() {
                 {newTimerMinutes}:{newTimerSeconds.toString().padStart(2, "0")}{" "}
                 • Alarm: {getAlarmText(newTimerAlarmCount)}
               </div>
+            </div>
+
+            {/* Extra per-timer options */}
+            <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <Label htmlFor="lead-time">Lead Time (seconds)</Label>
+                <Input
+                  id="lead-time"
+                  type="number"
+                  min="0"
+                  max="3600"
+                  value={newTimerLeadTime}
+                  onChange={e =>
+                    setNewTimerLeadTime(
+                      Math.max(0, parseInt(e.target.value, 10) || 0)
+                    )
+                  }
+                  data-testid="lead-time-input"
+                  placeholder="0"
+                />
+              </div>
+
+              <div className="flex items-start gap-3 pt-5">
+                <Switch
+                  id="overrun-enabled"
+                  checked={newTimerOverrunEnabled}
+                  onCheckedChange={setNewTimerOverrunEnabled}
+                  data-testid="overrun-switch"
+                />
+                <div>
+                  <Label htmlFor="overrun-enabled" className="cursor-pointer">
+                    Count past zero
+                  </Label>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Continue as -00:01, -00:02…
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 pt-5">
+                <Switch
+                  id="beep-quartiles"
+                  checked={newTimerBeepAtQuartiles}
+                  onCheckedChange={setNewTimerBeepAtQuartiles}
+                  data-testid="beep-quartiles-switch"
+                />
+                <div>
+                  <Label htmlFor="beep-quartiles" className="cursor-pointer">
+                    Beep at milestones
+                  </Label>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Beep at 25%, 50%, 75% elapsed
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end mt-4">
               <Button onClick={addTimer} data-testid="add-timer-confirm">
                 <Plus className="w-4 h-4 mr-2" />
                 Add Timer
@@ -900,90 +1098,175 @@ export default function Timer() {
 
       {/* Active Timers */}
       <div className="space-y-4">
-        {timers.map(timer => (
-          <Card
-            key={timer.id}
-            id={`timer-card-${timer.id}`}
-            className={`transition-all ${timer.isFinished ? "ring-2 ring-red-500 bg-red-50 dark:bg-red-950" : ""}`}
-          >
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center text-lg">
-                  <TimerIcon className="w-5 h-5 mr-2" />
-                  {timer.name}
-                  {timer.isFinished ? (
-                    <Badge variant="destructive" className="ml-2">
-                      Finished
-                    </Badge>
-                  ) : null}
-                  {timer.isRunning ? (
-                    <Badge className="ml-2">Running</Badge>
-                  ) : null}
-                </CardTitle>
-                <div className="flex items-center gap-2">
-                  <div className="text-sm text-slate-600 dark:text-slate-400">
-                    Alarm: {getAlarmText(timer.alarmCount)}
-                  </div>
-                  <Button
-                    onClick={() => toggleFullscreen(timer.id)}
-                    size="sm"
-                    variant="ghost"
-                    className="h-8 w-8 p-0 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
-                    data-testid={`fullscreen-timer-${timer.id}`}
-                  >
-                    <Expand className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    onClick={() => removeTimer(timer.id)}
-                    size="sm"
-                    variant="ghost"
-                    className="h-8 w-8 p-0 text-slate-400 hover:text-red-500"
-                    data-testid={`remove-timer-${timer.id}`}
-                  >
-                    <X className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center space-y-4">
-                <div
-                  className={`text-6xl font-mono font-bold ${timer.isFinished ? "text-red-600" : "text-slate-900 dark:text-slate-100"}`}
-                >
-                  {formatTimerTime(timer.timeLeft)}
-                </div>
+        {timers.map(timer => {
+          const percentComplete =
+            timer.duration > 0 && timer.leadTimeRemaining === 0
+              ? Math.min(
+                  100,
+                  Math.round(
+                    ((timer.duration - Math.max(0, timer.timeLeft)) /
+                      timer.duration) *
+                      100
+                  )
+                )
+              : 0;
+          let progressColor = theme === "dark" ? "#3b82f6" : "#2563eb";
+          if (timer.isFinished) progressColor = "#ef4444";
+          else if (timer.leadTimeRemaining > 0) progressColor = "#f59e0b";
+          const trackColor = theme === "dark" ? "#334155" : "#e2e8f0";
 
-                <div className="flex justify-center gap-2">
-                  {!timer.isFinished ? (
+          return (
+            <Card
+              key={timer.id}
+              id={`timer-card-${timer.id}`}
+              className={`transition-all ${timer.isFinished ? "ring-2 ring-red-500 bg-red-50 dark:bg-red-950" : ""}`}
+            >
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center text-lg">
+                    <TimerIcon className="w-5 h-5 mr-2" />
+                    {timer.name}
+                    {(() => {
+                      if (timer.isFinished) {
+                        if (timer.overrunEnabled && timer.isRunning) {
+                          return (
+                            <Badge variant="destructive" className="ml-2">
+                              Overtime
+                            </Badge>
+                          );
+                        }
+                        return (
+                          <Badge variant="destructive" className="ml-2">
+                            Finished
+                          </Badge>
+                        );
+                      }
+                      if (timer.isRunning && timer.leadTimeRemaining > 0) {
+                        return (
+                          <Badge className="ml-2 bg-amber-500 hover:bg-amber-500">
+                            Starting
+                          </Badge>
+                        );
+                      }
+                      if (timer.isRunning) {
+                        return <Badge className="ml-2">Running</Badge>;
+                      }
+                      return null;
+                    })()}
+                  </CardTitle>
+                  <div className="flex items-center gap-2">
+                    <div className="text-sm text-slate-600 dark:text-slate-400">
+                      Alarm: {getAlarmText(timer.alarmCount)}
+                    </div>
                     <Button
-                      onClick={() => toggleTimer(timer.id)}
-                      data-testid={`toggle-timer-${timer.id}`}
+                      onClick={() => toggleFullscreen(timer.id)}
+                      size="sm"
+                      variant="ghost"
+                      className="h-8 w-8 p-0 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+                      data-testid={`fullscreen-timer-${timer.id}`}
                     >
-                      {timer.isRunning ? (
-                        <>
-                          <Pause className="w-4 h-4 mr-2" />
-                          Pause
-                        </>
-                      ) : (
-                        <>
-                          <Play className="w-4 h-4 mr-2" />
-                          {timer.timeLeft < timer.duration
-                            ? "Continue"
-                            : "Start"}
-                        </>
-                      )}
+                      <Expand className="w-4 h-4" />
                     </Button>
-                  ) : (
-                    <div className="flex gap-2">
-                      <Button
-                        onClick={() => stopTimer(timer.id)}
-                        variant="outline"
-                        data-testid={`reset-timer-${timer.id}`}
-                      >
-                        <Square className="w-4 h-4 mr-2" />
-                        Reset
-                      </Button>
-                      {alarmIntervalsRef.current.has(timer.id) && (
+                    <Button
+                      onClick={() => removeTimer(timer.id)}
+                      size="sm"
+                      variant="ghost"
+                      className="h-8 w-8 p-0 text-slate-400 hover:text-red-500"
+                      data-testid={`remove-timer-${timer.id}`}
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {/* Time display + optional pie chart */}
+                  <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-8">
+                    {showPieChart ? (
+                      <div className="relative flex-shrink-0">
+                        <PieChart width={130} height={130}>
+                          <Pie
+                            data={[
+                              { value: percentComplete },
+                              { value: Math.max(0, 100 - percentComplete) },
+                            ]}
+                            cx={65}
+                            cy={65}
+                            innerRadius={40}
+                            outerRadius={58}
+                            startAngle={90}
+                            endAngle={-270}
+                            dataKey="value"
+                            strokeWidth={0}
+                          >
+                            <Cell fill={progressColor} />
+                            <Cell fill={trackColor} />
+                          </Pie>
+                        </PieChart>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                          <span className="text-xl font-bold font-mono text-slate-900 dark:text-slate-100">
+                            {percentComplete}%
+                          </span>
+                          <span className="text-xs text-slate-500 dark:text-slate-400">
+                            done
+                          </span>
+                        </div>
+                      </div>
+                    ) : null}
+                    <div className="text-center">
+                      {timer.leadTimeRemaining > 0 ? (
+                        <div className="flex flex-col items-center gap-1">
+                          <div className="text-6xl font-mono font-bold text-amber-500 dark:text-amber-400">
+                            {timer.leadTimeRemaining}
+                          </div>
+                          <div className="text-sm text-slate-500 dark:text-slate-400">
+                            Starting soon…
+                          </div>
+                        </div>
+                      ) : (
+                        <div
+                          className={`text-6xl font-mono font-bold ${
+                            timer.isFinished
+                              ? "text-red-600"
+                              : "text-slate-900 dark:text-slate-100"
+                          }`}
+                        >
+                          {timer.timeLeft < 0 ? "-" : ""}
+                          {formatTimerTime(Math.abs(timer.timeLeft))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Control buttons */}
+                  <div className="flex justify-center gap-2">
+                    {(() => {
+                      if (!timer.isFinished) {
+                        return (
+                          <Button
+                            onClick={() => toggleTimer(timer.id)}
+                            data-testid={`toggle-timer-${timer.id}`}
+                          >
+                            {timer.isRunning ? (
+                              <>
+                                <Pause className="w-4 h-4 mr-2" />
+                                Pause
+                              </>
+                            ) : (
+                              <>
+                                <Play className="w-4 h-4 mr-2" />
+                                {timer.timeLeft < timer.duration
+                                  ? "Continue"
+                                  : "Start"}
+                              </>
+                            )}
+                          </Button>
+                        );
+                      }
+                      const stopAlarmButton = alarmIntervalsRef.current.has(
+                        timer.id
+                      ) ? (
                         <Button
                           onClick={() => {
                             const handle = alarmIntervalsRef.current.get(
@@ -1000,18 +1283,63 @@ export default function Timer() {
                           <VolumeX className="w-4 h-4 mr-2" />
                           Stop Alarm
                         </Button>
-                      )}
-                    </div>
-                  )}
-                </div>
+                      ) : null;
+                      if (timer.overrunEnabled) {
+                        return (
+                          <div className="flex gap-2">
+                            <Button
+                              onClick={() => toggleTimer(timer.id)}
+                              data-testid={`toggle-timer-${timer.id}`}
+                            >
+                              {timer.isRunning ? (
+                                <>
+                                  <Pause className="w-4 h-4 mr-2" />
+                                  Pause
+                                </>
+                              ) : (
+                                <>
+                                  <Play className="w-4 h-4 mr-2" />
+                                  Continue
+                                </>
+                              )}
+                            </Button>
+                            <Button
+                              onClick={() => stopTimer(timer.id)}
+                              variant="outline"
+                              data-testid={`reset-timer-${timer.id}`}
+                            >
+                              <Square className="w-4 h-4 mr-2" />
+                              Reset
+                            </Button>
+                            {stopAlarmButton}
+                          </div>
+                        );
+                      }
+                      return (
+                        <div className="flex gap-2">
+                          <Button
+                            onClick={() => stopTimer(timer.id)}
+                            variant="outline"
+                            data-testid={`reset-timer-${timer.id}`}
+                          >
+                            <Square className="w-4 h-4 mr-2" />
+                            Reset
+                          </Button>
+                          {stopAlarmButton}
+                        </div>
+                      );
+                    })()}
+                  </div>
 
-                <div className="text-sm text-slate-600 dark:text-slate-400">
-                  Original duration: {formatTimerTime(timer.duration)}
+                  <div className="text-center text-sm text-slate-600 dark:text-slate-400">
+                    Original duration: {formatTimerTime(timer.duration)}
+                    {timer.leadTime > 0 ? ` • Lead: ${timer.leadTime}s` : ""}
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
 
       {/* Empty State */}
