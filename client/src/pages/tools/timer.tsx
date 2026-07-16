@@ -23,6 +23,7 @@ import {
   X,
   Timer as TimerIcon,
   VolumeX,
+  Expand,
 } from "lucide-react";
 import {
   formatTimerTime,
@@ -62,6 +63,9 @@ export default function Timer() {
   const [newTimerAlarmCount, setNewTimerAlarmCount] = useState(3);
   const [timers, setTimers] = useState<TimerInstance[]>([]);
   const [showAddTimer, setShowAddTimer] = useState(false);
+  const [fullscreenTimerId, setFullscreenTimerId] = useState<string | null>(
+    null
+  );
   // Track which timers were paused by the global pause so we can resume only those
   const [pausedByGlobal, setPausedByGlobal] = useState<Set<string>>(new Set());
 
@@ -74,6 +78,43 @@ export default function Timer() {
     request: requestWakeLock,
     release: releaseWakeLock,
   } = useWakeLock();
+
+  const toggleFullscreen = (id: string) => {
+    if (fullscreenTimerId === id) {
+      setFullscreenTimerId(null);
+      if (document.fullscreenElement) {
+        void document.exitFullscreen();
+      }
+    } else {
+      setFullscreenTimerId(id);
+    }
+  };
+
+  useEffect(() => {
+    if (fullscreenTimerId) {
+      const element = document.getElementById(
+        `timer-card-${fullscreenTimerId}`
+      );
+      if (element && !document.fullscreenElement) {
+        void element.requestFullscreen().catch(err => {
+          console.error("Fullscreen request failed:", err);
+          setFullscreenTimerId(null); // Reset on failure
+        });
+      }
+    } else if (document.fullscreenElement) {
+      void document.exitFullscreen();
+    }
+
+    const handleFullscreenChange = () => {
+      if (!document.fullscreenElement) {
+        setFullscreenTimerId(null);
+      }
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () =>
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  }, [fullscreenTimerId]);
 
   // Effect to manage the wake lock
   useEffect(() => {
@@ -623,6 +664,29 @@ export default function Timer() {
   // Check if there's modified data
   const hasModifiedData = timers.length > 0 || showAddTimer;
 
+  const fullscreenTimer = timers.find(t => t.id === fullscreenTimerId);
+
+  if (fullscreenTimer) {
+    return (
+      <div
+        id={`timer-card-${fullscreenTimer.id}`}
+        className="bg-white dark:bg-black w-screen h-screen flex flex-col items-center justify-center"
+      >
+        <div className="text-center space-y-4">
+          <div className="text-[20rem] leading-none font-mono font-bold text-slate-900 dark:text-slate-100">
+            {formatTimerTime(fullscreenTimer.timeLeft)}
+          </div>
+          <div className="text-5xl text-slate-600 dark:text-slate-400">
+            {fullscreenTimer.name}
+          </div>
+          <Button onClick={() => toggleFullscreen(fullscreenTimer.id)}>
+            Exit Fullscreen
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
@@ -839,6 +903,7 @@ export default function Timer() {
         {timers.map(timer => (
           <Card
             key={timer.id}
+            id={`timer-card-${timer.id}`}
             className={`transition-all ${timer.isFinished ? "ring-2 ring-red-500 bg-red-50 dark:bg-red-950" : ""}`}
           >
             <CardHeader className="pb-3">
@@ -859,6 +924,15 @@ export default function Timer() {
                   <div className="text-sm text-slate-600 dark:text-slate-400">
                     Alarm: {getAlarmText(timer.alarmCount)}
                   </div>
+                  <Button
+                    onClick={() => toggleFullscreen(timer.id)}
+                    size="sm"
+                    variant="ghost"
+                    className="h-8 w-8 p-0 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+                    data-testid={`fullscreen-timer-${timer.id}`}
+                  >
+                    <Expand className="w-4 h-4" />
+                  </Button>
                   <Button
                     onClick={() => removeTimer(timer.id)}
                     size="sm"
