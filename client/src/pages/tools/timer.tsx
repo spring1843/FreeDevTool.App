@@ -790,11 +790,56 @@ export default function Timer() {
   const fullscreenTimer = timers.find(t => t.id === fullscreenTimerId);
 
   if (fullscreenTimer) {
+    const fsPercent =
+      fullscreenTimer.duration > 0 && fullscreenTimer.leadTimeRemaining === 0
+        ? Math.min(
+            100,
+            Math.round(
+              ((fullscreenTimer.duration -
+                Math.max(0, fullscreenTimer.timeLeft)) /
+                fullscreenTimer.duration) *
+                100
+            )
+          )
+        : 0;
+    let fsProgressColor = theme === "dark" ? "#3b82f6" : "#2563eb";
+    if (fullscreenTimer.isFinished) fsProgressColor = "#ef4444";
+    else if (fullscreenTimer.leadTimeRemaining > 0) fsProgressColor = "#f59e0b";
+    const fsTrackColor = theme === "dark" ? "#334155" : "#e2e8f0";
+
     return (
       <div
         id={`timer-card-${fullscreenTimer.id}`}
-        className="bg-white dark:bg-black w-screen h-screen flex flex-col items-center justify-center"
+        className="bg-white dark:bg-black w-screen h-screen flex flex-col items-center justify-center gap-10"
       >
+        {showPieChart ? (
+          <div className="relative flex-shrink-0">
+            <PieChart width={260} height={260}>
+              <Pie
+                data={[
+                  { value: fsPercent },
+                  { value: Math.max(0, 100 - fsPercent) },
+                ]}
+                cx={130}
+                cy={130}
+                innerRadius={80}
+                outerRadius={118}
+                startAngle={90}
+                endAngle={-270}
+                dataKey="value"
+                strokeWidth={0}
+              >
+                <Cell fill={fsProgressColor} />
+                <Cell fill={fsTrackColor} />
+              </Pie>
+            </PieChart>
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <span className="text-5xl font-bold font-mono text-slate-900 dark:text-slate-100">
+                {fsPercent}%
+              </span>
+            </div>
+          </div>
+        ) : null}
         <div className="text-center space-y-4">
           <div className="text-[20rem] leading-none font-mono font-bold text-slate-900 dark:text-slate-100">
             {fullscreenTimer.timeLeft < 0 ? "-" : ""}
@@ -1204,12 +1249,9 @@ export default function Timer() {
                             <Cell fill={trackColor} />
                           </Pie>
                         </PieChart>
-                        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                           <span className="text-xl font-bold font-mono text-slate-900 dark:text-slate-100">
                             {percentComplete}%
-                          </span>
-                          <span className="text-xs text-slate-500 dark:text-slate-400">
-                            done
                           </span>
                         </div>
                       </div>
