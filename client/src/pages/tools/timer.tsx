@@ -73,7 +73,6 @@ export default function Timer() {
   const [newTimerOverrunEnabled, setNewTimerOverrunEnabled] = useState(false);
   const [newTimerLeadTime, setNewTimerLeadTime] = useState(0);
   const [newTimerBeepAtQuartiles, setNewTimerBeepAtQuartiles] = useState(true);
-  const [showPieChart, setShowPieChart] = useState(true);
   const [timers, setTimers] = useState<TimerInstance[]>([]);
   const [showAddTimer, setShowAddTimer] = useState(false);
   const [fullscreenTimerId, setFullscreenTimerId] = useState<string | null>(
@@ -812,34 +811,32 @@ export default function Timer() {
         id={`timer-card-${fullscreenTimer.id}`}
         className="bg-white dark:bg-black w-screen h-screen flex flex-col items-center justify-center gap-10"
       >
-        {showPieChart ? (
-          <div className="relative flex-shrink-0">
-            <PieChart width={260} height={260}>
-              <Pie
-                data={[
-                  { value: fsPercent },
-                  { value: Math.max(0, 100 - fsPercent) },
-                ]}
-                cx={130}
-                cy={130}
-                innerRadius={80}
-                outerRadius={118}
-                startAngle={90}
-                endAngle={-270}
-                dataKey="value"
-                strokeWidth={0}
-              >
-                <Cell fill={fsProgressColor} />
-                <Cell fill={fsTrackColor} />
-              </Pie>
-            </PieChart>
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <span className="text-5xl font-bold font-mono text-slate-900 dark:text-slate-100">
-                {fsPercent}%
-              </span>
-            </div>
+        <div className="relative flex-shrink-0">
+          <PieChart width={260} height={260}>
+            <Pie
+              data={[
+                { value: fsPercent },
+                { value: Math.max(0, 100 - fsPercent) },
+              ]}
+              cx={130}
+              cy={130}
+              innerRadius={80}
+              outerRadius={118}
+              startAngle={90}
+              endAngle={-270}
+              dataKey="value"
+              strokeWidth={0}
+            >
+              <Cell fill={fsProgressColor} />
+              <Cell fill={fsTrackColor} />
+            </Pie>
+          </PieChart>
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <span className="text-5xl font-bold font-mono text-slate-900 dark:text-slate-100">
+              {fsPercent}%
+            </span>
           </div>
-        ) : null}
+        </div>
         <div className="text-center space-y-4">
           <div className="text-[20rem] leading-none font-mono font-bold text-slate-900 dark:text-slate-100">
             {fullscreenTimer.timeLeft < 0 ? "-" : ""}
@@ -967,22 +964,6 @@ export default function Timer() {
           />
         </DataButtonGroup>
       </ToolButtonGroup>
-
-      {/* Display options */}
-      <div className="flex items-center gap-2 mb-4">
-        <Switch
-          id="show-pie-chart"
-          checked={showPieChart}
-          onCheckedChange={setShowPieChart}
-          data-testid="show-pie-chart-switch"
-        />
-        <Label
-          htmlFor="show-pie-chart"
-          className="text-sm font-normal cursor-pointer"
-        >
-          Show progress chart
-        </Label>
-      </div>
 
       {/* Add Timer Form */}
       {showAddTimer ? (
@@ -1226,58 +1207,55 @@ export default function Timer() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {/* Time display + optional pie chart */}
-                  <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-8">
-                    {showPieChart ? (
-                      <div className="relative flex-shrink-0">
-                        <PieChart width={130} height={130}>
-                          <Pie
-                            data={[
-                              { value: percentComplete },
-                              { value: Math.max(0, 100 - percentComplete) },
-                            ]}
-                            cx={65}
-                            cy={65}
-                            innerRadius={40}
-                            outerRadius={58}
-                            startAngle={90}
-                            endAngle={-270}
-                            dataKey="value"
-                            strokeWidth={0}
-                          >
-                            <Cell fill={progressColor} />
-                            <Cell fill={trackColor} />
-                          </Pie>
-                        </PieChart>
-                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                          <span className="text-xl font-bold font-mono text-slate-900 dark:text-slate-100">
-                            {percentComplete}%
-                          </span>
-                        </div>
-                      </div>
-                    ) : null}
-                    <div className="text-center">
-                      {timer.leadTimeRemaining > 0 ? (
-                        <div className="flex flex-col items-center gap-1">
-                          <div className="text-6xl font-mono font-bold text-amber-500 dark:text-amber-400">
-                            {timer.leadTimeRemaining}
-                          </div>
-                          <div className="text-sm text-slate-500 dark:text-slate-400">
-                            Starting soon…
-                          </div>
-                        </div>
-                      ) : (
-                        <div
-                          className={`text-6xl font-mono font-bold ${
-                            timer.isFinished
-                              ? "text-red-600"
-                              : "text-slate-900 dark:text-slate-100"
-                          }`}
+                  {/* Donut chart with time inside */}
+                  <div className="flex justify-center">
+                    <div className="relative flex-shrink-0">
+                      <PieChart
+                        width={240}
+                        height={240}
+                        margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+                      >
+                        <Pie
+                          data={[
+                            { value: percentComplete },
+                            { value: Math.max(0, 100 - percentComplete) },
+                          ]}
+                          cx={120}
+                          cy={120}
+                          innerRadius={88}
+                          outerRadius={112}
+                          startAngle={90}
+                          endAngle={-270}
+                          dataKey="value"
+                          strokeWidth={0}
                         >
-                          {timer.timeLeft < 0 ? "-" : ""}
-                          {formatTimerTime(Math.abs(timer.timeLeft))}
-                        </div>
-                      )}
+                          <Cell fill={progressColor} />
+                          <Cell fill={trackColor} />
+                        </Pie>
+                      </PieChart>
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none text-center">
+                        {timer.leadTimeRemaining > 0 ? (
+                          <>
+                            <div className="text-6xl font-mono font-bold text-amber-500 dark:text-amber-400">
+                              {timer.leadTimeRemaining}
+                            </div>
+                            <div className="text-xs text-slate-500 dark:text-slate-400">
+                              Starting soon…
+                            </div>
+                          </>
+                        ) : (
+                          <div
+                            className={`text-6xl font-mono font-bold ${
+                              timer.isFinished
+                                ? "text-red-600"
+                                : "text-slate-900 dark:text-slate-100"
+                            }`}
+                          >
+                            {timer.timeLeft < 0 ? "-" : ""}
+                            {formatTimerTime(Math.abs(timer.timeLeft))}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
 
