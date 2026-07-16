@@ -274,12 +274,16 @@ export default function Timer() {
     setNewTimerBeepAtQuartiles(true);
     setShowAddTimer(false);
 
-    // Update URL with latest timer
+    // Update URL with latest timer settings
     updateURL({
       h: newTimerHours,
       m: newTimerMinutes,
       s: newTimerSeconds,
       name,
+      alarm: newTimerAlarmCount,
+      overrun: newTimerOverrunEnabled,
+      lead: newTimerLeadTime,
+      beep: newTimerBeepAtQuartiles,
     });
 
     toast({
@@ -472,14 +476,19 @@ export default function Timer() {
   useEffect(() => {
     audioContextRef.current = createTimerSound();
 
-    // Capture ref value at effect start
+    // Capture ref values at effect start
     const intervals = alarmIntervalsRef.current;
+    const flashTimeouts = flashClearTimeoutsRef.current;
 
     // Load from URL parameters or create default timer
     const urlHours = getParam("h", 0);
     const urlMinutes = getParam("m", 5);
     const urlSeconds = getParam("s", 0);
     const urlName = getParam("name", "");
+    const urlOverrun = getParam("overrun", false);
+    const urlLead = getParam("lead", 5);
+    const urlBeep = getParam("beep", true);
+    const urlAlarm = getParam("alarm", 3);
 
     if (urlHours > 0 || urlMinutes > 0 || urlSeconds > 0) {
       const duration = urlHours * 3600 + urlMinutes * 60 + urlSeconds;
@@ -492,12 +501,12 @@ export default function Timer() {
         timeLeft: duration,
         isRunning: false, // Don't auto-start per STYLE.md for tools that make sound
         isFinished: false,
-        alarmCount: 3,
+        alarmCount: urlAlarm,
         currentAlarmPlays: 0,
-        overrunEnabled: false,
-        leadTime: 0,
-        leadTimeRemaining: 0,
-        beepAtQuartiles: true,
+        overrunEnabled: urlOverrun,
+        leadTime: urlLead,
+        leadTimeRemaining: urlLead,
+        beepAtQuartiles: urlBeep,
         quartilesBeeped: [],
       };
       setTimers([defaultTimer]);
@@ -511,7 +520,6 @@ export default function Timer() {
       intervals.forEach(interval => clearAlarmHandle(interval));
       intervals.clear();
       // Clear all flash timeouts using captured ref value
-      const flashTimeouts = flashClearTimeoutsRef.current;
       flashTimeouts.forEach(t => clearTimeout(t as unknown as number));
       flashTimeouts.clear();
     };
@@ -745,12 +753,25 @@ export default function Timer() {
       const hours = Math.floor(timer.duration / 3600);
       const minutes = Math.floor((timer.duration % 3600) / 60);
       const seconds = timer.duration % 60;
-      copyShareableURL({ h: hours, m: minutes, s: seconds, name: timer.name });
+      copyShareableURL({
+        h: hours,
+        m: minutes,
+        s: seconds,
+        name: timer.name,
+        alarm: timer.alarmCount,
+        overrun: timer.overrunEnabled,
+        lead: timer.leadTime,
+        beep: timer.beepAtQuartiles,
+      });
     } else {
       copyShareableURL({
         h: newTimerHours,
         m: newTimerMinutes,
         s: newTimerSeconds,
+        alarm: newTimerAlarmCount,
+        overrun: newTimerOverrunEnabled,
+        lead: newTimerLeadTime,
+        beep: newTimerBeepAtQuartiles,
       });
     }
 
@@ -758,7 +779,7 @@ export default function Timer() {
       title: "URL Copied",
       description: "Timer URL has been copied to clipboard",
     });
-  }, [timers, newTimerHours, newTimerMinutes, newTimerSeconds, toast]);
+  }, [timers, newTimerHours, newTimerMinutes, newTimerSeconds, newTimerAlarmCount, newTimerOverrunEnabled, newTimerLeadTime, newTimerBeepAtQuartiles, toast]);
 
   const getAlarmText = (count: number) => {
     switch (count) {
@@ -1194,7 +1215,7 @@ export default function Timer() {
               : 0;
           const isFlashing = flashingTimers.has(timer.id);
           let progressColor = theme === "dark" ? "#3b82f6" : "#2563eb";
-          if (timer.isFinished || isFlashing) progressColor = "#ef4444";
+          if (isFlashing || (timer.isFinished && !timer.isRunning)) progressColor = "#ef4444";
           else if (timer.leadTimeRemaining > 0) progressColor = "#f59e0b";
           const trackColor = theme === "dark" ? "#334155" : "#e2e8f0";
 
@@ -1303,7 +1324,7 @@ export default function Timer() {
                         ) : (
                           <div
                             className={`text-6xl font-mono font-bold ${
-                              timer.isFinished || isFlashing
+                              isFlashing || (timer.isFinished && !timer.isRunning)
                                 ? "text-red-600"
                                 : "text-slate-900 dark:text-slate-100"
                             }`}
@@ -1317,7 +1338,7 @@ export default function Timer() {
                         <div className="absolute top-[calc(50%+2.4rem)] left-1/2 -translate-x-1/2 pointer-events-none text-center">
                           <span
                             className={`text-base font-mono ${
-                              timer.isFinished || isFlashing
+                              isFlashing || (timer.isFinished && !timer.isRunning)
                                 ? "text-red-500"
                                 : "text-slate-500 dark:text-slate-400"
                             }`}
