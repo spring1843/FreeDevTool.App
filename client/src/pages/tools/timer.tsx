@@ -864,7 +864,11 @@ export default function Timer() {
         className="bg-white dark:bg-black w-screen h-screen flex flex-col items-center justify-center gap-10"
       >
         <div className="relative flex-shrink-0">
-          <PieChart width={260} height={260}>
+          <PieChart
+            width={260}
+            height={260}
+            margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+          >
             <Pie
               data={[
                 { value: fsPercent },
@@ -883,7 +887,7 @@ export default function Timer() {
               <Cell fill={fsTrackColor} />
             </Pie>
           </PieChart>
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none text-center">
             <span className="text-5xl font-bold font-mono text-slate-900 dark:text-slate-100">
               {fsPercent}%
             </span>
@@ -1309,6 +1313,19 @@ export default function Timer() {
                           </div>
                         )}
                       </div>
+                      {timer.leadTimeRemaining === 0 && (
+                        <div className="absolute top-[calc(50%+2.4rem)] left-1/2 -translate-x-1/2 pointer-events-none text-center">
+                          <span
+                            className={`text-base font-mono ${
+                              timer.isFinished || isFlashing
+                                ? "text-red-500"
+                                : "text-slate-500 dark:text-slate-400"
+                            }`}
+                          >
+                            {percentComplete}%
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
 
