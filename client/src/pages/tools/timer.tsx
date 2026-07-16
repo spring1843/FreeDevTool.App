@@ -605,7 +605,7 @@ export default function Timer() {
               for (const { pct, threshold } of milestones) {
                 if (
                   threshold > 0 &&
-                  newTimeLeft === threshold &&
+                  newTimeLeft <= threshold &&
                   !timer.quartilesBeeped.includes(pct)
                 ) {
                   updatedQuartilesBeeped = [...updatedQuartilesBeeped, pct];
@@ -779,7 +779,28 @@ export default function Timer() {
       title: "URL Copied",
       description: "Timer URL has been copied to clipboard",
     });
-  }, [timers, newTimerHours, newTimerMinutes, newTimerSeconds, newTimerAlarmCount, newTimerOverrunEnabled, newTimerLeadTime, newTimerBeepAtQuartiles, toast]);
+  }, [
+    timers,
+    newTimerHours,
+    newTimerMinutes,
+    newTimerSeconds,
+    newTimerAlarmCount,
+    newTimerOverrunEnabled,
+    newTimerLeadTime,
+    newTimerBeepAtQuartiles,
+    toast,
+  ]);
+
+  const getTimerTextColor = (
+    flashing: boolean,
+    isFinished: boolean,
+    isRunning: boolean,
+    leadTimeRemaining: number
+  ) => {
+    if (flashing || (isFinished && !isRunning)) return "text-red-600";
+    if (leadTimeRemaining > 0) return "text-slate-400 dark:text-slate-500";
+    return "text-slate-900 dark:text-slate-100";
+  };
 
   const getAlarmText = (count: number) => {
     switch (count) {
@@ -1215,7 +1236,8 @@ export default function Timer() {
               : 0;
           const isFlashing = flashingTimers.has(timer.id);
           let progressColor = theme === "dark" ? "#3b82f6" : "#2563eb";
-          if (isFlashing || (timer.isFinished && !timer.isRunning)) progressColor = "#ef4444";
+          if (isFlashing || (timer.isFinished && !timer.isRunning))
+            progressColor = "#ef4444";
           else if (timer.leadTimeRemaining > 0) progressColor = "#f59e0b";
           const trackColor = theme === "dark" ? "#334155" : "#e2e8f0";
 
@@ -1318,13 +1340,7 @@ export default function Timer() {
                           </div>
                         ) : (
                           <div
-                            className={`text-6xl font-mono font-bold ${
-                              isFlashing || (timer.isFinished && !timer.isRunning)
-                                ? "text-red-600"
-                                : timer.leadTimeRemaining > 0
-                                  ? "text-slate-400 dark:text-slate-500"
-                                  : "text-slate-900 dark:text-slate-100"
-                            }`}
+                            className={`text-6xl font-mono font-bold ${getTimerTextColor(isFlashing, timer.isFinished, timer.isRunning, timer.leadTimeRemaining)}`}
                           >
                             {timer.timeLeft < 0 ? "-" : ""}
                             {formatTimerTime(Math.abs(timer.timeLeft))}
@@ -1390,37 +1406,6 @@ export default function Timer() {
                           Stop Alarm
                         </Button>
                       ) : null;
-                      if (timer.overrunEnabled) {
-                        return (
-                          <div className="flex gap-2">
-                            <Button
-                              onClick={() => toggleTimer(timer.id)}
-                              data-testid={`toggle-timer-${timer.id}`}
-                            >
-                              {timer.isRunning ? (
-                                <>
-                                  <Pause className="w-4 h-4 mr-2" />
-                                  Pause
-                                </>
-                              ) : (
-                                <>
-                                  <Play className="w-4 h-4 mr-2" />
-                                  Continue
-                                </>
-                              )}
-                            </Button>
-                            <Button
-                              onClick={() => stopTimer(timer.id)}
-                              variant="outline"
-                              data-testid={`reset-timer-${timer.id}`}
-                            >
-                              <Square className="w-4 h-4 mr-2" />
-                              Reset
-                            </Button>
-                            {stopAlarmButton}
-                          </div>
-                        );
-                      }
                       return (
                         <div className="flex gap-2">
                           <Button
