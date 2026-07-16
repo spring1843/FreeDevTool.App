@@ -1312,21 +1312,18 @@ export default function Timer() {
                         </Pie>
                       </PieChart>
                       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none text-center">
-                        {timer.leadTimeRemaining > 0 ? (
-                          <>
-                            <div className="text-6xl font-mono font-bold text-amber-500 dark:text-amber-400">
-                              {timer.leadTimeRemaining}
-                            </div>
-                            <div className="text-xs text-slate-500 dark:text-slate-400">
-                              Starting soon…
-                            </div>
-                          </>
+                        {timer.isRunning && timer.leadTimeRemaining > 0 ? (
+                          <div className="text-6xl font-mono font-bold text-amber-500 dark:text-amber-400">
+                            {timer.leadTimeRemaining}
+                          </div>
                         ) : (
                           <div
                             className={`text-6xl font-mono font-bold ${
                               isFlashing || (timer.isFinished && !timer.isRunning)
                                 ? "text-red-600"
-                                : "text-slate-900 dark:text-slate-100"
+                                : timer.leadTimeRemaining > 0
+                                  ? "text-slate-400 dark:text-slate-500"
+                                  : "text-slate-900 dark:text-slate-100"
                             }`}
                           >
                             {timer.timeLeft < 0 ? "-" : ""}
@@ -1334,19 +1331,17 @@ export default function Timer() {
                           </div>
                         )}
                       </div>
-                      {timer.leadTimeRemaining === 0 && (
-                        <div className="absolute top-[calc(50%+2.4rem)] left-1/2 -translate-x-1/2 pointer-events-none text-center">
-                          <span
-                            className={`text-base font-mono ${
-                              isFlashing || (timer.isFinished && !timer.isRunning)
-                                ? "text-red-500"
-                                : "text-slate-500 dark:text-slate-400"
-                            }`}
-                          >
-                            {percentComplete}%
-                          </span>
-                        </div>
-                      )}
+                      <div className="absolute top-[calc(50%+2.4rem)] left-1/2 -translate-x-1/2 pointer-events-none text-center">
+                        <span
+                          className={`text-base font-mono ${
+                            isFlashing || (timer.isFinished && !timer.isRunning)
+                              ? "text-red-500"
+                              : "text-slate-500 dark:text-slate-400"
+                          }`}
+                        >
+                          {percentComplete}%
+                        </span>
+                      </div>
                     </div>
                   </div>
 
