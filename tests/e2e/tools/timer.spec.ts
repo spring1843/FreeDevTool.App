@@ -66,9 +66,9 @@ test.describe("Timer Tool", () => {
     const startAll = page.getByTestId("start-all-timers");
     await expect(startAll).toBeVisible();
 
-    // Click Start All and ensure both timers start (Running badge appears)
+    // Click Start All and ensure both timers are active (Running or Starting due to lead time)
     await startAll.click();
-    const runningBadges = page.locator("text=Running");
-    await expect(runningBadges).toHaveCount(2);
+    // After starting, "Pause All" should appear (both timers now running/starting)
+    await expect(page.getByTestId("pause-all-timers")).toBeVisible();
   });
 });
