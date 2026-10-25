@@ -99,7 +99,7 @@ export function Sidebar({
       {/* NAV */}
       <nav className="flex-1 overflow-y-auto no-scrollbar px-2 py-3 space-y-1">
         {/* HOME */}
-        <Link href="/">
+        <Link href="/" asChild>
           <a
             onClick={() => {
               if (collapsed) onExpandRequest?.("Home");
@@ -169,7 +169,7 @@ export function Sidebar({
                     }
 
                     return (
-                      <Link key={tool.path} href={tool.path}>
+                      <Link key={tool.path} href={tool.path} asChild>
                         <a
                           onClick={onToolClick}
                           className={cn(

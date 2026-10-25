@@ -17,7 +17,14 @@ import { ShortcutBadge } from "@/components/ui/shortcut-badge";
 import { Switch } from "@/components/ui/switch";
 import { ToolExplanations } from "@/components/tool-explanations";
 import { getToolByPath } from "@/data/tools";
+import {
+  findC2paDigitalSourceTypes,
+  readC2paManifest,
+} from "@/lib/c2pa-metadata";
+import { findImageAiIndicators } from "@/lib/image-ai-indicators";
+import { extractPngTextMetadata } from "@/lib/png-text-metadata";
 import { useToast } from "@/hooks/use-toast";
+import type { ManifestStore } from "@contentauth/c2pa-web";
 
 function formatBytes(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -47,6 +54,8 @@ export default function ImageMetadata() {
   const [metadata, setMetadata] = useState<Record<string, unknown> | null>(
     null
   );
+  const [c2paManifest, setC2paManifest] = useState<ManifestStore | null>(null);
+  const [c2paError, setC2paError] = useState<string | null>(null);
   const [hasProcessed, setHasProcessed] = useState(false);
   const [isExtracting, setIsExtracting] = useState(false);
   const [autoProcess, setAutoProcess] = useState(true);
@@ -60,16 +69,37 @@ export default function ImageMetadata() {
     setIsExtracting(true);
     setError(null);
     setMetadata(null);
+    setC2paManifest(null);
+    setC2paError(null);
     setHasProcessed(false);
 
     try {
-      const result: unknown = await parse(file, true);
+      const [result, pngText, c2paResult] = await Promise.all([
+        parse(file, true),
+        extractPngTextMetadata(file),
+        readC2paManifest(file)
+          .then(manifest => ({ manifest }))
+          .catch(cause => ({
+            error:
+              cause instanceof Error
+                ? cause.message
+                : "Unknown C2PA verification error",
+          })),
+      ]);
       if (currentExtractionId !== extractionId.current) return;
 
+      const manifest = "manifest" in c2paResult ? c2paResult.manifest : null;
+      setC2paManifest(manifest);
+      setC2paError("error" in c2paResult ? c2paResult.error : null);
       setMetadata(
-        result && typeof result === "object"
-          ? Object.fromEntries(Object.entries(result))
-          : {}
+        Object.assign(
+          {},
+          result && typeof result === "object"
+            ? Object.fromEntries(Object.entries(result))
+            : {},
+          pngText,
+          manifest ? { C2PA: manifest } : {}
+        )
       );
       setHasProcessed(true);
     } catch (cause) {
@@ -105,6 +135,8 @@ export default function ImageMetadata() {
     setIsExtracting(false);
     setError(null);
     setMetadata(null);
+    setC2paManifest(null);
+    setC2paError(null);
     setHasProcessed(false);
     setImageFile(file);
   };
@@ -113,6 +145,8 @@ export default function ImageMetadata() {
     extractionId.current += 1;
     setImageFile(null);
     setMetadata(null);
+    setC2paManifest(null);
+    setC2paError(null);
     setHasProcessed(false);
     setIsExtracting(false);
     setError(null);
@@ -139,6 +173,15 @@ export default function ImageMetadata() {
 
   const metadataText = metadata ? stringifyMetadata(metadata) : "";
   const hasMetadata = metadata !== null && Object.keys(metadata).length > 0;
+  const aiIndicators = metadata ? findImageAiIndicators(metadata) : [];
+  const c2paSourceTypes = c2paManifest
+    ? findC2paDigitalSourceTypes(c2paManifest)
+    : [];
+  const aiSourceTypes = c2paSourceTypes.filter(sourceType =>
+    /(?:trainedAlgorithmicMedia|compositeWithTrainedAlgorithmicMedia|algorithmicallyEnhanced)$/i.test(
+      sourceType
+    )
+  );
 
   const renderMetadataContent = () => {
     if (isExtracting) {
@@ -168,6 +211,123 @@ export default function ImageMetadata() {
     );
   };
 
+  const renderOriginIndicators = () => {
+    if (isExtracting) {
+      return (
+        <p role="status" className="text-sm text-slate-600 dark:text-slate-400">
+          Checking embedded metadata...
+        </p>
+      );
+    }
+    if (aiIndicators.length > 0) {
+      return (
+        <div
+          className="space-y-3"
+          data-testid="ai-indicators-found"
+          role="status"
+        >
+          <p className="font-medium text-amber-800 dark:text-amber-300">
+            AI-generation indicators were found in this file&apos;s metadata.
+          </p>
+          <ul className="list-disc space-y-1 pl-5 text-sm text-slate-700 dark:text-slate-300">
+            {aiIndicators.map((indicator, index) => (
+              <li key={`${indicator.field}-${index}`}>
+                <span className="font-mono">{indicator.field}</span>:{" "}
+                {indicator.evidence}
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    }
+    return (
+      <p
+        className="text-sm text-slate-600 dark:text-slate-400"
+        data-testid="no-ai-indicators"
+      >
+        No common AI-generation indicators were found in the metadata. This does
+        not prove the image was not AI-generated; metadata can be missing,
+        edited, or removed.
+      </p>
+    );
+  };
+
+  const renderC2paContent = () => {
+    if (isExtracting) {
+      return (
+        <p role="status" className="text-sm text-slate-600 dark:text-slate-400">
+          Checking for C2PA Content Credentials...
+        </p>
+      );
+    }
+    if (c2paError) {
+      return (
+        <p
+          className="text-sm text-red-700 dark:text-red-300"
+          data-testid="c2pa-read-error"
+        >
+          Could not inspect C2PA credentials locally: {c2paError}
+        </p>
+      );
+    }
+    if (!c2paManifest) {
+      return (
+        <p
+          className="text-sm text-slate-600 dark:text-slate-400"
+          data-testid="no-c2pa"
+        >
+          No embedded C2PA Content Credentials were found.
+        </p>
+      );
+    }
+
+    return (
+      <div className="space-y-3" data-testid="c2pa-found">
+        <p className="text-sm">
+          C2PA manifest found. Validation state:{" "}
+          <strong>{c2paManifest.validation_state ?? "not reported"}</strong>.
+        </p>
+        {aiSourceTypes.length > 0 ? (
+          <div
+            className="text-sm text-amber-800 dark:text-amber-300"
+            data-testid="c2pa-ai-source"
+          >
+            The manifest asserts AI-generated or AI-edited content:
+            <ul className="mt-1 list-disc pl-5">
+              {aiSourceTypes.map(sourceType => (
+                <li className="break-all font-mono" key={sourceType}>
+                  {sourceType}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <p
+            className="text-sm text-slate-600 dark:text-slate-400"
+            data-testid="c2pa-no-ai-source"
+          >
+            The manifest contains no recognized AI-source type. That does not
+            establish that the image was not AI-generated.
+          </p>
+        )}
+        {c2paManifest.validation_status?.length ? (
+          <ul className="list-disc space-y-1 pl-5 text-sm text-slate-600 dark:text-slate-400">
+            {c2paManifest.validation_status.map((status, index) => (
+              <li key={`${status.code}-${index}`}>
+                <span className="font-mono">{status.code}</span>
+                {status.explanation ? `: ${status.explanation}` : ""}
+              </li>
+            ))}
+          </ul>
+        ) : null}
+        <p className="text-xs text-slate-500 dark:text-slate-400">
+          Validation was performed locally. Remote manifest and
+          certificate-status lookups are disabled.
+        </p>
+      </div>
+    );
+  };
+
   return (
     <div className="mx-auto max-w-6xl">
       <div className="mb-6">
@@ -185,7 +345,8 @@ export default function ImageMetadata() {
 
       <p className="mb-4 text-sm text-slate-600 dark:text-slate-400">
         Your image stays on this device. Metadata can include private
-        information such as GPS coordinates.
+        information such as GPS coordinates. SynthID watermark detection is not
+        available in this offline tool.
       </p>
 
       {error ? (
@@ -277,6 +438,24 @@ export default function ImageMetadata() {
           ) : null}
         </CardContent>
       </Card>
+
+      {hasProcessed || isExtracting ? (
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>C2PA Content Credentials</CardTitle>
+          </CardHeader>
+          <CardContent>{renderC2paContent()}</CardContent>
+        </Card>
+      ) : null}
+
+      {hasProcessed || isExtracting ? (
+        <Card className="mb-6">
+          <CardHeader className="flex flex-row items-center justify-between gap-4">
+            <CardTitle>Image Origin Indicators</CardTitle>
+          </CardHeader>
+          <CardContent>{renderOriginIndicators()}</CardContent>
+        </Card>
+      ) : null}
 
       {hasProcessed || isExtracting ? (
         <Card className="mb-6">

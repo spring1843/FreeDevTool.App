@@ -3039,10 +3039,13 @@ export const toolsData: ToolData = {
         metadata: {
           title: "Image Metadata - Read EXIF, GPS, and Image Details",
           description:
-            "Extract EXIF, GPS, camera, IPTC, XMP, and other embedded metadata from image files locally in your browser.",
+            "Extract image metadata and inspect embedded C2PA Content Credentials locally in your browser.",
           keywords: [
             "image metadata",
             "EXIF reader",
+            "C2PA validator",
+            "Content Credentials",
+            "SynthID",
             "GPS photo metadata",
             "camera information",
             "photo metadata viewer",
@@ -3067,6 +3070,9 @@ export const toolsData: ToolData = {
                 "GPS coordinates and location-related tags",
                 "IPTC and XMP descriptions, creator details, and other embedded fields",
                 "Image properties and supported embedded color-profile information",
+                "Embedded C2PA Content Credentials and their local validation results",
+                "AI-origin clues from metadata and C2PA digital source type assertions",
+                "SynthID watermark detection is not available in this offline tool",
               ],
             },
             {

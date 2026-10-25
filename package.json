@@ -28,6 +28,7 @@
     "@codemirror/lang-yaml": "^6.1.2",
     "@codemirror/state": "^6.5.2",
     "@codemirror/view": "^6.38.1",
+    "@contentauth/c2pa-web": "^0.15.4",
     "@eslint/js": "^9.33.0",
     "@peculiar/x509": "^2.0.0",
     "@playwright/test": "^1.57.0",
