@@ -28,6 +28,7 @@ import {
   IndentIncrease,
   Link,
   Layers,
+  FileImage,
 
   // Text tools
   FileText,
@@ -3025,6 +3026,60 @@ export const toolsData: ToolData = {
                 "Major types (top 3 bits): 0=uint, 1=negint, 2=bytes, 3=text, 4=array, 5=map, 6=tag, 7=float/simple",
                 "Additional info (bottom 5 bits): 24=1-byte follows, 25=2-byte, 26=4-byte, 27=8-byte",
                 "Online reference: cbor.me lets you paste hex and see the decoded structure",
+              ],
+            },
+          ],
+        },
+      },
+      {
+        name: "Image Metadata",
+        path: "/tools/image-metadata",
+        icon: FileImage,
+        shortcut: "Ctrl+Shift+Alt+I",
+        metadata: {
+          title: "Image Metadata - Read EXIF, GPS, and Image Details",
+          description:
+            "Extract image metadata and inspect embedded C2PA Content Credentials locally in your browser.",
+          keywords: [
+            "image metadata",
+            "EXIF reader",
+            "C2PA validator",
+            "Content Credentials",
+            "SynthID",
+            "GPS photo metadata",
+            "camera information",
+            "photo metadata viewer",
+            "IPTC",
+            "XMP",
+          ],
+        },
+        explanations: {
+          notice: {
+            type: "privacy",
+            title: "Private, Local Image Processing",
+            items: [
+              "Images are parsed locally in your browser and are never uploaded.",
+              "Metadata depends on what the image file contains; edited or shared images may have had details removed.",
+            ],
+          },
+          sections: [
+            {
+              title: "Metadata This Tool Can Read",
+              items: [
+                "EXIF camera and lens details, capture settings, dates, and orientation",
+                "GPS coordinates and location-related tags",
+                "IPTC and XMP descriptions, creator details, and other embedded fields",
+                "Image properties and supported embedded color-profile information",
+                "Embedded C2PA Content Credentials and their local validation results",
+                "AI-origin clues from metadata and C2PA digital source type assertions",
+                "SynthID watermark detection is not available in this offline tool",
+              ],
+            },
+            {
+              title: "Supported Image Files",
+              items: [
+                "JPEG, PNG, TIFF, HEIC/HEIF, AVIF, and other formats recognized by the metadata parser",
+                "Results vary by file format and by the metadata preserved in the image",
               ],
             },
           ],

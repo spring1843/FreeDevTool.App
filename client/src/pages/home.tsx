@@ -146,7 +146,7 @@ export default function Home() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {data.tools.map(tool => (
-                <Link key={tool.path} href={tool.path}>
+                <Link key={tool.path} href={tool.path} asChild>
                   <a href={tool.path} className="block">
                     <Card
                       className="

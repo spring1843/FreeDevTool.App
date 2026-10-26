@@ -34,6 +34,10 @@ test.describe("Menu Toggle Functionality", () => {
     await expect(sidebar).toBeVisible();
   });
 
+  test("should not render nested navigation links", async ({ page }) => {
+    await expect(page.locator("a a")).toHaveCount(0);
+  });
+
   test("should work with keyboard shortcut Ctrl+M", async ({ page }) => {
     // Set desktop viewport
     await page.setViewportSize({ width: 1280, height: 720 });
