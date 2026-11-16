@@ -74,6 +74,7 @@
     "react-dom": "^19.1.1",
     "recharts": "^2.15.4",
     "reflect-metadata": "^0.2.2",
+    "sql-formatter": "^15.9.0",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "typescript-eslint": "^8.39.1",

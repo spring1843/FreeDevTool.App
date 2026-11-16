@@ -1033,3 +1033,76 @@ export async function formatGraphQL(input: string): Promise<{
     };
   }
 }
+
+type SqlDialect =
+  | "sql"
+  | "bigquery"
+  | "clickhouse"
+  | "db2"
+  | "db2i"
+  | "duckdb"
+  | "hive"
+  | "mariadb"
+  | "mysql"
+  | "n1ql"
+  | "plsql"
+  | "postgresql"
+  | "redshift"
+  | "singlestoredb"
+  | "snowflake"
+  | "spark"
+  | "sqlite"
+  | "tidb"
+  | "transactsql"
+  | "trino";
+
+type SqlCase = "preserve" | "upper" | "lower";
+
+export interface SqlFormatOptions {
+  language: SqlDialect;
+  tabWidth: number;
+  useTabs: boolean;
+  keywordCase: SqlCase;
+  dataTypeCase: SqlCase;
+  functionCase: SqlCase;
+  indentStyle: "standard" | "tabularLeft" | "tabularRight";
+  logicalOperatorNewline: "before" | "after";
+  expressionWidth: number;
+  linesBetweenQueries: number;
+  denseOperators: boolean;
+  newlineBeforeSemicolon: boolean;
+}
+
+export const DEFAULT_SQL_OPTIONS: SqlFormatOptions = {
+  language: "sql",
+  tabWidth: 2,
+  useTabs: false,
+  keywordCase: "upper",
+  dataTypeCase: "upper",
+  functionCase: "upper",
+  indentStyle: "standard",
+  logicalOperatorNewline: "before",
+  expressionWidth: 50,
+  linesBetweenQueries: 1,
+  denseOperators: false,
+  newlineBeforeSemicolon: false,
+};
+
+export async function formatSQL(
+  input: string,
+  options: Partial<SqlFormatOptions> = {}
+): Promise<{
+  formatted: string;
+  error?: string;
+}> {
+  try {
+    const { format } = await import("sql-formatter");
+    const formatted = format(input, { ...DEFAULT_SQL_OPTIONS, ...options });
+    return { formatted };
+  } catch (error) {
+    return {
+      formatted: input,
+      error: `SQL formatting error: ${error instanceof Error ? error.message : "Unknown error"}`,
+    };
+  }
+}

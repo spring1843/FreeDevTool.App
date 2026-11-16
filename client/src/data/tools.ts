@@ -22,6 +22,7 @@ import {
   FileJson,
   Braces,
   DatabaseBackup,
+  Database,
 
   // Encoders / Security
   KeyRound,
@@ -2290,6 +2291,81 @@ export const toolsData: ToolData = {
                   label: "GraphiQL/Playground:",
                   text: "Interactive IDE for exploring APIs",
                 },
+              ],
+            },
+          ],
+        },
+      },
+      {
+        name: "SQL Formatter",
+        path: "/tools/sql-formatter",
+        icon: Database,
+        shortcut: "Ctrl+Shift+Alt+S",
+        metadata: {
+          title: "SQL Formatter - Format SQL Queries Online",
+          description:
+            "Format and beautify SQL queries for PostgreSQL, MySQL, SQL Server, Oracle, SQLite, BigQuery, Snowflake and more. Configure keyword case, indentation and layout.",
+          keywords: [
+            "SQL formatter",
+            "SQL beautifier",
+            "SQL pretty print",
+            "PostgreSQL formatter",
+            "MySQL formatter",
+            "T-SQL formatter",
+          ],
+        },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "SQL Origins",
+            items: [
+              {
+                label: "Created:",
+                text: "IBM, early 1970s, as SEQUEL by Donald Chamberlin and Raymond Boyce",
+              },
+              {
+                label: "Standardized:",
+                text: "ANSI in 1986, ISO in 1987, revised many times since (SQL:2023 is the latest)",
+              },
+              {
+                label: "Dialects:",
+                text: "Every database extends the standard, so pick your dialect for the best results",
+              },
+            ],
+          },
+          sections: [
+            {
+              title: "Formatting Settings",
+              items: [
+                {
+                  label: "Dialect:",
+                  text: "Teaches the formatter dialect-specific syntax such as ::casts (PostgreSQL), [brackets] (SQL Server) or backticks (MySQL)",
+                },
+                {
+                  label: "Keyword case:",
+                  text: "UPPER keywords (SELECT, FROM) are the most common convention; preserve keeps your input as-is",
+                },
+                {
+                  label: "Indent style:",
+                  text: "Standard indents clauses; tabular styles align keywords in a column",
+                },
+                {
+                  label: "Expression width:",
+                  text: "Parenthesized expressions shorter than this stay on one line",
+                },
+                {
+                  label: "Logical operators:",
+                  text: "Put AND / OR at the start or the end of each line",
+                },
+              ],
+            },
+            {
+              title: "Pro Tips",
+              items: [
+                "Format generated ORM queries from logs to understand what actually hits the database",
+                "Leading AND/OR makes it easy to comment out a single condition",
+                "Format before committing migrations to keep git diffs readable",
+                "If formatting fails, try a different dialect: vendor syntax may not parse as standard SQL",
               ],
             },
           ],
