@@ -72,6 +72,7 @@
     "jsbarcode": "^3.12.1",
     "jsdom": "^26.1.0",
     "lucide-react": "^0.453.0",
+    "marked": "^18.2.0",
     "prettier": "^3.6.2",
     "qrcode-generator": "^2.0.4",
     "react": "^19.1.1",
