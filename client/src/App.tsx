@@ -135,7 +135,6 @@ function Router() {
           {/* Encoders */}
           <Route path="/tools/base64" component={Base64Encoder} />
           <Route path="/tools/cbor-encoder" component={CborEncoder} />
-          <Route path="/tools/image-metadata" component={ImageMetadata} />
           <Route path="/tools/url-encoder" component={UrlEncoder} />
           <Route path="/tools/jwt-decoder" component={JwtDecoder} />
           <Route path="/tools/tls-decoder" component={TlsDecoder} />
@@ -149,8 +148,6 @@ function Router() {
           <Route path="/tools/text-counter" component={TextCounter} />
           <Route path="/tools/text-split" component={TextSplit} />
           <Route path="/tools/search-replace" component={SearchReplace} />
-          <Route path="/tools/qr-generator" component={QRGenerator} />
-          <Route path="/tools/barcode-generator" component={BarcodeGenerator} />
           <Route path="/tools/lorem-generator" component={LoremGenerator} />
           <Route
             path="/tools/unicode-characters"
@@ -174,11 +171,14 @@ function Router() {
           <Route path="/tools/compound-interest" component={CompoundInterest} />
           <Route path="/tools/debt-repayment" component={DebtRepayment} />
 
-          {/* Color Tools */}
+          {/* Image Tools */}
           <Route
             path="/tools/color-palette-generator"
             component={ColorPaletteGenerator}
           />
+          <Route path="/tools/image-metadata" component={ImageMetadata} />
+          <Route path="/tools/qr-generator" component={QRGenerator} />
+          <Route path="/tools/barcode-generator" component={BarcodeGenerator} />
 
           {/* Hardware Tools */}
           <Route path="/tools/webcam-test" component={CameraTest} />
