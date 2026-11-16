@@ -63,6 +63,21 @@ export default defineConfig({
       },
     },
   },
+  optimizeDeps: {
+    // jSquash codecs locate their .wasm files relative to their own modules,
+    // which breaks if Vite pre-bundles them.
+    exclude: [
+      "@jsquash/avif",
+      "@jsquash/jpeg",
+      "@jsquash/jxl",
+      "@jsquash/oxipng",
+      "@jsquash/qoi",
+      "@jsquash/webp",
+    ],
+  },
+  worker: {
+    format: "es",
+  },
   server: {
     fs: {
       strict: true,

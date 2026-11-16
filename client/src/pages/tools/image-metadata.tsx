@@ -22,15 +22,10 @@ import {
   readC2paManifest,
 } from "@/lib/c2pa-metadata";
 import { findImageAiIndicators } from "@/lib/image-ai-indicators";
+import { formatBytes } from "@/lib/image-compression";
 import { extractPngTextMetadata } from "@/lib/png-text-metadata";
 import { useToast } from "@/hooks/use-toast";
 import type { ManifestStore } from "@contentauth/c2pa-web";
-
-function formatBytes(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-}
 
 function stringifyMetadata(metadata: Record<string, unknown>): string {
   return JSON.stringify(

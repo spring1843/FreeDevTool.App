@@ -29,6 +29,7 @@ import {
   Link,
   Layers,
   FileImage,
+  ImageDown,
 
   // Text tools
   FileText,
@@ -5029,6 +5030,82 @@ export const toolsData: ToolData = {
               items: [
                 "JPEG, PNG, TIFF, HEIC/HEIF, AVIF, and other formats recognized by the metadata parser",
                 "Results vary by file format and by the metadata preserved in the image",
+              ],
+            },
+          ],
+        },
+      },
+      {
+        name: "Image Compressor",
+        path: "/tools/image-compressor",
+        icon: ImageDown,
+        shortcut: "Ctrl+Shift+Alt+C",
+        metadata: {
+          title:
+            "Image Compressor - Compare AVIF, WebP, JPEG XL, JPEG & PNG Sizes",
+          description:
+            "Compress an image into AVIF, WebP, JPEG XL, JPEG, PNG, and QOI at once. Compare file sizes and previews, tune quality, and download the best format. Runs locally in your browser.",
+          keywords: [
+            "image compressor",
+            "compress image",
+            "convert to webp",
+            "convert to avif",
+            "jpeg xl converter",
+            "png optimizer",
+            "mozjpeg",
+            "oxipng",
+            "image format comparison",
+            "reduce image size",
+          ],
+        },
+        explanations: {
+          notice: {
+            type: "privacy",
+            title: "Private, Local Compression",
+            items: [
+              "Every format is encoded on your device with WebAssembly codecs",
+              "Your image is never uploaded to a server",
+              "Output files don't keep the original metadata (EXIF, GPS, color profiles)",
+            ],
+          },
+          sections: [
+            {
+              title: "Which Format to Pick",
+              items: [
+                {
+                  label: "AVIF:",
+                  text: "Usually the smallest for photos. Supported by all modern browsers, but slow to encode",
+                },
+                {
+                  label: "WebP:",
+                  text: "A safe default for the web. Small files, transparency, and universal browser support",
+                },
+                {
+                  label: "JPEG XL:",
+                  text: "Excellent compression and lossless mode, but only Safari displays it natively today",
+                },
+                {
+                  label: "JPEG:",
+                  text: "Works everywhere. Good for photos without transparency (transparent areas become white)",
+                },
+                {
+                  label: "PNG:",
+                  text: "Lossless. Best for screenshots, logos, and graphics with sharp edges or few colors",
+                },
+                {
+                  label: "QOI:",
+                  text: "Very fast lossless format for tooling and games. Browsers can't display it",
+                },
+              ],
+            },
+            {
+              title: "Settings Explained",
+              items: [
+                "Quality: lower values give smaller files with more visible artifacts. 60-80 is a good range for photos",
+                "Lossless: keeps every pixel exactly, at the cost of larger files",
+                "Effort / Speed: more effort makes smaller files but takes longer to encode",
+                "Chroma subsampling 4:2:0 halves color resolution, which is fine for photos but can blur colored text",
+                "Resize first: halving the dimensions cuts file size by roughly 75%",
               ],
             },
           ],

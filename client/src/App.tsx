@@ -37,6 +37,7 @@ const TimeFormatter = lazy(() => import("@/pages/tools/time-formatter"));
 const Base64Encoder = lazy(() => import("@/pages/tools/base64-encoder"));
 const CborEncoder = lazy(() => import("@/pages/tools/cbor-encoder"));
 const ImageMetadata = lazy(() => import("@/pages/tools/image-metadata"));
+const ImageCompressor = lazy(() => import("@/pages/tools/image-compressor"));
 const UrlEncoder = lazy(() => import("@/pages/tools/url-encoder"));
 const JwtDecoder = lazy(() => import("@/pages/tools/jwt-decoder"));
 const TlsDecoder = lazy(() => import("@/pages/tools/tls-decoder"));
@@ -177,6 +178,7 @@ function Router() {
             component={ColorPaletteGenerator}
           />
           <Route path="/tools/image-metadata" component={ImageMetadata} />
+          <Route path="/tools/image-compressor" component={ImageCompressor} />
           <Route path="/tools/qr-generator" component={QRGenerator} />
           <Route path="/tools/barcode-generator" component={BarcodeGenerator} />
 
