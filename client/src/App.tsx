@@ -36,6 +36,7 @@ const GraphQLFormatter = lazy(() => import("@/pages/tools/graphql-formatter"));
 const TimeFormatter = lazy(() => import("@/pages/tools/time-formatter"));
 const Base64Encoder = lazy(() => import("@/pages/tools/base64-encoder"));
 const CborEncoder = lazy(() => import("@/pages/tools/cbor-encoder"));
+const MarkdownToHtml = lazy(() => import("@/pages/tools/markdown-to-html"));
 const ImageMetadata = lazy(() => import("@/pages/tools/image-metadata"));
 const UrlEncoder = lazy(() => import("@/pages/tools/url-encoder"));
 const JwtDecoder = lazy(() => import("@/pages/tools/jwt-decoder"));
@@ -111,6 +112,7 @@ function Router() {
             path="/tools/number-base-converter"
             component={NumberBaseConverter}
           />
+          <Route path="/tools/markdown-to-html" component={MarkdownToHtml} />
 
           {/* Formatters */}
           <Route path="/tools/json-formatter" component={JsonFormatter} />

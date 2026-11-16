@@ -16,6 +16,7 @@ import {
   Link2,
   Table,
   Binary,
+  FileCode,
 
   // Formatters
   FileJson,
@@ -1223,6 +1224,66 @@ export const toolsData: ToolData = {
                 {
                   label: "(255).toString(16):",
                   text: "JS: decimal to hex string → 'ff'",
+                },
+              ],
+            },
+          ],
+        },
+      },
+      {
+        name: "Markdown to HTML",
+        path: "/tools/markdown-to-html",
+        icon: FileCode,
+        shortcut: "Ctrl+Shift+Alt+M",
+        metadata: {
+          title: "Markdown to HTML Converter - Preview and Download HTML",
+          description:
+            "Convert Markdown to HTML with a live rendered preview. Supports GitHub Flavored Markdown and downloads a standalone HTML file.",
+          keywords: [
+            "markdown to html",
+            "markdown converter",
+            "markdown preview",
+            "md to html",
+            "GitHub Flavored Markdown",
+            "markdown renderer",
+          ],
+        },
+        explanations: {
+          notice: {
+            type: "privacy",
+            title: "Private, Local Conversion",
+            items: [
+              "Markdown is converted locally in your browser and is never uploaded.",
+              "The preview runs in a sandboxed frame, so scripts embedded in the Markdown never execute.",
+            ],
+          },
+          sections: [
+            {
+              title: "Supported Markdown",
+              items: [
+                "Headings, emphasis, links, images, lists, and blockquotes",
+                "GitHub Flavored Markdown: tables, task lists, strikethrough, and autolinks",
+                "Fenced and indented code blocks, plus inline HTML",
+              ],
+            },
+            {
+              title: "Output Options",
+              items: [
+                {
+                  label: "Full HTML Document:",
+                  text: "a standalone page with <head>, title, and readable styles (light and dark)",
+                },
+                {
+                  label: "Body only:",
+                  text: "just the converted HTML, ready to paste into an existing page or CMS",
+                },
+                {
+                  label: "Download:",
+                  text: "saves the HTML using the first heading as the filename",
+                },
+                {
+                  label: "Remote images:",
+                  text: "are kept in the HTML but may not appear in the in-page preview",
                 },
               ],
             },
