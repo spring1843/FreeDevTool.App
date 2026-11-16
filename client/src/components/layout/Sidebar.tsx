@@ -33,7 +33,7 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   "Text Tools": Type,
   "Time Tools": Clock,
   "Financial Tools": DollarSign,
-  "Color Tools": Palette,
+  "Image Tools": Palette,
   System: Settings,
 };
 

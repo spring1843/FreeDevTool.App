@@ -3031,60 +3031,6 @@ export const toolsData: ToolData = {
           ],
         },
       },
-      {
-        name: "Image Metadata",
-        path: "/tools/image-metadata",
-        icon: FileImage,
-        shortcut: "Ctrl+Shift+Alt+I",
-        metadata: {
-          title: "Image Metadata - Read EXIF, GPS, and Image Details",
-          description:
-            "Extract image metadata and inspect embedded C2PA Content Credentials locally in your browser.",
-          keywords: [
-            "image metadata",
-            "EXIF reader",
-            "C2PA validator",
-            "Content Credentials",
-            "SynthID",
-            "GPS photo metadata",
-            "camera information",
-            "photo metadata viewer",
-            "IPTC",
-            "XMP",
-          ],
-        },
-        explanations: {
-          notice: {
-            type: "privacy",
-            title: "Private, Local Image Processing",
-            items: [
-              "Images are parsed locally in your browser and are never uploaded.",
-              "Metadata depends on what the image file contains; edited or shared images may have had details removed.",
-            ],
-          },
-          sections: [
-            {
-              title: "Metadata This Tool Can Read",
-              items: [
-                "EXIF camera and lens details, capture settings, dates, and orientation",
-                "GPS coordinates and location-related tags",
-                "IPTC and XMP descriptions, creator details, and other embedded fields",
-                "Image properties and supported embedded color-profile information",
-                "Embedded C2PA Content Credentials and their local validation results",
-                "AI-origin clues from metadata and C2PA digital source type assertions",
-                "SynthID watermark detection is not available in this offline tool",
-              ],
-            },
-            {
-              title: "Supported Image Files",
-              items: [
-                "JPEG, PNG, TIFF, HEIC/HEIF, AVIF, and other formats recognized by the metadata parser",
-                "Results vary by file format and by the metadata preserved in the image",
-              ],
-            },
-          ],
-        },
-      },
     ],
   },
   "Text Tools": {
@@ -3357,216 +3303,6 @@ export const toolsData: ToolData = {
                 "Longest English word: 45 letters (pneumonoultramicroscopicsilicovolcanoconiosis)",
                 "Hemingway's 6-word story: 'For sale: baby shoes, never worn.' = 33 chars",
                 "This tool counts UTF-8 bytes—emojis are 4 bytes each! 😀",
-              ],
-            },
-          ],
-        },
-      },
-      {
-        name: "QR Generator",
-        path: "/tools/qr-generator",
-        icon: ScanText,
-        shortcut: "Ctrl+Shift+Q",
-        metadata: {
-          title: "QR Code Generator - Create QR Codes",
-          description:
-            "Generate QR codes for URLs, text, and data. Customizable size and error correction levels.",
-          keywords: [
-            "QR code generator",
-            "QR generator",
-            "create QR code",
-            "barcode generator",
-          ],
-        },
-        explanations: {
-          notice: {
-            type: "info",
-            title: "QR Code Origins",
-            items: [
-              {
-                label: "Invented:",
-                text: "1994 by Denso Wave (Toyota subsidiary) to track car parts in manufacturing",
-              },
-              {
-                label: "Name:",
-                text: "'Quick Response'—designed to be scanned 10x faster than barcodes",
-              },
-              {
-                label: "Patent:",
-                text: "Denso Wave owns it but chose NOT to enforce it, enabling global adoption",
-              },
-            ],
-          },
-          sections: [
-            {
-              title: "QR Code Types This Tool Supports",
-              items: [
-                {
-                  label: "URL:",
-                  text: "Auto-opens website (most common use—menus, links, payments)",
-                },
-                {
-                  label: "WiFi:",
-                  text: "Scan to connect—perfect for guest networks, cafes, Airbnbs",
-                },
-                {
-                  label: "vCard:",
-                  text: "Scan to save contact—put on business cards, email signatures",
-                },
-                {
-                  label: "Email:",
-                  text: "Opens compose with pre-filled address (mailto: protocol)",
-                },
-                { label: "Phone:", text: "Tap to call (tel: protocol)" },
-                {
-                  label: "SMS:",
-                  text: "Opens text message with pre-filled number and message",
-                },
-              ],
-            },
-            {
-              title: "Error Correction Levels",
-              items: [
-                {
-                  label: "L (7%):",
-                  text: "Smallest QR, but easily damaged—use for perfect conditions",
-                },
-                {
-                  label: "M (15%):",
-                  text: "Default balance—handles minor scratches or dirt",
-                },
-                {
-                  label: "Q (25%):",
-                  text: "Good for printed materials that may get worn",
-                },
-                {
-                  label: "H (30%):",
-                  text: "Maximum recovery—allows logos in center (up to 30% can be obscured!)",
-                },
-              ],
-            },
-            {
-              title: "Creative QR Code Uses",
-              items: [
-                "Restaurant menus: COVID made these universal—no more sticky laminated menus",
-                "Gravestones: QR codes linking to memorial websites with photos and stories",
-                "Business cards: vCard QR saves your contact info with one scan",
-                "WiFi sharing: Print and frame near your router for guests",
-                "Scavenger hunts: Each QR reveals the next clue location",
-                "Art installations: QR codes as design elements linking to artist info",
-              ],
-            },
-            {
-              title: "Real-World QR Statistics",
-              items: [
-                "2022: 89 million US smartphone users scanned a QR code (up from 72M in 2019)",
-                "China: QR payments processed $1.8 TRILLION in 2020 (WeChat Pay, Alipay)",
-                "COVID impact: Restaurant QR menu usage jumped 750% in 2020",
-                "Maximum capacity: 4,296 alphanumeric characters (or 7,089 digits)",
-                "Smallest readable: About 1cm × 1cm for simple URLs (10 modules wide minimum)",
-              ],
-            },
-            {
-              title: "QR Code Best Practices",
-              items: [
-                "Test before printing: Scan with multiple phones and apps",
-                "Quiet zone: Leave white border around QR (at least 4 modules wide)",
-                "Contrast matters: Dark foreground on light background works best",
-                "Size rule: 10× the scanning distance in mm (10cm away = 1cm QR minimum)",
-                "Short URLs: Use URL shorteners for complex links—simpler QR = more reliable",
-                "Track scans: Use UTM parameters or QR analytics services",
-              ],
-            },
-            {
-              title: "QR vs Other Codes",
-              items: [
-                {
-                  label: "Barcode:",
-                  text: "1D, holds ~20 chars, requires laser scanner",
-                },
-                {
-                  label: "QR Code:",
-                  text: "2D, holds ~4,000 chars, any camera works",
-                },
-                {
-                  label: "Data Matrix:",
-                  text: "2D, smaller than QR for same data, used in electronics/pharma",
-                },
-                {
-                  label: "Aztec Code:",
-                  text: "2D, no quiet zone needed, used in airline boarding passes",
-                },
-              ],
-            },
-          ],
-        },
-      },
-      {
-        name: "Barcode Generator",
-        path: "/tools/barcode-generator",
-        icon: ScanLine,
-        shortcut: "Ctrl+Shift+I",
-        metadata: {
-          title: "Barcode Generator - Create Barcodes",
-          description:
-            "Generate barcodes in multiple formats including Code128, EAN, and UPC. Download as PNG or SVG.",
-          keywords: [
-            "barcode generator",
-            "create barcode",
-            "Code128",
-            "EAN generator",
-          ],
-        },
-        explanations: {
-          notice: {
-            type: "tips",
-            title: "Did You Know?",
-            items: [
-              "The first product scanned was a pack of Wrigley's gum on June 26, 1974 at a Marsh supermarket in Ohio",
-              "UPC barcodes encode a check digit—scanners reject codes with math errors",
-              "Pharmacode barcodes are intentionally hard to decode without special equipment to prevent medication errors",
-              "The 'quiet zone' (white space) around barcodes is critical—without it, scanners fail",
-            ],
-          },
-          sections: [
-            {
-              title: "Which Format to Use",
-              items: [
-                {
-                  label: "CODE 128:",
-                  text: "Best default choice—encodes any ASCII character, used in shipping labels (FedEx, UPS)",
-                },
-                {
-                  label: "EAN-13/UPC:",
-                  text: "Required for retail products sold in stores—EAN in Europe/Asia, UPC in North America",
-                },
-                {
-                  label: "CODE 39:",
-                  text: "US military and automotive industry standard—no check digit required",
-                },
-                {
-                  label: "ITF-14:",
-                  text: "Printed directly on corrugated cardboard boxes—tolerates low print quality",
-                },
-              ],
-            },
-            {
-              title: "Real-World Uses",
-              items: [
-                "Asset tracking: Label laptops, equipment, and inventory with CODE 128",
-                "Event tickets: Generate unique CODE 128 barcodes for entry validation",
-                "Library systems: Most libraries use CODE 39 for book tracking",
-                "Warehouse shelving: ITF-14 on boxes, EAN-13 on individual products inside",
-                "Membership cards: Encode member IDs for quick scanning at checkout",
-              ],
-            },
-            {
-              title: "Printing Tips",
-              items: [
-                "Minimum bar width of 2px for reliable scanning at 300 DPI",
-                "Print at 100% scale—never stretch or compress barcodes",
-                "Use matte paper to avoid glare that confuses scanners",
-                "Test with your actual scanner before printing batches",
               ],
             },
           ],
@@ -5050,7 +4786,7 @@ export const toolsData: ToolData = {
       },
     ],
   },
-  "Color Tools": {
+  "Image Tools": {
     color: "bg-pink-500 text-white dark:bg-pink-600",
     shortcut: "O",
     tools: [
@@ -5239,6 +4975,270 @@ export const toolsData: ToolData = {
                 "Screenshot test: Take screenshots, put them in a grid—do they feel cohesive?",
                 "Print check: Colors look different on paper vs screen—preview if printing",
                 "Get feedback: You've stared too long. Fresh eyes catch issues you're blind to",
+              ],
+            },
+          ],
+        },
+      },
+      {
+        name: "Image Metadata",
+        path: "/tools/image-metadata",
+        icon: FileImage,
+        shortcut: "Ctrl+Shift+Alt+I",
+        metadata: {
+          title: "Image Metadata - Read EXIF, GPS, and Image Details",
+          description:
+            "Extract image metadata and inspect embedded C2PA Content Credentials locally in your browser.",
+          keywords: [
+            "image metadata",
+            "EXIF reader",
+            "C2PA validator",
+            "Content Credentials",
+            "SynthID",
+            "GPS photo metadata",
+            "camera information",
+            "photo metadata viewer",
+            "IPTC",
+            "XMP",
+          ],
+        },
+        explanations: {
+          notice: {
+            type: "privacy",
+            title: "Private, Local Image Processing",
+            items: [
+              "Images are parsed locally in your browser and are never uploaded.",
+              "Metadata depends on what the image file contains; edited or shared images may have had details removed.",
+            ],
+          },
+          sections: [
+            {
+              title: "Metadata This Tool Can Read",
+              items: [
+                "EXIF camera and lens details, capture settings, dates, and orientation",
+                "GPS coordinates and location-related tags",
+                "IPTC and XMP descriptions, creator details, and other embedded fields",
+                "Image properties and supported embedded color-profile information",
+                "Embedded C2PA Content Credentials and their local validation results",
+                "AI-origin clues from metadata and C2PA digital source type assertions",
+                "SynthID watermark detection is not available in this offline tool",
+              ],
+            },
+            {
+              title: "Supported Image Files",
+              items: [
+                "JPEG, PNG, TIFF, HEIC/HEIF, AVIF, and other formats recognized by the metadata parser",
+                "Results vary by file format and by the metadata preserved in the image",
+              ],
+            },
+          ],
+        },
+      },
+      {
+        name: "QR Generator",
+        path: "/tools/qr-generator",
+        icon: ScanText,
+        shortcut: "Ctrl+Shift+Q",
+        metadata: {
+          title: "QR Code Generator - Create QR Codes",
+          description:
+            "Generate QR codes for URLs, text, and data. Customizable size and error correction levels.",
+          keywords: [
+            "QR code generator",
+            "QR generator",
+            "create QR code",
+            "barcode generator",
+          ],
+        },
+        explanations: {
+          notice: {
+            type: "info",
+            title: "QR Code Origins",
+            items: [
+              {
+                label: "Invented:",
+                text: "1994 by Denso Wave (Toyota subsidiary) to track car parts in manufacturing",
+              },
+              {
+                label: "Name:",
+                text: "'Quick Response'—designed to be scanned 10x faster than barcodes",
+              },
+              {
+                label: "Patent:",
+                text: "Denso Wave owns it but chose NOT to enforce it, enabling global adoption",
+              },
+            ],
+          },
+          sections: [
+            {
+              title: "QR Code Types This Tool Supports",
+              items: [
+                {
+                  label: "URL:",
+                  text: "Auto-opens website (most common use—menus, links, payments)",
+                },
+                {
+                  label: "WiFi:",
+                  text: "Scan to connect—perfect for guest networks, cafes, Airbnbs",
+                },
+                {
+                  label: "vCard:",
+                  text: "Scan to save contact—put on business cards, email signatures",
+                },
+                {
+                  label: "Email:",
+                  text: "Opens compose with pre-filled address (mailto: protocol)",
+                },
+                { label: "Phone:", text: "Tap to call (tel: protocol)" },
+                {
+                  label: "SMS:",
+                  text: "Opens text message with pre-filled number and message",
+                },
+              ],
+            },
+            {
+              title: "Error Correction Levels",
+              items: [
+                {
+                  label: "L (7%):",
+                  text: "Smallest QR, but easily damaged—use for perfect conditions",
+                },
+                {
+                  label: "M (15%):",
+                  text: "Default balance—handles minor scratches or dirt",
+                },
+                {
+                  label: "Q (25%):",
+                  text: "Good for printed materials that may get worn",
+                },
+                {
+                  label: "H (30%):",
+                  text: "Maximum recovery—allows logos in center (up to 30% can be obscured!)",
+                },
+              ],
+            },
+            {
+              title: "Creative QR Code Uses",
+              items: [
+                "Restaurant menus: COVID made these universal—no more sticky laminated menus",
+                "Gravestones: QR codes linking to memorial websites with photos and stories",
+                "Business cards: vCard QR saves your contact info with one scan",
+                "WiFi sharing: Print and frame near your router for guests",
+                "Scavenger hunts: Each QR reveals the next clue location",
+                "Art installations: QR codes as design elements linking to artist info",
+              ],
+            },
+            {
+              title: "Real-World QR Statistics",
+              items: [
+                "2022: 89 million US smartphone users scanned a QR code (up from 72M in 2019)",
+                "China: QR payments processed $1.8 TRILLION in 2020 (WeChat Pay, Alipay)",
+                "COVID impact: Restaurant QR menu usage jumped 750% in 2020",
+                "Maximum capacity: 4,296 alphanumeric characters (or 7,089 digits)",
+                "Smallest readable: About 1cm × 1cm for simple URLs (10 modules wide minimum)",
+              ],
+            },
+            {
+              title: "QR Code Best Practices",
+              items: [
+                "Test before printing: Scan with multiple phones and apps",
+                "Quiet zone: Leave white border around QR (at least 4 modules wide)",
+                "Contrast matters: Dark foreground on light background works best",
+                "Size rule: 10× the scanning distance in mm (10cm away = 1cm QR minimum)",
+                "Short URLs: Use URL shorteners for complex links—simpler QR = more reliable",
+                "Track scans: Use UTM parameters or QR analytics services",
+              ],
+            },
+            {
+              title: "QR vs Other Codes",
+              items: [
+                {
+                  label: "Barcode:",
+                  text: "1D, holds ~20 chars, requires laser scanner",
+                },
+                {
+                  label: "QR Code:",
+                  text: "2D, holds ~4,000 chars, any camera works",
+                },
+                {
+                  label: "Data Matrix:",
+                  text: "2D, smaller than QR for same data, used in electronics/pharma",
+                },
+                {
+                  label: "Aztec Code:",
+                  text: "2D, no quiet zone needed, used in airline boarding passes",
+                },
+              ],
+            },
+          ],
+        },
+      },
+      {
+        name: "Barcode Generator",
+        path: "/tools/barcode-generator",
+        icon: ScanLine,
+        shortcut: "Ctrl+Shift+I",
+        metadata: {
+          title: "Barcode Generator - Create Barcodes",
+          description:
+            "Generate barcodes in multiple formats including Code128, EAN, and UPC. Download as PNG or SVG.",
+          keywords: [
+            "barcode generator",
+            "create barcode",
+            "Code128",
+            "EAN generator",
+          ],
+        },
+        explanations: {
+          notice: {
+            type: "tips",
+            title: "Did You Know?",
+            items: [
+              "The first product scanned was a pack of Wrigley's gum on June 26, 1974 at a Marsh supermarket in Ohio",
+              "UPC barcodes encode a check digit—scanners reject codes with math errors",
+              "Pharmacode barcodes are intentionally hard to decode without special equipment to prevent medication errors",
+              "The 'quiet zone' (white space) around barcodes is critical—without it, scanners fail",
+            ],
+          },
+          sections: [
+            {
+              title: "Which Format to Use",
+              items: [
+                {
+                  label: "CODE 128:",
+                  text: "Best default choice—encodes any ASCII character, used in shipping labels (FedEx, UPS)",
+                },
+                {
+                  label: "EAN-13/UPC:",
+                  text: "Required for retail products sold in stores—EAN in Europe/Asia, UPC in North America",
+                },
+                {
+                  label: "CODE 39:",
+                  text: "US military and automotive industry standard—no check digit required",
+                },
+                {
+                  label: "ITF-14:",
+                  text: "Printed directly on corrugated cardboard boxes—tolerates low print quality",
+                },
+              ],
+            },
+            {
+              title: "Real-World Uses",
+              items: [
+                "Asset tracking: Label laptops, equipment, and inventory with CODE 128",
+                "Event tickets: Generate unique CODE 128 barcodes for entry validation",
+                "Library systems: Most libraries use CODE 39 for book tracking",
+                "Warehouse shelving: ITF-14 on boxes, EAN-13 on individual products inside",
+                "Membership cards: Encode member IDs for quick scanning at checkout",
+              ],
+            },
+            {
+              title: "Printing Tips",
+              items: [
+                "Minimum bar width of 2px for reliable scanning at 300 DPI",
+                "Print at 100% scale—never stretch or compress barcodes",
+                "Use matte paper to avoid glare that confuses scanners",
+                "Test with your actual scanner before printing batches",
               ],
             },
           ],
