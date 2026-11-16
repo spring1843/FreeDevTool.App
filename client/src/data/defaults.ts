@@ -526,6 +526,10 @@ export const DEFAULT_GRAPHQL = `type User
 type Comment{id:ID!content:String!author:User!post:Post!createdAt:String!}type UserProfile{bio:String avatar:String website:String location:String}input CreateUserInput{name:String!email:String!age:Int}input UpdateUserInput{name:String email:String age:Int}type Query{users:[User!]!user(id:ID!):User posts:[Post!]!post(id:ID!):Post searchPosts(query:String!):[Post!]!}type Mutation{createUser(input:CreateUserInput!):User!updateUser(id:ID!,input:UpdateUserInput!):User!deleteUser(id:ID!):Boolean!createPost(title:String!,content:String!,authorId:ID!):Post!}type Subscription{postAdded:Post!commentAdded(postId:ID!):Comment!}schema{query:Query mutation:Mutation subscription:Subscription}
 `;
 
+export const DEFAULT_SQL = `select u.id, u.name, u.email, count(o.id) as order_count, sum(o.total) as total_spent from users u left join orders o on o.user_id = u.id and o.status = 'completed' where u.created_at >= '2024-01-01' and (u.country = 'US' or u.country = 'CA') and u.id not in (select user_id from banned_users) group by u.id, u.name, u.email having sum(o.total) > 100 order by total_spent desc limit 20;
+insert into audit_log (event, created_at) values ('report_generated', current_timestamp);
+`;
+
 export const DEFAULT_URL_TO_JSON = `https://api.example.com/users?page=1&limit=10&sort=name&order=asc&filter=active&category=premium#section`;
 
 export const DEFAULT_CSV_TO_JSON = `name,email,age,city

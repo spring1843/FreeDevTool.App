@@ -33,6 +33,7 @@ const TypeScriptFormatter = lazy(
   () => import("@/pages/tools/typescript-formatter")
 );
 const GraphQLFormatter = lazy(() => import("@/pages/tools/graphql-formatter"));
+const SqlFormatter = lazy(() => import("@/pages/tools/sql-formatter"));
 const TimeFormatter = lazy(() => import("@/pages/tools/time-formatter"));
 const Base64Encoder = lazy(() => import("@/pages/tools/base64-encoder"));
 const CborEncoder = lazy(() => import("@/pages/tools/cbor-encoder"));
@@ -132,6 +133,7 @@ function Router() {
             component={TypeScriptFormatter}
           />
           <Route path="/tools/graphql-formatter" component={GraphQLFormatter} />
+          <Route path="/tools/sql-formatter" component={SqlFormatter} />
           <Route path="/tools/time-formatter" component={TimeFormatter} />
 
           {/* Encoders */}

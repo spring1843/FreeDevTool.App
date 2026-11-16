@@ -9,6 +9,7 @@ import {
   formatSCSS,
   formatJSONC,
   formatGraphQL,
+  formatSQL,
 } from "../../client/src/lib/formatters";
 
 describe("Async Formatter Functions", () => {
@@ -152,6 +153,63 @@ describe("Async Formatter Functions", () => {
       expect(result.error).toBeUndefined();
       expect(result.formatted).toContain("query GetUser");
       expect(result.formatted).toContain("user(");
+    });
+  });
+
+  describe("SQL Formatting", () => {
+    it("should format SQL with default options", async () => {
+      const result = await formatSQL("select id, name from users where id = 1");
+      expect(result.error).toBeUndefined();
+      expect(result.formatted).toBe(
+        "SELECT\n  id,\n  name\nFROM\n  users\nWHERE\n  id = 1"
+      );
+    });
+
+    it("should respect keyword case", async () => {
+      const lower = await formatSQL("SELECT a FROM t", {
+        keywordCase: "lower",
+      });
+      expect(lower.formatted).toContain("select");
+      expect(lower.formatted).toContain("from");
+      const preserve = await formatSQL("SeLeCt a FROM t", {
+        keywordCase: "preserve",
+      });
+      expect(preserve.formatted).toContain("SeLeCt");
+    });
+
+    it("should respect indentation settings", async () => {
+      const four = await formatSQL("select a from t", { tabWidth: 4 });
+      expect(four.formatted).toContain("\n    a\n");
+      const tabs = await formatSQL("select a from t", { useTabs: true });
+      expect(tabs.formatted).toContain("\n\ta\n");
+    });
+
+    it("should support dialect-specific syntax", async () => {
+      const pg = await formatSQL("select id::text from users", {
+        language: "postgresql",
+      });
+      expect(pg.error).toBeUndefined();
+      expect(pg.formatted).toContain("id::TEXT");
+
+      const tsql = await formatSQL("select [first name] from [my table]", {
+        language: "transactsql",
+      });
+      expect(tsql.error).toBeUndefined();
+      expect(tsql.formatted).toContain("[first name]");
+    });
+
+    it("should place semicolon on new line when enabled", async () => {
+      const result = await formatSQL("select a from t;", {
+        newlineBeforeSemicolon: true,
+      });
+      expect(result.formatted.endsWith("\n;")).toBe(true);
+    });
+
+    it("should return an error for invalid SQL", async () => {
+      const input = "select (a from t";
+      const result = await formatSQL(input);
+      expect(result.error).toContain("SQL formatting error");
+      expect(result.formatted).toBe(input);
     });
   });
 });
