@@ -2,7 +2,7 @@
 
 [FreeDevTool.App](https://FreeDevTool.App)
 
-**A comprehensive collection of 49+ open source developer tools with offline functionality**
+**A comprehensive collection of 50+ open source developer tools with offline functionality**
 
 ## Overview
 
@@ -44,7 +44,7 @@ The client-side is a React with TypeScript application, built on a component-bas
 
 - **Routing**: Uses wouter for lightweight client-side routing.
 - **State Management**: Leverages React's built-in state management with hooks.
-- **UI/UX Decisions**: Features collapsible header/sidebar menus with state persistence, responsive sidebar modes, a unified text editor with line numbers, and a searchable tool directory with keyboard shortcut navigation. All 49 tools now use simple React state (no session persistence) for optimal reliability and performance, and UI uniformity is achieved through shared components like `ToolButton` and `ToolTextArea`. Regex Tester uses Ctrl+E shortcut (Ctrl+R reserved for browser refresh). Session management has been completely removed from all tools for enhanced stability.
+- **UI/UX Decisions**: Features collapsible header/sidebar menus with state persistence, responsive sidebar modes, a unified text editor with line numbers, and a searchable tool directory with keyboard shortcut navigation. All 50 tools now use simple React state (no session persistence) for optimal reliability and performance, and UI uniformity is achieved through shared components like `ToolButton` and `ToolTextArea`. Regex Tester uses Ctrl+E shortcut (Ctrl+R reserved for browser refresh). Session management has been completely removed from all tools for enhanced stability.
 
 ### Backend Architecture
 
@@ -60,7 +60,7 @@ Not implemented
 
 ### Technical Implementations & Feature Specifications
 
-- **Tool Suite**: Comprehensive conversion tools (URL/CSV to JSON, Number Base, Date, Timezone, Unit), image metadata extraction with local C2PA Content Credentials validation, advanced text tools (password generator, UUID v1/v4), and hardware tests (Camera, Microphone, Keyboard) with Web Audio API integration for alerts. SynthID watermark verification is not included. Added Metronome with multi-tone functionality. All 49 tools converted to simple React state management for enhanced reliability.
+- **Tool Suite**: Comprehensive conversion tools (URL/CSV to JSON, Markdown to HTML, Number Base, Date, Timezone, Unit), image metadata extraction with local C2PA Content Credentials validation, advanced text tools (password generator, UUID v1/v4), and hardware tests (Camera, Microphone, Keyboard) with Web Audio API integration for alerts. SynthID watermark verification is not included. Added Metronome with multi-tone functionality. All 50 tools converted to simple React state management for enhanced reliability.
 - **Demo System**: Automated tour functionality with customizable speed controls (Slow 8s, Normal 5s, Fast 3s, Very Fast 1.5s), persistent state management, skip/stop controls, and speed preference persistence via localStorage.
 - **Offline Functionality**: All external dependencies for tools like QR and Barcode generators have been replaced with local JavaScript libraries to ensure 100% offline functionality.
 - **URL Sharing**: Implemented across all major tools, including timing tools, for state persistence and sharing.
